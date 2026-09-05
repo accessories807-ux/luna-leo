@@ -380,6 +380,14 @@ onclick="registerUser()">
 
 </button>
 
+<button
+class="submit"
+onclick="loginWithGoogle()">
+
+🔵 التسجيل بحساب Google
+
+</button>
+
 
 <button
 class="close"
@@ -394,7 +402,28 @@ onclick="closeRegister()">
 </div>
 
 
-<!-- تسجيل الدخول -->
+/* تسجيل الدخول بحساب Google */
+
+async function loginWithGoogle() {
+
+const { error } =
+await supabaseClient.auth.signInWithOAuth({
+
+provider: "google",
+
+options: {
+redirectTo: window.location.origin
+}
+
+});
+
+if (error) {
+
+alert("❌ حدث خطأ في تسجيل الدخول بجوجل");
+
+}
+
+}
 
 
 <div
