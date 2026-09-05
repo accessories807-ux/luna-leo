@@ -1,9 +1,9 @@
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>LUNA&LEO MARKET</title>
 
 <style>
@@ -18,7 +18,7 @@ color:#222;
 
 header{
 background:#111;
-color:white;
+color:#fff;
 padding:25px 15px;
 text-align:center;
 }
@@ -37,7 +37,7 @@ color:#ccc;
 }
 
 .buttons{
-background:white;
+background:#fff;
 padding:20px;
 text-align:center;
 }
@@ -54,7 +54,7 @@ cursor:pointer;
 
 .login{
 background:#111;
-color:white;
+color:#fff;
 }
 
 .register{
@@ -64,18 +64,18 @@ color:#111;
 
 .google{
 background:#4285f4;
-color:white;
+color:#fff;
 width:100%;
 }
 
 .logout{
 background:#c0392b;
-color:white;
+color:#fff;
 }
 
 .add-product{
 background:#111;
-color:white;
+color:#fff;
 width:100%;
 max-width:400px;
 }
@@ -134,7 +134,7 @@ margin:auto;
 }
 
 .category{
-background:white;
+background:#fff;
 padding:25px 10px;
 text-align:center;
 border-radius:12px;
@@ -150,7 +150,7 @@ margin:auto;
 }
 
 .product{
-background:white;
+background:#fff;
 border-radius:12px;
 overflow:hidden;
 box-shadow:0 2px 8px rgba(0,0,0,.08);
@@ -178,7 +178,7 @@ color:#b38b00;
 }
 
 .empty{
-background:white;
+background:#fff;
 max-width:650px;
 margin:auto;
 padding:30px 20px;
@@ -196,7 +196,7 @@ margin-top:10px;
 
 .delete-btn{
 background:#c0392b;
-color:white;
+color:#fff;
 width:100%;
 margin-top:10px;
 }
@@ -217,11 +217,11 @@ background:rgba(0,0,0,.7);
 align-items:center;
 justify-content:center;
 padding:20px;
-z-index:999;
+z-index:9999;
 }
 
 .modal-box{
-background:white;
+background:#fff;
 width:100%;
 max-width:420px;
 padding:25px;
@@ -236,7 +236,7 @@ margin-top:0;
 
 .submit{
 background:#111;
-color:white;
+color:#fff;
 width:100%;
 }
 
@@ -283,7 +283,7 @@ color:#777;
 
 #userBox{
 display:none;
-background:white;
+background:#fff;
 padding:15px;
 text-align:center;
 }
@@ -315,6 +315,7 @@ border-radius:10px;
 background:#eee;
 }
 </style>
+
 </head>
 
 <body>
@@ -331,6 +332,7 @@ LUNA<span>&</span>LEO
 
 </header>
 
+
 <div class="buttons" id="authButtons">
 
 <button class="login" onclick="openLogin()">
@@ -343,15 +345,15 @@ LUNA<span>&</span>LEO
 
 </div>
 
+
 <div id="userBox">
 
 👋 أهلاً بك
-
 <span id="userEmail"></span>
 
 <br>
 
-<button class="add-product" onclick="openProductModal()">
+<button class="add-product" onclick="openAddProduct()">
 ➕ إضافة منتج
 </button>
 
@@ -369,6 +371,7 @@ LUNA<span>&</span>LEO
 
 </div>
 
+
 <div class="search">
 
 <input
@@ -379,31 +382,25 @@ oninput="loadProducts()">
 
 </div>
 
+
 <section>
 
 <h2>الأقسام</h2>
 
 <div class="categories">
 
-<div class="category">
-👜 إكسسوارات
-</div>
+<div class="category">👜 إكسسوارات</div>
 
-<div class="category">
-⌚ ساعات
-</div>
+<div class="category">⌚ ساعات</div>
 
-<div class="category">
-📱 إلكترونيات
-</div>
+<div class="category">📱 إلكترونيات</div>
 
-<div class="category">
-👕 ملابس
-</div>
+<div class="category">👕 ملابس</div>
 
 </div>
 
 </section>
+
 
 <section>
 
@@ -419,6 +416,7 @@ oninput="loadProducts()">
 
 </section>
 
+
 <footer>
 
 © 2026 LUNA&LEO MARKET
@@ -429,7 +427,8 @@ oninput="loadProducts()">
 
 </footer>
 
-<!-- إنشاء الحساب -->
+
+<!-- إنشاء حساب -->
 
 <div class="modal" id="registerModal">
 
@@ -464,6 +463,7 @@ oninput="loadProducts()">
 </div>
 
 </div>
+
 
 <!-- تسجيل الدخول -->
 
@@ -503,6 +503,7 @@ oninput="loadProducts()">
 
 </div>
 
+
 <!-- نسيت كلمة المرور -->
 
 <div class="modal" id="forgotModal">
@@ -531,7 +532,8 @@ oninput="loadProducts()">
 
 </div>
 
-<!-- إضافة / تعديل منتج -->
+
+<!-- إضافة / تعديل المنتج -->
 
 <div class="modal" id="productModal">
 
@@ -557,7 +559,7 @@ rows="4"
 placeholder="وصف المنتج"></textarea>
 
 <label class="file-label" for="productImage">
-📷 اختيار صورة المنتج من الملفات
+📷 اختيار صورة المنتج
 </label>
 
 <input
@@ -570,8 +572,13 @@ onchange="previewImage(event)">
 
 <div id="productMessage" class="message"></div>
 
-<button id="productSubmitButton" class="submit" onclick="addProduct()">
+<button
+id="productSubmitButton"
+class="submit"
+onclick="saveProduct()">
+
 🛍️ نشر المنتج
+
 </button>
 
 <button class="close" onclick="closeProductModal()">
@@ -581,6 +588,7 @@ onchange="previewImage(event)">
 </div>
 
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -598,42 +606,64 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
-let editingProductId=null;
 
-/* النوافذ */
+/* المنتج الذي يتم تعديله */
+
+let editingProductId = null;
+
+
+/* =========================
+النوافذ
+========================= */
 
 function openRegister(){
+
 document.getElementById("registerModal").style.display="flex";
+
 }
 
 function closeRegister(){
+
 document.getElementById("registerModal").style.display="none";
+
 }
 
 function openLogin(){
+
 document.getElementById("loginModal").style.display="flex";
+
 }
 
 function closeLogin(){
+
 document.getElementById("loginModal").style.display="none";
+
 }
 
 function openForgot(){
+
 closeLogin();
+
 document.getElementById("forgotModal").style.display="flex";
+
 }
 
 function closeForgot(){
+
 document.getElementById("forgotModal").style.display="none";
+
 }
 
-function openProductModal(){
+
+function openAddProduct(){
 
 editingProductId=null;
 
-document.getElementById("productModalTitle").innerText="➕ إضافة منتج";
+document.getElementById("productModalTitle").innerText =
+"➕ إضافة منتج";
 
-document.getElementById("productSubmitButton").innerText="🛍️ نشر المنتج";
+document.getElementById("productSubmitButton").innerText =
+"🛍️ نشر المنتج";
 
 document.getElementById("productName").value="";
 
@@ -648,16 +678,22 @@ document.getElementById("imagePreview").style.display="none";
 document.getElementById("productMessage").style.display="none";
 
 document.getElementById("productModal").style.display="flex";
+
 }
+
 
 function closeProductModal(){
 
 editingProductId=null;
 
 document.getElementById("productModal").style.display="none";
+
 }
 
-/* الرسائل */
+
+/* =========================
+الرسائل
+========================= */
 
 function showMessage(id,text,type){
 
@@ -668,9 +704,13 @@ box.innerText=text;
 box.className="message "+type;
 
 box.style.display="block";
+
 }
 
-/* معاينة الصورة */
+
+/* =========================
+معاينة الصورة
+========================= */
 
 function previewImage(event){
 
@@ -683,6 +723,7 @@ if(!file){
 preview.style.display="none";
 
 return;
+
 }
 
 if(!file.type.startsWith("image/")){
@@ -696,6 +737,7 @@ showMessage(
 event.target.value="";
 
 return;
+
 }
 
 if(file.size>5*1024*1024){
@@ -709,18 +751,24 @@ showMessage(
 event.target.value="";
 
 return;
+
 }
 
 preview.src=URL.createObjectURL(file);
 
 preview.style.display="block";
+
 }
 
-/* Google */
+
+/* =========================
+Google
+========================= */
 
 async function loginWithGoogle(){
 
-const {error}=await supabaseClient.auth.signInWithOAuth({
+const {error} =
+await supabaseClient.auth.signInWithOAuth({
 
 provider:"google",
 
@@ -732,26 +780,32 @@ redirectTo:"https://luna-leo.vercel.app"
 
 if(error){
 
-alert("❌ حدث خطأ أثناء تسجيل الدخول باستخدام Google");
+alert(
+"❌ حدث خطأ أثناء تسجيل الدخول باستخدام Google"
+);
 
 }
 
 }
 
-/* إنشاء حساب */
+
+/* =========================
+إنشاء حساب
+========================= */
 
 async function registerUser(){
 
-const name=
+const name =
 document.getElementById("registerName").value.trim();
 
-const email=
+const email =
 document.getElementById("registerEmail").value.trim();
 
-const password=
+const password =
 document.getElementById("registerPassword").value;
 
-if(!name||!email||!password){
+
+if(!name || !email || !password){
 
 showMessage(
 "registerMessage",
@@ -760,7 +814,9 @@ showMessage(
 );
 
 return;
+
 }
+
 
 if(password.length<6){
 
@@ -771,9 +827,11 @@ showMessage(
 );
 
 return;
+
 }
 
-const result=
+
+const result =
 await supabaseClient.auth.signUp({
 
 email:email,
@@ -788,6 +846,7 @@ name:name
 
 });
 
+
 if(result.error){
 
 showMessage(
@@ -797,7 +856,9 @@ showMessage(
 );
 
 return;
+
 }
+
 
 showMessage(
 "registerMessage",
@@ -807,17 +868,21 @@ showMessage(
 
 }
 
-/* تسجيل الدخول */
+
+/* =========================
+تسجيل الدخول
+========================= */
 
 async function loginUser(){
 
-const email=
+const email =
 document.getElementById("loginEmail").value.trim();
 
-const password=
+const password =
 document.getElementById("loginPassword").value;
 
-if(!email||!password){
+
+if(!email || !password){
 
 showMessage(
 "loginMessage",
@@ -826,15 +891,19 @@ showMessage(
 );
 
 return;
+
 }
 
-const result=
+
+const result =
 await supabaseClient.auth.signInWithPassword({
 
 email:email,
+
 password:password
 
 });
+
 
 if(result.error){
 
@@ -845,13 +914,16 @@ showMessage(
 );
 
 return;
+
 }
+
 
 showMessage(
 "loginMessage",
 "✅ تم تسجيل الدخول بنجاح",
 "success"
 );
+
 
 setTimeout(function(){
 
@@ -863,12 +935,16 @@ updateUser();
 
 }
 
-/* استعادة كلمة المرور */
+
+/* =========================
+استعادة كلمة المرور
+========================= */
 
 async function sendResetEmail(){
 
-const email=
+const email =
 document.getElementById("forgotEmail").value.trim();
+
 
 if(!email){
 
@@ -879,15 +955,21 @@ showMessage(
 );
 
 return;
+
 }
 
-const result=
+
+const result =
 await supabaseClient.auth.resetPasswordForEmail(
+
 email,
+
 {
 redirectTo:"https://luna-leo.vercel.app"
 }
+
 );
+
 
 if(result.error){
 
@@ -898,7 +980,9 @@ showMessage(
 );
 
 return;
+
 }
+
 
 showMessage(
 "forgotMessage",
@@ -908,25 +992,31 @@ showMessage(
 
 }
 
-/* إضافة منتج */
 
-async function addProduct(){
+/* =========================
+حفظ المنتج
+إضافة أو تعديل
+========================= */
 
-const name=
+async function saveProduct(){
+
+const name =
 document.getElementById("productName").value.trim();
 
-const price=
+const price =
 document.getElementById("productPrice").value;
 
-const description=
+const description =
 document.getElementById("productDescription").value.trim();
 
-const imageInput=
+const imageInput =
 document.getElementById("productImage");
 
-const file=imageInput.files[0];
+const file =
+imageInput.files[0];
 
-if(!name||!price||!description){
+
+if(!name || !price || !description){
 
 showMessage(
 "productMessage",
@@ -935,12 +1025,15 @@ showMessage(
 );
 
 return;
+
 }
+
 
 const {
 data:{user}
-}=
+} =
 await supabaseClient.auth.getUser();
+
 
 if(!user){
 
@@ -951,9 +1044,18 @@ showMessage(
 );
 
 return;
+
 }
 
-let image_url="";
+
+/* =========================
+تعديل منتج
+========================= */
+
+if(editingProductId){
+
+let newImageUrl=null;
+
 
 if(file){
 
@@ -966,7 +1068,9 @@ showMessage(
 );
 
 return;
+
 }
+
 
 if(file.size>5*1024*1024){
 
@@ -977,7 +1081,158 @@ showMessage(
 );
 
 return;
+
 }
+
+
+showMessage(
+"productMessage",
+"⏳ جاري رفع الصورة الجديدة...",
+"success"
+);
+
+
+const ext =
+file.name.split(".").pop();
+
+const fileName =
+user.id+"/edit-"+Date.now()+"."+ext;
+
+
+const {error:uploadError} =
+await supabaseClient.storage
+.from("products")
+.upload(
+fileName,
+file,
+{
+contentType:file.type,
+upsert:false
+}
+);
+
+
+if(uploadError){
+
+showMessage(
+"productMessage",
+"❌ فشل رفع الصورة: "+
+uploadError.message,
+"error"
+);
+
+return;
+
+}
+
+
+const {data:publicData} =
+supabaseClient.storage
+.from("products")
+.getPublicUrl(fileName);
+
+
+newImageUrl =
+publicData.publicUrl;
+
+}
+
+
+const updateData = {
+
+name:name,
+
+price:Number(price),
+
+description:description
+
+};
+
+
+if(newImageUrl){
+
+updateData.image_url=newImageUrl;
+
+}
+
+
+const {error} =
+await supabaseClient
+.from("products")
+.update(updateData)
+.eq("id",editingProductId)
+.eq("user_id",user.id);
+
+
+if(error){
+
+showMessage(
+"productMessage",
+"❌ لم يتم تعديل المنتج: "+
+error.message,
+"error"
+);
+
+return;
+
+}
+
+
+showMessage(
+"productMessage",
+"✅ تم تعديل المنتج بنجاح",
+"success"
+);
+
+
+setTimeout(function(){
+
+closeProductModal();
+
+loadMyProducts();
+
+},800);
+
+
+return;
+
+}
+
+
+/* =========================
+إضافة منتج جديد
+========================= */
+
+let image_url="";
+
+
+if(file){
+
+if(!file.type.startsWith("image/")){
+
+showMessage(
+"productMessage",
+"❌ الملف المختار ليس صورة",
+"error"
+);
+
+return;
+
+}
+
+
+if(file.size>5*1024*1024){
+
+showMessage(
+"productMessage",
+"❌ حجم الصورة أكبر من 5 ميجابايت",
+"error"
+);
+
+return;
+
+}
+
 
 showMessage(
 "productMessage",
@@ -985,40 +1240,54 @@ showMessage(
 "success"
 );
 
-const fileExt=file.name.split(".").pop();
 
-const fileName=
-user.id+"/"+Date.now()+"."+fileExt;
+const ext =
+file.name.split(".").pop();
 
-const {error:uploadError}=
+const fileName =
+user.id+"/"+Date.now()+"."+ext;
+
+
+const {error:uploadError} =
 await supabaseClient.storage
 .from("products")
-.upload(fileName,file,{
+.upload(
+fileName,
+file,
+{
 contentType:file.type,
 upsert:false
-});
+}
+);
+
 
 if(uploadError){
 
 showMessage(
 "productMessage",
-"❌ فشل رفع الصورة: "+uploadError.message,
+"❌ فشل رفع الصورة: "+
+uploadError.message,
 "error"
 );
 
 return;
+
 }
 
-const {data:publicData}=
+
+const {data:publicData} =
 supabaseClient.storage
 .from("products")
 .getPublicUrl(fileName);
 
-image_url=publicData.publicUrl;
+
+image_url =
+publicData.publicUrl;
 
 }
 
-const {error}=
+
+const {error} =
 await supabaseClient
 .from("products")
 .insert([{
@@ -1035,16 +1304,20 @@ user_id:user.id
 
 }]);
 
+
 if(error){
 
 showMessage(
 "productMessage",
-"❌ حدث خطأ: "+error.message,
+"❌ حدث خطأ: "+
+error.message,
 "error"
 );
 
 return;
+
 }
+
 
 showMessage(
 "productMessage",
@@ -1052,15 +1325,6 @@ showMessage(
 "success"
 );
 
-document.getElementById("productName").value="";
-
-document.getElementById("productPrice").value="";
-
-document.getElementById("productDescription").value="";
-
-document.getElementById("productImage").value="";
-
-document.getElementById("imagePreview").style.display="none";
 
 setTimeout(function(){
 
@@ -1068,27 +1332,33 @@ closeProductModal();
 
 loadProducts();
 
-},1000);
+},800);
 
 }
 
-/* تعديل المنتج */
+
+/* =========================
+فتح تعديل المنتج
+========================= */
 
 async function editProduct(productId){
 
 const {
 data:{user}
-}=
+} =
 await supabaseClient.auth.getUser();
+
 
 if(!user){
 
 alert("❌ لازم تسجل الدخول أولاً");
 
 return;
+
 }
 
-const {data:product,error}=
+
+const {data:product,error} =
 await supabaseClient
 .from("products")
 .select("*")
@@ -1096,28 +1366,45 @@ await supabaseClient
 .eq("user_id",user.id)
 .single();
 
-if(error||!product){
+
+if(error || !product){
 
 alert("❌ لم يتم العثور على المنتج");
 
 return;
+
 }
+
 
 editingProductId=productId;
 
-document.getElementById("productModalTitle").innerText="✏️ تعديل المنتج";
 
-document.getElementById("productSubmitButton").innerText="💾 حفظ التعديل";
+document.getElementById("productModalTitle").innerText =
+"✏️ تعديل المنتج";
 
-document.getElementById("productName").value=product.name||"";
 
-document.getElementById("productPrice").value=product.price||"";
+document.getElementById("productSubmitButton").innerText =
+"💾 حفظ التعديل";
 
-document.getElementById("productDescription").value=product.description||"";
+
+document.getElementById("productName").value =
+product.name || "";
+
+
+document.getElementById("productPrice").value =
+product.price || "";
+
+
+document.getElementById("productDescription").value =
+product.description || "";
+
 
 document.getElementById("productImage").value="";
 
-const preview=document.getElementById("imagePreview");
+
+const preview =
+document.getElementById("imagePreview");
+
 
 if(product.image_url){
 
@@ -1131,305 +1418,216 @@ preview.style.display="none";
 
 }
 
+
 document.getElementById("productMessage").style.display="none";
 
+
 document.getElementById("productModal").style.display="flex";
-}
-
-/* حفظ التعديل */
-
-async function updateProduct(){
-
-const name=
-document.getElementById("productName").value.trim();
-
-const price=
-document.getElementById("productPrice").value;
-
-const description=
-document.getElementById("productDescription").value.trim();
-
-const imageInput=
-document.getElementById("productImage");
-
-const file=imageInput.files[0];
-
-if(!name||!price||!description){
-
-showMessage(
-"productMessage",
-"من فضلك املأ اسم المنتج والسعر والوصف",
-"error"
-);
-
-return;
-}
-
-const {
-data:{user}
-}=
-await supabaseClient.auth.getUser();
-
-if(!user){
-
-showMessage(
-"productMessage",
-"❌ لازم تسجل الدخول أولاً",
-"error"
-);
-
-return;
-}
-
-let image_url=null;
-
-if(file){
-
-if(!file.type.startsWith("image/")){
-
-showMessage(
-"productMessage",
-"❌ من فضلك اختر صورة فقط",
-"error"
-);
-
-return;
-}
-
-if(file.size>5*1024*1024){
-
-showMessage(
-"productMessage",
-"❌ حجم الصورة أكبر من 5 ميجابايت",
-"error"
-);
-
-return;
-}
-
-showMessage(
-"productMessage",
-"⏳ جاري رفع الصورة الجديدة...",
-"success"
-);
-
-const fileExt=file.name.split(".").pop();
-
-const fileName=
-user.id+"/"+Date.now()+"."+fileExt;
-
-const {error:uploadError}=
-await supabaseClient.storage
-.from("products")
-.upload(fileName,file,{
-contentType:file.type,
-upsert:false
-});
-
-if(uploadError){
-
-showMessage(
-"productMessage",
-"❌ فشل رفع الصورة: "+uploadError.message,
-"error"
-);
-
-return;
-}
-
-const {data:publicData}=
-supabaseClient.storage
-.from("products")
-.getPublicUrl(fileName);
-
-image_url=publicData.publicUrl;
 
 }
 
-const updateData={
 
-name:name,
-
-price:Number(price),
-
-description:description
-
-};
-
-if(image_url){
-
-updateData.image_url=image_url;
-
-}
-
-const {error}=
-await supabaseClient
-.from("products")
-.update(updateData)
-.eq("id",editingProductId)
-.eq("user_id",user.id);
-
-if(error){
-
-showMessage(
-"productMessage",
-"❌ لم يتم حفظ التعديل: "+error.message,
-"error"
-);
-
-return;
-}
-
-showMessage(
-"productMessage",
-"✅ تم تعديل المنتج بنجاح",
-"success"
-);
-
-setTimeout(function(){
-
-closeProductModal();
-
-loadMyProducts();
-
-},1000);
-
-}
-
-/* عرض المنتجات */
+/* =========================
+عرض كل المنتجات
+========================= */
 
 async function loadProducts(){
 
-const container=
+const container =
 document.getElementById("productsContainer");
 
-const search=
-document.getElementById("searchInput").value.trim().toLowerCase();
+const search =
+document.getElementById("searchInput")
+.value
+.trim()
+.toLowerCase();
 
-const {data,error}=
+
+const {data,error} =
 await supabaseClient
 .from("products")
 .select("*")
 .order("id",{ascending:false});
 
+
 if(error){
 
-container.innerHTML=
+container.innerHTML =
 '<div class="empty">❌ تعذر تحميل المنتجات</div>';
 
 return;
+
 }
 
-let products=data||[];
+
+let products=data || [];
+
 
 if(search){
 
-products=products.filter(function(product){
+products =
+products.filter(function(product){
 
-return(
-(product.name||"").toLowerCase().includes(search)||
-(product.description||"").toLowerCase().includes(search)
+return (
+
+(product.name||"")
+.toLowerCase()
+.includes(search)
+
+||
+
+(product.description||"")
+.toLowerCase()
+.includes(search)
+
 );
 
 });
 
 }
 
+
 if(products.length===0){
 
-container.innerHTML=
+container.innerHTML =
 '<div class="empty"><h3>لا توجد منتجات حتى الآن</h3><p>كن أول شخص يعرض منتجه على LUNA&LEO MARKET</p></div>';
 
 return;
+
 }
+
 
 renderProducts(products,false);
 
 }
 
-/* منتجاتي */
+
+/* =========================
+منتجاتي
+========================= */
 
 async function loadMyProducts(){
 
-const container=
+const container =
 document.getElementById("productsContainer");
+
 
 const {
 data:{user}
-}=
+} =
 await supabaseClient.auth.getUser();
+
 
 if(!user){
 
 alert("❌ لازم تسجل الدخول أولاً");
 
 return;
+
 }
 
-container.innerHTML=
+
+container.innerHTML =
 '<div class="empty">⏳ جاري تحميل منتجاتك...</div>';
 
-const {data,error}=
+
+const {data,error} =
 await supabaseClient
 .from("products")
 .select("*")
 .eq("user_id",user.id)
 .order("id",{ascending:false});
 
+
 if(error){
 
-container.innerHTML=
+container.innerHTML =
 '<div class="empty">❌ تعذر تحميل منتجاتك</div>';
 
 return;
+
 }
 
-if(!data||data.length===0){
 
-container.innerHTML=
+if(!data || data.length===0){
+
+container.innerHTML =
 '<div class="empty"><h3>📦 لا توجد منتجات لك</h3><p>ابدأ بإضافة أول منتج لك</p></div>';
 
 return;
+
 }
+
 
 renderProducts(data,true);
 
 }
 
-/* رسم المنتجات */
+
+/* =========================
+رسم المنتجات
+========================= */
 
 function renderProducts(products,myProducts){
 
-const container=
+const container =
 document.getElementById("productsContainer");
 
-container.innerHTML=
+
+container.innerHTML =
 products.map(function(product){
 
-const image=
+
+const image =
 product.image_url
+
 ?
+
 `<img src="${product.image_url}" alt="${product.name}">`
+
 :
-`<div style="height:180px;background:#eee;display:flex;align-items:center;justify-content:center;color:#888;">📦 لا توجد صورة</div>`;
 
-const actionButtons=
-myProducts
-?
-`
-<button class="edit-btn"
+`<div style="
+height:180px;
+background:#eee;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#888;">
+📦 لا توجد صورة
+</div>`;
+
+
+let actions="";
+
+
+if(myProducts){
+
+actions = `
+
+<button
+class="edit-btn"
 onclick="editProduct('${product.id}')">
+
 ✏️ تعديل المنتج
+
 </button>
 
-<button class="delete-btn"
+
+<button
+class="delete-btn"
 onclick="deleteProduct('${product.id}')">
-🗑️ حذف المنتج
-</button>
-`
-:"";
 
-return`
+🗑️ حذف المنتج
+
+</button>
+
+`;
+
+}
+
+
+return `
 
 <div class="product">
 
@@ -1437,7 +1635,9 @@ ${image}
 
 <div class="product-info">
 
-<h3>${product.name}</h3>
+<h3>
+${product.name}
+</h3>
 
 <div class="price">
 ${product.price} جنيه
@@ -1447,7 +1647,7 @@ ${product.price} جنيه
 ${product.description}
 </p>
 
-${actionButtons}
+${actions}
 
 </div>
 
@@ -1459,51 +1659,72 @@ ${actionButtons}
 
 }
 
-/* حذف منتج */
+
+/* =========================
+حذف المنتج
+========================= */
 
 async function deleteProduct(productId){
 
 const {
 data:{user}
-}=
+} =
 await supabaseClient.auth.getUser();
+
 
 if(!user){
 
 alert("❌ لازم تسجل الدخول أولاً");
 
 return;
+
 }
 
-const confirmDelete=
-confirm("⚠️ هل أنت متأكد أنك تريد حذف هذا المنتج؟");
 
-if(!confirmDelete){
+const answer =
+confirm(
+"⚠️ هل أنت متأكد أنك تريد حذف هذا المنتج؟"
+);
+
+
+if(!answer){
 
 return;
+
 }
 
-const {error}=
+
+const {error} =
 await supabaseClient
 .from("products")
 .delete()
 .eq("id",productId)
 .eq("user_id",user.id);
 
+
 if(error){
 
-alert("❌ لم يتم حذف المنتج: "+error.message);
+alert(
+"❌ لم يتم حذف المنتج: "+
+error.message
+);
 
 return;
+
 }
 
+
 alert("✅ تم حذف المنتج بنجاح");
+
 
 loadMyProducts();
 
 }
 
-/* تسجيل الخروج */
+
+/* =========================
+تسجيل الخروج
+========================= */
 
 async function logout(){
 
@@ -1515,14 +1736,19 @@ loadProducts();
 
 }
 
-/* تحديث المستخدم */
+
+/* =========================
+تحديث حالة المستخدم
+========================= */
 
 async function updateUser(){
 
-const result=
+const result =
 await supabaseClient.auth.getUser();
 
-const user=result.data.user;
+const user =
+result.data.user;
+
 
 if(user){
 
@@ -1530,12 +1756,10 @@ document.getElementById("authButtons").style.display="none";
 
 document.getElementById("userBox").style.display="block";
 
-document.getElementById("userEmail").innerText=
-user.email||"";
+document.getElementById("userEmail").innerText =
+" "+(user.email || "");
 
-}
-
-else{
+}else{
 
 document.getElementById("authButtons").style.display="block";
 
@@ -1545,20 +1769,27 @@ document.getElementById("userBox").style.display="none";
 
 }
 
-/* متابعة Google */
+
+/* =========================
+مراقبة تسجيل الدخول
+========================= */
 
 supabaseClient.auth.onAuthStateChange(
 function(event,session){
 
-if(session&&session.user){
+if(session && session.user){
 
 updateUser();
 
 }
 
-});
+}
+);
 
-/* تشغيل الموقع */
+
+/* =========================
+تشغيل الموقع
+========================= */
 
 updateUser();
 
@@ -1567,5 +1798,4 @@ loadProducts();
 </script>
 
 </body>
-
   </html>
