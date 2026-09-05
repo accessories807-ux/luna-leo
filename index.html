@@ -317,5 +317,18 @@ function closeLogin() {
 
 </script>
 
-</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://zuljqdzinbndmesbarjn.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_thb5jIXk2pFDqs79kJMQRQ_N-HrFAt6";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+console.log("Supabase connected");
+</script></body>
 </html>
