@@ -64,6 +64,11 @@
       color: #111;
     }
 
+    .logout {
+      background: #c0392b;
+      color: white;
+    }
+
     .search {
       padding: 20px 15px;
     }
@@ -135,6 +140,7 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      z-index: 999;
     }
 
     .modal-box {
@@ -159,6 +165,36 @@
       color: white;
       width: 100%;
     }
+
+    .message {
+      text-align: center;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      display: none;
+      font-weight: bold;
+    }
+
+    .success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    #userBox {
+      display: none;
+      text-align: center;
+      background: #fff;
+      padding: 15px;
+    }
+
+    #userEmail {
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -174,7 +210,9 @@
   </p>
 </header>
 
-<div class="buttons">
+
+<div class="buttons" id="authButtons">
+
   <button class="login" onclick="openLogin()">
     👤 تسجيل الدخول
   </button>
@@ -182,16 +220,36 @@
   <button class="register" onclick="openRegister()">
     ➕ إنشاء حساب
   </button>
+
 </div>
 
+
+<div id="userBox">
+
+  👋 أهلاً بك
+  <span id="userEmail"></span>
+
+  <br>
+
+  <button class="logout" onclick="logout()">
+    🚪 تسجيل الخروج
+  </button>
+
+</div>
+
+
 <div class="search">
+
   <input
     type="text"
     placeholder="🔎 ابحث عن منتج..."
   >
+
 </div>
 
+
 <section>
+
   <h2>الأقسام</h2>
 
   <div class="categories">
@@ -205,7 +263,9 @@
     <div class="category">👕 ملابس</div>
 
   </div>
+
 </section>
+
 
 <section>
 
@@ -223,41 +283,57 @@
 
 </section>
 
+
 <footer>
+
   © 2026 LUNA&LEO MARKET
+
   <br><br>
+
   جميع الحقوق محفوظة
+
 </footer>
 
 
-<!-- نافذة التسجيل -->
+<!-- نافذة إنشاء الحساب -->
 
 <div class="modal" id="registerModal">
 
   <div class="modal-box">
 
-    <h2>إنشاء حساب</h2>
+    <h2>➕ إنشاء حساب</h2>
 
     <input
       type="text"
+      id="registerName"
       placeholder="الاسم"
     >
 
     <input
       type="email"
+      id="registerEmail"
       placeholder="البريد الإلكتروني"
     >
 
     <input
       type="password"
+      id="registerPassword"
       placeholder="كلمة المرور"
     >
 
-    <button class="submit">
+    <div id="registerMessage" class="message"></div>
+
+    <button
+      class="submit"
+      onclick="registerUser()"
+    >
       إنشاء الحساب
     </button>
 
-    <button class="close" onclick="closeRegister()">
+    <button
+      class="close"
+      onclick="closeRegister()"
+    >
       إغلاق
     </button>
 
@@ -272,23 +348,33 @@
 
   <div class="modal-box">
 
-    <h2>تسجيل الدخول</h2>
+    <h2>👤 تسجيل الدخول</h2>
 
     <input
       type="email"
+      id="loginEmail"
       placeholder="البريد الإلكتروني"
     >
 
     <input
       type="password"
+      id="loginPassword"
       placeholder="كلمة المرور"
     >
 
-    <button class="submit">
+    <div id="loginMessage" class="message"></div>
+
+    <button
+      class="submit"
+      onclick="loginUser()"
+    >
       تسجيل الدخول
     </button>
 
-    <button class="close" onclick="closeLogin()">
+    <button
+      class="close"
+      onclick="closeLogin()"
+    >
       إغلاق
     </button>
 
@@ -297,38 +383,263 @@
 </div>
 
 
-<script>
-
-function openRegister() {
-  document.getElementById("registerModal").style.display = "flex";
-}
-
-function closeRegister() {
-  document.getElementById("registerModal").style.display = "none";
-}
-
-function openLogin() {
-  document.getElementById("loginModal").style.display = "flex";
-}
-
-function closeLogin() {
-  document.getElementById("loginModal").style.display = "none";
-}
-
-</script>
+<!-- Supabase -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const SUPABASE_URL = "https://zuljqdzinbndmesbarjn.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_thb5jIXk2pFDqs79kJMQRQ_N-HrFAt6";
+const SUPABASE_URL =
+  "https://zuljqdzinbndmesbarjn.supabase.co";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const SUPABASE_KEY =
+  "sb_publishable_thb5jIXk2pFDqs79kJMQRQ_N-HrFAt6";
 
-console.log("Supabase connected");
-</script></body>
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* فتح وغلق النوافذ */
+
+function openRegister() {
+
+  document.getElementById("registerModal").style.display = "flex";
+
+}
+
+function closeRegister() {
+
+  document.getElementById("registerModal").style.display = "none";
+
+}
+
+function openLogin() {
+
+  document.getElementById("loginModal").style.display = "flex";
+
+}
+
+function closeLogin() {
+
+  document.getElementById("loginModal").style.display = "none";
+
+}
+
+
+/* رسالة */
+
+function showMessage(id, text, type) {
+
+  const box = document.getElementById(id);
+
+  box.innerText = text;
+
+  box.className = "message " + type;
+
+  box.style.display = "block";
+
+}
+
+
+/* إنشاء حساب */
+
+async function registerUser() {
+
+  const name =
+    document.getElementById("registerName").value.trim();
+
+  const email =
+    document.getElementById("registerEmail").value.trim();
+
+  const password =
+    document.getElementById("registerPassword").value;
+
+
+  if (!name || !email || !password) {
+
+    showMessage(
+      "registerMessage",
+      "من فضلك املأ جميع البيانات",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if (password.length < 6) {
+
+    showMessage(
+      "registerMessage",
+      "كلمة المرور لازم تكون 6 أحرف على الأقل",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const { data, error } =
+    await supabaseClient.auth.signUp({
+
+      email: email,
+
+      password: password,
+
+      options: {
+
+        data: {
+          name: name
+        }
+
+      }
+
+    });
+
+
+  if (error) {
+
+    showMessage(
+      "registerMessage",
+      "❌ " + error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  showMessage(
+    "registerMessage",
+    "✅ تم إنشاء الحساب بنجاح",
+    "success"
+  );
+
+
+  document.getElementById("registerName").value = "";
+  document.getElementById("registerEmail").value = "";
+  document.getElementById("registerPassword").value = "";
+
+}
+
+
+/* تسجيل الدخول */
+
+async function loginUser() {
+
+  const email =
+    document.getElementById("loginEmail").value.trim();
+
+  const password =
+    document.getElementById("loginPassword").value;
+
+
+  if (!email || !password) {
+
+    showMessage(
+      "loginMessage",
+      "من فضلك اكتب البريد وكلمة المرور",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+
+      email: email,
+
+      password: password
+
+    });
+
+
+  if (error) {
+
+    showMessage(
+      "loginMessage",
+      "❌ البريد أو كلمة المرور غير صحيحة",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  showMessage(
+    "loginMessage",
+    "✅ تم تسجيل الدخول بنجاح",
+    "success"
+  );
+
+
+  setTimeout(() => {
+
+    closeLogin();
+
+    updateUserInterface();
+
+  }, 800);
+
+}
+
+
+/* تسجيل الخروج */
+
+async function logout() {
+
+  await supabaseClient.auth.signOut();
+
+  updateUserInterface();
+
+}
+
+
+/* معرفة المستخدم الحالي */
+
+async function updateUserInterface() {
+
+  const { data } =
+    await supabaseClient.auth.getUser();
+
+  const user = data.user;
+
+
+  if (user) {
+
+    document.getElementById("authButtons").style.display = "none";
+
+    document.getElementById("userBox").style.display = "block";
+
+    document.getElementById("userEmail").innerText =
+      user.email;
+
+  } else {
+
+    document.getElementById("authButtons").style.display = "block";
+
+    document.getElementById("userBox").style.display = "none";
+
+  }
+
+}
+
+
+/* عند فتح الموقع */
+
+updateUserInterface();
+
+</script>
+
+</body>
 </html>
