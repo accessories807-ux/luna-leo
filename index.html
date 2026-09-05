@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
@@ -8,7 +7,6 @@
 <title>LUNA&LEO MARKET</title>
 
 <style>
-
 * {
 box-sizing: border-box;
 }
@@ -77,6 +75,13 @@ background: #c0392b;
 color: white;
 }
 
+.add-product {
+background: #111;
+color: white;
+width: 100%;
+max-width: 400px;
+}
+
 .search {
 padding: 20px;
 }
@@ -95,6 +100,16 @@ margin: 7px 0;
 border: 1px solid #ddd;
 border-radius: 9px;
 font-size: 15px;
+}
+
+textarea {
+width: 100%;
+padding: 14px;
+margin: 7px 0;
+border: 1px solid #ddd;
+border-radius: 9px;
+font-size: 15px;
+resize: vertical;
 }
 
 section {
@@ -119,6 +134,42 @@ padding: 25px 10px;
 text-align: center;
 border-radius: 12px;
 font-weight: bold;
+}
+
+.products {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+gap: 15px;
+max-width: 900px;
+margin: auto;
+}
+
+.product {
+background: white;
+border-radius: 12px;
+overflow: hidden;
+box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.product img {
+width: 100%;
+height: 180px;
+object-fit: cover;
+background: #eee;
+}
+
+.product-info {
+padding: 15px;
+}
+
+.product-info h3 {
+margin-top: 0;
+}
+
+.price {
+font-size: 20px;
+font-weight: bold;
+color: #b38b00;
 }
 
 .empty {
@@ -156,6 +207,8 @@ width: 100%;
 max-width: 420px;
 padding: 25px;
 border-radius: 15px;
+max-height: 90vh;
+overflow-y: auto;
 }
 
 .modal-box h2 {
@@ -215,9 +268,7 @@ background: white;
 padding: 15px;
 text-align: center;
 }
-
 </style>
-
 </head>
 
 <body>
@@ -237,20 +288,12 @@ LUNA<span>&</span>LEO
 
 <div class="buttons" id="authButtons">
 
-<button
-class="login"
-onclick="openLogin()">
-
+<button class="login" onclick="openLogin()">
 👤 تسجيل الدخول
-
 </button>
 
-<button
-class="register"
-onclick="openRegister()">
-
+<button class="register" onclick="openRegister()">
 ➕ إنشاء حساب
-
 </button>
 
 </div>
@@ -264,12 +307,14 @@ onclick="openRegister()">
 
 <br>
 
-<button
-class="logout"
-onclick="logout()">
+<button class="add-product" onclick="openProductModal()">
+➕ إضافة منتج
+</button>
 
+<br>
+
+<button class="logout" onclick="logout()">
 🚪 تسجيل الخروج
-
 </button>
 
 </div>
@@ -278,8 +323,10 @@ onclick="logout()">
 <div class="search">
 
 <input
+id="searchInput"
 type="text"
-placeholder="🔎 ابحث عن منتج...">
+placeholder="🔎 ابحث عن منتج..."
+oninput="loadProducts()">
 
 </div>
 
@@ -315,15 +362,11 @@ placeholder="🔎 ابحث عن منتج...">
 
 <h2>🛍️ أحدث المنتجات</h2>
 
+<div id="productsContainer" class="products">
+
 <div class="empty">
-
-<h3>
-لا توجد منتجات حتى الآن
-</h3>
-
-<p>
-كن أول شخص يعرض منتجه على LUNA&LEO MARKET
-</p>
+جاري تحميل المنتجات...
+</div>
 
 </div>
 
@@ -343,9 +386,7 @@ placeholder="🔎 ابحث عن منتج...">
 
 <!-- إنشاء الحساب -->
 
-<div
-class="modal"
-id="registerModal">
+<div class="modal" id="registerModal">
 
 <div class="modal-box">
 
@@ -353,52 +394,28 @@ id="registerModal">
 ➕ إنشاء حساب
 </h2>
 
-<button
-class="google"
-onclick="loginWithGoogle()">
-
+<button class="google" onclick="loginWithGoogle()">
 🔵 التسجيل باستخدام Google
-
 </button>
 
 <div class="divider">
 أو التسجيل بالبريد الإلكتروني
 </div>
 
-<input
-id="registerName"
-type="text"
-placeholder="الاسم">
+<input id="registerName" type="text" placeholder="الاسم">
 
-<input
-id="registerEmail"
-type="email"
-placeholder="البريد الإلكتروني">
+<input id="registerEmail" type="email" placeholder="البريد الإلكتروني">
 
-<input
-id="registerPassword"
-type="password"
-placeholder="كلمة المرور">
+<input id="registerPassword" type="password" placeholder="كلمة المرور">
 
-<div
-id="registerMessage"
-class="message">
-</div>
+<div id="registerMessage" class="message"></div>
 
-<button
-class="submit"
-onclick="registerUser()">
-
+<button class="submit" onclick="registerUser()">
 إنشاء الحساب
-
 </button>
 
-<button
-class="close"
-onclick="closeRegister()">
-
+<button class="close" onclick="closeRegister()">
 إغلاق
-
 </button>
 
 </div>
@@ -408,9 +425,7 @@ onclick="closeRegister()">
 
 <!-- تسجيل الدخول -->
 
-<div
-class="modal"
-id="loginModal">
+<div class="modal" id="loginModal">
 
 <div class="modal-box">
 
@@ -418,55 +433,30 @@ id="loginModal">
 👤 تسجيل الدخول
 </h2>
 
-<button
-class="google"
-onclick="loginWithGoogle()">
-
+<button class="google" onclick="loginWithGoogle()">
 🔵 الدخول باستخدام Google
-
 </button>
 
 <div class="divider">
 أو الدخول بالبريد الإلكتروني
 </div>
 
-<input
-id="loginEmail"
-type="email"
-placeholder="البريد الإلكتروني">
+<input id="loginEmail" type="email" placeholder="البريد الإلكتروني">
 
-<input
-id="loginPassword"
-type="password"
-placeholder="كلمة المرور">
+<input id="loginPassword" type="password" placeholder="كلمة المرور">
 
-<div
-class="forgot"
-onclick="openForgot()">
-
+<div class="forgot" onclick="openForgot()">
 🔑 نسيت كلمة المرور؟
-
 </div>
 
-<div
-id="loginMessage"
-class="message">
-</div>
+<div id="loginMessage" class="message"></div>
 
-<button
-class="submit"
-onclick="loginUser()">
-
+<button class="submit" onclick="loginUser()">
 تسجيل الدخول
-
 </button>
 
-<button
-class="close"
-onclick="closeLogin()">
-
+<button class="close" onclick="closeLogin()">
 إغلاق
-
 </button>
 
 </div>
@@ -476,9 +466,7 @@ onclick="closeLogin()">
 
 <!-- نسيت كلمة المرور -->
 
-<div
-class="modal"
-id="forgotModal">
+<div class="modal" id="forgotModal">
 
 <div class="modal-box">
 
@@ -490,30 +478,61 @@ id="forgotModal">
 اكتب بريدك الإلكتروني وسنرسل لك رابط استعادة كلمة المرور.
 </p>
 
-<input
-id="forgotEmail"
-type="email"
-placeholder="البريد الإلكتروني">
+<input id="forgotEmail" type="email" placeholder="البريد الإلكتروني">
 
-<div
-id="forgotMessage"
-class="message">
-</div>
+<div id="forgotMessage" class="message"></div>
 
-<button
-class="submit"
-onclick="sendResetEmail()">
-
+<button class="submit" onclick="sendResetEmail()">
 📧 إرسال الرابط
-
 </button>
 
-<button
-class="close"
-onclick="closeForgot()">
-
+<button class="close" onclick="closeForgot()">
 إغلاق
+</button>
 
+</div>
+
+</div>
+
+
+<!-- إضافة منتج -->
+
+<div class="modal" id="productModal">
+
+<div class="modal-box">
+
+<h2>
+➕ إضافة منتج
+</h2>
+
+<input
+id="productName"
+type="text"
+placeholder="اسم المنتج">
+
+<input
+id="productPrice"
+type="number"
+placeholder="السعر بالجنيه">
+
+<textarea
+id="productDescription"
+rows="4"
+placeholder="وصف المنتج"></textarea>
+
+<input
+id="productImage"
+type="url"
+placeholder="رابط صورة المنتج">
+
+<div id="productMessage" class="message"></div>
+
+<button class="submit" onclick="addProduct()">
+🛍️ نشر المنتج
+</button>
+
+<button class="close" onclick="closeProductModal()">
+إغلاق
 </button>
 
 </div>
@@ -540,82 +559,57 @@ SUPABASE_KEY
 );
 
 
-/* فتح النوافذ */
+/* النوافذ */
 
 function openRegister() {
-
-document.getElementById(
-"registerModal"
-).style.display = "flex";
-
+document.getElementById("registerModal").style.display = "flex";
 }
 
 function closeRegister() {
-
-document.getElementById(
-"registerModal"
-).style.display = "none";
-
+document.getElementById("registerModal").style.display = "none";
 }
 
 function openLogin() {
-
-document.getElementById(
-"loginModal"
-).style.display = "flex";
-
+document.getElementById("loginModal").style.display = "flex";
 }
 
 function closeLogin() {
-
-document.getElementById(
-"loginModal"
-).style.display = "none";
-
+document.getElementById("loginModal").style.display = "none";
 }
 
 function openForgot() {
-
 closeLogin();
-
-document.getElementById(
-"forgotModal"
-).style.display = "flex";
-
+document.getElementById("forgotModal").style.display = "flex";
 }
 
 function closeForgot() {
+document.getElementById("forgotModal").style.display = "none";
+}
 
-document.getElementById(
-"forgotModal"
-).style.display = "none";
+function openProductModal() {
+document.getElementById("productModal").style.display = "flex";
+}
 
+function closeProductModal() {
+document.getElementById("productModal").style.display = "none";
 }
 
 
 /* الرسائل */
 
-function showMessage(
-id,
-text,
-type
-) {
+function showMessage(id, text, type) {
 
-const box =
-document.getElementById(id);
+const box = document.getElementById(id);
 
 box.innerText = text;
 
-box.className =
-"message " + type;
+box.className = "message " + type;
 
-box.style.display =
-"block";
-
+box.style.display = "block";
 }
 
 
-/* تسجيل الدخول باستخدام Google */
+/* Google */
 
 async function loginWithGoogle() {
 
@@ -625,11 +619,8 @@ await supabaseClient.auth.signInWithOAuth({
 provider: "google",
 
 options: {
-
 redirectTo:
-window.location.origin +
-window.location.pathname
-
+"https://luna-leo.vercel.app"
 }
 
 });
@@ -645,25 +636,18 @@ alert(
 }
 
 
-/* إنشاء حساب بالبريد */
+/* إنشاء حساب */
 
 async function registerUser() {
 
 const name =
-document.getElementById(
-"registerName"
-).value.trim();
+document.getElementById("registerName").value.trim();
 
 const email =
-document.getElementById(
-"registerEmail"
-).value.trim();
+document.getElementById("registerEmail").value.trim();
 
 const password =
-document.getElementById(
-"registerPassword"
-).value;
-
+document.getElementById("registerPassword").value;
 
 if (!name || !email || !password) {
 
@@ -674,9 +658,7 @@ showMessage(
 );
 
 return;
-
 }
-
 
 if (password.length < 6) {
 
@@ -687,9 +669,7 @@ showMessage(
 );
 
 return;
-
 }
-
 
 const result =
 await supabaseClient.auth.signUp({
@@ -699,15 +679,12 @@ email: email,
 password: password,
 
 options: {
-
 data: {
 name: name
 }
-
 }
 
 });
-
 
 if (result.error) {
 
@@ -718,9 +695,7 @@ showMessage(
 );
 
 return;
-
 }
-
 
 showMessage(
 "registerMessage",
@@ -731,20 +706,15 @@ showMessage(
 }
 
 
-/* تسجيل الدخول بالبريد */
+/* تسجيل الدخول */
 
 async function loginUser() {
 
 const email =
-document.getElementById(
-"loginEmail"
-).value.trim();
+document.getElementById("loginEmail").value.trim();
 
 const password =
-document.getElementById(
-"loginPassword"
-).value;
-
+document.getElementById("loginPassword").value;
 
 if (!email || !password) {
 
@@ -755,19 +725,15 @@ showMessage(
 );
 
 return;
-
 }
-
 
 const result =
 await supabaseClient.auth.signInWithPassword({
 
 email: email,
-
 password: password
 
 });
-
 
 if (result.error) {
 
@@ -778,9 +744,7 @@ showMessage(
 );
 
 return;
-
 }
-
 
 showMessage(
 "loginMessage",
@@ -788,17 +752,12 @@ showMessage(
 "success"
 );
 
-
-setTimeout(
-function() {
+setTimeout(function() {
 
 closeLogin();
-
 updateUser();
 
-},
-800
-);
+}, 500);
 
 }
 
@@ -808,10 +767,7 @@ updateUser();
 async function sendResetEmail() {
 
 const email =
-document.getElementById(
-"forgotEmail"
-).value.trim();
-
+document.getElementById("forgotEmail").value.trim();
 
 if (!email) {
 
@@ -822,23 +778,16 @@ showMessage(
 );
 
 return;
-
 }
-
-
-const redirectUrl =
-window.location.origin +
-window.location.pathname;
-
 
 const result =
 await supabaseClient.auth.resetPasswordForEmail(
 email,
 {
-redirectTo: redirectUrl
+redirectTo:
+"https://luna-leo.vercel.app"
 }
 );
-
 
 if (result.error) {
 
@@ -849,15 +798,207 @@ showMessage(
 );
 
 return;
-
 }
-
 
 showMessage(
 "forgotMessage",
 "✅ تم إرسال رابط الاستعادة إلى بريدك الإلكتروني",
 "success"
 );
+
+}
+
+
+/* إضافة منتج */
+
+async function addProduct() {
+
+const name =
+document.getElementById("productName").value.trim();
+
+const price =
+document.getElementById("productPrice").value;
+
+const description =
+document.getElementById("productDescription").value.trim();
+
+const image_url =
+document.getElementById("productImage").value.trim();
+
+
+if (!name || !price || !description) {
+
+showMessage(
+"productMessage",
+"من فضلك املأ اسم المنتج والسعر والوصف",
+"error"
+);
+
+return;
+}
+
+
+const {
+data: { user }
+} =
+await supabaseClient.auth.getUser();
+
+
+if (!user) {
+
+showMessage(
+"productMessage",
+"❌ لازم تسجل الدخول أولاً",
+"error"
+);
+
+return;
+}
+
+
+const { error } =
+await supabaseClient
+.from("products")
+.insert([{
+
+name: name,
+
+price: Number(price),
+
+description: description,
+
+image_url: image_url,
+
+user_id: user.id
+
+}]);
+
+
+if (error) {
+
+showMessage(
+"productMessage",
+"❌ حدث خطأ: " + error.message,
+"error"
+);
+
+return;
+}
+
+
+showMessage(
+"productMessage",
+"✅ تم نشر المنتج بنجاح",
+"success"
+);
+
+
+document.getElementById("productName").value = "";
+document.getElementById("productPrice").value = "";
+document.getElementById("productDescription").value = "";
+document.getElementById("productImage").value = "";
+
+
+setTimeout(function() {
+
+closeProductModal();
+
+loadProducts();
+
+}, 1000);
+
+}
+
+
+/* تحميل المنتجات */
+
+async function loadProducts() {
+
+const container =
+document.getElementById("productsContainer");
+
+const search =
+document.getElementById("searchInput").value.trim().toLowerCase();
+
+
+const { data, error } =
+await supabaseClient
+.from("products")
+.select("*")
+.order("id", { ascending: false });
+
+
+if (error) {
+
+container.innerHTML =
+'<div class="empty">❌ تعذر تحميل المنتجات</div>';
+
+return;
+}
+
+
+let products = data || [];
+
+
+if (search) {
+
+products =
+products.filter(function(product) {
+
+return (
+(product.name || "").toLowerCase().includes(search) ||
+(product.description || "").toLowerCase().includes(search)
+);
+
+});
+
+}
+
+
+if (products.length === 0) {
+
+container.innerHTML =
+'<div class="empty"><h3>لا توجد منتجات حتى الآن</h3><p>كن أول شخص يعرض منتجه على LUNA&LEO MARKET</p></div>';
+
+return;
+}
+
+
+container.innerHTML = products.map(function(product) {
+
+const image =
+product.image_url
+?
+`<img src="${product.image_url}" alt="${product.name}">`
+:
+`<div style="height:180px;background:#eee;display:flex;align-items:center;justify-content:center;color:#888;">📦 لا توجد صورة</div>`;
+
+
+return `
+
+<div class="product">
+
+${image}
+
+<div class="product-info">
+
+<h3>${product.name}</h3>
+
+<div class="price">
+${product.price} جنيه
+</div>
+
+<p>
+${product.description}
+</p>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
 
 }
 
@@ -873,7 +1014,7 @@ updateUser();
 }
 
 
-/* تحديث حالة المستخدم */
+/* تحديث المستخدم */
 
 async function updateUser() {
 
@@ -886,57 +1027,47 @@ result.data.user;
 
 if (user) {
 
-document.getElementById(
-"authButtons"
-).style.display = "none";
+document.getElementById("authButtons").style.display = "none";
 
-document.getElementById(
-"userBox"
-).style.display = "block";
+document.getElementById("userBox").style.display = "block";
 
-document.getElementById(
-"userEmail"
-).innerText =
+document.getElementById("userEmail").innerText =
 user.email || "";
 
 }
 
 else {
 
-document.getElementById(
-"authButtons"
-).style.display = "block";
+document.getElementById("authButtons").style.display = "block";
 
-document.getElementById(
-"userBox"
-).style.display = "none";
+document.getElementById("userBox").style.display = "none";
 
 }
 
 }
 
 
-/* متابعة تسجيل الدخول بعد الرجوع من Google */
+/* متابعة Google */
 
 supabaseClient.auth.onAuthStateChange(
 function(event, session) {
 
 if (session && session.user) {
-
 updateUser();
-
 }
 
 }
 );
 
 
-/* تشغيل حالة المستخدم */
+/* تشغيل الموقع */
 
 updateUser();
+
+loadProducts();
 
 </script>
 
 </body>
 
-  </html>
+</html>
