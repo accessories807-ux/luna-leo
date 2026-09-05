@@ -1,184 +1,903 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LUNA&LEO MARKET</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #222;
-    }
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    header {
-      background: #111;
-      color: white;
-      padding: 25px 15px;
-      text-align: center;
-    }
+<title>LUNA&LEO MARKET</title>
 
-    .logo {
-      font-size: 30px;
-      font-weight: bold;
-    }
+<style>
 
-    .logo span {
-      color: #d4af37;
-    }
+* {
+box-sizing: border-box;
+}
 
-    header p {
-      color: #ccc;
-      margin-bottom: 0;
-    }
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background: #f5f5f5;
+color: #222;
+}
 
-    .buttons {
-      text-align: center;
-      padding: 20px 10px;
-      background: white;
-    }
+header {
+background: #111;
+color: white;
+padding: 25px 15px;
+text-align: center;
+}
 
-    button {
-      border: 0;
-      padding: 13px 22px;
-      margin: 5px;
-      border-radius: 9px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.logo {
+font-size: 30px;
+font-weight: bold;
+}
 
-    .login {
-      background: #111;
-      color: white;
-    }
+.logo span {
+color: #d4af37;
+}
 
-    .register {
-      background: #d4af37;
-      color: #111;
-    }
+header p {
+color: #ccc;
+}
 
-    .logout {
-      background: #c0392b;
-      color: white;
-    }
+.buttons {
+background: white;
+padding: 20px;
+text-align: center;
+}
 
-    .search {
-      padding: 20px 15px;
-    }
+button {
+border: 0;
+padding: 13px 20px;
+margin: 5px;
+border-radius: 9px;
+font-size: 15px;
+font-weight: bold;
+cursor: pointer;
+}
 
-    input {
-      width: 100%;
-      padding: 14px;
-      margin: 7px 0;
-      border: 1px solid #ddd;
-      border-radius: 9px;
-      font-size: 15px;
-      outline: none;
-    }
+.login {
+background: #111;
+color: white;
+}
 
-    .search input {
-      max-width: 650px;
-      display: block;
-      margin: auto;
-    }
+.register {
+background: #d4af37;
+color: #111;
+}
 
-    section {
-      padding: 20px 15px;
-    }
+.logout {
+background: #c0392b;
+color: white;
+}
 
-    h2 {
-      text-align: center;
-    }
+.search {
+padding: 20px;
+}
 
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      max-width: 700px;
-      margin: auto;
-    }
+.search input {
+width: 100%;
+max-width: 650px;
+display: block;
+margin: auto;
+}
 
-    .category {
-      background: white;
-      padding: 25px 10px;
-      text-align: center;
-      border-radius: 12px;
-      font-weight: bold;
-      box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    }
+input {
+width: 100%;
+padding: 14px;
+margin: 7px 0;
+border: 1px solid #ddd;
+border-radius: 9px;
+font-size: 15px;
+}
 
-    .empty {
-      background: white;
-      max-width: 650px;
-      margin: auto;
-      padding: 30px 20px;
-      text-align: center;
-      border-radius: 12px;
-      color: #777;
-    }
+section {
+padding: 20px 15px;
+}
 
-    footer {
-      margin-top: 30px;
-      background: #111;
-      color: #aaa;
-      text-align: center;
-      padding: 25px 10px;
-    }
+h2 {
+text-align: center;
+}
 
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.7);
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 999;
-    }
+.categories {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 12px;
+max-width: 700px;
+margin: auto;
+}
 
-    .modal-box {
-      background: white;
-      width: 100%;
-      max-width: 420px;
-      padding: 25px;
-      border-radius: 15px;
-    }
+.category {
+background: white;
+padding: 25px 10px;
+text-align: center;
+border-radius: 12px;
+font-weight: bold;
+}
 
-    .modal-box h2 {
-      margin-top: 0;
-    }
+.empty {
+background: white;
+max-width: 650px;
+margin: auto;
+padding: 30px 20px;
+text-align: center;
+border-radius: 12px;
+color: #777;
+}
 
-    .close {
-      background: #ddd;
-      color: #222;
-    }
+footer {
+margin-top: 30px;
+background: #111;
+color: #aaa;
+text-align: center;
+padding: 25px;
+}
 
-    .submit {
-      background: #111;
-      color: white;
-      width: 100%;
-    }
+.modal {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,.7);
+align-items: center;
+justify-content: center;
+padding: 20px;
+z-index: 999;
+}
 
-    .forgot {
-      display: block;
-      text-align: center;
-      margin: 12px 0;
-      color: #8a6d00;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.modal-box {
+background: white;
+width: 100%;
+max-width: 420px;
+padding: 25px;
+border-radius: 15px;
+}
 
-    .message {
-      text-align: center;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      display: none;
-      font-weight:
+.modal-box h2 {
+margin-top: 0;
+}
+
+.submit {
+background: #111;
+color: white;
+width: 100%;
+}
+
+.close {
+background: #ddd;
+}
+
+.forgot {
+display: block;
+text-align: center;
+margin: 12px;
+color: #8a6d00;
+font-weight: bold;
+cursor: pointer;
+}
+
+.message {
+display: none;
+padding: 10px;
+margin: 8px 0;
+border-radius: 8px;
+text-align: center;
+font-weight: bold;
+}
+
+.success {
+display: block;
+background: #d4edda;
+color: #155724;
+}
+
+.error {
+display: block;
+background: #f8d7da;
+color: #721c24;
+}
+
+#userBox {
+display: none;
+background: white;
+padding: 15px;
+text-align: center;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<div class="logo">
+LUNA<span>&</span>LEO
+</div>
+
+<p>
+سوقك الإلكتروني لعرض وبيع المنتجات
+</p>
+
+</header>
+
+
+<div class="buttons" id="authButtons">
+
+<button
+class="login"
+onclick="openLogin()">
+
+👤 تسجيل الدخول
+
+</button>
+
+
+<button
+class="register"
+onclick="openRegister()">
+
+➕ إنشاء حساب
+
+</button>
+
+</div>
+
+
+<div id="userBox">
+
+👋 أهلاً بك
+
+<span id="userEmail"></span>
+
+<br>
+
+<button
+class="logout"
+onclick="logout()">
+
+🚪 تسجيل الخروج
+
+</button>
+
+</div>
+
+
+<div class="search">
+
+<input
+type="text"
+placeholder="🔎 ابحث عن منتج...">
+
+</div>
+
+
+<section>
+
+<h2>الأقسام</h2>
+
+<div class="categories">
+
+<div class="category">
+👜 إكسسوارات
+</div>
+
+<div class="category">
+⌚ ساعات
+</div>
+
+<div class="category">
+📱 إلكترونيات
+</div>
+
+<div class="category">
+👕 ملابس
+</div>
+
+</div>
+
+</section>
+
+
+<section>
+
+<h2>🛍️ أحدث المنتجات</h2>
+
+<div class="empty">
+
+<h3>
+لا توجد منتجات حتى الآن
+</h3>
+
+<p>
+كن أول شخص يعرض منتجه على LUNA&LEO MARKET
+</p>
+
+</div>
+
+</section>
+
+
+<footer>
+
+© 2026 LUNA&LEO MARKET
+
+<br><br>
+
+جميع الحقوق محفوظة
+
+</footer>
+
+
+<!-- التسجيل -->
+
+
+<div
+class="modal"
+id="registerModal">
+
+<div class="modal-box">
+
+<h2>
+➕ إنشاء حساب
+</h2>
+
+
+<input
+id="registerName"
+type="text"
+placeholder="الاسم">
+
+
+<input
+id="registerEmail"
+type="email"
+placeholder="البريد الإلكتروني">
+
+
+<input
+id="registerPassword"
+type="password"
+placeholder="كلمة المرور">
+
+
+<div
+id="registerMessage"
+class="message">
+</div>
+
+
+<button
+class="submit"
+onclick="registerUser()">
+
+إنشاء الحساب
+
+</button>
+
+
+<button
+class="close"
+onclick="closeRegister()">
+
+إغلاق
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- تسجيل الدخول -->
+
+
+<div
+class="modal"
+id="loginModal">
+
+<div class="modal-box">
+
+<h2>
+👤 تسجيل الدخول
+</h2>
+
+
+<input
+id="loginEmail"
+type="email"
+placeholder="البريد الإلكتروني">
+
+
+<input
+id="loginPassword"
+type="password"
+placeholder="كلمة المرور">
+
+
+<div
+class="forgot"
+onclick="openForgot()">
+
+🔑 نسيت كلمة المرور؟
+
+</div>
+
+
+<div
+id="loginMessage"
+class="message">
+</div>
+
+
+<button
+class="submit"
+onclick="loginUser()">
+
+تسجيل الدخول
+
+</button>
+
+
+<button
+class="close"
+onclick="closeLogin()">
+
+إغلاق
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- نسيت كلمة المرور -->
+
+
+<div
+class="modal"
+id="forgotModal">
+
+<div class="modal-box">
+
+<h2>
+🔑 نسيت كلمة المرور؟
+</h2>
+
+<p>
+اكتب بريدك الإلكتروني وسنرسل لك رابط استعادة كلمة المرور.
+</p>
+
+
+<input
+id="forgotEmail"
+type="email"
+placeholder="البريد الإلكتروني">
+
+
+<div
+id="forgotMessage"
+class="message">
+</div>
+
+
+<button
+class="submit"
+onclick="sendResetEmail()">
+
+📧 إرسال الرابط
+
+</button>
+
+
+<button
+class="close"
+onclick="closeForgot()">
+
+إغلاق
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- Supabase -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+
+const SUPABASE_URL =
+"https://zuljqdzinbndmesbarjn.supabase.co";
+
+
+const SUPABASE_KEY =
+"sb_publishable_thb5jIXk2pFDqs79kJMQRQ_N-HrFAt6";
+
+
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+
+function openRegister() {
+
+document.getElementById(
+"registerModal"
+).style.display = "flex";
+
+}
+
+
+function closeRegister() {
+
+document.getElementById(
+"registerModal"
+).style.display = "none";
+
+}
+
+
+function openLogin() {
+
+document.getElementById(
+"loginModal"
+).style.display = "flex";
+
+}
+
+
+function closeLogin() {
+
+document.getElementById(
+"loginModal"
+).style.display = "none";
+
+}
+
+
+function openForgot() {
+
+closeLogin();
+
+document.getElementById(
+"forgotModal"
+).style.display = "flex";
+
+}
+
+
+function closeForgot() {
+
+document.getElementById(
+"forgotModal"
+).style.display = "none";
+
+}
+
+
+
+function showMessage(
+id,
+text,
+type
+) {
+
+const box =
+document.getElementById(id);
+
+box.innerText = text;
+
+box.className =
+"message " + type;
+
+box.style.display =
+"block";
+
+}
+
+
+
+/* إنشاء الحساب */
+
+
+async function registerUser() {
+
+const name =
+document.getElementById(
+"registerName"
+).value.trim();
+
+const email =
+document.getElementById(
+"registerEmail"
+).value.trim();
+
+const password =
+document.getElementById(
+"registerPassword"
+).value;
+
+
+if (!name || !email || !password) {
+
+showMessage(
+"registerMessage",
+"من فضلك املأ جميع البيانات",
+"error"
+);
+
+return;
+
+}
+
+
+if (password.length < 6) {
+
+showMessage(
+"registerMessage",
+"كلمة المرور لازم تكون 6 أحرف على الأقل",
+"error"
+);
+
+return;
+
+}
+
+
+const result =
+await supabaseClient.auth.signUp({
+
+email: email,
+
+password: password,
+
+options: {
+
+data: {
+name: name
+}
+
+}
+
+});
+
+
+if (result.error) {
+
+showMessage(
+"registerMessage",
+"❌ " + result.error.message,
+"error"
+);
+
+return;
+
+}
+
+
+showMessage(
+"registerMessage",
+"✅ تم إنشاء الحساب بنجاح",
+"success"
+);
+
+}
+
+
+
+/* تسجيل الدخول */
+
+
+async function loginUser() {
+
+const email =
+document.getElementById(
+"loginEmail"
+).value.trim();
+
+const password =
+document.getElementById(
+"loginPassword"
+).value;
+
+
+if (!email || !password) {
+
+showMessage(
+"loginMessage",
+"من فضلك اكتب البريد وكلمة المرور",
+"error"
+);
+
+return;
+
+}
+
+
+const result =
+await supabaseClient.auth.signInWithPassword({
+
+email: email,
+
+password: password
+
+});
+
+
+if (result.error) {
+
+showMessage(
+"loginMessage",
+"❌ البريد أو كلمة المرور غير صحيحة",
+"error"
+);
+
+return;
+
+}
+
+
+showMessage(
+"loginMessage",
+"✅ تم تسجيل الدخول بنجاح",
+"success"
+);
+
+
+setTimeout(
+function() {
+
+closeLogin();
+
+updateUser();
+
+},
+800
+);
+
+}
+
+
+
+/* استعادة كلمة المرور */
+
+
+async function sendResetEmail() {
+
+const email =
+document.getElementById(
+"forgotEmail"
+).value.trim();
+
+
+if (!email) {
+
+showMessage(
+"forgotMessage",
+"من فضلك اكتب البريد الإلكتروني",
+"error"
+);
+
+return;
+
+}
+
+
+const redirectUrl =
+window.location.origin +
+window.location.pathname;
+
+
+const result =
+await supabaseClient.auth.resetPasswordForEmail(
+email,
+{
+redirectTo: redirectUrl
+}
+);
+
+
+if (result.error) {
+
+showMessage(
+"forgotMessage",
+"❌ " + result.error.message,
+"error"
+);
+
+return;
+
+}
+
+
+showMessage(
+"forgotMessage",
+"✅ تم إرسال رابط الاستعادة إلى بريدك الإلكتروني",
+"success"
+);
+
+}
+
+
+
+/* تسجيل الخروج */
+
+
+async function logout() {
+
+await supabaseClient.auth.signOut();
+
+updateUser();
+
+}
+
+
+
+/* حالة المستخدم */
+
+
+async function updateUser() {
+
+const result =
+await supabaseClient.auth.getUser();
+
+const user =
+result.data.user;
+
+
+if (user) {
+
+document.getElementById(
+"authButtons"
+).style.display = "none";
+
+document.getElementById(
+"userBox"
+).style.display = "block";
+
+document.getElementById(
+"userEmail"
+).innerText =
+user.email;
+
+}
+
+else {
+
+document.getElementById(
+"authButtons"
+).style.display = "block";
+
+document.getElementById(
+"userBox"
+).style.display = "none";
+
+}
+
+}
+
+
+updateUser();
+
+
+</script>
+
+
+</body>
+
+</html>
