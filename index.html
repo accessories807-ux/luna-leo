@@ -2,11 +2,8 @@
 <html lang="ar" dir="rtl">
 
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>LUNA&LEO MARKET</title>
 
@@ -67,6 +64,12 @@ color: white;
 .register {
 background: #d4af37;
 color: #111;
+}
+
+.google {
+background: #4285f4;
+color: white;
+width: 100%;
 }
 
 .logout {
@@ -167,6 +170,7 @@ width: 100%;
 
 .close {
 background: #ddd;
+width: 100%;
 }
 
 .forgot {
@@ -199,6 +203,12 @@ background: #f8d7da;
 color: #721c24;
 }
 
+.divider {
+text-align: center;
+margin: 15px 0;
+color: #777;
+}
+
 #userBox {
 display: none;
 background: white;
@@ -210,9 +220,7 @@ text-align: center;
 
 </head>
 
-
 <body>
-
 
 <header>
 
@@ -236,7 +244,6 @@ onclick="openLogin()">
 👤 تسجيل الدخول
 
 </button>
-
 
 <button
 class="register"
@@ -334,8 +341,7 @@ placeholder="🔎 ابحث عن منتج...">
 </footer>
 
 
-<!-- التسجيل -->
-
+<!-- إنشاء الحساب -->
 
 <div
 class="modal"
@@ -347,30 +353,37 @@ id="registerModal">
 ➕ إنشاء حساب
 </h2>
 
+<button
+class="google"
+onclick="loginWithGoogle()">
+
+🔵 التسجيل باستخدام Google
+
+</button>
+
+<div class="divider">
+أو التسجيل بالبريد الإلكتروني
+</div>
 
 <input
 id="registerName"
 type="text"
 placeholder="الاسم">
 
-
 <input
 id="registerEmail"
 type="email"
 placeholder="البريد الإلكتروني">
-
 
 <input
 id="registerPassword"
 type="password"
 placeholder="كلمة المرور">
 
-
 <div
 id="registerMessage"
 class="message">
 </div>
-
 
 <button
 class="submit"
@@ -379,15 +392,6 @@ onclick="registerUser()">
 إنشاء الحساب
 
 </button>
-
-<button
-class="submit"
-onclick="loginWithGoogle()">
-
-🔵 التسجيل بحساب Google
-
-</button>
-
 
 <button
 class="close"
@@ -402,29 +406,7 @@ onclick="closeRegister()">
 </div>
 
 
-/* تسجيل الدخول بحساب Google */
-
-async function loginWithGoogle() {
-
-const { error } =
-await supabaseClient.auth.signInWithOAuth({
-
-provider: "google",
-
-options: {
-redirectTo: window.location.origin
-}
-
-});
-
-if (error) {
-
-alert("❌ حدث خطأ في تسجيل الدخول بجوجل");
-
-}
-
-}
-
+<!-- تسجيل الدخول -->
 
 <div
 class="modal"
@@ -436,18 +418,27 @@ id="loginModal">
 👤 تسجيل الدخول
 </h2>
 
+<button
+class="google"
+onclick="loginWithGoogle()">
+
+🔵 الدخول باستخدام Google
+
+</button>
+
+<div class="divider">
+أو الدخول بالبريد الإلكتروني
+</div>
 
 <input
 id="loginEmail"
 type="email"
 placeholder="البريد الإلكتروني">
 
-
 <input
 id="loginPassword"
 type="password"
 placeholder="كلمة المرور">
-
 
 <div
 class="forgot"
@@ -457,12 +448,10 @@ onclick="openForgot()">
 
 </div>
 
-
 <div
 id="loginMessage"
 class="message">
 </div>
-
 
 <button
 class="submit"
@@ -471,7 +460,6 @@ onclick="loginUser()">
 تسجيل الدخول
 
 </button>
-
 
 <button
 class="close"
@@ -488,7 +476,6 @@ onclick="closeLogin()">
 
 <!-- نسيت كلمة المرور -->
 
-
 <div
 class="modal"
 id="forgotModal">
@@ -503,18 +490,15 @@ id="forgotModal">
 اكتب بريدك الإلكتروني وسنرسل لك رابط استعادة كلمة المرور.
 </p>
 
-
 <input
 id="forgotEmail"
 type="email"
 placeholder="البريد الإلكتروني">
 
-
 <div
 id="forgotMessage"
 class="message">
 </div>
-
 
 <button
 class="submit"
@@ -523,7 +507,6 @@ onclick="sendResetEmail()">
 📧 إرسال الرابط
 
 </button>
-
 
 <button
 class="close"
@@ -540,20 +523,15 @@ onclick="closeForgot()">
 
 <!-- Supabase -->
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <script>
-
 
 const SUPABASE_URL =
 "https://zuljqdzinbndmesbarjn.supabase.co";
 
-
 const SUPABASE_KEY =
 "sb_publishable_thb5jIXk2pFDqs79kJMQRQ_N-HrFAt6";
-
 
 const supabaseClient =
 window.supabase.createClient(
@@ -562,6 +540,7 @@ SUPABASE_KEY
 );
 
 
+/* فتح النوافذ */
 
 function openRegister() {
 
@@ -571,7 +550,6 @@ document.getElementById(
 
 }
 
-
 function closeRegister() {
 
 document.getElementById(
@@ -579,7 +557,6 @@ document.getElementById(
 ).style.display = "none";
 
 }
-
 
 function openLogin() {
 
@@ -589,7 +566,6 @@ document.getElementById(
 
 }
 
-
 function closeLogin() {
 
 document.getElementById(
@@ -597,7 +573,6 @@ document.getElementById(
 ).style.display = "none";
 
 }
-
 
 function openForgot() {
 
@@ -609,7 +584,6 @@ document.getElementById(
 
 }
 
-
 function closeForgot() {
 
 document.getElementById(
@@ -619,6 +593,7 @@ document.getElementById(
 }
 
 
+/* الرسائل */
 
 function showMessage(
 id,
@@ -640,9 +615,37 @@ box.style.display =
 }
 
 
+/* تسجيل الدخول باستخدام Google */
 
-/* إنشاء الحساب */
+async function loginWithGoogle() {
 
+const { error } =
+await supabaseClient.auth.signInWithOAuth({
+
+provider: "google",
+
+options: {
+
+redirectTo:
+window.location.origin +
+window.location.pathname
+
+}
+
+});
+
+if (error) {
+
+alert(
+"❌ حدث خطأ أثناء تسجيل الدخول باستخدام Google"
+);
+
+}
+
+}
+
+
+/* إنشاء حساب بالبريد */
 
 async function registerUser() {
 
@@ -728,9 +731,7 @@ showMessage(
 }
 
 
-
-/* تسجيل الدخول */
-
+/* تسجيل الدخول بالبريد */
 
 async function loginUser() {
 
@@ -802,9 +803,7 @@ updateUser();
 }
 
 
-
 /* استعادة كلمة المرور */
-
 
 async function sendResetEmail() {
 
@@ -863,9 +862,7 @@ showMessage(
 }
 
 
-
 /* تسجيل الخروج */
-
 
 async function logout() {
 
@@ -876,9 +873,7 @@ updateUser();
 }
 
 
-
-/* حالة المستخدم */
-
+/* تحديث حالة المستخدم */
 
 async function updateUser() {
 
@@ -902,7 +897,7 @@ document.getElementById(
 document.getElementById(
 "userEmail"
 ).innerText =
-user.email;
+user.email || "";
 
 }
 
@@ -921,12 +916,27 @@ document.getElementById(
 }
 
 
+/* متابعة تسجيل الدخول بعد الرجوع من Google */
+
+supabaseClient.auth.onAuthStateChange(
+function(event, session) {
+
+if (session && session.user) {
+
 updateUser();
 
+}
+
+}
+);
+
+
+/* تشغيل حالة المستخدم */
+
+updateUser();
 
 </script>
 
-
 </body>
 
-</html>
+  </html>
