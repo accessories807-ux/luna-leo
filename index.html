@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>LUNA&LEO MARKET</title>
 
   <style>
@@ -21,58 +20,38 @@
     header {
       background: #111;
       color: white;
-      padding: 18px;
+      padding: 25px 15px;
       text-align: center;
     }
 
     .logo {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: bold;
-      letter-spacing: 1px;
     }
 
     .logo span {
       color: #d4af37;
     }
 
-    .top-text {
+    header p {
       color: #ccc;
-      margin: 8px 0 0;
-      font-size: 14px;
-    }
-
-    .search-box {
-      padding: 20px 15px;
-      background: white;
-    }
-
-    .search {
-      width: 100%;
-      max-width: 600px;
-      display: block;
-      margin: auto;
-      padding: 14px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 16px;
-      outline: none;
+      margin-bottom: 0;
     }
 
     .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 15px;
-      flex-wrap: wrap;
+      text-align: center;
+      padding: 20px 10px;
+      background: white;
     }
 
-    .btn {
-      border: none;
-      padding: 13px 20px;
+    button {
+      border: 0;
+      padding: 13px 22px;
+      margin: 5px;
       border-radius: 9px;
-      cursor: pointer;
-      font-weight: bold;
       font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     .login {
@@ -80,21 +59,40 @@
       color: white;
     }
 
-    .add {
+    .register {
       background: #d4af37;
       color: #111;
     }
 
-    .categories {
+    .search {
       padding: 20px 15px;
     }
 
-    .categories h2 {
-      text-align: center;
-      margin-bottom: 18px;
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 7px 0;
+      border: 1px solid #ddd;
+      border-radius: 9px;
+      font-size: 15px;
+      outline: none;
     }
 
-    .category-list {
+    .search input {
+      max-width: 650px;
+      display: block;
+      margin: auto;
+    }
+
+    section {
+      padding: 20px 15px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .categories {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
@@ -104,121 +102,220 @@
 
     .category {
       background: white;
-      padding: 22px 10px;
+      padding: 25px 10px;
+      text-align: center;
       border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       font-weight: bold;
-    }
-
-    .products {
-      padding: 20px 15px 40px;
-    }
-
-    .products h2 {
-      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
     }
 
     .empty {
-      max-width: 600px;
-      margin: 20px auto;
       background: white;
+      max-width: 650px;
+      margin: auto;
       padding: 30px 20px;
-      border-radius: 12px;
       text-align: center;
+      border-radius: 12px;
       color: #777;
     }
 
     footer {
+      margin-top: 30px;
       background: #111;
       color: #aaa;
       text-align: center;
-      padding: 25px 15px;
-      font-size: 14px;
+      padding: 25px 10px;
     }
 
-    @media (min-width: 700px) {
-      .category-list {
-        grid-template-columns: repeat(4, 1fr);
-      }
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.7);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-box {
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      padding: 25px;
+      border-radius: 15px;
+    }
+
+    .modal-box h2 {
+      margin-top: 0;
+    }
+
+    .close {
+      background: #ddd;
+      color: #222;
+    }
+
+    .submit {
+      background: #111;
+      color: white;
+      width: 100%;
     }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <div class="logo">
-      LUNA<span>&</span>LEO
-    </div>
+<header>
+  <div class="logo">
+    LUNA<span>&</span>LEO
+  </div>
 
-    <p class="top-text">
-      سوقك الإلكتروني لعرض وبيع المنتجات
+  <p>
+    سوقك الإلكتروني لعرض وبيع المنتجات
+  </p>
+</header>
+
+<div class="buttons">
+  <button class="login" onclick="openLogin()">
+    👤 تسجيل الدخول
+  </button>
+
+  <button class="register" onclick="openRegister()">
+    ➕ إنشاء حساب
+  </button>
+</div>
+
+<div class="search">
+  <input
+    type="text"
+    placeholder="🔎 ابحث عن منتج..."
+  >
+</div>
+
+<section>
+  <h2>الأقسام</h2>
+
+  <div class="categories">
+
+    <div class="category">👜 إكسسوارات</div>
+
+    <div class="category">⌚ ساعات</div>
+
+    <div class="category">📱 إلكترونيات</div>
+
+    <div class="category">👕 ملابس</div>
+
+  </div>
+</section>
+
+<section>
+
+  <h2>🛍️ أحدث المنتجات</h2>
+
+  <div class="empty">
+
+    <h3>لا توجد منتجات حتى الآن</h3>
+
+    <p>
+      كن أول شخص يعرض منتجه على LUNA&LEO MARKET
     </p>
-  </header>
 
-  <div class="search-box">
+  </div>
+
+</section>
+
+<footer>
+  © 2026 LUNA&LEO MARKET
+  <br><br>
+  جميع الحقوق محفوظة
+</footer>
+
+
+<!-- نافذة التسجيل -->
+
+<div class="modal" id="registerModal">
+
+  <div class="modal-box">
+
+    <h2>إنشاء حساب</h2>
+
     <input
-      class="search"
       type="text"
-      placeholder="🔎 ابحث عن منتج..."
+      placeholder="الاسم"
     >
-  </div>
 
-  <div class="buttons">
-    <button class="btn login">
-      👤 تسجيل الدخول
+    <input
+      type="email"
+      placeholder="البريد الإلكتروني"
+    >
+
+    <input
+      type="password"
+      placeholder="كلمة المرور"
+    >
+
+    <button class="submit">
+      إنشاء الحساب
     </button>
 
-    <button class="btn add">
-      ➕ أضف منتجك
+    <button class="close" onclick="closeRegister()">
+      إغلاق
     </button>
+
   </div>
 
-  <section class="categories">
-    <h2>الأقسام</h2>
+</div>
 
-    <div class="category-list">
 
-      <div class="category">
-        👜 إكسسوارات
-      </div>
+<!-- نافذة تسجيل الدخول -->
 
-      <div class="category">
-        ⌚ ساعات
-      </div>
+<div class="modal" id="loginModal">
 
-      <div class="category">
-        📱 إلكترونيات
-      </div>
+  <div class="modal-box">
 
-      <div class="category">
-        👕 ملابس
-      </div>
+    <h2>تسجيل الدخول</h2>
 
-    </div>
-  </section>
+    <input
+      type="email"
+      placeholder="البريد الإلكتروني"
+    >
 
-  <section class="products">
+    <input
+      type="password"
+      placeholder="كلمة المرور"
+    >
 
-    <h2>🛍️ أحدث المنتجات</h2>
+    <button class="submit">
+      تسجيل الدخول
+    </button>
 
-    <div class="empty">
-      <h3>لا توجد منتجات حتى الآن</h3>
+    <button class="close" onclick="closeLogin()">
+      إغلاق
+    </button>
 
-      <p>
-        كن أول شخص يعرض منتجه على LUNA&LEO MARKET
-      </p>
+  </div>
 
-    </div>
+</div>
 
-  </section>
 
-  <footer>
-    © 2026 LUNA&LEO MARKET
-    <br><br>
-    جميع الحقوق محفوظة
-  </footer>
+<script>
+
+function openRegister() {
+  document.getElementById("registerModal").style.display = "flex";
+}
+
+function closeRegister() {
+  document.getElementById("registerModal").style.display = "none";
+}
+
+function openLogin() {
+  document.getElementById("loginModal").style.display = "flex";
+}
+
+function closeLogin() {
+  document.getElementById("loginModal").style.display = "none";
+}
+
+</script>
 
 </body>
 </html>
