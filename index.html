@@ -268,6 +268,33 @@ background: white;
 padding: 15px;
 text-align: center;
 }
+
+.file-label {
+display: block;
+width: 100%;
+padding: 15px;
+margin: 7px 0;
+background: #f1f1f1;
+border: 2px dashed #bbb;
+border-radius: 9px;
+text-align: center;
+font-weight: bold;
+cursor: pointer;
+}
+
+#productImage {
+display: none;
+}
+
+#imagePreview {
+display: none;
+width: 100%;
+max-height: 220px;
+object-fit: contain;
+margin-top: 10px;
+border-radius: 10px;
+background: #eee;
+}
 </style>
 </head>
 
@@ -285,7 +312,6 @@ LUNA<span>&</span>LEO
 
 </header>
 
-
 <div class="buttons" id="authButtons">
 
 <button class="login" onclick="openLogin()">
@@ -297,7 +323,6 @@ LUNA<span>&</span>LEO
 </button>
 
 </div>
-
 
 <div id="userBox">
 
@@ -319,7 +344,6 @@ LUNA<span>&</span>LEO
 
 </div>
 
-
 <div class="search">
 
 <input
@@ -329,7 +353,6 @@ placeholder="🔎 ابحث عن منتج..."
 oninput="loadProducts()">
 
 </div>
-
 
 <section>
 
@@ -357,7 +380,6 @@ oninput="loadProducts()">
 
 </section>
 
-
 <section>
 
 <h2>🛍️ أحدث المنتجات</h2>
@@ -372,7 +394,6 @@ oninput="loadProducts()">
 
 </section>
 
-
 <footer>
 
 © 2026 LUNA&LEO MARKET
@@ -382,7 +403,6 @@ oninput="loadProducts()">
 جميع الحقوق محفوظة
 
 </footer>
-
 
 <!-- إنشاء الحساب -->
 
@@ -421,7 +441,6 @@ oninput="loadProducts()">
 </div>
 
 </div>
-
 
 <!-- تسجيل الدخول -->
 
@@ -463,7 +482,6 @@ oninput="loadProducts()">
 
 </div>
 
-
 <!-- نسيت كلمة المرور -->
 
 <div class="modal" id="forgotModal">
@@ -494,7 +512,6 @@ oninput="loadProducts()">
 
 </div>
 
-
 <!-- إضافة منتج -->
 
 <div class="modal" id="productModal">
@@ -520,11 +537,17 @@ id="productDescription"
 rows="4"
 placeholder="وصف المنتج"></textarea>
 
+<label class="file-label" for="productImage">
+📷 اختيار صورة المنتج من الملفات
+</label>
+
 <input
 id="productImage"
-type="url"
-placeholder="📸
-اختيار صورة المنتج">
+type="file"
+accept="image/*"
+onchange="previewImage(event)">
+
+<img id="imagePreview">
 
 <div id="productMessage" class="message"></div>
 
@@ -539,7 +562,6 @@ placeholder="📸
 </div>
 
 </div>
-
 
 <!-- Supabase -->
 
@@ -558,7 +580,6 @@ window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
-
 
 /* النوافذ */
 
@@ -595,7 +616,6 @@ function closeProductModal() {
 document.getElementById("productModal").style.display = "none";
 }
 
-
 /* الرسائل */
 
 function showMessage(id, text, type) {
@@ -609,6 +629,40 @@ box.className = "message " + type;
 box.style.display = "block";
 }
 
+/* معاينة الصورة */
+
+function previewImage(event) {
+
+const file = event.target.files[0];
+
+const preview =
+document.getElementById("imagePreview");
+
+if (!file) {
+
+preview.style.display = "none";
+
+return;
+}
+
+if (!file.type.startsWith("image/")) {
+
+showMessage(
+"productMessage",
+"❌ من فضلك اختر صورة فقط",
+"error"
+);
+
+event.target.value = "";
+
+return;
+}
+
+preview.src =
+URL.createObjectURL(file);
+
+preview.style.display = "block";
+}
 
 /* Google */
 
@@ -635,7 +689,6 @@ alert(
 }
 
 }
-
 
 /* إنشاء حساب */
 
@@ -706,7 +759,6 @@ showMessage(
 
 }
 
-
 /* تسجيل الدخول */
 
 async function loginUser() {
@@ -762,7 +814,6 @@ updateUser();
 
 }
 
-
 /* استعادة كلمة المرور */
 
 async function sendResetEmail() {
@@ -809,7 +860,6 @@ showMessage(
 
 }
 
-
 /* إضافة منتج */
 
 async function addProduct() {
@@ -823,9 +873,11 @@ document.getElementById("productPrice").value;
 const description =
 document.getElementById("productDescription").value.trim();
 
-const image_url =
-document.getElementById("productImage").value.trim();
+const imageInput =
+document.getElementById("productImage");
 
+const file =
+imageInput.files[0];
 
 if (!name || !price || !description) {
 
@@ -838,12 +890,10 @@ showMessage(
 return;
 }
 
-
 const {
 data: { user }
 } =
 await supabaseClient.auth.getUser();
-
 
 if (!user) {
 
@@ -856,6 +906,74 @@ showMessage(
 return;
 }
 
+let image_url = "";
+
+if (file) {
+
+if (!file.type.startsWith("image/")) {
+
+showMessage(
+"productMessage",
+"❌ الملف المختار ليس صورة",
+"error"
+);
+
+return;
+}
+
+if (file.size > 5 * 1024 * 1024) {
+
+showMessage(
+"productMessage",
+"❌ حجم الصورة أكبر من 5 ميجابايت",
+"error"
+);
+
+return;
+}
+
+showMessage(
+"productMessage",
+"⏳ جاري رفع الصورة...",
+"success"
+);
+
+const fileExt =
+file.name.split(".").pop();
+
+const fileName =
+user.id + "/" +
+Date.now() + "." +
+fileExt;
+
+const { error: uploadError } =
+await supabaseClient.storage
+.from("products")
+.upload(fileName, file, {
+contentType: file.type,
+upsert: false
+});
+
+if (uploadError) {
+
+showMessage(
+"productMessage",
+"❌ فشل رفع الصورة: " +
+uploadError.message,
+"error"
+);
+
+return;
+}
+
+const { data: publicData } =
+supabaseClient.storage
+.from("products")
+.getPublicUrl(fileName);
+
+image_url =
+publicData.publicUrl;
+}
 
 const { error } =
 await supabaseClient
@@ -874,7 +992,6 @@ user_id: user.id
 
 }]);
 
-
 if (error) {
 
 showMessage(
@@ -886,19 +1003,21 @@ showMessage(
 return;
 }
 
-
 showMessage(
 "productMessage",
 "✅ تم نشر المنتج بنجاح",
 "success"
 );
 
-
 document.getElementById("productName").value = "";
+
 document.getElementById("productPrice").value = "";
+
 document.getElementById("productDescription").value = "";
+
 document.getElementById("productImage").value = "";
 
+document.getElementById("imagePreview").style.display = "none";
 
 setTimeout(function() {
 
@@ -910,7 +1029,6 @@ loadProducts();
 
 }
 
-
 /* تحميل المنتجات */
 
 async function loadProducts() {
@@ -921,13 +1039,11 @@ document.getElementById("productsContainer");
 const search =
 document.getElementById("searchInput").value.trim().toLowerCase();
 
-
 const { data, error } =
 await supabaseClient
 .from("products")
 .select("*")
 .order("id", { ascending: false });
-
 
 if (error) {
 
@@ -937,9 +1053,7 @@ container.innerHTML =
 return;
 }
 
-
 let products = data || [];
-
 
 if (search) {
 
@@ -955,7 +1069,6 @@ return (
 
 }
 
-
 if (products.length === 0) {
 
 container.innerHTML =
@@ -964,8 +1077,8 @@ container.innerHTML =
 return;
 }
 
-
-container.innerHTML = products.map(function(product) {
+container.innerHTML =
+products.map(function(product) {
 
 const image =
 product.image_url
@@ -973,7 +1086,6 @@ product.image_url
 `<img src="${product.image_url}" alt="${product.name}">`
 :
 `<div style="height:180px;background:#eee;display:flex;align-items:center;justify-content:center;color:#888;">📦 لا توجد صورة</div>`;
-
 
 return `
 
@@ -1003,7 +1115,6 @@ ${product.description}
 
 }
 
-
 /* تسجيل الخروج */
 
 async function logout() {
@@ -1014,7 +1125,6 @@ updateUser();
 
 }
 
-
 /* تحديث المستخدم */
 
 async function updateUser() {
@@ -1024,7 +1134,6 @@ await supabaseClient.auth.getUser();
 
 const user =
 result.data.user;
-
 
 if (user) {
 
@@ -1047,7 +1156,6 @@ document.getElementById("userBox").style.display = "none";
 
 }
 
-
 /* متابعة Google */
 
 supabaseClient.auth.onAuthStateChange(
@@ -1059,7 +1167,6 @@ updateUser();
 
 }
 );
-
 
 /* تشغيل الموقع */
 
