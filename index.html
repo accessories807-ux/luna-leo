@@ -3,59 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LUNA&LEO</title>
+
+  <title>LUNA&LEO MARKET</title>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #111;
-      color: white;
-      text-align: center;
+      background: #f5f5f5;
+      color: #222;
     }
 
     header {
-      padding: 35px 15px;
-      background: #000;
+      background: #111;
+      color: white;
+      padding: 18px;
+      text-align: center;
     }
 
-    h1 {
-      margin: 0;
-      font-size: 38px;
-      letter-spacing: 2px;
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 1px;
     }
 
-    .subtitle {
+    .logo span {
+      color: #d4af37;
+    }
+
+    .top-text {
       color: #ccc;
-      margin-top: 10px;
+      margin: 8px 0 0;
+      font-size: 14px;
+    }
+
+    .search-box {
+      padding: 20px 15px;
+      background: white;
+    }
+
+    .search {
+      width: 100%;
+      max-width: 600px;
+      display: block;
+      margin: auto;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px;
+      flex-wrap: wrap;
     }
 
     .btn {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 14px 28px;
-      background: white;
+      border: none;
+      padding: 13px 20px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .login {
+      background: #111;
+      color: white;
+    }
+
+    .add {
+      background: #d4af37;
       color: #111;
-      text-decoration: none;
-      border-radius: 8px;
+    }
+
+    .categories {
+      padding: 20px 15px;
+    }
+
+    .categories h2 {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .category-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .category {
+      background: white;
+      padding: 22px 10px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       font-weight: bold;
     }
 
-    section {
-      padding: 45px 20px;
+    .products {
+      padding: 20px 15px 40px;
     }
 
-    .card {
-      max-width: 500px;
-      margin: auto;
-      padding: 25px;
-      background: #1d1d1d;
-      border-radius: 15px;
+    .products h2 {
+      text-align: center;
+    }
+
+    .empty {
+      max-width: 600px;
+      margin: 20px auto;
+      background: white;
+      padding: 30px 20px;
+      border-radius: 12px;
+      text-align: center;
+      color: #777;
     }
 
     footer {
-      padding: 20px;
-      background: #000;
+      background: #111;
       color: #aaa;
+      text-align: center;
+      padding: 25px 15px;
+      font-size: 14px;
+    }
+
+    @media (min-width: 700px) {
+      .category-list {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
   </style>
 </head>
@@ -63,23 +148,76 @@
 <body>
 
   <header>
-    <h1>LUNA&LEO</h1>
-    <p class="subtitle">متجرك الإلكتروني المميز</p>
-    <a class="btn" href="#about">اكتشف المتجر</a>
+    <div class="logo">
+      LUNA<span>&</span>LEO
+    </div>
+
+    <p class="top-text">
+      سوقك الإلكتروني لعرض وبيع المنتجات
+    </p>
   </header>
 
-  <section id="about">
-    <div class="card">
-      <h2>أهلاً بك في LUNA&LEO</h2>
-      <p>
-        نقدم لك مجموعة مميزة من الإكسسوارات والمنتجات
-        بتصميم عصري وجودة مميزة.
-      </p>
+  <div class="search-box">
+    <input
+      class="search"
+      type="text"
+      placeholder="🔎 ابحث عن منتج..."
+    >
+  </div>
+
+  <div class="buttons">
+    <button class="btn login">
+      👤 تسجيل الدخول
+    </button>
+
+    <button class="btn add">
+      ➕ أضف منتجك
+    </button>
+  </div>
+
+  <section class="categories">
+    <h2>الأقسام</h2>
+
+    <div class="category-list">
+
+      <div class="category">
+        👜 إكسسوارات
+      </div>
+
+      <div class="category">
+        ⌚ ساعات
+      </div>
+
+      <div class="category">
+        📱 إلكترونيات
+      </div>
+
+      <div class="category">
+        👕 ملابس
+      </div>
+
     </div>
   </section>
 
+  <section class="products">
+
+    <h2>🛍️ أحدث المنتجات</h2>
+
+    <div class="empty">
+      <h3>لا توجد منتجات حتى الآن</h3>
+
+      <p>
+        كن أول شخص يعرض منتجه على LUNA&LEO MARKET
+      </p>
+
+    </div>
+
+  </section>
+
   <footer>
-    © 2026 LUNA&LEO - جميع الحقوق محفوظة
+    © 2026 LUNA&LEO MARKET
+    <br><br>
+    جميع الحقوق محفوظة
   </footer>
 
 </body>
