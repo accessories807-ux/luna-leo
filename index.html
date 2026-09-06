@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,11 +9,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-/* =========================================================
-   RESET
-========================================================= */
-
 *{
     box-sizing:border-box;
     margin:0;
@@ -28,13 +22,10 @@ html{
 body{
     font-family:Arial,Tahoma,sans-serif;
     background:#fff;
-    color:#15191a;
-    overflow-x:hidden;
+    color:#171717;
 }
 
-button,
-input,
-textarea{
+button,input,textarea{
     font-family:inherit;
 }
 
@@ -44,70 +35,22 @@ button{
 
 :root{
     --gold:#d8b43c;
-    --gold-light:#f0cf62;
-    --teal:#20a5ad;
-    --teal-dark:#062326;
-    --dark:#02090a;
-    --text:#15191a;
+    --teal:#21a5aa;
+    --dark:#031314;
+    --dark2:#061c1d;
 }
 
-
-/* =========================================================
-   GENERAL BUTTONS
-========================================================= */
-
-.btn{
-    border:none;
-    padding:13px 24px;
-    border-radius:35px;
-    font-size:15px;
-    font-weight:800;
-    transition:.3s;
-}
-
-.btn:hover{
-    transform:translateY(-3px);
-}
-
-.btn-gold{
-    background:var(--gold);
-    color:#111;
-}
-
-.btn-gold:hover{
-    background:var(--gold-light);
-}
-
-.btn-teal{
-    background:var(--teal);
-    color:white;
-}
-
-.btn-outline{
-    background:transparent;
-    border:1px solid rgba(255,255,255,.35);
-    color:white;
-}
-
-.btn-outline:hover{
-    border-color:var(--teal);
-    color:#fff;
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
+/* ================= HEADER ================= */
 
 .site-header{
     position:absolute;
     top:0;
-    right:0;
     left:0;
+    right:0;
     z-index:100;
-    padding:16px 5%;
-    background:rgba(2,10,11,.65);
-    backdrop-filter:blur(18px);
+    padding:18px 5%;
+    background:rgba(2,12,13,.72);
+    backdrop-filter:blur(15px);
     border-bottom:1px solid rgba(255,255,255,.08);
 }
 
@@ -122,9 +65,8 @@ button{
 
 .logo{
     color:#fff;
-    font-size:27px;
+    font-size:25px;
     font-weight:900;
-    letter-spacing:-1px;
     white-space:nowrap;
 }
 
@@ -134,442 +76,300 @@ button{
 
 .nav-links{
     display:flex;
-    align-items:center;
-    justify-content:center;
     gap:25px;
 }
 
 .nav-links a{
-    color:#d8dddd;
+    color:#ddd;
     text-decoration:none;
     font-size:14px;
-    transition:.3s;
 }
 
 .nav-links a:hover{
-    color:var(--teal);
+    color:var(--gold);
 }
 
-.nav-buttons{
+.nav-buttons,
+.userbox{
     display:flex;
     align-items:center;
-    gap:9px;
+    gap:10px;
 }
 
-.nav-buttons .btn{
-    padding:11px 19px;
-}
-
-.menu-btn{
+.userbox{
     display:none;
+    color:white;
+}
+
+.userbox button{
     border:1px solid rgba(255,255,255,.3);
     background:transparent;
-    color:white;
-    border-radius:12px;
-    padding:7px 12px;
-    font-size:21px;
+    color:#fff;
+    padding:8px 13px;
+    border-radius:20px;
 }
 
+.btn{
+    border:0;
+    padding:13px 22px;
+    border-radius:30px;
+    font-weight:bold;
+    font-size:15px;
+}
 
-/* =========================================================
-   HERO
-========================================================= */
+.btn-gold{
+    background:var(--gold);
+    color:#111;
+}
+
+.btn-teal{
+    background:var(--teal);
+    color:#fff;
+}
+
+.btn-outline{
+    background:transparent;
+    border:1px solid rgba(255,255,255,.35);
+    color:#fff;
+}
+
+/* ================= HOME HERO ================= */
 
 .hero{
-    min-height:930px;
+    min-height:900px;
+    background:
+        radial-gradient(circle at 50% 40%,rgba(22,123,126,.35),transparent 32%),
+        radial-gradient(circle at 20% 80%,rgba(20,105,108,.15),transparent 30%),
+        linear-gradient(145deg,#02090a,#031819 50%,#010606);
+    color:white;
     position:relative;
     overflow:hidden;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:150px 20px 60px;
-
-    background:
-        radial-gradient(
-            circle at 50% 23%,
-            rgba(28,159,166,.34),
-            transparent 29%
-        ),
-        radial-gradient(
-            circle at 10% 70%,
-            rgba(15,92,96,.25),
-            transparent 30%
-        ),
-        linear-gradient(
-            150deg,
-            #02090a,
-            #032427 48%,
-            #010708
-        );
-
-    color:white;
+    text-align:center;
+    padding:140px 20px 80px;
 }
 
-.hero::before{
+.hero:before{
     content:"";
     position:absolute;
     width:700px;
     height:700px;
+    border:1px solid rgba(35,170,175,.15);
     border-radius:50%;
-    border:1px solid rgba(39,174,181,.18);
+    top:430px;
     left:50%;
-    bottom:-390px;
     transform:translateX(-50%);
-    box-shadow:
-        0 0 0 80px rgba(32,165,173,.035),
-        0 0 0 160px rgba(32,165,173,.025),
-        0 0 0 240px rgba(32,165,173,.015);
 }
 
-.hero::after{
+.hero:after{
     content:"";
     position:absolute;
-    width:100%;
-    height:250px;
-    bottom:0;
-    left:0;
-    background:linear-gradient(
-        to bottom,
-        transparent,
-        rgba(0,0,0,.35)
-    );
-    pointer-events:none;
+    width:450px;
+    height:450px;
+    border:1px solid rgba(216,180,60,.07);
+    border-radius:50%;
+    top:540px;
+    left:50%;
+    transform:translateX(-50%);
 }
 
 .hero-content{
-    width:100%;
-    max-width:1050px;
     position:relative;
-    z-index:3;
-    text-align:center;
+    z-index:2;
+    max-width:900px;
 }
 
 .badge{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:11px 23px;
-    border-radius:40px;
-    background:rgba(29,163,169,.14);
-    border:1px solid rgba(52,190,196,.3);
-    color:#e2cb70;
-    font-size:14px;
-    margin-bottom:27px;
-    box-shadow:0 15px 50px rgba(0,0,0,.15);
+    display:inline-block;
+    padding:11px 22px;
+    border-radius:30px;
+    background:rgba(32,161,166,.14);
+    border:1px solid rgba(47,186,191,.3);
+    color:#e0ca7a;
+    margin-bottom:28px;
+    font-size:15px;
 }
 
 .hero h1{
-    font-size:clamp(43px,7vw,78px);
+    font-size:clamp(43px,8vw,78px);
     line-height:1.15;
     font-weight:900;
-    letter-spacing:-2px;
     margin-bottom:25px;
 }
 
 .hero h1 span{
-    color:#23a5ad;
+    color:#23a5aa;
 }
 
 .hero-text{
-    max-width:690px;
+    max-width:700px;
     margin:auto;
-    color:#d0d7d7;
-    font-size:18px;
+    color:#d3dada;
+    font-size:19px;
     line-height:2;
 }
 
 .hero-actions{
     display:flex;
     justify-content:center;
-    align-items:center;
     gap:14px;
     flex-wrap:wrap;
     margin-top:32px;
 }
 
 .hero-actions .btn{
-    min-width:175px;
-    padding:15px 30px;
+    padding:16px 32px;
     font-size:17px;
 }
 
 .trust{
-    margin-top:27px;
+    margin-top:28px;
     color:#ddd;
     font-size:14px;
 }
 
 .stars{
-    color:#f3c542;
+    color:#f2bd3d;
 }
 
+/* ================= HERO VISUAL ================= */
 
-/* =========================================================
-   HERO VISUAL
-========================================================= */
-
-.dashboard-visual{
+.hero-visual{
     position:relative;
-    width:min(820px,100%);
-    height:350px;
-    margin:48px auto 0;
+    width:min(650px,100%);
+    height:280px;
+    margin:60px auto 0;
 }
 
-.circle{
+.visual-circle{
     position:absolute;
-    width:355px;
-    height:355px;
+    width:300px;
+    height:300px;
     border-radius:50%;
     left:50%;
-    top:-5px;
+    top:0;
     transform:translateX(-50%);
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(28,157,163,.34),
-            transparent 67%
-        );
-
-    border:1px solid rgba(41,179,185,.4);
-
-    box-shadow:
-        0 0 70px rgba(26,157,163,.12);
+    border:1px solid rgba(37,171,176,.35);
+    background:radial-gradient(circle,rgba(31,157,162,.35),transparent 65%);
 }
 
-.laptop{
+.visual-store{
     position:absolute;
-    width:445px;
-    height:220px;
+    width:310px;
+    height:185px;
     left:50%;
-    top:82px;
+    top:65px;
     transform:translateX(-50%);
-    z-index:5;
-
-    border-radius:15px 15px 6px 6px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #596568,
-            #151c1e
-        );
-
-    border:7px solid #252d2f;
-
-    box-shadow:
-        0 35px 80px rgba(0,0,0,.7);
+    background:#101a1b;
+    border:5px solid #2c3839;
+    border-radius:12px;
+    box-shadow:0 25px 60px rgba(0,0,0,.5);
+    padding:18px;
 }
 
-.laptop::after{
-    content:"";
-    position:absolute;
-    width:530px;
-    height:20px;
-    bottom:-29px;
-    left:50%;
-    transform:translateX(-50%);
+.visual-top{
+    height:25px;
+    display:flex;
+    gap:6px;
+    border-bottom:1px solid #334;
+    margin-bottom:18px;
+}
+
+.visual-dot{
+    width:8px;
+    height:8px;
     border-radius:50%;
-    background:
-        linear-gradient(
-            #667274,
-            #202728
-        );
+    background:#777;
 }
 
-.laptop-screen{
-    margin:14px;
-    height:170px;
-    border-radius:7px;
-    padding:20px;
-    overflow:hidden;
-
-    background:
-        radial-gradient(
-            circle at 80% 20%,
-            rgba(216,180,60,.2),
-            transparent 30%
-        ),
-        #071112;
+.visual-line{
+    height:12px;
+    background:#249da2;
+    border-radius:10px;
+    margin:12px 0;
 }
 
-.laptop-screen::before{
-    content:"LUNA&LEO";
-    display:block;
-    text-align:right;
-    color:var(--gold);
-    font-size:20px;
-    font-weight:900;
-    margin-bottom:22px;
+.visual-line.small{
+    width:50%;
 }
 
-.laptop-screen div{
-    height:10px;
-    width:90%;
-    background:#258e94;
-    border-radius:20px;
-    margin-bottom:13px;
-}
-
-.laptop-screen div:nth-child(2){
-    width:67%;
-}
-
-.laptop-screen div:nth-child(3){
-    width:48%;
-}
-
-.floating-card{
+.floating{
     position:absolute;
-    z-index:7;
     background:white;
-    color:#202526;
-    padding:14px 18px;
+    color:#222;
     border-radius:16px;
-    box-shadow:0 20px 55px rgba(0,0,0,.45);
-    font-size:13px;
+    padding:15px 18px;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
     font-weight:bold;
-    text-align:right;
+    font-size:13px;
 }
 
-.floating-card small{
-    color:#777;
-    font-weight:normal;
-}
-
-.card-one{
-    right:2%;
+.float-right{
+    right:0;
     top:45px;
 }
 
-.card-two{
-    left:2%;
-    top:145px;
+.float-left{
+    left:0;
+    top:125px;
 }
 
-
-/* =========================================================
-   STATS
-========================================================= */
+/* ================= SECTIONS ================= */
 
 .stats{
-    position:relative;
-    z-index:5;
-    padding:42px 20px;
+    padding:45px 20px;
     text-align:center;
-    background:white;
     border-bottom:1px solid #eee;
+    background:#fff;
 }
 
 .stats h2{
-    font-size:29px;
-    margin-bottom:11px;
+    font-size:28px;
+    margin-bottom:10px;
 }
 
 .stats h2 span{
-    color:#188f95;
+    color:#188f94;
 }
 
 .stats p{
     color:#777;
-    font-size:15px;
 }
-
-
-/* =========================================================
-   TRUST BAR
-========================================================= */
-
-.trust-bar{
-    background:#fff;
-    padding:28px 20px;
-    border-bottom:1px solid #eee;
-}
-
-.trust-bar-inner{
-    max-width:1100px;
-    margin:auto;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:25px;
-    flex-wrap:wrap;
-}
-
-.trust-pill{
-    color:#888;
-    font-weight:bold;
-    font-size:14px;
-    opacity:.8;
-}
-
-.trust-pill strong{
-    color:#222;
-}
-
-
-/* =========================================================
-   SECTIONS
-========================================================= */
 
 .section{
-    padding:95px 20px;
-}
-
-.section-light{
-    background:#fff;
+    padding:90px 20px;
 }
 
 .section-gray{
-    background:#f7f8f8;
-}
-
-.section-dark{
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(29,157,163,.12),
-            transparent 45%
-        ),
-        #061315;
-    color:white;
+    background:#f7f7f7;
 }
 
 .section-title{
-    max-width:730px;
+    max-width:720px;
+    margin:0 auto 50px;
     text-align:center;
-    margin:0 auto 55px;
 }
 
-.section-title .mini{
-    color:#d19e1e;
+.mini{
+    color:#c9971c;
     font-weight:bold;
-    margin-bottom:14px;
+    margin-bottom:15px;
 }
 
 .section-title h2{
-    font-size:clamp(32px,5vw,49px);
-    line-height:1.3;
+    font-size:clamp(31px,6vw,48px);
     margin-bottom:15px;
 }
 
 .section-title p{
     color:#777;
     line-height:1.9;
-    font-size:16px;
 }
-
-.section-dark .section-title p{
-    color:#bfc8c8;
-}
-
-
-/* =========================================================
-   FEATURES
-========================================================= */
 
 .features{
-    max-width:1120px;
+    max-width:1100px;
     margin:auto;
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -577,64 +377,40 @@ button{
 }
 
 .feature{
-    position:relative;
-    padding:32px;
-    border-radius:24px;
     background:white;
-    border:1px solid #ededed;
-    box-shadow:0 12px 40px rgba(0,0,0,.055);
-    transition:.35s;
-    overflow:hidden;
-}
-
-.feature::before{
-    content:"";
-    position:absolute;
-    width:90px;
-    height:90px;
-    border-radius:50%;
-    background:#eaf8f8;
-    left:-35px;
-    top:-35px;
+    border:1px solid #eee;
+    border-radius:24px;
+    padding:30px;
+    box-shadow:0 10px 35px rgba(0,0,0,.05);
+    transition:.3s;
 }
 
 .feature:hover{
-    transform:translateY(-9px);
-    box-shadow:0 25px 60px rgba(0,0,0,.1);
+    transform:translateY(-6px);
 }
 
 .feature-icon{
-    position:relative;
-    z-index:2;
-    width:60px;
-    height:60px;
+    width:58px;
+    height:58px;
     display:flex;
     align-items:center;
     justify-content:center;
-    border-radius:18px;
-    background:#e9f7f7;
-    font-size:28px;
-    margin-bottom:21px;
+    background:#eaf7f7;
+    border-radius:17px;
+    font-size:27px;
+    margin-bottom:20px;
 }
 
 .feature h3{
-    position:relative;
-    z-index:2;
-    font-size:20px;
     margin-bottom:12px;
 }
 
 .feature p{
-    position:relative;
-    z-index:2;
     color:#777;
-    line-height:1.9;
+    line-height:1.8;
 }
 
-
-/* =========================================================
-   STEPS
-========================================================= */
+/* ================= STEPS ================= */
 
 .steps{
     max-width:1050px;
@@ -646,22 +422,21 @@ button{
 
 .step{
     text-align:center;
-    padding:30px 20px;
+    padding:30px;
 }
 
 .step-number{
-    width:70px;
-    height:70px;
-    border-radius:50%;
+    width:60px;
+    height:60px;
+    margin:0 auto 20px;
     display:flex;
     align-items:center;
     justify-content:center;
-    margin:0 auto 20px;
-    background:rgba(31,165,172,.14);
-    border:1px solid rgba(31,165,172,.4);
-    color:#36b9c0;
-    font-size:25px;
-    font-weight:900;
+    border-radius:50%;
+    background:#071b1c;
+    color:#d8b43c;
+    font-size:22px;
+    font-weight:bold;
 }
 
 .step h3{
@@ -669,118 +444,66 @@ button{
 }
 
 .step p{
-    color:#8d9999;
+    color:#777;
     line-height:1.8;
 }
 
-
-/* =========================================================
-   CTA
-========================================================= */
+/* ================= CTA ================= */
 
 .cta{
-    max-width:1120px;
+    max-width:1100px;
     margin:auto;
-    border-radius:32px;
     padding:80px 25px;
     text-align:center;
-    color:white;
-
+    border-radius:32px;
+    color:#fff;
     background:
-        radial-gradient(
-            circle at 50% 20%,
-            rgba(31,167,174,.35),
-            transparent 45%
-        ),
-        linear-gradient(
-            145deg,
-            #071719,
-            #02090a
-        );
-
-    box-shadow:0 30px 80px rgba(0,0,0,.18);
+        radial-gradient(circle at center,rgba(31,158,164,.35),transparent 50%),
+        #061415;
 }
 
 .cta h2{
-    font-size:clamp(32px,5vw,50px);
-    margin-bottom:16px;
+    font-size:clamp(32px,6vw,50px);
+    margin-bottom:15px;
 }
 
 .cta p{
-    color:#c5cece;
+    color:#c9d0d0;
     margin-bottom:30px;
-    line-height:1.8;
 }
 
-
-/* =========================================================
-   FAQ
-========================================================= */
-
-.faq{
-    max-width:850px;
-    margin:auto;
-}
-
-.faq-item{
-    background:white;
-    border:1px solid #eee;
-    border-radius:17px;
-    margin-bottom:13px;
-    overflow:hidden;
-}
-
-.faq-question{
-    width:100%;
-    padding:20px;
-    border:none;
-    background:white;
-    text-align:right;
-    font-size:16px;
-    font-weight:bold;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-.faq-answer{
-    display:none;
-    padding:0 20px 20px;
-    color:#777;
-    line-height:1.9;
-}
-
-.faq-item.open .faq-answer{
-    display:block;
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
+/* ================= DASHBOARD ================= */
 
 .dashboard{
     display:none;
     min-height:100vh;
-    background:#f3f4f4;
+    background:#f4f5f5;
     padding:110px 20px 60px;
 }
 
 .dashboard-box{
-    max-width:1000px;
+    max-width:1050px;
     margin:auto;
-    background:white;
+    background:#fff;
     border-radius:28px;
-    padding:32px;
-    box-shadow:0 15px 50px rgba(0,0,0,.07);
+    padding:30px;
+    box-shadow:0 10px 40px rgba(0,0,0,.06);
 }
 
-.dashboard-box h2{
+.dashboard-head{
+    background:#071718;
+    color:#fff;
+    border-radius:22px;
+    padding:25px;
     margin-bottom:25px;
 }
 
+.dashboard-head h2{
+    margin-bottom:8px;
+}
+
 .form-group{
-    margin-bottom:19px;
+    margin-bottom:18px;
 }
 
 .form-group label{
@@ -796,16 +519,16 @@ button{
     border:1px solid #ddd;
     border-radius:13px;
     outline:none;
-    background:white;
+    background:#fff;
 }
 
 .form-group input:focus,
 .form-group textarea:focus{
-    border-color:#20a5ad;
+    border-color:#d8b43c;
 }
 
 .form-group textarea{
-    min-height:105px;
+    min-height:100px;
     resize:vertical;
 }
 
@@ -817,13 +540,10 @@ button{
 
 .dark-btn{
     background:#111;
-    color:white;
+    color:#fff;
 }
 
-
-/* =========================================================
-   PUBLIC STORE
-========================================================= */
+/* ================= PUBLIC STORE ================= */
 
 .store-page{
     display:none;
@@ -831,47 +551,38 @@ button{
     background:#f5f5f5;
 }
 
-.store-hero{
+.store-header{
     min-height:570px;
     position:relative;
+    color:#fff;
     display:flex;
     align-items:flex-end;
-    overflow:hidden;
-
     background:
-        radial-gradient(
-            circle at 50% 20%,
-            rgba(33,165,172,.3),
-            transparent 40%
-        ),
-        linear-gradient(
-            135deg,
-            #061719,
-            #101b1d
-        );
-
-    color:white;
+        radial-gradient(circle at center,rgba(36,160,165,.35),transparent 35%),
+        linear-gradient(145deg,#031012,#061d1e 50%,#020708);
+    background-size:cover;
+    background-position:center;
+    overflow:hidden;
 }
 
-.store-hero::after{
+.store-header:before{
     content:"";
     position:absolute;
-    inset:0;
-    background:linear-gradient(
-        to bottom,
-        rgba(0,0,0,.1),
-        rgba(0,0,0,.8)
-    );
+    width:550px;
+    height:550px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:50%;
+    left:50%;
+    top:150px;
+    transform:translateX(-50%);
 }
 
-.store-hero-content{
-    width:100%;
-    max-width:1100px;
-    margin:auto;
-    padding:70px 25px;
-    text-align:center;
+.store-content{
     position:relative;
-    z-index:3;
+    z-index:2;
+    width:100%;
+    text-align:center;
+    padding:65px 20px;
 }
 
 .store-logo{
@@ -879,23 +590,31 @@ button{
     height:115px;
     border-radius:50%;
     object-fit:cover;
-    border:4px solid white;
-    background:#222;
+    border:4px solid #fff;
+    background:#202727;
     margin-bottom:20px;
-    box-shadow:0 15px 45px rgba(0,0,0,.4);
+    box-shadow:0 15px 40px rgba(0,0,0,.4);
 }
 
-.store-hero h1{
-    font-size:clamp(38px,7vw,64px);
-    margin-bottom:13px;
+.store-content h1{
+    font-size:clamp(40px,8vw,65px);
+    margin-bottom:12px;
 }
 
-.store-hero p{
+.store-content p{
     max-width:650px;
     margin:auto;
-    color:#d5dddd;
+    color:#d7dddd;
     line-height:1.9;
     font-size:17px;
+}
+
+.store-actions{
+    margin-top:25px;
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
 }
 
 .store-products{
@@ -904,86 +623,105 @@ button{
     padding:70px 20px;
 }
 
-.products-title{
+.products-head{
     text-align:center;
-    margin-bottom:38px;
+    margin-bottom:40px;
 }
 
-.products-title h2{
-    font-size:35px;
+.products-head .mini{
     margin-bottom:10px;
 }
 
-.products-title p{
+.products-head h2{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.products-head p{
     color:#777;
 }
 
 .products-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:22px;
+    gap:24px;
 }
 
 .product-card{
-    background:white;
+    background:#fff;
     border-radius:22px;
     overflow:hidden;
-    box-shadow:0 10px 35px rgba(0,0,0,.08);
+    box-shadow:0 10px 30px rgba(0,0,0,.07);
     transition:.3s;
+    border:1px solid #eee;
 }
 
 .product-card:hover{
-    transform:translateY(-6px);
+    transform:translateY(-7px);
+    box-shadow:0 18px 45px rgba(0,0,0,.12);
 }
 
 .product-card img{
     width:100%;
-    height:245px;
+    height:260px;
     object-fit:cover;
     background:#eee;
 }
 
+.no-image{
+    height:260px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#eee,#fafafa);
+    font-size:60px;
+}
+
 .product-info{
-    padding:21px;
+    padding:22px;
 }
 
 .product-info h3{
+    font-size:20px;
     margin-bottom:10px;
-    font-size:19px;
 }
 
 .product-price{
-    color:#c29720;
+    color:#bd9118;
     font-size:22px;
-    font-weight:900;
-    margin-bottom:13px;
+    font-weight:bold;
+    margin-bottom:12px;
 }
 
 .product-info p{
     color:#777;
-    line-height:1.8;
-    margin-bottom:17px;
+    line-height:1.7;
+    margin-bottom:18px;
 }
 
 .buy-btn{
     width:100%;
     padding:14px;
-    border:none;
+    border:0;
     border-radius:13px;
-    background:#111;
-    color:white;
+    background:#071718;
+    color:#fff;
     font-weight:bold;
-    transition:.3s;
+    font-size:15px;
 }
 
-.buy-btn:hover{
-    background:#20a5ad;
+.store-footer{
+    background:#061314;
+    color:#aaa;
+    text-align:center;
+    padding:35px 20px;
 }
 
+.store-footer strong{
+    color:#d8b43c;
+}
 
-/* =========================================================
-   MODALS
-========================================================= */
+/* ================= MODALS ================= */
 
 .modal{
     display:none;
@@ -997,10 +735,10 @@ button{
 }
 
 .modal-box{
-    background:white;
     width:min(450px,100%);
     max-height:90vh;
     overflow:auto;
+    background:#fff;
     border-radius:25px;
     padding:30px;
     position:relative;
@@ -1008,9 +746,9 @@ button{
 
 .close{
     position:absolute;
-    top:12px;
-    left:18px;
-    border:none;
+    top:13px;
+    left:17px;
+    border:0;
     background:none;
     font-size:27px;
 }
@@ -1022,7 +760,7 @@ button{
 .modal-btn{
     width:100%;
     padding:14px;
-    border:none;
+    border:0;
     border-radius:13px;
     margin-top:10px;
     font-size:16px;
@@ -1031,7 +769,6 @@ button{
 
 .google-btn{
     background:#eee;
-    color:#222;
 }
 
 .error{
@@ -1040,86 +777,37 @@ button{
     font-size:14px;
 }
 
-
-/* =========================================================
-   USER
-========================================================= */
-
-.userbox{
-    display:none;
-    align-items:center;
-    gap:8px;
-    color:white;
-}
-
-.userbox button{
-    border:1px solid #555;
-    background:transparent;
-    color:white;
-    border-radius:20px;
-    padding:8px 12px;
-}
-
-
-/* =========================================================
-   FOOTER
-========================================================= */
+/* ================= FOOTER ================= */
 
 footer{
-    background:#061011;
-    color:#9da7a7;
+    background:#061314;
+    color:#aaa;
     text-align:center;
     padding:40px 20px;
-    line-height:1.7;
 }
 
 footer strong{
-    color:var(--gold);
-    font-size:18px;
+    color:#d8b43c;
 }
 
-
-/* =========================================================
-   MOBILE
-========================================================= */
+/* ================= MOBILE ================= */
 
 @media(max-width:800px){
 
     .site-header{
-        padding:11px 14px;
+        padding:13px 15px;
     }
 
     .nav{
-        gap:10px;
-    }
-
-    .logo{
-        font-size:21px;
-    }
-
-    .menu-btn{
-        display:block;
-        order:2;
+        flex-wrap:wrap;
     }
 
     .nav-links{
         display:none;
-        width:100%;
-        order:5;
-        flex-direction:column;
-        gap:17px;
-        padding:20px 10px;
-        margin-top:8px;
-        background:rgba(2,12,13,.97);
-        border-radius:16px;
     }
 
-    .nav-links.open{
-        display:flex;
-    }
-
-    .nav-buttons{
-        order:3;
+    .logo{
+        font-size:21px;
     }
 
     .nav-buttons .btn{
@@ -1128,1280 +816,690 @@ footer strong{
     }
 
     .hero{
-        min-height:900px;
-        padding:145px 17px 40px;
+        min-height:850px;
+        padding:135px 18px 60px;
     }
 
     .hero h1{
         font-size:42px;
-        letter-spacing:-1px;
     }
 
     .hero-text{
         font-size:16px;
-        line-height:1.95;
-    }
-
-    .hero-actions{
-        flex-direction:column;
     }
 
     .hero-actions .btn{
-        width:90%;
+        width:100%;
+        max-width:300px;
     }
 
-    .dashboard-visual{
-        height:270px;
-        transform:scale(.68);
-        transform-origin:top center;
-        margin-top:32px;
+    .hero-visual{
+        transform:scale(.78);
+        margin-top:30px;
     }
 
-    .floating-card{
-        display:none;
-    }
-
-    .features{
-        grid-template-columns:1fr;
-    }
-
-    .steps{
-        grid-template-columns:1fr;
-    }
-
+    .features,
+    .steps,
     .products-grid{
         grid-template-columns:1fr;
     }
 
-    .store-hero{
-        min-height:500px;
+    .section{
+        padding:70px 18px;
     }
 
-    .store-hero-content{
-        padding:55px 20px;
-    }
-
-    .cta{
-        border-radius:22px;
-        padding:60px 20px;
+    .dashboard{
+        padding:95px 12px 40px;
     }
 
     .dashboard-box{
-        padding:22px;
+        padding:20px;
         border-radius:20px;
     }
 
-    .dashboard-actions{
-        flex-direction:column;
+    .store-header{
+        min-height:520px;
     }
 
-    .dashboard-actions .btn{
-        width:100%;
+    .store-content{
+        padding:50px 18px;
     }
 
+    .store-content h1{
+        font-size:43px;
+    }
+
+    .store-products{
+        padding:55px 15px;
+    }
+
+    .products-head h2{
+        font-size:32px;
+    }
+
+    .product-card img,
+    .no-image{
+        height:300px;
+    }
+
+    .floating{
+        display:none;
+    }
 }
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media(max-width:430px){
-
-    .hero h1{
-        font-size:38px;
-    }
-
-    .badge{
-        font-size:12px;
-        padding:9px 16px;
-    }
-
-    .stats h2{
-        font-size:23px;
-    }
-
-    .section{
-        padding:70px 17px;
-    }
-
-    .section-title h2{
-        font-size:31px;
-    }
-
-}
-
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
+<!-- ================= MAIN HEADER ================= -->
 
 <header class="site-header" id="mainHeader">
 
-    <div class="nav">
+<div class="nav">
 
-        <div class="logo">
-            LUNA<span>&</span>LEO
-        </div>
+<div class="logo">
+LUNA<span>&</span>LEO
+</div>
 
-        <button class="menu-btn"
-                onclick="toggleMenu()">
-            ☰
-        </button>
+<nav class="nav-links">
+<a href="#home">الرئيسية</a>
+<a href="#about">من نحن</a>
+<a href="#features">المميزات</a>
+<a href="#steps">كيف تعمل؟</a>
+<a href="#contact">تواصل معنا</a>
+</nav>
 
-        <nav class="nav-links">
+<div class="nav-buttons" id="navButtons">
 
-            <a href="#home" onclick="closeMenu()">
-                الرئيسية
-            </a>
+<button class="btn btn-outline"
+onclick="openModal('loginModal')">
+تسجيل الدخول
+</button>
 
-            <a href="#about" onclick="closeMenu()">
-                من نحن
-            </a>
+<button class="btn btn-gold"
+onclick="startStoreCreation()">
+أنشئ متجرك
+</button>
 
-            <a href="#features" onclick="closeMenu()">
-                المميزات
-            </a>
+</div>
 
-            <a href="#steps" onclick="closeMenu()">
-                كيف تعمل؟
-            </a>
+<div class="userbox" id="userBox">
 
-            <a href="#faq" onclick="closeMenu()">
-                الأسئلة الشائعة
-            </a>
+<span id="userEmail"></span>
 
-        </nav>
+<button onclick="viewMyStore()">
+🔗 متجري
+</button>
 
+<button onclick="logout()">
+خروج
+</button>
 
-        <div class="nav-buttons" id="navButtons">
+</div>
 
-            <button class="btn btn-outline"
-                    id="homeLoginButton"
-                    onclick="openModal('loginModal')">
-
-                تسجيل الدخول
-
-            </button>
-
-            <button class="btn btn-gold"
-                    onclick="startStoreCreation()">
-
-                أنشئ متجرك
-
-            </button>
-
-        </div>
-
-
-        <div class="userbox" id="userBox">
-
-            <span id="userEmail"></span>
-
-            <button onclick="viewMyStore()">
-                🔗 متجري
-            </button>
-
-            <button onclick="logout()">
-                خروج
-            </button>
-
-        </div>
-
-    </div>
+</div>
 
 </header>
 
 
-
-<!-- =====================================================
-     HOME
-===================================================== -->
+<!-- ================= HOME ================= -->
 
 <main id="homePage">
 
-
 <section class="hero" id="home">
 
-    <div class="hero-content">
+<div class="hero-content">
+
+<div class="badge">
+⭐ منصة LUNA&LEO المتكاملة
+</div>
+
+<h1>
+كل أدوات تجارتك الإلكترونية
+<br>
+<span>في منصة واحدة</span>
+</h1>
+
+<p class="hero-text">
+أنشئ متجرك الإلكتروني خلال دقائق، أضف منتجاتك،
+تحكم في شكل متجرك وشارك رابطك مع عملائك بسهولة.
+</p>
+
+<div class="hero-actions">
+
+<button class="btn btn-teal"
+onclick="startStoreCreation()">
+← أنشئ متجرك
+</button>
+
+<button class="btn btn-outline"
+onclick="document.getElementById('features').scrollIntoView()">
+اكتشف المميزات
+</button>
+
+</div>
+
+<div class="trust">
+<span class="stars">★★★★★</span>
+&nbsp;
+ابدأ تجارتك الإلكترونية بسهولة
+</div>
 
 
-        <div class="badge">
-            ⭐ منصة LUNA&LEO المتكاملة
-        </div>
+<div class="hero-visual">
 
+<div class="visual-circle"></div>
 
-        <h1>
+<div class="floating float-right">
+📈 مبيعاتك بسهولة
+<br>
+<small>تابع منتجاتك</small>
+</div>
 
-            كل أدوات تجارتك الإلكترونية
+<div class="floating float-left">
+🛍️ متجرك جاهز
+<br>
+<small>اعرض منتجاتك</small>
+</div>
 
-            <br>
+<div class="visual-store">
 
-            <span>
-                في منصة واحدة
-            </span>
+<div class="visual-top">
+<div class="visual-dot"></div>
+<div class="visual-dot"></div>
+<div class="visual-dot"></div>
+</div>
 
-        </h1>
+<div class="visual-line"></div>
+<div class="visual-line small"></div>
+<div class="visual-line"></div>
+<div class="visual-line small"></div>
 
+</div>
 
-        <p class="hero-text">
+</div>
 
-            أنشئ متجرك الإلكتروني خلال دقائق،
-            أضف منتجاتك، تحكم في شكل متجرك
-            وشارك رابطك مع عملائك بسهولة.
-
-        </p>
-
-
-        <div class="hero-actions">
-
-            <button class="btn btn-teal"
-                    onclick="startStoreCreation()">
-
-                ← أنشئ متجرك
-
-            </button>
-
-
-            <button class="btn btn-outline"
-                    onclick="document.getElementById('features').scrollIntoView()">
-
-                اكتشف المميزات
-
-            </button>
-
-        </div>
-
-
-        <div class="trust">
-
-            <span class="stars">
-                ⭐
-            </span>
-
-            ابدأ اليوم وابني متجرك الإلكتروني بسهولة
-
-        </div>
-
-
-        <!-- HERO VISUAL -->
-
-        <div class="dashboard-visual">
-
-            <div class="circle"></div>
-
-
-            <div class="floating-card card-one">
-
-                📈 مبيعاتك بسهولة
-
-                <br>
-
-                <small>
-                    تابع منتجاتك ومتجرك
-                </small>
-
-            </div>
-
-
-            <div class="floating-card card-two">
-
-                🛍️ متجرك جاهز
-
-                <br>
-
-                <small>
-                    اعرض منتجاتك للعملاء
-                </small>
-
-            </div>
-
-
-            <div class="laptop">
-
-                <div class="laptop-screen">
-
-                    <div></div>
-                    <div></div>
-                    <div></div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
-
-
-<!-- STATS -->
 
 <section class="stats">
 
-    <h2>
+<h2>
+ابدأ مع <span>LUNA&LEO MARKET</span>
+</h2>
 
-        ابدأ تجارتك مع
-
-        <span>
-            LUNA&LEO MARKET
-        </span>
-
-    </h2>
-
-    <p>
-        كل الأدوات الأساسية لإنشاء متجرك في مكان واحد
-    </p>
+<p>
+كل الأدوات الأساسية لإنشاء متجرك الإلكتروني في مكان واحد
+</p>
 
 </section>
 
 
+<section class="section" id="about">
 
-<!-- TRUST -->
+<div class="section-title">
 
-<section class="trust-bar">
+<div class="mini">
+✨ منصة واحدة لتجارتك
+</div>
 
-    <div class="trust-bar-inner">
+<h2>
+تجارتك تبدأ من هنا
+</h2>
 
-        <div class="trust-pill">
-            🛍️ <strong>متجر إلكتروني</strong>
-        </div>
+<p>
+أنشئ متجرك، أضف منتجاتك، وشارك رابطك مع العملاء
+بدون الحاجة إلى خبرة في البرمجة.
+</p>
 
-        <div class="trust-pill">
-            📦 <strong>إدارة المنتجات</strong>
-        </div>
+</div>
 
-        <div class="trust-pill">
-            🔗 <strong>رابط خاص بمتجرك</strong>
-        </div>
+<div class="features">
 
-        <div class="trust-pill">
-            📱 <strong>متوافق مع الهاتف</strong>
-        </div>
+<div class="feature">
+<div class="feature-icon">🛍️</div>
+<h3>متجرك الخاص</h3>
+<p>
+أنشئ صفحة احترافية خاصة بمتجرك تحمل اسمك
+وتشارك رابطها مع عملائك.
+</p>
+</div>
 
-        <div class="trust-pill">
-            🚀 <strong>ابدأ بسهولة</strong>
-        </div>
+<div class="feature">
+<div class="feature-icon">📦</div>
+<h3>إدارة المنتجات</h3>
+<p>
+أضف المنتجات بالصور والأسعار والوصف
+وإدارتها بسهولة.
+</p>
+</div>
 
-    </div>
+<div class="feature">
+<div class="feature-icon">🎨</div>
+<h3>تخصيص المتجر</h3>
+<p>
+اختار ألوان متجرك وأضف الشعار وصورة الغلاف
+بطريقة تناسب علامتك.
+</p>
+</div>
 
-</section>
+<div class="feature">
+<div class="feature-icon">📱</div>
+<h3>مناسب للموبايل</h3>
+<p>
+متجرك مصمم ليظهر بشكل احترافي
+على الهاتف والكمبيوتر.
+</p>
+</div>
 
+<div class="feature">
+<div class="feature-icon">🔗</div>
+<h3>رابط خاص</h3>
+<p>
+شارك رابط متجرك بسهولة عبر واتساب
+وفيسبوك وإنستجرام.
+</p>
+</div>
 
+<div class="feature">
+<div class="feature-icon">🚀</div>
+<h3>ابدأ بسرعة</h3>
+<p>
+لا تحتاج إلى معرفة البرمجة.
+أنشئ متجرك وابدأ إضافة منتجاتك.
+</p>
+</div>
 
-<!-- ABOUT -->
-
-<section class="section section-light"
-         id="about">
-
-    <div class="section-title">
-
-        <div class="mini">
-            ✨ كل ما تحتاجه
-        </div>
-
-        <h2>
-            هل إدارة متجرك معقدة؟
-        </h2>
-
-        <p>
-            مع LUNA&LEO تقدر تبدأ متجرك
-            وتضيف منتجاتك وتشارك رابطك
-            بدون الدخول في تعقيدات البرمجة.
-        </p>
-
-    </div>
-
-
-    <div class="features">
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                🛍️
-            </div>
-
-            <h3>
-                متجرك الخاص
-            </h3>
-
-            <p>
-                أنشئ صفحة خاصة بمتجرك تحمل
-                اسمك وتقدر تشارك رابطها مع العملاء.
-            </p>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                📦
-            </div>
-
-            <h3>
-                إدارة المنتجات
-            </h3>
-
-            <p>
-                أضف المنتجات بالصور والأسعار والوصف
-                وقم بإدارتها بسهولة.
-            </p>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                🎨
-            </div>
-
-            <h3>
-                تصميم متجرك
-            </h3>
-
-            <p>
-                تحكم في ألوان المتجر وشعاره وصورة
-                الغلاف ليظهر بشكل احترافي.
-            </p>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                📱
-            </div>
-
-            <h3>
-                متوافق مع الموبايل
-            </h3>
-
-            <p>
-                متجرك يظهر بشكل مرتب على الهاتف
-                والتابلت والكمبيوتر.
-            </p>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                🔗
-            </div>
-
-            <h3>
-                رابط متجرك
-            </h3>
-
-            <p>
-                شارك رابط متجرك على واتساب وفيسبوك
-                وإنستجرام بسهولة.
-            </p>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                🚀
-            </div>
-
-            <h3>
-                ابدأ في دقائق
-            </h3>
-
-            <p>
-                لا تحتاج إلى خبرة برمجية لإنشاء
-                متجرك والبدء في عرض منتجاتك.
-            </p>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 
+<section class="section section-gray" id="steps">
 
-<!-- STEPS -->
+<div class="section-title">
 
-<section class="section section-dark"
-         id="steps">
+<div class="mini">
+🚀 خطوات بسيطة
+</div>
 
-    <div class="section-title">
+<h2>
+كيف تعمل المنصة؟
+</h2>
 
-        <div class="mini">
-            🚀 طريقة العمل
-        </div>
+<p>
+من التسجيل إلى متجرك الإلكتروني في خطوات بسيطة.
+</p>
 
-        <h2>
-            متجرك في 3 خطوات بسيطة
-        </h2>
+</div>
 
-        <p>
-            مش محتاج تكون مبرمج علشان تبدأ.
-        </p>
+<div class="steps">
 
-    </div>
+<div class="step">
+<div class="step-number">1</div>
+<h3>أنشئ حسابك</h3>
+<p>
+سجل حسابك في LUNA&LEO خلال دقائق.
+</p>
+</div>
 
+<div class="step">
+<div class="step-number">2</div>
+<h3>جهز متجرك</h3>
+<p>
+اكتب اسم المتجر وأضف الشعار والغلاف والمنتجات.
+</p>
+</div>
 
-    <div class="steps">
+<div class="step">
+<div class="step-number">3</div>
+<h3>شارك متجرك</h3>
+<p>
+شارك رابط المتجر مع عملائك وابدأ البيع.
+</p>
+</div>
 
-
-        <div class="step">
-
-            <div class="step-number">
-                1
-            </div>
-
-            <h3>
-                أنشئ حسابك
-            </h3>
-
-            <p>
-                سجل حسابك مجانًا وابدأ إنشاء متجرك.
-            </p>
-
-        </div>
-
-
-        <div class="step">
-
-            <div class="step-number">
-                2
-            </div>
-
-            <h3>
-                أضف منتجاتك
-            </h3>
-
-            <p>
-                ارفع الصور واكتب اسم المنتج
-                والسعر والوصف.
-            </p>
-
-        </div>
-
-
-        <div class="step">
-
-            <div class="step-number">
-                3
-            </div>
-
-            <h3>
-                شارك متجرك
-            </h3>
-
-            <p>
-                خذ رابط متجرك وشاركه مع عملائك.
-            </p>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 
+<section class="section">
 
-<!-- FEATURES CTA -->
+<div class="cta">
 
-<section class="section section-gray"
-         id="features">
+<h2>
+جاهز تبدأ تجارتك؟
+</h2>
 
-    <div class="section-title">
+<p>
+أنشئ متجرك الإلكتروني الآن وابدأ عرض منتجاتك.
+</p>
 
-        <div class="mini">
-            ⭐ مميزات LUNA&LEO
-        </div>
+<button class="btn btn-gold"
+onclick="startStoreCreation()">
+🚀 ابدأ إنشاء متجرك
+</button>
 
-        <h2>
-            كل شيء في مكان واحد
-        </h2>
-
-        <p>
-            أدوات بسيطة تساعدك تبدأ تجارتك الإلكترونية
-            بشكل أسرع وأسهل.
-        </p>
-
-    </div>
-
-
-    <div class="cta">
-
-        <h2>
-            جاهز تبدأ متجرك؟
-        </h2>
-
-        <p>
-            أنشئ حسابك وابدأ إضافة منتجاتك الآن.
-        </p>
-
-        <button class="btn btn-gold"
-                onclick="startStoreCreation()">
-
-            🚀 ابدأ إنشاء متجرك
-
-        </button>
-
-    </div>
+</div>
 
 </section>
 
 
+<section class="section section-gray" id="contact">
 
-<!-- FAQ -->
+<div class="section-title">
 
-<section class="section section-light"
-         id="faq">
+<div class="mini">
+📩 تواصل معنا
+</div>
 
-    <div class="section-title">
+<h2>
+LUNA&LEO MARKET
+</h2>
 
-        <div class="mini">
-            ❓ الأسئلة الشائعة
-        </div>
+<p>
+منصتك لإنشاء وإدارة المتاجر الإلكترونية.
+</p>
 
-        <h2>
-            كل شيء بسيط
-        </h2>
-
-        <p>
-            أهم الأسئلة التي قد تحتاج إلى معرفتها.
-        </p>
-
-    </div>
-
-
-    <div class="faq">
-
-
-        <div class="faq-item">
-
-            <button class="faq-question"
-                    onclick="toggleFaq(this)">
-
-                هل أحتاج إلى خبرة في البرمجة؟
-
-                <span>
-                    +
-                </span>
-
-            </button>
-
-            <div class="faq-answer">
-
-                لا، تقدر تنشئ متجرك وتضيف منتجاتك
-                من لوحة التحكم بدون الحاجة للبرمجة.
-
-            </div>
-
-        </div>
-
-
-        <div class="faq-item">
-
-            <button class="faq-question"
-                    onclick="toggleFaq(this)">
-
-                هل أقدر أضيف صور للمنتجات؟
-
-                <span>
-                    +
-                </span>
-
-            </button>
-
-            <div class="faq-answer">
-
-                نعم، يمكنك رفع صورة لكل منتج
-                وعرضها داخل متجرك.
-
-            </div>
-
-        </div>
-
-
-        <div class="faq-item">
-
-            <button class="faq-question"
-                    onclick="toggleFaq(this)">
-
-                هل أقدر أغير شكل المتجر؟
-
-                <span>
-                    +
-                </span>
-
-            </button>
-
-            <div class="faq-answer">
-
-                نعم، يمكنك تغيير لون المتجر واللون
-                المميز والشعار وصورة الغلاف.
-
-            </div>
-
-        </div>
-
-
-        <div class="faq-item">
-
-            <button class="faq-question"
-                    onclick="toggleFaq(this)">
-
-                كيف أشارك متجري؟
-
-                <span>
-                    +
-                </span>
-
-            </button>
-
-            <div class="faq-answer">
-
-                بعد إنشاء المتجر اضغط "متجري"
-                وسيظهر لك رابط المتجر الذي يمكنك مشاركته.
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
-
-
-
-<!-- CONTACT -->
-
-<section class="section section-gray"
-         id="contact">
-
-    <div class="section-title">
-
-        <div class="mini">
-            📩 تواصل معنا
-        </div>
-
-        <h2>
-            LUNA&LEO MARKET
-        </h2>
-
-        <p>
-            منصتك البسيطة لإنشاء وإدارة متجرك الإلكتروني.
-        </p>
-
-    </div>
-
-</section>
-
 
 </main>
 
 
+<!-- ================= DASHBOARD ================= -->
 
-<!-- =====================================================
-     DASHBOARD
-===================================================== -->
+<section class="dashboard" id="dashboard">
 
-<section class="dashboard"
-         id="dashboard">
+<div class="dashboard-box">
 
-    <div class="dashboard-box">
+<div class="dashboard-head">
 
+<h2>⚙️ لوحة تحكم متجري</h2>
 
-        <h2>
-            ⚙️ إدارة متجري
-        </h2>
+<p>
+من هنا تقدر تتحكم في بيانات متجرك ومنتجاتك.
+</p>
 
+</div>
 
-        <div class="form-group">
+<div class="form-group">
+<label>اسم المتجر</label>
+<input id="storeName" placeholder="مثال: LUNA Store">
+</div>
 
-            <label>
-                اسم المتجر
-            </label>
+<div class="form-group">
+<label>وصف المتجر</label>
+<textarea id="storeDescription"
+placeholder="اكتب وصف متجرك"></textarea>
+</div>
 
-            <input
-                id="storeName"
-                placeholder="مثال: LUNA Store">
+<div class="form-group">
+<label>لون المتجر</label>
+<input type="color" id="themeColor" value="#071718">
+</div>
 
-        </div>
+<div class="form-group">
+<label>اللون المميز</label>
+<input type="color" id="accentColor" value="#d8b43c">
+</div>
 
+<div class="form-group">
+<label>شعار المتجر</label>
+<input type="file" id="logoFile" accept="image/*">
+</div>
 
-        <div class="form-group">
+<div class="form-group">
+<label>صورة الغلاف</label>
+<input type="file" id="coverFile" accept="image/*">
+</div>
 
-            <label>
-                وصف المتجر
-            </label>
+<div class="dashboard-actions">
 
-            <textarea
-                id="storeDescription"
-                placeholder="اكتب وصف متجرك">
-            </textarea>
+<button class="btn btn-gold"
+onclick="saveStore()">
+💾 حفظ المتجر
+</button>
 
-        </div>
+<button class="btn dark-btn"
+onclick="viewMyStore()">
+🔗 مشاهدة متجري
+</button>
 
+<button class="btn"
+onclick="showHome()">
+🏠 الرئيسية
+</button>
 
-        <div class="form-group">
+</div>
 
-            <label>
-                لون المتجر
-            </label>
+<hr style="margin:35px 0">
 
-            <input
-                type="color"
-                id="themeColor"
-                value="#111111">
+<h2>📦 إضافة منتج</h2>
 
-        </div>
+<br>
 
+<div class="form-group">
+<label>اسم المنتج</label>
+<input id="productName">
+</div>
 
-        <div class="form-group">
+<div class="form-group">
+<label>السعر</label>
+<input id="productPrice" type="number">
+</div>
 
-            <label>
-                اللون المميز
-            </label>
+<div class="form-group">
+<label>وصف المنتج</label>
+<textarea id="productDescription"></textarea>
+</div>
 
-            <input
-                type="color"
-                id="accentColor"
-                value="#d7b238">
+<div class="form-group">
+<label>صورة المنتج</label>
+<input id="productImage" type="file" accept="image/*">
+</div>
 
-        </div>
+<button class="btn btn-gold"
+onclick="addProduct()">
+➕ إضافة المنتج
+</button>
 
+<div id="myProducts"
+class="products-grid"
+style="margin-top:35px">
+</div>
 
-        <div class="form-group">
-
-            <label>
-                شعار المتجر
-            </label>
-
-            <input
-                type="file"
-                id="logoFile"
-                accept="image/*">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                صورة الغلاف
-            </label>
-
-            <input
-                type="file"
-                id="coverFile"
-                accept="image/*">
-
-        </div>
-
-
-        <div class="dashboard-actions">
-
-            <button
-                class="btn btn-gold"
-                onclick="saveStore()">
-
-                💾 حفظ المتجر
-
-            </button>
-
-
-            <button
-                class="btn dark-btn"
-                onclick="viewMyStore()">
-
-                🔗 مشاهدة متجري
-
-            </button>
-
-
-            <button
-                class="btn"
-                onclick="showHome()">
-
-                🏠 الرئيسية
-
-            </button>
-
-        </div>
-
-
-        <hr style="margin:30px 0">
-
-
-        <h2>
-            📦 منتجاتي
-        </h2>
-
-
-        <div class="form-group">
-
-            <label>
-                اسم المنتج
-            </label>
-
-            <input id="productName">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                السعر
-            </label>
-
-            <input
-                id="productPrice"
-                type="number">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                وصف المنتج
-            </label>
-
-            <textarea
-                id="productDescription">
-            </textarea>
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                صورة المنتج
-            </label>
-
-            <input
-                id="productImage"
-                type="file"
-                accept="image/*">
-
-        </div>
-
-
-        <button
-            class="btn btn-gold"
-            onclick="addProduct()">
-
-            ➕ إضافة المنتج
-
-        </button>
-
-
-        <div
-            id="myProducts"
-            class="products-grid"
-            style="margin-top:30px">
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 
+<!-- ================= PUBLIC STORE ================= -->
 
-<!-- =====================================================
-     PUBLIC STORE
-===================================================== -->
+<section class="store-page" id="storePage">
 
-<section class="store-page"
-         id="storePage">
+<div class="store-header" id="storeHero">
 
+<div class="store-content">
 
-    <div class="store-hero"
-         id="storeHero">
+<img id="publicLogo"
+class="store-logo"
+style="display:none">
 
+<div class="badge">
+⭐ متجر إلكتروني
+</div>
 
-        <div class="store-hero-content">
+<h1 id="publicStoreName">
+متجري
+</h1>
 
+<p id="publicStoreDescription"></p>
 
-            <img
-                id="publicLogo"
-                class="store-logo"
-                style="display:none">
+<div class="store-actions">
 
+<button class="btn btn-gold"
+onclick="scrollToProducts()">
+🛍️ تسوق الآن
+</button>
 
-            <h1 id="publicStoreName">
-                المتجر
-            </h1>
+<button class="btn btn-outline"
+onclick="showHome()">
+🏠 الرئيسية
+</button>
 
+</div>
 
-            <p id="publicStoreDescription"></p>
+</div>
 
-
-            <br>
-
-
-            <button
-                class="btn btn-gold"
-                onclick="scrollToProducts()">
-
-                🛍️ تسوق الآن
-
-            </button>
-
-
-            <button
-                class="btn btn-outline"
-                onclick="showHome()">
-
-                🏠 الرئيسية
-
-            </button>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <div
-        class="store-products"
-        id="publicProducts">
+<div class="store-products" id="publicProducts">
+
+<div class="products-head">
+
+<div class="mini">
+🛍️ متجرنا
+</div>
+
+<h2>
+منتجاتنا
+</h2>
+
+<p>
+اختار المنتج المناسب لك
+</p>
+
+</div>
+
+<div class="products-grid"
+id="productsGrid">
+</div>
+
+</div>
 
 
-        <div class="products-title">
+<div class="store-footer">
 
-            <h2>
-                🛍️ منتجاتنا
-            </h2>
+<strong id="storeFooterName">
+LUNA&LEO MARKET
+</strong>
 
-            <p>
-                اختار المنتج المناسب لك
-            </p>
+<br><br>
 
-        </div>
+متجر إلكتروني powered by LUNA&LEO MARKET
 
-
-        <div
-            class="products-grid"
-            id="productsGrid">
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 
+<!-- ================= LOGIN ================= -->
 
-<!-- =====================================================
-     LOGIN MODAL
-===================================================== -->
+<div class="modal" id="loginModal">
 
-<div class="modal"
-     id="loginModal">
+<div class="modal-box">
 
+<button class="close"
+onclick="closeModal('loginModal')">
+×
+</button>
 
-    <div class="modal-box">
+<h2>🔐 تسجيل الدخول</h2>
 
+<div class="form-group">
+<label>البريد الإلكتروني</label>
+<input id="loginEmail" type="email">
+</div>
 
-        <button
-            class="close"
-            onclick="closeModal('loginModal')">
+<div class="form-group">
+<label>كلمة المرور</label>
+<input id="loginPassword" type="password">
+</div>
 
-            ×
+<button class="modal-btn btn-gold"
+onclick="login()">
+تسجيل الدخول
+</button>
 
-        </button>
+<button class="modal-btn google-btn"
+onclick="googleLogin()">
+🔵 الدخول باستخدام Google
+</button>
 
+<p id="loginError" class="error"></p>
 
-        <h2>
-            🔐 تسجيل الدخول
-        </h2>
+<p style="text-align:center;margin-top:15px">
+ليس لديك حساب؟
 
+<button
+style="border:0;background:none;color:#b58b13;font-weight:bold"
+onclick="closeModal('loginModal');openModal('registerModal')">
+إنشاء حساب
+</button>
 
-        <div class="form-group">
+</p>
 
-            <label>
-                البريد الإلكتروني
-            </label>
-
-            <input
-                id="loginEmail"
-                type="email">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                كلمة المرور
-            </label>
-
-            <input
-                id="loginPassword"
-                type="password">
-
-        </div>
-
-
-        <button
-            class="modal-btn btn-gold"
-            onclick="login()">
-
-            تسجيل الدخول
-
-        </button>
-
-
-        <button
-            class="modal-btn google-btn"
-            onclick="googleLogin()">
-
-            🔵 الدخول باستخدام Google
-
-        </button>
-
-
-        <p
-            id="loginError"
-            class="error">
-        </p>
-
-
-        <p style="text-align:center;margin-top:15px">
-
-            ليس لديك حساب؟
-
-            <button
-                style="border:0;background:none;color:#b58b13;font-weight:bold"
-                onclick="closeModal('loginModal');openModal('registerModal')">
-
-                إنشاء حساب
-
-            </button>
-
-        </p>
-
-    </div>
+</div>
 
 </div>
 
 
+<!-- ================= REGISTER ================= -->
 
-<!-- =====================================================
-     REGISTER MODAL
-===================================================== -->
+<div class="modal" id="registerModal">
 
-<div class="modal"
-     id="registerModal">
+<div class="modal-box">
 
+<button class="close"
+onclick="closeModal('registerModal')">
+×
+</button>
 
-    <div class="modal-box">
+<h2>🚀 إنشاء حساب</h2>
 
+<div class="form-group">
+<label>البريد الإلكتروني</label>
+<input id="registerEmail" type="email">
+</div>
 
-        <button
-            class="close"
-            onclick="closeModal('registerModal')">
+<div class="form-group">
+<label>كلمة المرور</label>
+<input id="registerPassword" type="password">
+</div>
 
-            ×
+<button class="modal-btn btn-gold"
+onclick="register()">
+إنشاء الحساب
+</button>
 
-        </button>
-
-
-        <h2>
-            🚀 إنشاء حساب
-        </h2>
-
-
-        <div class="form-group">
-
-            <label>
-                البريد الإلكتروني
-            </label>
-
-            <input
-                id="registerEmail"
-                type="email">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                كلمة المرور
-            </label>
-
-            <input
-                id="registerPassword"
-                type="password">
-
-        </div>
-
-
-        <button
-            class="modal-btn btn-gold"
-            onclick="register()">
-
-            إنشاء الحساب
-
-        </button>
-
-
-        <p
-            id="registerError"
-            class="error">
-        </p>
-
-    </div>
+<p id="registerError" class="error"></p>
 
 </div>
 
+</div>
 
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
 
 <footer>
 
-    <strong>
-        LUNA&LEO MARKET
-    </strong>
+<strong>LUNA&LEO MARKET</strong>
 
-    <br><br>
+<br><br>
 
-    منصة إنشاء وإدارة المتاجر الإلكترونية
-
-    <br>
-
-    © 2026 جميع الحقوق محفوظة
+منصتك لإنشاء وإدارة المتاجر الإلكترونية
 
 </footer>
-
 
 
 <script>
 
 /* =========================================================
-   SUPABASE
+SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
@@ -2412,1363 +1510,911 @@ const SUPABASE_KEY =
 
 const supabaseClient =
 supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
 
 /* =========================================================
-   MENU
-========================================================= */
-
-function toggleMenu(){
-
-    const menu =
-        document.querySelector(".nav-links");
-
-    menu.classList.toggle("open");
-
-}
-
-
-function closeMenu(){
-
-    const menu =
-        document.querySelector(".nav-links");
-
-    menu.classList.remove("open");
-
-}
-
-
-/* =========================================================
-   FAQ
-========================================================= */
-
-function toggleFaq(button){
-
-    const item =
-        button.parentElement;
-
-    item.classList.toggle("open");
-
-    const symbol =
-        button.querySelector("span");
-
-    if(item.classList.contains("open")){
-
-        symbol.textContent="−";
-
-    }else{
-
-        symbol.textContent="+";
-
-    }
-
-}
-
-
-/* =========================================================
-   MODALS
+HELPERS
 ========================================================= */
 
 function openModal(id){
-
-    document.getElementById(id).style.display="flex";
-
+document.getElementById(id).style.display="flex";
 }
-
 
 function closeModal(id){
-
-    document.getElementById(id).style.display="none";
-
+document.getElementById(id).style.display="none";
 }
-
-
-/* =========================================================
-   HOME
-========================================================= */
 
 function showHome(){
 
-    document.getElementById("homePage").style.display="block";
+document.getElementById("homePage").style.display="block";
+document.getElementById("dashboard").style.display="none";
+document.getElementById("storePage").style.display="none";
+document.getElementById("mainHeader").style.display="block";
 
-    document.getElementById("dashboard").style.display="none";
-
-    document.getElementById("storePage").style.display="none";
-
-    document.getElementById("mainHeader").style.display="block";
-
-    window.scrollTo(0,0);
+window.scrollTo(0,0);
 
 }
 
 
 /* =========================================================
-   USER
+USER
 ========================================================= */
 
 async function getUser(){
 
-    const {
-        data
-    } = await supabaseClient.auth.getUser();
+const {data}=await supabaseClient.auth.getUser();
 
-    return data.user;
+return data.user;
 
 }
 
 
 async function updateUser(){
 
-    const user =
-        await getUser();
+const user=await getUser();
 
+const navButtons=
+document.getElementById("navButtons");
 
-    const navButtons =
-        document.getElementById("navButtons");
+const userBox=
+document.getElementById("userBox");
 
+if(user){
 
-    const userBox =
-        document.getElementById("userBox");
+navButtons.style.display="none";
 
+userBox.style.display="flex";
 
-    if(user){
+document.getElementById("userEmail").textContent=
+user.email || "حسابي";
 
-        navButtons.style.display="none";
+await ensureStore(user);
 
-        userBox.style.display="flex";
+}else{
 
+navButtons.style.display="flex";
 
-        document.getElementById(
-            "userEmail"
-        ).textContent =
-            user.email || "حسابي";
+userBox.style.display="none";
 
-
-        await ensureStore(user);
-
-    }else{
-
-        navButtons.style.display="flex";
-
-        userBox.style.display="none";
-
-    }
+}
 
 }
 
 
 /* =========================================================
-   ENSURE STORE
+ENSURE STORE
 ========================================================= */
 
 async function ensureStore(user){
 
-    const {
-        data:store
-    } =
-        await supabaseClient
-            .from("stores")
-            .select("*")
-            .eq("user_id",user.id)
-            .maybeSingle();
+const {data:store}=await supabaseClient
+.from("stores")
+.select("*")
+.eq("user_id",user.id)
+.maybeSingle();
 
+if(!store){
 
-    if(!store){
+await supabaseClient
+.from("stores")
+.insert({
 
-        await supabaseClient
-            .from("stores")
-            .insert({
+user_id:user.id,
 
-                user_id:user.id,
+store_name:"متجري الجديد",
 
-                store_name:"متجري الجديد",
+description:"مرحباً بكم في متجري",
 
-                description:
-                    "مرحباً بكم في متجري",
+theme_color:"#071718",
 
-                theme_color:"#111111",
+accent_color:"#d8b43c",
 
-                accent_color:"#d7b238",
+layout:"grid"
 
-                layout:"grid"
+});
 
-            });
-
-    }
+}
 
 }
 
 
 /* =========================================================
-   START STORE CREATION
+START STORE
 ========================================================= */
 
 async function startStoreCreation(){
 
-    const user =
-        await getUser();
+const user=await getUser();
 
+if(user){
 
-    if(user){
+await ensureStore(user);
 
-        await ensureStore(user);
+openDashboard();
 
-        openDashboard();
+}else{
 
-    }else{
+openModal("registerModal");
 
-        openModal("registerModal");
-
-    }
+}
 
 }
 
 
 /* =========================================================
-   REGISTER
+REGISTER
 ========================================================= */
 
 async function register(){
 
-    const email =
-        document
-            .getElementById("registerEmail")
-            .value
-            .trim();
+const email=
+document.getElementById("registerEmail").value.trim();
 
+const password=
+document.getElementById("registerPassword").value;
 
-    const password =
-        document
-            .getElementById("registerPassword")
-            .value;
+const error=
+document.getElementById("registerError");
 
+error.textContent="";
 
-    const error =
-        document
-            .getElementById("registerError");
+if(!email || !password){
 
+error.textContent="اكتب البريد وكلمة المرور";
 
-    error.textContent="";
+return;
 
+}
 
-    if(!email || !password){
+const {data,error:err}=
+await supabaseClient.auth.signUp({
+email,
+password
+});
 
-        error.textContent =
-            "اكتب البريد وكلمة المرور";
+if(err){
 
-        return;
+error.textContent=err.message;
 
-    }
+return;
 
+}
 
-    const {
-        data,
-        error:err
-    } =
-        await supabaseClient.auth.signUp({
+if(data.user){
 
-            email,
-            password
+await ensureStore(data.user);
 
-        });
+closeModal("registerModal");
 
+await updateUser();
 
-    if(err){
+openDashboard();
 
-        error.textContent =
-            err.message;
-
-        return;
-
-    }
-
-
-    if(data.user){
-
-        await ensureStore(data.user);
-
-        closeModal("registerModal");
-
-        await updateUser();
-
-        openDashboard();
-
-    }
+}
 
 }
 
 
 /* =========================================================
-   LOGIN
+LOGIN
 ========================================================= */
 
 async function login(){
 
-    const email =
-        document
-            .getElementById("loginEmail")
-            .value
-            .trim();
+const email=
+document.getElementById("loginEmail").value.trim();
 
+const password=
+document.getElementById("loginPassword").value;
 
-    const password =
-        document
-            .getElementById("loginPassword")
-            .value;
+const error=
+document.getElementById("loginError");
 
+error.textContent="";
 
-    const error =
-        document
-            .getElementById("loginError");
+const {data,error:err}=
+await supabaseClient.auth.signInWithPassword({
+email,
+password
+});
 
+if(err){
 
-    error.textContent="";
+error.textContent=err.message;
 
+return;
 
-    if(!email || !password){
+}
 
-        error.textContent =
-            "اكتب البريد وكلمة المرور";
+if(data.user){
 
-        return;
+await ensureStore(data.user);
 
-    }
+closeModal("loginModal");
 
+await updateUser();
 
-    const {
-        data,
-        error:err
-    } =
-        await supabaseClient
-            .auth
-            .signInWithPassword({
+openDashboard();
 
-                email,
-                password
-
-            });
-
-
-    if(err){
-
-        error.textContent =
-            err.message;
-
-        return;
-
-    }
-
-
-    if(data.user){
-
-        await ensureStore(data.user);
-
-        closeModal("loginModal");
-
-        await updateUser();
-
-        openDashboard();
-
-    }
+}
 
 }
 
 
 /* =========================================================
-   GOOGLE
+GOOGLE
 ========================================================= */
 
 async function googleLogin(){
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .auth
-            .signInWithOAuth({
+const {error}=
+await supabaseClient.auth.signInWithOAuth({
 
-                provider:"google",
+provider:"google",
 
-                options:{
-                    redirectTo:
-                        window.location.origin
-                }
+options:{
+redirectTo:window.location.origin
+}
 
-            });
+});
 
-
-    if(error){
-
-        alert(error.message);
-
-    }
+if(error){
+alert(error.message);
+}
 
 }
 
 
 /* =========================================================
-   LOGOUT
+LOGOUT
 ========================================================= */
 
 async function logout(){
 
-    await supabaseClient.auth.signOut();
+await supabaseClient.auth.signOut();
 
-    showHome();
+showHome();
 
-    await updateUser();
+await updateUser();
 
 }
 
 
 /* =========================================================
-   DASHBOARD
+DASHBOARD
 ========================================================= */
 
 async function openDashboard(){
 
-    const user =
-        await getUser();
+const user=await getUser();
 
+if(!user){
 
-    if(!user){
+openModal("loginModal");
 
-        openModal("loginModal");
+return;
 
-        return;
+}
 
-    }
+await ensureStore(user);
 
+document.getElementById("homePage").style.display="none";
+document.getElementById("storePage").style.display="none";
+document.getElementById("dashboard").style.display="block";
+document.getElementById("mainHeader").style.display="block";
 
-    await ensureStore(user);
+await loadMyStore();
+await loadMyProducts();
 
-
-    document.getElementById(
-        "homePage"
-    ).style.display="none";
-
-
-    document.getElementById(
-        "storePage"
-    ).style.display="none";
-
-
-    document.getElementById(
-        "dashboard"
-    ).style.display="block";
-
-
-    document.getElementById(
-        "mainHeader"
-    ).style.display="block";
-
-
-    await loadMyStore();
-
-    await loadMyProducts();
-
-
-    window.scrollTo(0,0);
+window.scrollTo(0,0);
 
 }
 
 
 /* =========================================================
-   LOAD MY STORE
+LOAD STORE
 ========================================================= */
 
 async function loadMyStore(){
 
-    const user =
-        await getUser();
+const user=await getUser();
 
+if(!user)return;
 
-    if(!user) return;
+const {data:store}=
+await supabaseClient
+.from("stores")
+.select("*")
+.eq("user_id",user.id)
+.maybeSingle();
 
+if(!store)return;
 
-    const {
-        data:store
-    } =
-        await supabaseClient
-            .from("stores")
-            .select("*")
-            .eq("user_id",user.id)
-            .maybeSingle();
+document.getElementById("storeName").value=
+store.store_name || "";
 
+document.getElementById("storeDescription").value=
+store.description || "";
 
-    if(!store) return;
+document.getElementById("themeColor").value=
+store.theme_color || "#071718";
 
-
-    document.getElementById(
-        "storeName"
-    ).value =
-        store.store_name || "";
-
-
-    document.getElementById(
-        "storeDescription"
-    ).value =
-        store.description || "";
-
-
-    document.getElementById(
-        "themeColor"
-    ).value =
-        store.theme_color || "#111111";
-
-
-    document.getElementById(
-        "accentColor"
-    ).value =
-        store.accent_color || "#d7b238";
+document.getElementById("accentColor").value=
+store.accent_color || "#d8b43c";
 
 }
 
 
 /* =========================================================
-   UPLOAD IMAGE
+UPLOAD IMAGE
 ========================================================= */
 
 async function uploadImage(file,folder){
 
-    if(!file) return null;
+if(!file)return null;
 
+const ext=file.name.split(".").pop();
 
-    const ext =
-        file.name
-            .split(".")
-            .pop();
+const path=
+folder+"/"+
+Date.now()+"-"+
+Math.random().toString(36).substring(2)+
+"."+ext;
 
+const {error}=
+await supabaseClient
+.storage
+.from("products")
+.upload(path,file,{
+upsert:true
+});
 
-    const path =
-        folder +
-        "/" +
-        Date.now() +
-        "-" +
-        Math.random()
-            .toString(36)
-            .substring(2) +
-        "." +
-        ext;
+if(error){
 
+alert(error.message);
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .storage
-            .from("products")
-            .upload(
-                path,
-                file,
-                {
-                    upsert:true
-                }
-            );
+return null;
 
+}
 
-    if(error){
+const {data}=
+supabaseClient
+.storage
+.from("products")
+.getPublicUrl(path);
 
-        alert(error.message);
-
-        return null;
-
-    }
-
-
-    const {
-        data
-    } =
-        supabaseClient
-            .storage
-            .from("products")
-            .getPublicUrl(path);
-
-
-    return data.publicUrl;
+return data.publicUrl;
 
 }
 
 
 /* =========================================================
-   SAVE STORE
+SAVE STORE
 ========================================================= */
 
 async function saveStore(){
 
-    const user =
-        await getUser();
+const user=await getUser();
 
+if(!user)return;
 
-    if(!user) return;
+let logoUrl=null;
+let coverUrl=null;
 
+const logoFile=
+document.getElementById("logoFile").files[0];
 
-    let logoUrl=null;
+const coverFile=
+document.getElementById("coverFile").files[0];
 
-    let coverUrl=null;
+if(logoFile){
 
+logoUrl=
+await uploadImage(
+logoFile,
+"logos"
+);
 
-    const logoFile =
-        document
-            .getElementById("logoFile")
-            .files[0];
+}
 
+if(coverFile){
 
-    const coverFile =
-        document
-            .getElementById("coverFile")
-            .files[0];
+coverUrl=
+await uploadImage(
+coverFile,
+"covers"
+);
 
+}
 
-    if(logoFile){
+const updateData={
 
-        logoUrl =
-            await uploadImage(
-                logoFile,
-                "logos"
-            );
+store_name:
+document.getElementById("storeName").value,
 
-    }
+description:
+document.getElementById("storeDescription").value,
 
+theme_color:
+document.getElementById("themeColor").value,
 
-    if(coverFile){
+accent_color:
+document.getElementById("accentColor").value
 
-        coverUrl =
-            await uploadImage(
-                coverFile,
-                "covers"
-            );
+};
 
-    }
+if(logoUrl)
+updateData.logo_url=logoUrl;
 
+if(coverUrl)
+updateData.cover_url=coverUrl;
 
-    const updateData={
+const {error}=
+await supabaseClient
+.from("stores")
+.update(updateData)
+.eq("user_id",user.id);
 
-        store_name:
-            document
-                .getElementById("storeName")
-                .value
-                .trim(),
+if(error){
 
-        description:
-            document
-                .getElementById("storeDescription")
-                .value
-                .trim(),
+alert(error.message);
 
-        theme_color:
-            document
-                .getElementById("themeColor")
-                .value,
+return;
 
-        accent_color:
-            document
-                .getElementById("accentColor")
-                .value
+}
 
-    };
-
-
-    if(logoUrl)
-        updateData.logo_url=logoUrl;
-
-
-    if(coverUrl)
-        updateData.cover_url=coverUrl;
-
-
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("stores")
-            .update(updateData)
-            .eq("user_id",user.id);
-
-
-    if(error){
-
-        alert(error.message);
-
-        return;
-
-    }
-
-
-    alert("✅ تم حفظ بيانات المتجر");
+alert("✅ تم حفظ بيانات المتجر");
 
 }
 
 
 /* =========================================================
-   ADD PRODUCT
+ADD PRODUCT
 ========================================================= */
 
 async function addProduct(){
 
-    const user =
-        await getUser();
+const user=await getUser();
 
+if(!user)return;
 
-    if(!user) return;
+const name=
+document.getElementById("productName").value.trim();
 
+const price=
+document.getElementById("productPrice").value;
 
-    const name =
-        document
-            .getElementById("productName")
-            .value
-            .trim();
+const description=
+document.getElementById("productDescription").value.trim();
 
+const file=
+document.getElementById("productImage").files[0];
 
-    const price =
-        document
-            .getElementById("productPrice")
-            .value;
+if(!name || !price){
 
+alert("اكتب اسم المنتج والسعر");
 
-    const description =
-        document
-            .getElementById("productDescription")
-            .value
-            .trim();
+return;
 
+}
 
-    const file =
-        document
-            .getElementById("productImage")
-            .files[0];
+let imageUrl=null;
 
+if(file){
 
-    if(!name || !price){
+imageUrl=
+await uploadImage(
+file,
+"product-images"
+);
 
-        alert("اكتب اسم المنتج والسعر");
+}
 
-        return;
+const {error}=
+await supabaseClient
+.from("products")
+.insert({
 
-    }
+name:name,
+price:Number(price),
+description:description,
+image_url:imageUrl,
+user_id:user.id
 
+});
 
-    let imageUrl=null;
+if(error){
 
+alert(error.message);
 
-    if(file){
+return;
 
-        imageUrl =
-            await uploadImage(
-                file,
-                "product-images"
-            );
+}
 
-    }
+document.getElementById("productName").value="";
+document.getElementById("productPrice").value="";
+document.getElementById("productDescription").value="";
+document.getElementById("productImage").value="";
 
+await loadMyProducts();
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("products")
-            .insert({
-
-                name:name,
-
-                price:Number(price),
-
-                description:description,
-
-                image_url:imageUrl,
-
-                user_id:user.id
-
-            });
-
-
-    if(error){
-
-        alert(error.message);
-
-        return;
-
-    }
-
-
-    document.getElementById(
-        "productName"
-    ).value="";
-
-
-    document.getElementById(
-        "productPrice"
-    ).value="";
-
-
-    document.getElementById(
-        "productDescription"
-    ).value="";
-
-
-    document.getElementById(
-        "productImage"
-    ).value="";
-
-
-    await loadMyProducts();
-
-
-    alert("✅ تمت إضافة المنتج");
+alert("✅ تمت إضافة المنتج");
 
 }
 
 
 /* =========================================================
-   LOAD MY PRODUCTS
+MY PRODUCTS
 ========================================================= */
 
 async function loadMyProducts(){
 
-    const user =
-        await getUser();
+const user=await getUser();
 
+if(!user)return;
 
-    if(!user) return;
+const {data:products}=
+await supabaseClient
+.from("products")
+.select("*")
+.eq("user_id",user.id)
+.order("id",{ascending:false});
 
-
-    const {
-        data:products
-    } =
-        await supabaseClient
-            .from("products")
-            .select("*")
-            .eq("user_id",user.id)
-            .order("id",{ascending:false});
-
-
-    renderMyProducts(products || []);
+renderMyProducts(products || []);
 
 }
 
-
-/* =========================================================
-   RENDER MY PRODUCTS
-========================================================= */
 
 function renderMyProducts(products){
 
-    const box =
-        document.getElementById("myProducts");
+const box=
+document.getElementById("myProducts");
 
+if(!products.length){
 
-    if(!products.length){
+box.innerHTML=`
+<p style="grid-column:1/-1;text-align:center;color:#777;padding:30px">
+لا توجد منتجات حتى الآن
+</p>
+`;
 
-        box.innerHTML =
-            "<p style='grid-column:1/-1;text-align:center;color:#777;padding:30px'>لا توجد منتجات حتى الآن</p>";
+return;
 
-        return;
+}
 
-    }
+box.innerHTML=
+products.map(product=>`
 
+<div class="product-card">
 
-    box.innerHTML =
-        products
-            .map(product=>`
+${
+product.image_url
+?
+`<img src="${product.image_url}" alt="">`
+:
+`<div class="no-image">🛍️</div>`
+}
 
-        <div class="product-card">
+<div class="product-info">
 
-            ${
-                product.image_url
+<h3>${escapeHtml(product.name)}</h3>
 
-                ?
+<div class="product-price">
+${product.price} جنيه
+</div>
 
-                `<img
-                    src="${product.image_url}"
-                    alt="">`
+<p>
+${escapeHtml(product.description || "")}
+</p>
 
-                :
+<button class="buy-btn"
+onclick="deleteProduct('${product.id}')">
+🗑️ حذف المنتج
+</button>
 
-                `<div
-                    style="
-                    height:245px;
-                    background:#eee;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    font-size:50px">
+</div>
 
-                    🛍️
+</div>
 
-                </div>`
-
-            }
-
-
-            <div class="product-info">
-
-                <h3>
-                    ${escapeHtml(product.name)}
-                </h3>
-
-
-                <div class="product-price">
-
-                    ${product.price} جنيه
-
-                </div>
-
-
-                <p>
-
-                    ${escapeHtml(
-                        product.description || ""
-                    )}
-
-                </p>
-
-
-                <button
-                    class="buy-btn"
-                    onclick="deleteProduct('${product.id}')">
-
-                    🗑️ حذف المنتج
-
-                </button>
-
-            </div>
-
-        </div>
-
-    `)
-    .join("");
+`).join("");
 
 }
 
 
 /* =========================================================
-   DELETE PRODUCT
+DELETE
 ========================================================= */
 
 async function deleteProduct(id){
 
-    if(
-        !confirm(
-            "هل تريد حذف المنتج؟"
-        )
-    ) return;
+if(!confirm("هل تريد حذف المنتج؟"))return;
 
+const {error}=
+await supabaseClient
+.from("products")
+.delete()
+.eq("id",id);
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("products")
-            .delete()
-            .eq("id",id);
+if(error){
 
+alert(error.message);
 
-    if(error){
+return;
 
-        alert(error.message);
+}
 
-        return;
-
-    }
-
-
-    await loadMyProducts();
+await loadMyProducts();
 
 }
 
 
 /* =========================================================
-   VIEW MY STORE
+VIEW MY STORE
 ========================================================= */
 
 async function viewMyStore(){
 
-    const user =
-        await getUser();
+const user=await getUser();
 
+if(!user){
 
-    if(!user){
+openModal("loginModal");
 
-        openModal("loginModal");
+return;
 
-        return;
+}
 
-    }
+const url=
+window.location.origin+
+window.location.pathname+
+"?store="+
+user.id;
 
-
-    const url =
-        window.location.origin +
-        window.location.pathname +
-        "?store=" +
-        user.id;
-
-
-    window.location.href=url;
+window.location.href=url;
 
 }
 
 
 /* =========================================================
-   PUBLIC STORE
+PUBLIC STORE
 ========================================================= */
 
 async function loadPublicStore(userId){
 
-    const {
-        data:store,
-        error
-    } =
-        await supabaseClient
-            .from("stores")
-            .select("*")
-            .eq("user_id",userId)
-            .maybeSingle();
+const {data:store,error}=
+await supabaseClient
+.from("stores")
+.select("*")
+.eq("user_id",userId)
+.maybeSingle();
 
+if(error || !store){
 
-    if(error || !store){
+alert("المتجر غير موجود");
 
-        alert("المتجر غير موجود");
+showHome();
 
-        showHome();
+return;
 
-        return;
+}
 
-    }
+document.getElementById("homePage").style.display="none";
+document.getElementById("dashboard").style.display="none";
+document.getElementById("storePage").style.display="block";
+document.getElementById("mainHeader").style.display="none";
 
+document.getElementById("publicStoreName").textContent=
+store.store_name || "متجري";
 
-    document.getElementById(
-        "homePage"
-    ).style.display="none";
+document.getElementById("publicStoreDescription").textContent=
+store.description || "";
 
+document.getElementById("storeFooterName").textContent=
+store.store_name || "LUNA&LEO MARKET";
 
-    document.getElementById(
-        "dashboard"
-    ).style.display="none";
+const hero=
+document.getElementById("storeHero");
 
+if(store.cover_url){
 
-    document.getElementById(
-        "storePage"
-    ).style.display="block";
+hero.style.backgroundImage=
+`linear-gradient(to bottom,rgba(0,0,0,.1),rgba(0,0,0,.82)),url("${store.cover_url}")`;
 
+}
 
-    document.getElementById(
-        "mainHeader"
-    ).style.display="none";
+if(store.theme_color){
 
+hero.style.backgroundColor=
+store.theme_color;
 
-    document.getElementById(
-        "publicStoreName"
-    ).textContent =
-        store.store_name || "متجري";
+}
 
+if(store.accent_color){
 
-    document.getElementById(
-        "publicStoreDescription"
-    ).textContent =
-        store.description || "";
+document.documentElement.style.setProperty(
+"--gold",
+store.accent_color
+);
 
+}
 
-    const hero =
-        document.getElementById(
-            "storeHero"
-        );
+const logo=
+document.getElementById("publicLogo");
 
+if(store.logo_url){
 
-    hero.style.backgroundImage =
-        `radial-gradient(circle at 50% 20%,rgba(33,165,172,.25),transparent 40%),linear-gradient(135deg,${store.theme_color || "#061719"},#101b1d)`;
+logo.src=store.logo_url;
+logo.style.display="inline-block";
 
+}else{
 
-    if(store.cover_url){
+logo.style.display="none";
 
-        hero.style.backgroundImage =
-            `linear-gradient(
-                to bottom,
-                rgba(0,0,0,.12),
-                rgba(0,0,0,.82)
-            ),
-            url("${store.cover_url}")`;
+}
 
-        hero.style.backgroundSize="cover";
+const {data:products}=
+await supabaseClient
+.from("products")
+.select("*")
+.eq("user_id",userId)
+.order("id",{ascending:false});
 
-        hero.style.backgroundPosition="center";
+renderPublicProducts(products || []);
 
-    }
-
-
-    if(store.accent_color){
-
-        document.documentElement.style.setProperty(
-            "--gold",
-            store.accent_color
-        );
-
-    }
-
-
-    const logo =
-        document.getElementById(
-            "publicLogo"
-        );
-
-
-    if(store.logo_url){
-
-        logo.src =
-            store.logo_url;
-
-        logo.style.display =
-            "inline-block";
-
-    }else{
-
-        logo.style.display =
-            "none";
-
-    }
-
-
-    const {
-        data:products
-    } =
-        await supabaseClient
-            .from("products")
-            .select("*")
-            .eq("user_id",userId)
-            .order("id",{ascending:false});
-
-
-    renderPublicProducts(
-        products || []
-    );
-
-
-    window.scrollTo(0,0);
+window.scrollTo(0,0);
 
 }
 
 
 /* =========================================================
-   PUBLIC PRODUCTS
+PUBLIC PRODUCTS
 ========================================================= */
 
 function renderPublicProducts(products){
 
-    const grid =
-        document.getElementById(
-            "productsGrid"
-        );
+const grid=
+document.getElementById("productsGrid");
 
+if(!products.length){
 
-    if(!products.length){
+grid.innerHTML=`
 
-        grid.innerHTML=`
+<div style="
+grid-column:1/-1;
+text-align:center;
+padding:70px 20px">
 
-            <div
-                style="
-                grid-column:1/-1;
-                text-align:center;
-                padding:70px 20px">
+<div style="font-size:65px">
+🛍️
+</div>
 
-                <div
-                    style="font-size:55px">
+<h3 style="margin-top:15px">
+المتجر جديد
+</h3>
 
-                    🛍️
+<p style="color:#777;margin-top:10px">
+لا توجد منتجات مضافة حتى الآن
+</p>
 
-                </div>
+</div>
 
-                <h3 style="margin-top:15px">
+`;
 
-                    المتجر جديد
-
-                </h3>
-
-                <p
-                    style="
-                    color:#777;
-                    margin-top:10px">
-
-                    لا توجد منتجات مضافة حتى الآن
-
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    grid.innerHTML =
-        products
-            .map(product=>`
-
-        <div class="product-card">
-
-
-            ${
-                product.image_url
-
-                ?
-
-                `<img
-                    src="${product.image_url}"
-                    alt="${escapeHtml(product.name)}">`
-
-                :
-
-                `<div
-                    style="
-                    height:245px;
-                    background:#eee;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    font-size:55px">
-
-                    🛍️
-
-                </div>`
-
-            }
-
-
-            <div class="product-info">
-
-
-                <h3>
-
-                    ${escapeHtml(
-                        product.name
-                    )}
-
-                </h3>
-
-
-                <div class="product-price">
-
-                    ${product.price} جنيه
-
-                </div>
-
-
-                <p>
-
-                    ${escapeHtml(
-                        product.description || ""
-                    )}
-
-                </p>
-
-
-                <button
-                    class="buy-btn"
-                    onclick="alert('سيتم إضافة نظام الطلبات قريبًا ❤️')">
-
-                    🛒 اطلب الآن
-
-                </button>
-
-
-            </div>
-
-        </div>
-
-    `)
-    .join("");
+return;
 
 }
 
+grid.innerHTML=
+products.map(product=>`
 
-/* =========================================================
-   SCROLL PRODUCTS
-========================================================= */
+<div class="product-card">
+
+${
+product.image_url
+?
+`<img src="${product.image_url}" alt="${escapeHtml(product.name)}">`
+:
+`<div class="no-image">🛍️</div>`
+}
+
+<div class="product-info">
+
+<h3>
+${escapeHtml(product.name)}
+</h3>
+
+<div class="product-price">
+${product.price} جنيه
+</div>
+
+<p>
+${escapeHtml(product.description || "")}
+</p>
+
+<button class="buy-btn"
+onclick="alert('نظام الطلبات والسلة هنضيفه في المرحلة القادمة ❤️')">
+🛒 اطلب الآن
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
 
 function scrollToProducts(){
 
-    document
-        .getElementById(
-            "publicProducts"
-        )
-        .scrollIntoView({
-            behavior:"smooth"
-        });
+document
+.getElementById("publicProducts")
+.scrollIntoView({
+behavior:"smooth"
+});
 
 }
 
 
 /* =========================================================
-   ESCAPE HTML
+ESCAPE
 ========================================================= */
 
 function escapeHtml(text){
 
-    const div =
-        document.createElement("div");
+const div=document.createElement("div");
 
-    div.textContent =
-        text || "";
+div.textContent=text || "";
 
-    return div.innerHTML;
+return div.innerHTML;
 
 }
 
 
 /* =========================================================
-   START
+START
 ========================================================= */
 
 async function start(){
 
-    await updateUser();
+await updateUser();
 
+const params=
+new URLSearchParams(window.location.search);
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
+const storeId=
+params.get("store");
 
+if(storeId){
 
-    const storeId =
-        params.get("store");
+await loadPublicStore(storeId);
 
-
-    if(storeId){
-
-        await loadPublicStore(
-            storeId
-        );
-
-    }
+}
 
 }
 
 
 /* =========================================================
-   AUTH LISTENER
+AUTH LISTENER
 ========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
-    async function(){
-
-        await updateUser();
-
-    }
+async function(){
+await updateUser();
+}
 );
 
 
 /* =========================================================
-   RUN
+RUN
 ========================================================= */
 
 start();
 
 </script>
 
-
 </body>
-    </html>
+   </html>
