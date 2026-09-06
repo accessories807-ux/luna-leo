@@ -476,7 +476,6 @@ font-size:23px;
 
 <body>
 
-
 <header>
 
 <div class="logo">
@@ -488,11 +487,6 @@ LUNA<span>&</span>LEO
 </p>
 
 </header>
-
-
-<!-- =========================
-     أزرار الدخول
-========================= -->
 
 <div class="auth" id="authButtons">
 
@@ -515,11 +509,6 @@ onclick="openModal('registerModal')">
 </button>
 
 </div>
-
-
-<!-- =========================
-     المستخدم
-========================= -->
 
 <div class="userbox" id="userBox">
 
@@ -566,11 +555,6 @@ onclick="logout()">
 
 </div>
 
-
-<!-- =========================
-     الرئيسية
-========================= -->
-
 <section
 class="home"
 id="homeSection">
@@ -590,10 +574,12 @@ LUNA&LEO MARKET تمنحك متجرًا إلكترونيًا
 
 </p>
 
+<!-- تم تعديل هذا الزر فقط -->
+
 <button
 class="gold"
 type="button"
-onclick="openModal('registerModal')">
+onclick="startStoreCreation()">
 
 🚀 ابدأ إنشاء متجرك
 
@@ -607,7 +593,6 @@ onclick="openModal('loginModal')">
 👤 لدي حساب بالفعل
 
 </button>
-
 
 <div class="features">
 
@@ -625,7 +610,6 @@ onclick="openModal('loginModal')">
 
 </div>
 
-
 <div class="feature">
 
 📦
@@ -640,7 +624,6 @@ onclick="openModal('loginModal')">
 
 </div>
 
-
 <div class="feature">
 
 🎨
@@ -654,7 +637,6 @@ onclick="openModal('loginModal')">
 </span>
 
 </div>
-
 
 <div class="feature">
 
@@ -676,11 +658,6 @@ onclick="openModal('loginModal')">
 
 </section>
 
-
-<!-- =========================
-     لوحة التحكم
-========================= -->
-
 <section
 class="dashboard"
 id="dashboard">
@@ -690,7 +667,6 @@ id="dashboard">
 </h2>
 
 <div class="dashboard-grid">
-
 
 <div
 class="dash-card"
@@ -708,7 +684,6 @@ onclick="openStoreSettings()">
 
 </div>
 
-
 <div
 class="dash-card"
 onclick="openProductModal()">
@@ -724,7 +699,6 @@ onclick="openProductModal()">
 </span>
 
 </div>
-
 
 <div
 class="dash-card"
@@ -742,7 +716,6 @@ onclick="myProducts()">
 
 </div>
 
-
 <div
 class="dash-card"
 onclick="viewMyStore()">
@@ -759,7 +732,6 @@ onclick="viewMyStore()">
 
 </div>
 
-
 <div class="dash-card">
 
 🛒
@@ -773,7 +745,6 @@ onclick="viewMyStore()">
 </span>
 
 </div>
-
 
 <div class="dash-card">
 
@@ -792,11 +763,6 @@ onclick="viewMyStore()">
 </div>
 
 </section>
-
-
-<!-- =========================
-     رأس المتجر
-========================= -->
 
 <section
 class="store-header"
@@ -827,11 +793,6 @@ onclick="goHome()">
 
 </section>
 
-
-<!-- =========================
-     المنتجات
-========================= -->
-
 <section
 class="container products-section"
 id="productsSection">
@@ -860,11 +821,6 @@ id="products">
 </div>
 
 </section>
-
-
-<!-- =========================
-     تسجيل الدخول
-========================= -->
 
 <div
 class="modal"
@@ -938,11 +894,6 @@ onclick="switchToRegister()">
 </div>
 
 </div>
-
-
-<!-- =========================
-     إنشاء الحساب
-========================= -->
 
 <div
 class="modal"
@@ -1022,11 +973,6 @@ onclick="switchToLogin()">
 
 </div>
 
-
-<!-- =========================
-     إعدادات المتجر
-========================= -->
-
 <div
 class="modal"
 id="storeModal">
@@ -1079,7 +1025,6 @@ id="accentColor"
 type="color"
 value="#d4af37">
 
-
 <div class="file-box">
 
 <b>
@@ -1092,7 +1037,6 @@ type="file"
 accept="image/*">
 
 </div>
-
 
 <div class="file-box">
 
@@ -1107,7 +1051,6 @@ accept="image/*">
 
 </div>
 
-
 <button
 class="green"
 type="button"
@@ -1121,11 +1064,6 @@ onclick="saveStore()">
 </div>
 
 </div>
-
-
-<!-- =========================
-     إضافة منتج
-========================= -->
 
 <div
 class="modal"
@@ -1193,7 +1131,6 @@ onclick="saveProduct()">
 
 </div>
 
-
 <footer>
 
 © 2026 LUNA&LEO MARKET
@@ -1204,13 +1141,7 @@ onclick="saveProduct()">
 
 </footer>
 
-
 <script>
-
-
-/* =================================
-   إعداد SUPABASE
-================================= */
 
 const SUPABASE_URL =
 "https://zuljqdzinbndmesbarjn.supabase.co";
@@ -1278,8 +1209,6 @@ openModal("loginModal");
 
 }
 
-
-/* إغلاق النافذة عند الضغط خارجها */
 
 document.querySelectorAll(".modal").forEach(function(modal){
 
@@ -1412,7 +1341,6 @@ showMessage(
 "تم إنشاء الحساب بنجاح 🎉",
 "success"
 );
-
 
 setTimeout(function(){
 
@@ -1783,6 +1711,44 @@ document.getElementById(
 document.getElementById(
 "productsSection"
 ).style.display="none";
+
+}
+
+
+/* =================================
+   إصلاح زر إنشاء المتجر
+================================= */
+
+async function startStoreCreation(){
+
+const user =
+await getUser();
+
+
+if(user){
+
+/*
+   المستخدم مسجل دخول بالفعل
+   لذلك لا نفتح نافذة التسجيل
+*/
+
+await createStoreForUser(user);
+
+await updateUser();
+
+openDashboard();
+
+return;
+
+}
+
+
+/*
+   المستخدم غير مسجل
+   افتح التسجيل
+*/
+
+openModal("registerModal");
 
 }
 
@@ -2660,9 +2626,9 @@ let deleteButton="";
 if(isOwner){
 
 deleteButton =
-'<button class="red" type="button" onclick="deleteProduct(\'' +
-escapeHtml(p.id) +
-'\')">🗑️ حذف</button>';
+'<button class="red" type="button" onclick="deleteProduct(' +
+JSON.stringify(String(p.id)) +
+')">🗑️ حذف</button>';
 
 }
 
@@ -2867,4 +2833,4 @@ start();
 </script>
 
 </body>
-   </html>
+</html>
