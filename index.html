@@ -1437,36 +1437,29 @@ return null;
 ================================= */
 
 async function updateUser(){
+async function updateUser(){
+  try{
+    const { data: { user } } = await supabaseClient.auth.getUser();
 
-const user =
-await getUser();
+    if(!user){
+      document.getElementById("userBox").innerHTML = "";
+      return;
+    }
 
-const authButtons =
-document.getElementById("authButtons");
+    const { data: store } = await supabaseClient
+      .from("stores")
+      .select("store_name")
+      .eq("user_id", user.id)
+      .maybeSingle();
 
-const userBox =
-document.getElementById("userBox");
+    const storeName = store?.store_name || "متجرك";
 
+    document.getElementById("userBox").innerHTML =
+      `👋 أهلاً بك في <b>${storeName}</b>`;
 
-if(user){
-
-authButtons.style.display="none";
-
-userBox.style.display="block";
-
-document.getElementById("userEmail").textContent =
-user.email || "";
-
-await createStoreForUser(user);
-
-}else{
-
-authButtons.style.display="block";
-
-userBox.style.display="none";
-
-}
-
+  }catch(error){
+    console.log(error);
+  }
 }
 
 
