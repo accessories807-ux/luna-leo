@@ -26,7 +26,7 @@ body{
     color:#171717;
 }
 
-button,input,textarea{
+button,input,textarea,select{
     font-family:inherit;
 }
 
@@ -649,7 +649,8 @@ button{
 }
 
 .form-group input,
-.form-group textarea{
+.form-group textarea,
+.form-group select{
     width:100%;
 
     padding:14px;
@@ -661,10 +662,13 @@ button{
     outline:none;
 
     transition:.2s;
+
+    background:#fff;
 }
 
 .form-group input:focus,
-.form-group textarea:focus{
+.form-group textarea:focus,
+.form-group select:focus{
     border-color:#20a3a8;
 
     box-shadow:0 0 0 3px rgba(32,163,168,.08);
@@ -688,6 +692,134 @@ button{
     background:#111;
 
     color:white;
+}
+
+
+/* =========================================================
+   ORDERS
+========================================================= */
+
+.orders-section{
+    margin-top:40px;
+}
+
+.orders-section h2{
+    margin-bottom:20px;
+}
+
+.orders-list{
+    display:grid;
+    gap:18px;
+}
+
+.order-card{
+    border:1px solid #eee;
+    border-radius:18px;
+    padding:20px;
+    background:#fff;
+    box-shadow:0 8px 25px rgba(0,0,0,.04);
+}
+
+.order-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:15px;
+}
+
+.order-number{
+    font-weight:bold;
+    font-size:18px;
+}
+
+.order-date{
+    color:#777;
+    font-size:13px;
+}
+
+.order-info{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.order-info-box{
+    background:#f7f7f7;
+    padding:12px;
+    border-radius:12px;
+}
+
+.order-info-box strong{
+    display:block;
+    margin-bottom:5px;
+    font-size:13px;
+    color:#777;
+}
+
+.order-products{
+    border-top:1px solid #eee;
+    border-bottom:1px solid #eee;
+    padding:14px 0;
+    margin-bottom:15px;
+}
+
+.order-product-row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:7px 0;
+}
+
+.order-total{
+    font-size:20px;
+    font-weight:bold;
+    color:#b58b13;
+    margin-bottom:15px;
+}
+
+.order-status-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.order-status-select{
+    flex:1;
+    min-width:180px;
+    padding:11px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    outline:none;
+}
+
+.order-status-btn{
+    border:0;
+    background:#111;
+    color:#fff;
+    padding:11px 18px;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+.status-badge{
+    padding:7px 12px;
+    border-radius:20px;
+    background:#fff4d1;
+    color:#8b6a00;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.no-orders{
+    text-align:center;
+    padding:45px 20px;
+    color:#777;
+    background:#f8f8f8;
+    border-radius:18px;
 }
 
 
@@ -1292,6 +1424,10 @@ footer strong{
         justify-content:center;
     }
 
+    .order-info{
+        grid-template-columns:1fr;
+    }
+
 }
 
 
@@ -1411,6 +1547,10 @@ onclick="startStoreCreation()">
 
 <button onclick="viewMyStore()">
 🔗 متجري
+</button>
+
+<button onclick="openDashboard()">
+⚙️ الإدارة
 </button>
 
 <button onclick="logout()">
@@ -1935,6 +2075,15 @@ onclick="viewMyStore()">
 
 <button
 class="btn"
+onclick="loadMyOrders()">
+
+🔄 تحديث الطلبات
+
+</button>
+
+
+<button
+class="btn"
 onclick="showHome()">
 
 🏠 الرئيسية
@@ -2015,6 +2164,51 @@ id="myProducts"
 class="products-grid"
 style="margin-top:30px">
 </div>
+
+
+<!-- =========================================================
+     ORDERS
+========================================================= -->
+
+<div class="orders-section">
+
+<hr style="margin:40px 0">
+
+
+<div style="
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+flex-wrap:wrap">
+
+<h2>
+📦 طلبات العملاء
+</h2>
+
+<button
+class="btn btn-gold"
+onclick="loadMyOrders()">
+
+🔄 تحديث
+
+</button>
+
+</div>
+
+
+<div
+id="ordersList"
+class="orders-list">
+
+<div class="no-orders">
+⏳ جاري تحميل الطلبات...
+</div>
+
+</div>
+
+</div>
+
 
 </div>
 
@@ -2162,18 +2356,26 @@ onclick="closeModal('cartModal')">
 
 <div class="form-group">
 
+<label>
+الاسم
+</label>
+
 <input
 id="orderName"
-placeholder="اسمك">
+placeholder="اكتب اسمك">
 
 </div>
 
 
 <div class="form-group">
 
+<label>
+رقم الموبايل
+</label>
+
 <input
 id="orderPhone"
-placeholder="رقم الموبايل"
+placeholder="01xxxxxxxxx"
 type="tel">
 
 </div>
@@ -2181,9 +2383,34 @@ type="tel">
 
 <div class="form-group">
 
+<label>
+العنوان
+</label>
+
 <textarea
 id="orderAddress"
-placeholder="العنوان بالتفصيل"></textarea>
+placeholder="اكتب العنوان بالتفصيل"></textarea>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+طريقة الدفع
+</label>
+
+<select id="paymentMethod">
+
+<option value="cash">
+💵 الدفع عند الاستلام
+</option>
+
+<option value="online">
+💳 الدفع الإلكتروني - قريباً
+</option>
+
+</select>
 
 </div>
 
@@ -2192,7 +2419,7 @@ placeholder="العنوان بالتفصيل"></textarea>
 class="modal-btn btn-gold"
 onclick="sendOrder()">
 
-📲 تجهيز الطلب
+📲 تأكيد الطلب
 
 </button>
 
@@ -2398,6 +2625,8 @@ SUPABASE_KEY
 let cart = [];
 
 let currentStoreId = null;
+
+let publicProductsCache = {};
 
 
 /* =========================================================
@@ -2746,6 +2975,8 @@ await loadMyStore();
 
 await loadMyProducts();
 
+await loadMyOrders();
+
 window.scrollTo(0,0);
 
 }
@@ -3040,12 +3271,21 @@ const user=await getUser();
 if(!user)return;
 
 
-const {data:products}=
+const {data:products,error}=
 await supabaseClient
 .from("products")
 .select("*")
 .eq("user_id",user.id)
 .order("id",{ascending:false});
+
+
+if(error){
+
+console.error(error);
+
+return;
+
+}
 
 
 renderMyProducts(products || []);
@@ -3091,7 +3331,7 @@ product.image_url
 ?
 
 `<img
-src="${product.image_url}"
+src="${escapeHtml(product.image_url)}"
 alt="${escapeHtml(product.name)}">`
 
 :
@@ -3130,7 +3370,7 @@ ${escapeHtml(product.description || "")}
 
 <button
 class="buy-btn"
-onclick="deleteProduct('${product.id}')">
+onclick="deleteProduct('${escapeHtml(String(product.id))}')">
 
 🗑️ حذف المنتج
 
@@ -3146,7 +3386,7 @@ onclick="deleteProduct('${product.id}')">
 
 
 /* =========================================================
-   DELETE
+   DELETE PRODUCT
 ========================================================= */
 
 async function deleteProduct(id){
@@ -3172,6 +3412,8 @@ return;
 
 
 await loadMyProducts();
+
+alert("✅ تم حذف المنتج");
 
 }
 
@@ -3306,12 +3548,23 @@ logo.style.display="none";
 }
 
 
-const {data:products}=
+const {data:products,error:productsError}=
 await supabaseClient
 .from("products")
 .select("*")
 .eq("user_id",userId)
 .order("id",{ascending:false});
+
+
+if(productsError){
+
+console.error(productsError);
+
+alert("حدث خطأ في تحميل المنتجات");
+
+return;
+
+}
 
 
 renderPublicProducts(products || []);
@@ -3330,6 +3583,8 @@ function renderPublicProducts(products){
 
 const grid=
 document.getElementById("productsGrid");
+
+publicProductsCache={};
 
 
 if(!products.length){
@@ -3366,6 +3621,14 @@ return;
 }
 
 
+products.forEach(product=>{
+
+publicProductsCache[String(product.id)] =
+product;
+
+});
+
+
 grid.innerHTML=
 products.map(product=>`
 
@@ -3377,7 +3640,7 @@ product.image_url
 ?
 
 `<img
-src="${product.image_url}"
+src="${escapeHtml(product.image_url)}"
 alt="${escapeHtml(product.name)}">`
 
 :
@@ -3416,7 +3679,7 @@ ${escapeHtml(product.description || "")}
 
 <button
 class="buy-btn"
-onclick='addToCart(${JSON.stringify(product).replace(/'/g,"&#39;")})'>
+onclick="addToCartById('${escapeHtml(String(product.id))}')">
 
 🛒 أضف للسلة
 
@@ -3432,14 +3695,47 @@ onclick='addToCart(${JSON.stringify(product).replace(/'/g,"&#39;")})'>
 
 
 /* =========================================================
+   ADD TO CART BY ID
+========================================================= */
+
+function addToCartById(id){
+
+const product=
+publicProductsCache[String(id)];
+
+
+if(!product){
+
+alert("❌ المنتج غير متاح");
+
+return;
+
+}
+
+
+addToCart(product);
+
+}
+
+
+/* =========================================================
    CART ADD
 ========================================================= */
 
 function addToCart(product){
 
+if(!currentStoreId){
+
+alert("⚠️ افتح متجرًا أولاً");
+
+return;
+
+}
+
+
 const existing=
 cart.find(
-item=>item.id===product.id
+item=>String(item.id)===String(product.id)
 );
 
 
@@ -3457,7 +3753,7 @@ name:product.name,
 
 price:Number(product.price),
 
-image_url:product.image_url,
+image_url:product.image_url || null,
 
 quantity:1
 
@@ -3563,7 +3859,7 @@ item.image_url
 ?
 
 `<img
-src="${item.image_url}"
+src="${escapeHtml(item.image_url)}"
 alt="${escapeHtml(item.name)}">`
 
 :
@@ -3657,6 +3953,17 @@ return;
 }
 
 
+if(!currentStoreId){
+
+alert(
+"⚠️ لا يمكن تسجيل الطلب لأن المتجر غير محدد."
+);
+
+return;
+
+}
+
+
 const name=
 document.getElementById("orderName")
 .value.trim();
@@ -3672,6 +3979,11 @@ document.getElementById("orderAddress")
 .value.trim();
 
 
+const paymentMethod=
+document.getElementById("paymentMethod")
+.value;
+
+
 if(!name || !phone || !address){
 
 alert(
@@ -3683,66 +3995,534 @@ return;
 }
 
 
+/* =====================================================
+   ONLINE PAYMENT - NOT ACTIVE YET
+===================================================== */
+
+if(paymentMethod==="online"){
+
+alert(
+"💳 الدفع الإلكتروني لم يتم ربطه بعد.\n\n"+
+"اختار الدفع عند الاستلام حالياً."
+);
+
+return;
+
+}
+
+
+/* =====================================================
+   TOTAL
+===================================================== */
+
 const total=
 cart.reduce(
 (sum,item)=>
-sum+(item.price*item.quantity),
+sum+
+(Number(item.price)*Number(item.quantity)),
 0
 );
 
 
-let message=
-"🛍️ طلب جديد من LUNA&LEO MARKET\n\n";
+/* =====================================================
+   ITEMS
+===================================================== */
+
+const orderItems=
+cart.map(item=>({
+
+id:item.id,
+
+name:item.name,
+
+price:Number(item.price),
+
+quantity:Number(item.quantity),
+
+image_url:item.image_url || null
+
+}));
 
 
-message+=
-"👤 الاسم: "+
-name+
-"\n";
+/* =====================================================
+   INSERT ORDER
+===================================================== */
 
+const {error}=
+await supabaseClient
+.from("orders")
+.insert({
 
-message+=
-"📱 الموبايل: "+
-phone+
-"\n";
+store_id:currentStoreId,
 
+customer_name:name,
 
-message+=
-"📍 العنوان: "+
-address+
-"\n\n";
+customer_phone:phone,
 
+customer_address:address,
 
-message+="📦 المنتجات:\n";
+items:orderItems,
 
+total:total,
 
-cart.forEach(item=>{
+payment_method:"cash",
 
-message+=
-"• "+
-item.name+
-" × "+
-item.quantity+
-" = "+
-(item.price*item.quantity)+
-" جنيه\n";
+payment_status:"pending",
+
+order_status:"new"
 
 });
 
 
-message+=
-"\n💰 الإجمالي: "+
-total+
-" جنيه";
+if(error){
+
+console.error("ORDER ERROR:",error);
+
+alert(
+"❌ حصل خطأ أثناء تسجيل الطلب:\n\n"+
+error.message
+);
+
+return;
+
+}
+
+
+/* =====================================================
+   SUCCESS
+===================================================== */
+
+cart=[];
+
+updateCart();
+
+
+document.getElementById("orderName").value="";
+
+document.getElementById("orderPhone").value="";
+
+document.getElementById("orderAddress").value="";
+
+document.getElementById("paymentMethod").value="cash";
+
+
+closeModal("cartModal");
 
 
 alert(
-"✅ تم تجهيز الطلب بنجاح\n\n"+
-"بيانات الطلب جاهزة للإرسال."
+"✅ تم تسجيل طلبك بنجاح!\n\n"+
+"💵 الدفع عند الاستلام\n"+
+"📦 سيتم التواصل معك لتأكيد الطلب."
+);
+
+}
+
+
+/* =========================================================
+   LOAD MY ORDERS
+========================================================= */
+
+async function loadMyOrders(){
+
+const user=await getUser();
+
+if(!user){
+
+return;
+
+}
+
+
+const box=
+document.getElementById("ordersList");
+
+
+if(!box){
+
+return;
+
+}
+
+
+box.innerHTML=`
+
+<div class="no-orders">
+⏳ جاري تحميل الطلبات...
+</div>
+
+`;
+
+
+const {data:orders,error}=
+await supabaseClient
+.from("orders")
+.select("*")
+.eq("store_id",user.id)
+.order("created_at",{ascending:false});
+
+
+if(error){
+
+console.error("ORDERS ERROR:",error);
+
+box.innerHTML=`
+
+<div class="no-orders">
+
+❌ تعذر تحميل الطلبات
+
+<br><br>
+
+${escapeHtml(error.message)}
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+if(!orders || !orders.length){
+
+box.innerHTML=`
+
+<div class="no-orders">
+
+<div style="font-size:50px">
+📦
+</div>
+
+<h3 style="margin-top:10px">
+لا توجد طلبات حتى الآن
+</h3>
+
+<p style="margin-top:8px">
+عندما يطلب أحد العملاء منتجًا ستظهر الطلبات هنا.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+box.innerHTML=
+orders.map(order=>renderOrderCard(order))
+.join("");
+
+}
+
+
+/* =========================================================
+   RENDER ORDER
+========================================================= */
+
+function renderOrderCard(order){
+
+let items=[];
+
+try{
+
+items=
+Array.isArray(order.items)
+?
+order.items
+:
+JSON.parse(order.items || "[]");
+
+}catch(e){
+
+items=[];
+
+}
+
+
+const date=
+order.created_at
+?
+new Date(order.created_at).toLocaleString("ar-EG")
+:
+"";
+
+
+const status=
+order.order_status || "new";
+
+
+const payment=
+order.payment_method==="cash"
+?
+"💵 الدفع عند الاستلام"
+:
+"💳 الدفع الإلكتروني";
+
+
+return `
+
+<div class="order-card">
+
+<div class="order-top">
+
+<div class="order-number">
+
+📦 طلب #${escapeHtml(String(order.id))}
+
+</div>
+
+
+<div class="order-date">
+
+${escapeHtml(date)}
+
+</div>
+
+</div>
+
+
+<div class="order-info">
+
+
+<div class="order-info-box">
+
+<strong>
+👤 العميل
+</strong>
+
+${escapeHtml(order.customer_name || "")}
+
+</div>
+
+
+<div class="order-info-box">
+
+<strong>
+📱 الموبايل
+</strong>
+
+${escapeHtml(order.customer_phone || "")}
+
+</div>
+
+
+<div class="order-info-box">
+
+<strong>
+📍 العنوان
+</strong>
+
+${escapeHtml(order.customer_address || "")}
+
+</div>
+
+
+</div>
+
+
+<div class="order-products">
+
+<strong>
+🛍️ المنتجات
+</strong>
+
+
+${
+items.length
+
+?
+
+items.map(item=>`
+
+<div class="order-product-row">
+
+<span>
+${escapeHtml(item.name || "منتج")}
+× ${Number(item.quantity || 1)}
+</span>
+
+<strong>
+${Number(item.price || 0) *
+Number(item.quantity || 1)}
+ جنيه
+</strong>
+
+</div>
+
+`).join("")
+
+:
+
+"<p style='color:#777;margin-top:10px'>لا توجد بيانات للمنتجات</p>"
+
+}
+
+</div>
+
+
+<div class="order-total">
+
+💰 الإجمالي:
+${Number(order.total || 0)}
+جنيه
+
+</div>
+
+
+<div style="
+margin-bottom:15px;
+color:#555">
+
+${payment}
+
+</div>
+
+
+<div class="order-status-row">
+
+<span class="status-badge">
+
+الحالة الحالية:
+${getStatusText(status)}
+
+</span>
+
+
+<select
+class="order-status-select"
+id="status-${escapeHtml(String(order.id))}">
+
+<option value="new" ${status==="new"?"selected":""}>
+🟡 جديد
+</option>
+
+<option value="confirmed" ${status==="confirmed"?"selected":""}>
+🟢 تم التأكيد
+</option>
+
+<option value="shipped" ${status==="shipped"?"selected":""}>
+🚚 تم الشحن
+</option>
+
+<option value="delivered" ${status==="delivered"?"selected":""}>
+✅ تم التسليم
+</option>
+
+<option value="cancelled" ${status==="cancelled"?"selected":""}>
+❌ ملغي
+</option>
+
+</select>
+
+
+<button
+class="order-status-btn"
+onclick="updateOrderStatus('${escapeHtml(String(order.id))}')">
+
+💾 حفظ الحالة
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================================
+   STATUS TEXT
+========================================================= */
+
+function getStatusText(status){
+
+const statuses={
+
+new:"جديد",
+
+confirmed:"تم التأكيد",
+
+shipped:"تم الشحن",
+
+delivered:"تم التسليم",
+
+cancelled:"ملغي"
+
+};
+
+return statuses[status] || "جديد";
+
+}
+
+
+/* =========================================================
+   UPDATE ORDER STATUS
+========================================================= */
+
+async function updateOrderStatus(orderId){
+
+const user=await getUser();
+
+if(!user){
+
+alert("⚠️ يجب تسجيل الدخول");
+
+return;
+
+}
+
+
+const select=
+document.getElementById(
+"status-"+orderId
 );
 
 
-console.log(message);
+if(!select){
+
+return;
+
+}
+
+
+const newStatus=
+select.value;
+
+
+const {error}=
+await supabaseClient
+.from("orders")
+.update({
+
+order_status:newStatus
+
+})
+.eq("id",orderId)
+.eq("store_id",user.id);
+
+
+if(error){
+
+console.error(error);
+
+alert(
+"❌ تعذر تحديث حالة الطلب:\n\n"+
+error.message
+);
+
+return;
+
+}
+
+
+alert("✅ تم تحديث حالة الطلب");
+
+await loadMyOrders();
 
 }
 
@@ -3763,7 +4543,7 @@ behavior:"smooth"
 
 
 /* =========================================================
-   ESCAPE
+   ESCAPE HTML
 ========================================================= */
 
 function escapeHtml(text){
@@ -3814,7 +4594,14 @@ await loadPublicStore(storeId);
 supabaseClient.auth.onAuthStateChange(
 async function(){
 
+setTimeout(
+async function(){
+
 await updateUser();
+
+},
+0
+);
 
 }
 );
@@ -3829,4 +4616,4 @@ start();
 </script>
 
 </body>
-</html>
+    </html>
