@@ -488,6 +488,9 @@ LUNA<span>&</span>LEO
 
 </header>
 
+
+<!-- أزرار الزائر -->
+
 <div class="auth" id="authButtons">
 
 <button
@@ -509,6 +512,9 @@ onclick="openModal('registerModal')">
 </button>
 
 </div>
+
+
+<!-- بيانات المستخدم -->
 
 <div class="userbox" id="userBox">
 
@@ -555,6 +561,9 @@ onclick="logout()">
 
 </div>
 
+
+<!-- الصفحة الرئيسية -->
+
 <section
 class="home"
 id="homeSection">
@@ -574,7 +583,8 @@ LUNA&LEO MARKET تمنحك متجرًا إلكترونيًا
 
 </p>
 
-<!-- تم تعديل هذا الزر فقط -->
+
+<!-- الزر يتغير حسب حالة الدخول -->
 
 <button
 class="gold"
@@ -585,7 +595,11 @@ onclick="startStoreCreation()">
 
 </button>
 
+
+<!-- يظهر للزائر فقط -->
+
 <button
+id="homeLoginButton"
 class="black"
 type="button"
 onclick="openModal('loginModal')">
@@ -593,6 +607,20 @@ onclick="openModal('loginModal')">
 👤 لدي حساب بالفعل
 
 </button>
+
+
+<!-- يظهر للمستخدم المسجل فقط -->
+
+<button
+id="homeDashboardButton"
+class="purple hidden"
+type="button"
+onclick="openDashboard()">
+
+📊 لوحة التحكم
+
+</button>
+
 
 <div class="features">
 
@@ -657,6 +685,9 @@ onclick="openModal('loginModal')">
 </div>
 
 </section>
+
+
+<!-- لوحة التحكم -->
 
 <section
 class="dashboard"
@@ -764,6 +795,9 @@ onclick="viewMyStore()">
 
 </section>
 
+
+<!-- رأس المتجر -->
+
 <section
 class="store-header"
 id="storeHeader">
@@ -793,6 +827,9 @@ onclick="goHome()">
 
 </section>
 
+
+<!-- المنتجات -->
+
 <section
 class="container products-section"
 id="productsSection">
@@ -821,6 +858,9 @@ id="products">
 </div>
 
 </section>
+
+
+<!-- تسجيل الدخول -->
 
 <div
 class="modal"
@@ -894,6 +934,9 @@ onclick="switchToRegister()">
 </div>
 
 </div>
+
+
+<!-- التسجيل -->
 
 <div
 class="modal"
@@ -972,6 +1015,9 @@ onclick="switchToLogin()">
 </div>
 
 </div>
+
+
+<!-- إعدادات المتجر -->
 
 <div
 class="modal"
@@ -1065,6 +1111,9 @@ onclick="saveStore()">
 
 </div>
 
+
+<!-- إضافة منتج -->
+
 <div
 class="modal"
 id="productModal">
@@ -1131,6 +1180,7 @@ onclick="saveProduct()">
 
 </div>
 
+
 <footer>
 
 © 2026 LUNA&LEO MARKET
@@ -1140,6 +1190,7 @@ onclick="saveProduct()">
 منصة المتاجر الإلكترونية
 
 </footer>
+
 
 <script>
 
@@ -1342,11 +1393,11 @@ showMessage(
 "success"
 );
 
-setTimeout(function(){
+setTimeout(async function(){
 
 closeModal("registerModal");
 
-updateUser();
+await updateUser();
 
 openDashboard();
 
@@ -1591,12 +1642,24 @@ document.getElementById("userBox");
 const userName =
 document.getElementById("userEmail");
 
+const homeLoginButton =
+document.getElementById("homeLoginButton");
+
+const homeDashboardButton =
+document.getElementById("homeDashboardButton");
+
+
+/* المستخدم غير مسجل */
 
 if(error || !data.user){
 
 authButtons.style.display="block";
 
 userBox.style.display="none";
+
+homeLoginButton.classList.remove("hidden");
+
+homeDashboardButton.classList.add("hidden");
 
 return;
 
@@ -1605,6 +1668,11 @@ return;
 
 const user =
 data.user;
+
+
+/* التأكد من وجود المتجر */
+
+await createStoreForUser(user);
 
 
 const {data:store} =
@@ -1623,9 +1691,18 @@ userName.textContent =
 storeName;
 
 
+/* إخفاء أزرار الدخول */
+
 authButtons.style.display="none";
 
 userBox.style.display="block";
+
+
+/* تغيير زر الصفحة الرئيسية */
+
+homeLoginButton.classList.add("hidden");
+
+homeDashboardButton.classList.remove("hidden");
 
 
 }catch(error){
@@ -1716,7 +1793,7 @@ document.getElementById(
 
 
 /* =================================
-   إصلاح زر إنشاء المتجر
+   زر إنشاء المتجر
 ================================= */
 
 async function startStoreCreation(){
@@ -1728,8 +1805,7 @@ await getUser();
 if(user){
 
 /*
-   المستخدم مسجل دخول بالفعل
-   لذلك لا نفتح نافذة التسجيل
+المستخدم داخل حسابه بالفعل
 */
 
 await createStoreForUser(user);
@@ -1744,8 +1820,7 @@ return;
 
 
 /*
-   المستخدم غير مسجل
-   افتح التسجيل
+المستخدم غير مسجل
 */
 
 openModal("registerModal");
