@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,7 +10,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+box-sizing:border-box;
+}
 
 :root{
 --main:#111111;
@@ -26,15 +30,22 @@ color:#222;
 
 button{
 border:0;
-border-radius:10px;
-padding:12px 16px;
+border-radius:12px;
+padding:13px 17px;
 margin:4px;
 font-size:15px;
 font-weight:bold;
 cursor:pointer;
+transition:.2s;
 }
 
-input,textarea,select{
+button:active{
+transform:scale(.97);
+}
+
+input,
+textarea,
+select{
 width:100%;
 padding:13px;
 margin:7px 0;
@@ -44,30 +55,36 @@ font-size:15px;
 background:#fff;
 }
 
-textarea{resize:vertical}
+textarea{
+resize:vertical;
+}
 
 header{
 background:linear-gradient(135deg,#111,#292929);
 color:white;
 text-align:center;
-padding:32px 15px;
+padding:35px 15px;
 }
 
 .logo{
-font-size:32px;
-font-weight:800;
+font-size:34px;
+font-weight:900;
+letter-spacing:.5px;
 }
 
-.logo span{color:#d4af37}
+.logo span{
+color:#d4af37;
+}
 
 header p{
-margin:8px 0 0;
+margin:9px 0 0;
 color:#ddd;
+font-size:16px;
 }
 
 .auth{
 background:#fff;
-padding:14px;
+padding:15px;
 text-align:center;
 box-shadow:0 2px 10px #00000012;
 }
@@ -75,52 +92,94 @@ box-shadow:0 2px 10px #00000012;
 .userbox{
 display:none;
 background:#fff;
-padding:14px;
+padding:16px;
 text-align:center;
 box-shadow:0 2px 10px #00000012;
 }
 
-.gold{background:#d4af37;color:#111}
-.black{background:#111;color:#fff}
-.green{background:#27ae60;color:#fff}
-.red{background:#c0392b;color:#fff}
-.blue{background:#4285f4;color:#fff}
-.purple{background:#8e44ad;color:#fff}
-.gray{background:#eee;color:#222}
+.user-welcome{
+font-size:18px;
+margin-bottom:10px;
+}
 
-.container,.dashboard{
+.user-welcome b{
+color:#a77f00;
+}
+
+.gold{
+background:#d4af37;
+color:#111;
+}
+
+.black{
+background:#111;
+color:#fff;
+}
+
+.green{
+background:#27ae60;
+color:#fff;
+}
+
+.red{
+background:#c0392b;
+color:#fff;
+}
+
+.blue{
+background:#4285f4;
+color:#fff;
+}
+
+.purple{
+background:#8e44ad;
+color:#fff;
+}
+
+.gray{
+background:#eee;
+color:#222;
+}
+
+.container,
+.dashboard{
 max-width:1100px;
 margin:auto;
-padding:18px;
+padding:20px;
 }
 
 .dashboard{
 display:none;
 }
 
+.dashboard-title{
+margin-top:0;
+font-size:26px;
+}
+
 .dashboard-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-gap:12px;
+gap:13px;
 }
 
 .dash-card{
 background:#fff;
-border-radius:15px;
-padding:20px 10px;
+border-radius:17px;
+padding:22px 10px;
 text-align:center;
-box-shadow:0 2px 10px #00000010;
+box-shadow:0 3px 14px #00000010;
 cursor:pointer;
 transition:.2s;
 }
 
-.dash-card:active{
-transform:scale(.97);
+.dash-card:hover{
+transform:translateY(-2px);
 }
 
 .dash-card b{
 display:block;
-margin-top:8px;
+margin-top:9px;
 font-size:18px;
 }
 
@@ -140,31 +199,32 @@ text-align:center;
 
 .home-box{
 background:#fff;
-border-radius:20px;
-padding:30px 20px;
-box-shadow:0 3px 15px #00000010;
+border-radius:22px;
+padding:35px 22px;
+box-shadow:0 3px 18px #00000010;
 }
 
 .home-box h1{
 margin-top:0;
-font-size:28px;
+font-size:30px;
 }
 
 .home-box p{
 color:#666;
-line-height:1.8;
+line-height:2;
+font-size:16px;
 }
 
 .features{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 gap:12px;
-margin-top:20px;
+margin-top:25px;
 }
 
 .feature{
 background:#f7f7f7;
-padding:18px 10px;
+padding:20px 10px;
 border-radius:15px;
 }
 
@@ -185,9 +245,9 @@ gap:15px;
 
 .product{
 background:#fff;
-border-radius:15px;
+border-radius:17px;
 overflow:hidden;
-box-shadow:0 2px 10px #00000012;
+box-shadow:0 3px 12px #00000012;
 }
 
 .product img{
@@ -204,6 +264,7 @@ padding:13px;
 
 .product-info h3{
 margin:0 0 8px;
+font-size:17px;
 }
 
 .price{
@@ -243,8 +304,9 @@ width:100%;
 max-width:480px;
 max-height:92vh;
 overflow-y:auto;
-border-radius:18px;
-padding:20px;
+border-radius:20px;
+padding:22px;
+box-shadow:0 10px 40px #0008;
 }
 
 .modal-box h2{
@@ -260,7 +322,7 @@ border-radius:50%;
 width:38px;
 height:38px;
 padding:0;
-font-size:20px;
+font-size:21px;
 }
 
 .message{
@@ -287,9 +349,9 @@ color:#721c24;
 .file-box{
 background:#f7f7f7;
 border:1px dashed #bbb;
-padding:12px;
+padding:13px;
 border-radius:10px;
-margin:8px 0;
+margin:9px 0;
 }
 
 .store-header{
@@ -303,54 +365,81 @@ padding:20px 15px 30px;
 display:block;
 width:100%;
 max-width:1000px;
-height:210px;
+height:230px;
 object-fit:cover;
 margin:0 auto 10px;
-border-radius:15px;
+border-radius:17px;
 }
 
 .store-logo{
-width:110px;
-height:110px;
+width:115px;
+height:115px;
 object-fit:cover;
 border-radius:50%;
 border:4px solid white;
 background:white;
-margin-top:-45px;
+margin-top:-50px;
 }
 
 .store-header h1{
 margin:10px 0 5px;
+font-size:28px;
 }
 
 .store-header p{
 margin:5px 0 15px;
 color:#eee;
+line-height:1.7;
 }
 
 .hidden{
 display:none!important;
 }
 
+.section-title{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+}
+
 footer{
 background:#111;
 color:#aaa;
 text-align:center;
-padding:25px 10px;
+padding:28px 10px;
 margin-top:30px;
 }
 
 @media(max-width:500px){
 
 .logo{
-font-size:27px;
+font-size:28px;
+}
+
+header{
+padding:30px 12px;
+}
+
+header p{
+font-size:15px;
 }
 
 .home{
 padding:12px;
 }
 
-.container,.dashboard{
+.home-box{
+padding:28px 17px;
+}
+
+.home-box h1{
+font-size:26px;
+}
+
+.container,
+.dashboard{
 padding:12px;
 }
 
@@ -375,11 +464,18 @@ font-size:15px;
 font-size:17px;
 }
 
+.dashboard-title{
+font-size:23px;
 }
+
+}
+
 </style>
+
 </head>
 
 <body>
+
 
 <header>
 
@@ -394,7 +490,9 @@ LUNA<span>&</span>LEO
 </header>
 
 
-<!-- أزرار الدخول -->
+<!-- =========================
+     أزرار الدخول
+========================= -->
 
 <div class="auth" id="authButtons">
 
@@ -402,48 +500,66 @@ LUNA<span>&</span>LEO
 class="black"
 type="button"
 onclick="openModal('loginModal')">
+
 👤 تسجيل الدخول
+
 </button>
 
 <button
 class="gold"
 type="button"
 onclick="openModal('registerModal')">
+
 ➕ إنشاء متجري
+
 </button>
 
 </div>
 
 
-<!-- المستخدم -->
+<!-- =========================
+     المستخدم
+========================= -->
 
 <div class="userbox" id="userBox">
 
-👋 أهلاً بك
+<div class="user-welcome">
 
-<b id="userEmail"></b>
+👋 أهلاً بك في
 
-<div style="margin-top:10px">
+<b id="userEmail">
+متجرك
+</b>
+
+</div>
+
+<div>
 
 <button
 class="purple"
 type="button"
 onclick="openDashboard()">
+
 📊 لوحة التحكم
+
 </button>
 
 <button
 class="green"
 type="button"
 onclick="viewMyStore()">
+
 🔗 متجري
+
 </button>
 
 <button
 class="red"
 type="button"
 onclick="logout()">
+
 🚪 خروج
+
 </button>
 
 </div>
@@ -451,7 +567,9 @@ onclick="logout()">
 </div>
 
 
-<!-- الرئيسية -->
+<!-- =========================
+     الرئيسية
+========================= -->
 
 <section
 class="home"
@@ -464,58 +582,92 @@ id="homeSection">
 </h1>
 
 <p>
-LUNA&LEO MARKET تمنحك متجرًا إلكترونيًا خاصًا بك،
-تستطيع من خلاله إضافة منتجاتك وتعديل اسم المتجر
-والألوان والصور ومشاركة رابط متجرك مع عملائك.
+
+LUNA&LEO MARKET تمنحك متجرًا إلكترونيًا
+خاصًا بك، تستطيع من خلاله إضافة منتجاتك
+وتعديل اسم المتجر والألوان والصور
+ومشاركة رابط متجرك مع عملائك.
+
 </p>
 
 <button
 class="gold"
 type="button"
 onclick="openModal('registerModal')">
+
 🚀 ابدأ إنشاء متجرك
+
 </button>
 
 <button
 class="black"
 type="button"
 onclick="openModal('loginModal')">
+
 👤 لدي حساب بالفعل
+
 </button>
 
 
 <div class="features">
 
 <div class="feature">
+
 🏪
-<b>متجرك الخاص</b>
+
+<b>
+متجرك الخاص
+</b>
+
 <span class="small">
 رابط مستقل لمتجرك
 </span>
+
 </div>
 
+
 <div class="feature">
+
 📦
-<b>إدارة المنتجات</b>
+
+<b>
+إدارة المنتجات
+</b>
+
 <span class="small">
 أضف واحذف منتجاتك
 </span>
+
 </div>
 
+
 <div class="feature">
+
 🎨
-<b>تصميم المتجر</b>
+
+<b>
+تصميم المتجر
+</b>
+
 <span class="small">
 ألوان ولوجو وغلاف
 </span>
+
 </div>
 
+
 <div class="feature">
+
 🔗
-<b>مشاركة المتجر</b>
+
+<b>
+مشاركة المتجر
+</b>
+
 <span class="small">
 شارك رابط متجرك
 </span>
+
 </div>
 
 </div>
@@ -525,17 +677,20 @@ onclick="openModal('loginModal')">
 </section>
 
 
-<!-- لوحة التحكم -->
+<!-- =========================
+     لوحة التحكم
+========================= -->
 
 <section
 class="dashboard"
 id="dashboard">
 
-<h2>
+<h2 class="dashboard-title">
 📊 لوحة تحكم متجرك
 </h2>
 
 <div class="dashboard-grid">
+
 
 <div
 class="dash-card"
@@ -639,7 +794,9 @@ onclick="viewMyStore()">
 </section>
 
 
-<!-- رأس المتجر -->
+<!-- =========================
+     رأس المتجر
+========================= -->
 
 <section
 class="store-header"
@@ -647,11 +804,13 @@ id="storeHeader">
 
 <img
 id="storeCover"
-class="cover hidden">
+class="cover hidden"
+alt="غلاف المتجر">
 
 <img
 id="storeLogo"
-class="store-logo hidden">
+class="store-logo hidden"
+alt="لوجو المتجر">
 
 <h1 id="storeTitle"></h1>
 
@@ -661,20 +820,23 @@ class="store-logo hidden">
 class="gold"
 type="button"
 onclick="goHome()">
+
 🏠 الرئيسية
+
 </button>
 
 </section>
 
 
-<!-- المنتجات -->
+<!-- =========================
+     المنتجات
+========================= -->
 
 <section
 class="container products-section"
 id="productsSection">
 
-<div
-style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+<div class="section-title">
 
 <h2 id="productsTitle">
 🛍️ المنتجات
@@ -684,7 +846,9 @@ style="display:flex;justify-content:space-between;align-items:center;gap:10px;fl
 class="black"
 type="button"
 onclick="openDashboard()">
+
 📊 لوحة التحكم
+
 </button>
 
 </div>
@@ -692,12 +856,15 @@ onclick="openDashboard()">
 <div
 class="products"
 id="products">
+
 </div>
 
 </section>
 
 
-<!-- تسجيل الدخول -->
+<!-- =========================
+     تسجيل الدخول
+========================= -->
 
 <div
 class="modal"
@@ -709,7 +876,9 @@ id="loginModal">
 class="close"
 type="button"
 onclick="closeModal('loginModal')">
+
 ×
+
 </button>
 
 <h2>
@@ -736,7 +905,9 @@ class="black"
 type="button"
 style="width:100%"
 onclick="login()">
+
 🔐 دخول
+
 </button>
 
 <button
@@ -744,7 +915,9 @@ class="blue"
 type="button"
 style="width:100%"
 onclick="googleLogin()">
+
 🔵 الدخول بحساب Google
+
 </button>
 
 <p style="text-align:center">
@@ -755,7 +928,9 @@ onclick="googleLogin()">
 class="gray"
 type="button"
 onclick="switchToRegister()">
+
 إنشاء حساب
+
 </button>
 
 </p>
@@ -765,7 +940,9 @@ onclick="switchToRegister()">
 </div>
 
 
-<!-- إنشاء الحساب -->
+<!-- =========================
+     إنشاء الحساب
+========================= -->
 
 <div
 class="modal"
@@ -777,7 +954,9 @@ id="registerModal">
 class="close"
 type="button"
 onclick="closeModal('registerModal')">
+
 ×
+
 </button>
 
 <h2>
@@ -809,7 +988,9 @@ class="gold"
 type="button"
 style="width:100%"
 onclick="register()">
+
 🚀 إنشاء الحساب
+
 </button>
 
 <button
@@ -817,7 +998,9 @@ class="blue"
 type="button"
 style="width:100%"
 onclick="googleLogin()">
+
 🔵 إنشاء باستخدام Google
+
 </button>
 
 <p style="text-align:center">
@@ -828,7 +1011,9 @@ onclick="googleLogin()">
 class="gray"
 type="button"
 onclick="switchToLogin()">
+
 تسجيل الدخول
+
 </button>
 
 </p>
@@ -838,7 +1023,9 @@ onclick="switchToLogin()">
 </div>
 
 
-<!-- إعدادات المتجر -->
+<!-- =========================
+     إعدادات المتجر
+========================= -->
 
 <div
 class="modal"
@@ -850,7 +1037,9 @@ id="storeModal">
 class="close"
 type="button"
 onclick="closeModal('storeModal')">
+
 ×
+
 </button>
 
 <h2>
@@ -870,8 +1059,7 @@ placeholder="اسم المتجر">
 <textarea
 id="storeDescription"
 rows="4"
-placeholder="وصف المتجر">
-</textarea>
+placeholder="وصف المتجر"></textarea>
 
 <label>
 🎨 اللون الأساسي
@@ -890,6 +1078,7 @@ value="#111111">
 id="accentColor"
 type="color"
 value="#d4af37">
+
 
 <div class="file-box">
 
@@ -924,7 +1113,9 @@ class="green"
 type="button"
 style="width:100%"
 onclick="saveStore()">
+
 💾 حفظ المتجر
+
 </button>
 
 </div>
@@ -932,7 +1123,9 @@ onclick="saveStore()">
 </div>
 
 
-<!-- إضافة منتج -->
+<!-- =========================
+     إضافة منتج
+========================= -->
 
 <div
 class="modal"
@@ -944,7 +1137,9 @@ id="productModal">
 class="close"
 type="button"
 onclick="closeModal('productModal')">
+
 ×
+
 </button>
 
 <h2>
@@ -969,8 +1164,7 @@ placeholder="السعر">
 <textarea
 id="productDescription"
 rows="4"
-placeholder="وصف المنتج">
-</textarea>
+placeholder="وصف المنتج"></textarea>
 
 <div class="file-box">
 
@@ -990,7 +1184,9 @@ class="green"
 type="button"
 style="width:100%"
 onclick="saveProduct()">
+
 ➕ إضافة المنتج
+
 </button>
 
 </div>
@@ -1010,6 +1206,7 @@ onclick="saveProduct()">
 
 
 <script>
+
 
 /* =================================
    إعداد SUPABASE
@@ -1042,9 +1239,11 @@ if(!modal){
 alert("حدث خطأ في فتح النافذة");
 
 return;
+
 }
 
 modal.classList.add("active");
+
 }
 
 
@@ -1259,6 +1458,7 @@ await supabaseClient
 if(data) return;
 
 
+const {error} =
 await supabaseClient
 .from("stores")
 .insert({
@@ -1276,6 +1476,16 @@ accent_color:"#d4af37",
 layout:"grid"
 
 });
+
+
+if(error){
+
+console.log(
+"Create store error:",
+error.message
+);
+
+}
 
 }catch(err){
 
@@ -1405,7 +1615,7 @@ alert(err.message);
 
 
 /* =================================
-   المستخدم
+   المستخدم الحالي
 ================================= */
 
 async function getUser(){
@@ -1433,33 +1643,72 @@ return null;
 
 
 /* =================================
-   تحديث المستخدم
+   تحديث بيانات المستخدم
 ================================= */
 
 async function updateUser(){
-async function updateUser(){
-  try{
-    const { data: { user } } = await supabaseClient.auth.getUser();
 
-    if(!user){
-      document.getElementById("userBox").innerHTML = "";
-      return;
-    }
+try{
 
-    const { data: store } = await supabaseClient
-      .from("stores")
-      .select("store_name")
-      .eq("user_id", user.id)
-      .maybeSingle();
+const {data,error} =
+await supabaseClient.auth.getUser();
 
-    const storeName = store?.store_name || "متجرك";
 
-    document.getElementById("userBox").innerHTML =
-      `👋 أهلاً بك في <b>${storeName}</b>`;
+const authButtons =
+document.getElementById("authButtons");
 
-  }catch(error){
-    console.log(error);
-  }
+const userBox =
+document.getElementById("userBox");
+
+const userName =
+document.getElementById("userEmail");
+
+
+if(error || !data.user){
+
+authButtons.style.display="block";
+
+userBox.style.display="none";
+
+return;
+
+}
+
+
+const user =
+data.user;
+
+
+const {data:store} =
+await supabaseClient
+.from("stores")
+.select("store_name")
+.eq("user_id",user.id)
+.maybeSingle();
+
+
+const storeName =
+store?.store_name || "متجرك";
+
+
+userName.textContent =
+storeName;
+
+
+authButtons.style.display="none";
+
+userBox.style.display="block";
+
+
+}catch(error){
+
+console.log(
+"updateUser error:",
+error
+);
+
+}
+
 }
 
 
@@ -1471,13 +1720,26 @@ async function logout(){
 
 await supabaseClient.auth.signOut();
 
-document.getElementById("dashboard").style.display="none";
 
-document.getElementById("storeHeader").style.display="none";
+document.getElementById(
+"dashboard"
+).style.display="none";
 
-document.getElementById("productsSection").style.display="none";
 
-document.getElementById("homeSection").style.display="block";
+document.getElementById(
+"storeHeader"
+).style.display="none";
+
+
+document.getElementById(
+"productsSection"
+).style.display="none";
+
+
+document.getElementById(
+"homeSection"
+).style.display="block";
+
 
 await updateUser();
 
@@ -1493,6 +1755,7 @@ async function openDashboard(){
 const user =
 await getUser();
 
+
 if(!user){
 
 openModal("loginModal");
@@ -1502,13 +1765,24 @@ return;
 }
 
 
-document.getElementById("homeSection").style.display="none";
+document.getElementById(
+"homeSection"
+).style.display="none";
 
-document.getElementById("dashboard").style.display="block";
 
-document.getElementById("storeHeader").style.display="none";
+document.getElementById(
+"dashboard"
+).style.display="block";
 
-document.getElementById("productsSection").style.display="none";
+
+document.getElementById(
+"storeHeader"
+).style.display="none";
+
+
+document.getElementById(
+"productsSection"
+).style.display="none";
 
 }
 
@@ -1521,6 +1795,7 @@ async function openStoreSettings(){
 
 const user =
 await getUser();
+
 
 if(!user){
 
@@ -1550,16 +1825,27 @@ return;
 
 if(data){
 
-document.getElementById("storeName").value =
+document.getElementById(
+"storeName"
+).value =
 data.store_name || "";
 
-document.getElementById("storeDescription").value =
+
+document.getElementById(
+"storeDescription"
+).value =
 data.description || "";
 
-document.getElementById("themeColor").value =
+
+document.getElementById(
+"themeColor"
+).value =
 data.theme_color || "#111111";
 
-document.getElementById("accentColor").value =
+
+document.getElementById(
+"accentColor"
+).value =
 data.accent_color || "#d4af37";
 
 }
@@ -1574,13 +1860,24 @@ openModal("storeModal");
    رفع صور المتجر
 ================================= */
 
-async function uploadStoreImage(file,userId,type){
+async function uploadStoreImage(
+file,
+userId,
+type
+){
 
-if(!file) return null;
+if(!file){
+
+return null;
+
+}
 
 
 const extension =
-file.name.split(".").pop();
+file.name
+.split(".")
+.pop()
+.toLowerCase();
 
 
 const fileName =
@@ -1590,6 +1887,10 @@ userId +
 type +
 "_" +
 Date.now() +
+"_" +
+Math.random()
+.toString(36)
+.substring(2,8) +
 "." +
 extension;
 
@@ -1602,7 +1903,7 @@ await supabaseClient
 fileName,
 file,
 {
-upsert:true
+upsert:false
 }
 );
 
@@ -1618,7 +1919,9 @@ const {data} =
 supabaseClient
 .storage
 .from("products")
-.getPublicUrl(fileName);
+.getPublicUrl(
+fileName
+);
 
 
 return data.publicUrl;
@@ -1635,6 +1938,7 @@ async function saveStore(){
 const user =
 await getUser();
 
+
 if(!user){
 
 openModal("loginModal");
@@ -1645,22 +1949,39 @@ return;
 
 
 const storeName =
-document.getElementById("storeName").value.trim();
+document.getElementById(
+"storeName"
+).value.trim();
+
 
 const description =
-document.getElementById("storeDescription").value.trim();
+document.getElementById(
+"storeDescription"
+).value.trim();
+
 
 const themeColor =
-document.getElementById("themeColor").value;
+document.getElementById(
+"themeColor"
+).value;
+
 
 const accentColor =
-document.getElementById("accentColor").value;
+document.getElementById(
+"accentColor"
+).value;
+
 
 const logoFile =
-document.getElementById("logoFile").files[0];
+document.getElementById(
+"logoFile"
+).files[0];
+
 
 const coverFile =
-document.getElementById("coverFile").files[0];
+document.getElementById(
+"coverFile"
+).files[0];
 
 
 if(!storeName){
@@ -1731,14 +2052,16 @@ layout:"grid"
 
 if(logoUrl){
 
-updateData.logo_url=logoUrl;
+updateData.logo_url =
+logoUrl;
 
 }
 
 
 if(coverUrl){
 
-updateData.cover_url=coverUrl;
+updateData.cover_url =
+coverUrl;
 
 }
 
@@ -1762,6 +2085,9 @@ showMessage(
 "تم حفظ المتجر بنجاح ✅",
 "success"
 );
+
+
+await updateUser();
 
 
 setTimeout(function(){
@@ -1793,6 +2119,7 @@ async function openProductModal(){
 const user =
 await getUser();
 
+
 if(!user){
 
 openModal("loginModal");
@@ -1800,6 +2127,7 @@ openModal("loginModal");
 return;
 
 }
+
 
 openModal("productModal");
 
@@ -1815,6 +2143,7 @@ async function saveProduct(){
 const user =
 await getUser();
 
+
 if(!user){
 
 openModal("loginModal");
@@ -1825,16 +2154,27 @@ return;
 
 
 const name =
-document.getElementById("productName").value.trim();
+document.getElementById(
+"productName"
+).value.trim();
+
 
 const price =
-document.getElementById("productPrice").value;
+document.getElementById(
+"productPrice"
+).value;
+
 
 const description =
-document.getElementById("productDescription").value.trim();
+document.getElementById(
+"productDescription"
+).value.trim();
+
 
 const imageFile =
-document.getElementById("productImage").files[0];
+document.getElementById(
+"productImage"
+).files[0];
 
 
 if(!name || !price){
@@ -1865,13 +2205,20 @@ let imageUrl=null;
 if(imageFile){
 
 const extension =
-imageFile.name.split(".").pop();
+imageFile.name
+.split(".")
+.pop()
+.toLowerCase();
 
 
 const fileName =
 user.id +
 "/product_" +
 Date.now() +
+"_" +
+Math.random()
+.toString(36)
+.substring(2,8) +
 "." +
 extension;
 
@@ -1884,7 +2231,7 @@ await supabaseClient
 fileName,
 imageFile,
 {
-upsert:true
+upsert:false
 }
 );
 
@@ -1900,10 +2247,13 @@ const {data} =
 supabaseClient
 .storage
 .from("products")
-.getPublicUrl(fileName);
+.getPublicUrl(
+fileName
+);
 
 
-imageUrl=data.publicUrl;
+imageUrl =
+data.publicUrl;
 
 }
 
@@ -1940,13 +2290,24 @@ showMessage(
 );
 
 
-document.getElementById("productName").value="";
+document.getElementById(
+"productName"
+).value="";
 
-document.getElementById("productPrice").value="";
 
-document.getElementById("productDescription").value="";
+document.getElementById(
+"productPrice"
+).value="";
 
-document.getElementById("productImage").value="";
+
+document.getElementById(
+"productDescription"
+).value="";
+
+
+document.getElementById(
+"productImage"
+).value="";
 
 
 setTimeout(function(){
@@ -1980,6 +2341,7 @@ async function myProducts(){
 const user =
 await getUser();
 
+
 if(!user){
 
 openModal("loginModal");
@@ -1989,15 +2351,29 @@ return;
 }
 
 
-document.getElementById("homeSection").style.display="none";
+document.getElementById(
+"homeSection"
+).style.display="none";
 
-document.getElementById("dashboard").style.display="block";
 
-document.getElementById("storeHeader").style.display="none";
+document.getElementById(
+"dashboard"
+).style.display="block";
 
-document.getElementById("productsSection").style.display="block";
 
-document.getElementById("productsTitle").textContent =
+document.getElementById(
+"storeHeader"
+).style.display="none";
+
+
+document.getElementById(
+"productsSection"
+).style.display="block";
+
+
+document.getElementById(
+"productsTitle"
+).textContent =
 "🛍️ منتجاتي";
 
 
@@ -2011,7 +2387,9 @@ await supabaseClient
 
 if(error){
 
-document.getElementById("products").innerHTML =
+document.getElementById(
+"products"
+).innerHTML =
 '<div class="empty">حدث خطأ: ' +
 escapeHtml(error.message) +
 '</div>';
@@ -2021,7 +2399,10 @@ return;
 }
 
 
-renderProducts(data || [],true);
+renderProducts(
+data || [],
+true
+);
 
 }
 
@@ -2035,6 +2416,7 @@ async function viewMyStore(){
 const user =
 await getUser();
 
+
 if(!user){
 
 openModal("loginModal");
@@ -2043,7 +2425,10 @@ return;
 
 }
 
-await loadPublicStore(user.id);
+
+await loadPublicStore(
+user.id
+);
 
 }
 
@@ -2052,18 +2437,34 @@ await loadPublicStore(user.id);
    المتجر العام
 ================================= */
 
-async function loadPublicStore(userId){
+async function loadPublicStore(
+userId
+){
 
-document.getElementById("homeSection").style.display="none";
-
-document.getElementById("dashboard").style.display="none";
-
-document.getElementById("productsSection").style.display="block";
-
-document.getElementById("storeHeader").style.display="block";
+document.getElementById(
+"homeSection"
+).style.display="none";
 
 
-const {data:store,error:storeError} =
+document.getElementById(
+"dashboard"
+).style.display="none";
+
+
+document.getElementById(
+"productsSection"
+).style.display="block";
+
+
+document.getElementById(
+"storeHeader"
+).style.display="block";
+
+
+const {
+data:store,
+error:storeError
+} =
 await supabaseClient
 .from("stores")
 .select("*")
@@ -2082,7 +2483,9 @@ return;
 
 if(!store){
 
-document.getElementById("storeTitle").textContent =
+document.getElementById(
+"storeTitle"
+).textContent =
 "متجر غير موجود";
 
 return;
@@ -2090,27 +2493,41 @@ return;
 }
 
 
-document.getElementById("storeTitle").textContent =
-store.store_name || "متجري";
+document.getElementById(
+"storeTitle"
+).textContent =
+store.store_name ||
+"متجري";
 
 
-document.getElementById("storeDescription").textContent =
-store.description || "";
+document.getElementById(
+"storeDescription"
+).textContent =
+store.description ||
+"";
 
 
 const storeHeader =
-document.getElementById("storeHeader");
+document.getElementById(
+"storeHeader"
+);
 
 
 storeHeader.style.background =
-store.theme_color || "#111111";
+store.theme_color ||
+"#111111";
 
 
 const storeLogo =
-document.getElementById("storeLogo");
+document.getElementById(
+"storeLogo"
+);
+
 
 const storeCover =
-document.getElementById("storeCover");
+document.getElementById(
+"storeCover"
+);
 
 
 if(store.logo_url){
@@ -2118,11 +2535,15 @@ if(store.logo_url){
 storeLogo.src =
 store.logo_url;
 
-storeLogo.classList.remove("hidden");
+storeLogo.classList.remove(
+"hidden"
+);
 
 }else{
 
-storeLogo.classList.add("hidden");
+storeLogo.classList.add(
+"hidden"
+);
 
 }
 
@@ -2132,21 +2553,30 @@ if(store.cover_url){
 storeCover.src =
 store.cover_url;
 
-storeCover.classList.remove("hidden");
+storeCover.classList.remove(
+"hidden"
+);
 
 }else{
 
-storeCover.classList.add("hidden");
+storeCover.classList.add(
+"hidden"
+);
 
 }
 
 
-document.getElementById("productsTitle").textContent =
+document.getElementById(
+"productsTitle"
+).textContent =
 "🛍️ منتجات " +
 (store.store_name || "المتجر");
 
 
-const {data:products,error} =
+const {
+data:products,
+error
+} =
 await supabaseClient
 .from("products")
 .select("*")
@@ -2156,7 +2586,9 @@ await supabaseClient
 
 if(error){
 
-document.getElementById("products").innerHTML =
+document.getElementById(
+"products"
+).innerHTML =
 '<div class="empty">حدث خطأ: ' +
 escapeHtml(error.message) +
 '</div>';
@@ -2166,7 +2598,10 @@ return;
 }
 
 
-renderProducts(products || [],false);
+renderProducts(
+products || [],
+false
+);
 
 }
 
@@ -2175,10 +2610,15 @@ renderProducts(products || [],false);
    عرض المنتجات
 ================================= */
 
-function renderProducts(products,isOwner){
+function renderProducts(
+products,
+isOwner
+){
 
 const box =
-document.getElementById("products");
+document.getElementById(
+"products"
+);
 
 
 if(!products.length){
@@ -2221,7 +2661,7 @@ if(isOwner){
 
 deleteButton =
 '<button class="red" type="button" onclick="deleteProduct(\'' +
-p.id +
+escapeHtml(p.id) +
 '\')">🗑️ حذف</button>';
 
 }
@@ -2297,6 +2737,7 @@ return;
 const user =
 await getUser();
 
+
 if(!user){
 
 openModal("loginModal");
@@ -2334,13 +2775,24 @@ await myProducts();
 
 function goHome(){
 
-document.getElementById("homeSection").style.display="block";
+document.getElementById(
+"homeSection"
+).style.display="block";
 
-document.getElementById("dashboard").style.display="none";
 
-document.getElementById("storeHeader").style.display="none";
+document.getElementById(
+"dashboard"
+).style.display="none";
 
-document.getElementById("productsSection").style.display="none";
+
+document.getElementById(
+"storeHeader"
+).style.display="none";
+
+
+document.getElementById(
+"productsSection"
+).style.display="none";
 
 }
 
@@ -2356,17 +2808,21 @@ new URLSearchParams(
 window.location.search
 );
 
+
 const storeId =
 params.get("store");
 
 
 if(storeId){
 
-loadPublicStore(storeId);
+loadPublicStore(
+storeId
+);
 
 return true;
 
 }
+
 
 return false;
 
@@ -2393,19 +2849,11 @@ checkStoreLink();
 supabaseClient.auth.onAuthStateChange(
 function(event,session){
 
-if(session){
-
 setTimeout(function(){
 
 updateUser();
 
 },100);
-
-}else{
-
-updateUser();
-
-}
 
 });
 
@@ -2419,4 +2867,4 @@ start();
 </script>
 
 </body>
-  </html>
+   </html>
