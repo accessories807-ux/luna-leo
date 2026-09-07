@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>LUNA&LEO MARKET | أنشئ متجرك الإلكتروني</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+LUNA&LEO MARKET | أنشئ متجرك الإلكتروني
+</title>
 
 <meta name="description"
 content="LUNA&LEO MARKET منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة.">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <style>
 
 /* =========================
-   RESET
+   GENERAL
 ========================= */
 
 *{
@@ -36,14 +42,18 @@ body{
     overflow-x:hidden;
 }
 
-a{
-    text-decoration:none;
-    color:inherit;
+button,
+input{
+    font-family:inherit;
 }
 
 button{
-    font-family:inherit;
     cursor:pointer;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
 }
 
 .container{
@@ -52,6 +62,7 @@ button{
     margin:auto;
 }
 
+
 /* =========================
    HEADER
 ========================= */
@@ -59,8 +70,8 @@ button{
 header{
     position:fixed;
     top:0;
-    right:0;
     left:0;
+    right:0;
     z-index:1000;
     padding:18px 0;
     transition:.3s;
@@ -69,7 +80,7 @@ header{
 header.scrolled{
     background:rgba(6,16,18,.95);
     backdrop-filter:blur(15px);
-    box-shadow:0 5px 30px rgba(0,0,0,.25);
+    box-shadow:0 5px 30px rgba(0,0,0,.3);
 }
 
 .nav{
@@ -92,7 +103,7 @@ header.scrolled{
 .nav-links{
     display:flex;
     align-items:center;
-    gap:30px;
+    gap:28px;
 }
 
 .nav-links a{
@@ -124,14 +135,17 @@ header.scrolled{
 }
 
 .btn-primary{
-    background:linear-gradient(135deg,#d6b35a,#a98532);
+    background:linear-gradient(
+        135deg,
+        #d6b35a,
+        #a98532
+    );
     color:#071113;
     font-weight:bold;
 }
 
 .btn:hover{
     transform:translateY(-2px);
-    box-shadow:0 8px 25px rgba(214,179,90,.2);
 }
 
 .menu-btn{
@@ -139,8 +153,9 @@ header.scrolled{
     background:none;
     border:none;
     color:#fff;
-    font-size:27px;
+    font-size:28px;
 }
+
 
 /* =========================
    HERO
@@ -155,7 +170,7 @@ header.scrolled{
     overflow:hidden;
 }
 
-.hero::before{
+.hero:before{
     content:"";
     position:absolute;
     width:600px;
@@ -203,6 +218,8 @@ header.scrolled{
 
 .hero-image img{
     width:100%;
+    height:450px;
+    object-fit:cover;
     border-radius:30px;
     display:block;
     box-shadow:0 30px 80px rgba(0,0,0,.5);
@@ -224,6 +241,7 @@ header.scrolled{
     font-size:28px;
     color:#d6b35a;
 }
+
 
 /* =========================
    SECTIONS
@@ -247,39 +265,58 @@ section{
     color:#9ca8aa;
 }
 
+
 /* =========================
    CARDS
 ========================= */
 
 .cards{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:
+    repeat(3,1fr);
     gap:22px;
 }
 
 .card{
-    background:linear-gradient(145deg,#0c1b1e,#081214);
+    background:
+    linear-gradient(
+        145deg,
+        #0c1b1e,
+        #081214
+    );
+
     border:1px solid rgba(255,255,255,.07);
+
     padding:30px;
+
     border-radius:22px;
+
     transition:.3s;
 }
 
 .card:hover{
     transform:translateY(-7px);
-    border-color:rgba(214,179,90,.35);
+    border-color:
+    rgba(214,179,90,.35);
 }
 
 .icon{
     width:55px;
     height:55px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     border-radius:15px;
-    background:rgba(214,179,90,.1);
+
+    background:
+    rgba(214,179,90,.1);
+
     color:#d6b35a;
+
     font-size:25px;
+
     margin-bottom:20px;
 }
 
@@ -291,8 +328,9 @@ section{
     color:#9ca8aa;
 }
 
+
 /* =========================
-   STORE PREVIEW
+   PREVIEW
 ========================= */
 
 .preview{
@@ -333,13 +371,15 @@ section{
     margin-left:8px;
 }
 
+
 /* =========================
    STEPS
 ========================= */
 
 .steps{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:
+    repeat(4,1fr);
     gap:20px;
 }
 
@@ -351,16 +391,25 @@ section{
 .step-number{
     width:60px;
     height:60px;
+
     border-radius:50%;
+
     background:#d6b35a;
+
     color:#071113;
+
     font-size:24px;
+
     font-weight:bold;
+
     display:flex;
+
     align-items:center;
     justify-content:center;
+
     margin:0 auto 20px;
 }
+
 
 /* =========================
    PRICING
@@ -368,15 +417,21 @@ section{
 
 .pricing{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:
+    repeat(3,1fr);
     gap:25px;
 }
 
 .price-card{
     background:#0b191b;
-    border:1px solid rgba(255,255,255,.08);
+
+    border:1px solid
+    rgba(255,255,255,.08);
+
     border-radius:25px;
+
     padding:35px 25px;
+
     text-align:center;
 }
 
@@ -412,11 +467,12 @@ section{
     color:#bbb;
 }
 
-.price-card li::before{
+.price-card li:before{
     content:"✓";
     color:#d6b35a;
     margin-left:8px;
 }
+
 
 /* =========================
    FAQ
@@ -428,7 +484,8 @@ section{
 }
 
 .faq-item{
-    border-bottom:1px solid rgba(255,255,255,.1);
+    border-bottom:
+    1px solid rgba(255,255,255,.1);
 }
 
 .faq-question{
@@ -439,6 +496,7 @@ section{
     color:#fff;
     text-align:right;
     font-size:17px;
+
     display:flex;
     justify-content:space-between;
 }
@@ -455,6 +513,7 @@ section{
     padding-bottom:20px;
 }
 
+
 /* =========================
    CTA
 ========================= */
@@ -462,10 +521,13 @@ section{
 .cta{
     text-align:center;
     padding:100px 20px;
+
     background:
-    radial-gradient(circle at center,
-    rgba(214,179,90,.12),
-    transparent 60%);
+    radial-gradient(
+        circle at center,
+        rgba(214,179,90,.12),
+        transparent 60%
+    );
 }
 
 .cta h2{
@@ -478,13 +540,15 @@ section{
     margin-bottom:30px;
 }
 
+
 /* =========================
    FOOTER
 ========================= */
 
 footer{
     padding:40px 0;
-    border-top:1px solid rgba(255,255,255,.07);
+    border-top:
+    1px solid rgba(255,255,255,.07);
 }
 
 .footer{
@@ -498,62 +562,110 @@ footer{
     color:#777;
 }
 
+
 /* =========================
    AUTH MODAL
 ========================= */
 
 .auth-modal{
+
     display:none !important;
+
     position:fixed;
+
     inset:0;
-    z-index:99999;
-    background:rgba(0,0,0,.82);
+
+    z-index:999999;
+
+    background:
+    rgba(0,0,0,.82);
+
     backdrop-filter:blur(10px);
+
     align-items:center;
+
     justify-content:center;
+
     padding:20px;
 }
 
 .auth-box{
+
     width:100%;
+
     max-width:430px;
+
+    max-height:90vh;
+
+    overflow-y:auto;
+
     background:#071113;
-    border:1px solid rgba(214,179,90,.35);
+
+    border:
+    1px solid rgba(214,179,90,.35);
+
     border-radius:25px;
+
     padding:35px 25px;
+
     position:relative;
-    box-shadow:0 25px 80px rgba(0,0,0,.7);
+
+    box-shadow:
+    0 25px 80px rgba(0,0,0,.7);
+
     text-align:center;
-    animation:authIn .25s ease;
+
+    animation:
+    authIn .25s ease;
 }
 
 @keyframes authIn{
+
     from{
         opacity:0;
-        transform:translateY(20px) scale(.97);
+        transform:
+        translateY(20px)
+        scale(.97);
     }
+
     to{
         opacity:1;
-        transform:translateY(0) scale(1);
+        transform:
+        translateY(0)
+        scale(1);
     }
+
 }
 
 .auth-close{
+
     position:absolute;
+
     top:12px;
+
     left:15px;
+
     width:35px;
+
     height:35px;
+
     border:none;
+
     border-radius:50%;
+
     background:#132326;
+
     color:#fff;
+
     font-size:25px;
 }
 
 .auth-logo{
+
     font-size:28px;
+
     font-weight:bold;
+
     margin-bottom:15px;
 }
 
@@ -567,57 +679,177 @@ footer{
 
 .auth-box p{
     color:#929d9f;
+
     font-size:14px;
+
     margin-bottom:25px;
 }
 
 .auth-box input{
+
     width:100%;
+
     padding:14px;
+
     margin-bottom:12px;
+
     border-radius:12px;
-    border:1px solid rgba(255,255,255,.1);
+
+    border:
+    1px solid rgba(255,255,255,.1);
+
     background:#0d1c1f;
+
     color:#fff;
+
     outline:none;
+
     font-size:15px;
 }
 
 .auth-box input:focus{
+
     border-color:#d6b35a;
+
 }
 
 .auth-submit{
+
     width:100%;
+
     padding:14px;
+
     border:none;
+
     border-radius:12px;
-    background:linear-gradient(135deg,#d6b35a,#a98532);
+
+    background:
+    linear-gradient(
+        135deg,
+        #d6b35a,
+        #a98532
+    );
+
     color:#071113;
+
     font-weight:bold;
+
     font-size:16px;
+
     margin-top:5px;
 }
 
 .auth-message{
+
     min-height:25px;
+
     margin-top:15px;
+
     font-size:14px;
+
     color:#d6b35a;
 }
 
 .auth-switch{
+
     margin-top:20px;
+
     color:#888;
+
     font-size:14px;
 }
 
 .auth-switch button{
+
     background:none;
+
     border:none;
+
     color:#d6b35a;
+
     margin-right:5px;
 }
+
+
+/* GOOGLE */
+
+.auth-or{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin:20px 0;
+
+    color:#777;
+}
+
+.auth-or:before,
+.auth-or:after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:
+    rgba(255,255,255,.1);
+}
+
+.google-btn{
+
+    width:100%;
+
+    padding:13px;
+
+    border-radius:12px;
+
+    border:
+    1px solid rgba(255,255,255,.12);
+
+    background:#fff;
+
+    color:#111;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.google-btn:hover{
+
+    transform:
+    translateY(-2px);
+}
+
+.google-btn span{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:25px;
+
+    height:25px;
+
+    margin-left:8px;
+
+    border-radius:50%;
+
+    font-weight:bold;
+
+    color:#4285F4;
+}
+
 
 /* =========================
    MOBILE
@@ -675,6 +907,7 @@ footer{
     }
 }
 
+
 @media(max-width:550px){
 
     .hero-text h1{
@@ -695,15 +928,26 @@ footer{
 
     .hero-image img{
         height:300px;
-        object-fit:cover;
     }
 
 }
 
+
+/* =========================
+   HIDE MODAL BEFORE JS
+========================= */
+
+#authModal{
+    display:none !important;
+}
+
 </style>
+
 </head>
 
+
 <body>
+
 
 <!-- =========================
 HEADER
@@ -717,32 +961,56 @@ HEADER
 LUNA<span>&</span>LEO
 </div>
 
+
 <nav class="nav-links">
 
-<a href="#features">المميزات</a>
-<a href="#steps">كيف يعمل؟</a>
-<a href="#pricing">الأسعار</a>
-<a href="#faq">الأسئلة</a>
+<a href="#features">
+المميزات
+</a>
+
+<a href="#steps">
+كيف يعمل؟
+</a>
+
+<a href="#pricing">
+الأسعار
+</a>
+
+<a href="#faq">
+الأسئلة
+</a>
 
 </nav>
 
+
 <div class="nav-buttons">
 
-<button class="btn btn-login"
+<button
+class="btn btn-login"
 onclick="login()">
+
 تسجيل الدخول
+
 </button>
 
-<button class="btn btn-primary"
+
+<button
+class="btn btn-primary"
 onclick="createStore()">
+
 أنشئ متجرك
+
 </button>
 
 </div>
 
-<button class="menu-btn"
+
+<button
+class="menu-btn"
 onclick="toggleMenu()">
+
 ☰
+
 </button>
 
 </div>
@@ -758,34 +1026,53 @@ HERO
 
 <div class="container hero-grid">
 
+
 <div class="hero-text">
 
 <h1>
+
 أنشئ متجرك الإلكتروني
+
 <br>
-<span class="gold">وابدأ البيع بسهولة 🚀</span>
+
+<span class="gold">
+وابدأ البيع بسهولة 🚀
+</span>
+
 </h1>
 
+
 <p>
+
 LUNA&LEO MARKET تساعدك على إنشاء متجرك الإلكتروني
 وإدارة منتجاتك وطلباتك وعملائك من مكان واحد.
+
 </p>
+
 
 <div class="hero-buttons">
 
-<button class="btn btn-primary"
+<button
+class="btn btn-primary"
 onclick="createStore()">
+
 ابدأ مجانًا الآن
+
 </button>
 
-<button class="btn btn-login"
+
+<button
+class="btn btn-login"
 onclick="scrollToSection('features')">
+
 اكتشف المميزات
+
 </button>
 
 </div>
 
 </div>
+
 
 <div class="hero-image">
 
@@ -793,9 +1080,12 @@ onclick="scrollToSection('features')">
 src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=80"
 alt="متجر إلكتروني">
 
+
 <div class="dashboard">
 
-<div>مبيعات متجرك</div>
+<div>
+مبيعات متجرك
+</div>
 
 <strong>
 +24,850
@@ -834,11 +1124,15 @@ FEATURES
 
 </div>
 
+
 <div class="cards">
+
 
 <div class="card">
 
-<div class="icon">🛍️</div>
+<div class="icon">
+🛍️
+</div>
 
 <h3>
 متجرك الخاص
@@ -850,9 +1144,12 @@ FEATURES
 
 </div>
 
+
 <div class="card">
 
-<div class="icon">📦</div>
+<div class="icon">
+📦
+</div>
 
 <h3>
 إدارة المنتجات
@@ -864,9 +1161,12 @@ FEATURES
 
 </div>
 
+
 <div class="card">
 
-<div class="icon">📊</div>
+<div class="icon">
+📊
+</div>
 
 <h3>
 إدارة الطلبات
@@ -878,9 +1178,12 @@ FEATURES
 
 </div>
 
+
 <div class="card">
 
-<div class="icon">👥</div>
+<div class="icon">
+👥
+</div>
 
 <h3>
 العملاء
@@ -892,9 +1195,12 @@ FEATURES
 
 </div>
 
+
 <div class="card">
 
-<div class="icon">📱</div>
+<div class="icon">
+📱
+</div>
 
 <h3>
 متوافق مع الموبايل
@@ -906,9 +1212,12 @@ FEATURES
 
 </div>
 
+
 <div class="card">
 
-<div class="icon">🔒</div>
+<div class="icon">
+🔒
+</div>
 
 <h3>
 حماية وأمان
@@ -935,9 +1244,11 @@ PREVIEW
 
 <div class="container store-preview">
 
+
 <img
 src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1000&q=80"
 alt="متجر LUNA&LEO">
+
 
 <div class="preview-text">
 
@@ -949,6 +1260,7 @@ alt="متجر LUNA&LEO">
 لا تحتاج إلى مصمم أو مبرمج.
 أنشئ متجرك وابدأ في عرض منتجاتك للعملاء.
 </p>
+
 
 <div class="check">
 <span>✓</span>
@@ -970,12 +1282,16 @@ alt="متجر LUNA&LEO">
 إدارة الطلبات والعملاء
 </div>
 
+
 <br>
+
 
 <button
 class="btn btn-primary"
 onclick="createStore()">
+
 أنشئ متجرك الآن
+
 </button>
 
 </div>
@@ -1005,11 +1321,15 @@ STEPS
 
 </div>
 
+
 <div class="steps">
+
 
 <div class="step">
 
-<div class="step-number">1</div>
+<div class="step-number">
+1
+</div>
 
 <h3>
 أنشئ حسابك
@@ -1021,9 +1341,12 @@ STEPS
 
 </div>
 
+
 <div class="step">
 
-<div class="step-number">2</div>
+<div class="step-number">
+2
+</div>
 
 <h3>
 أنشئ متجرك
@@ -1035,9 +1358,12 @@ STEPS
 
 </div>
 
+
 <div class="step">
 
-<div class="step-number">3</div>
+<div class="step-number">
+3
+</div>
 
 <h3>
 أضف منتجاتك
@@ -1049,9 +1375,12 @@ STEPS
 
 </div>
 
+
 <div class="step">
 
-<div class="step-number">4</div>
+<div class="step-number">
+4
+</div>
 
 <h3>
 ابدأ البيع
@@ -1090,7 +1419,9 @@ PRICING
 
 </div>
 
+
 <div class="pricing">
+
 
 <div class="price-card">
 
@@ -1099,23 +1430,43 @@ PRICING
 </h3>
 
 <div class="price">
+
 0
-<small>جنيه / شهر</small>
+
+<small>
+جنيه / شهر
+</small>
+
 </div>
+
 
 <ul>
 
-<li>إنشاء متجر</li>
-<li>إضافة المنتجات</li>
-<li>إدارة الطلبات</li>
-<li>إدارة العملاء</li>
+<li>
+إنشاء متجر
+</li>
+
+<li>
+إضافة المنتجات
+</li>
+
+<li>
+إدارة الطلبات
+</li>
+
+<li>
+إدارة العملاء
+</li>
 
 </ul>
+
 
 <button
 class="btn btn-primary"
 onclick="createStore()">
+
 ابدأ مجانًا
+
 </button>
 
 </div>
@@ -1128,23 +1479,43 @@ onclick="createStore()">
 </h3>
 
 <div class="price">
+
 199
-<small>جنيه / شهر</small>
+
+<small>
+جنيه / شهر
+</small>
+
 </div>
+
 
 <ul>
 
-<li>كل مميزات المجاني</li>
-<li>مميزات إضافية</li>
-<li>تخصيص أكبر للمتجر</li>
-<li>دعم أفضل</li>
+<li>
+كل مميزات المجاني
+</li>
+
+<li>
+مميزات إضافية
+</li>
+
+<li>
+تخصيص أكبر للمتجر
+</li>
+
+<li>
+دعم أفضل
+</li>
 
 </ul>
+
 
 <button
 class="btn btn-primary"
 onclick="createStore()">
+
 ابدأ الآن
+
 </button>
 
 </div>
@@ -1157,23 +1528,43 @@ Business
 </h3>
 
 <div class="price">
+
 499
-<small>جنيه / شهر</small>
+
+<small>
+جنيه / شهر
+</small>
+
 </div>
+
 
 <ul>
 
-<li>كل مميزات الاحترافي</li>
-<li>مميزات متقدمة</li>
-<li>إدارة احترافية</li>
-<li>أولوية الدعم</li>
+<li>
+كل مميزات الاحترافي
+</li>
+
+<li>
+مميزات متقدمة
+</li>
+
+<li>
+إدارة احترافية
+</li>
+
+<li>
+أولوية الدعم
+</li>
 
 </ul>
+
 
 <button
 class="btn btn-primary"
 onclick="createStore()">
+
 ابدأ الآن
+
 </button>
 
 </div>
@@ -1201,17 +1592,27 @@ FAQ
 
 </div>
 
+
 <div class="faq">
 
+
 <div class="faq-item">
 
-<button class="faq-question">
+<button
+class="faq-question">
+
 هل إنشاء الحساب مجاني؟
-<span>＋</span>
+
+<span>
+＋
+</span>
+
 </button>
 
 <div class="faq-answer">
+
 نعم، يمكنك إنشاء حساب وبدء متجرك مجانًا.
+
 </div>
 
 </div>
@@ -1219,13 +1620,21 @@ FAQ
 
 <div class="faq-item">
 
-<button class="faq-question">
+<button
+class="faq-question">
+
 هل أحتاج إلى خبرة في البرمجة؟
-<span>＋</span>
+
+<span>
+＋
+</span>
+
 </button>
 
 <div class="faq-answer">
+
 لا، المنصة مصممة لتكون سهلة الاستخدام حتى لو لم تكن لديك خبرة في البرمجة.
+
 </div>
 
 </div>
@@ -1233,13 +1642,21 @@ FAQ
 
 <div class="faq-item">
 
-<button class="faq-question">
+<button
+class="faq-question">
+
 هل أستطيع إضافة منتجات كثيرة؟
-<span>＋</span>
+
+<span>
+＋
+</span>
+
 </button>
 
 <div class="faq-answer">
+
 نعم، يمكنك إضافة منتجاتك وإدارة أسعارها ومخزونها من لوحة التحكم.
+
 </div>
 
 </div>
@@ -1247,13 +1664,21 @@ FAQ
 
 <div class="faq-item">
 
-<button class="faq-question">
+<button
+class="faq-question">
+
 هل الموقع يعمل على الهاتف؟
-<span>＋</span>
+
+<span>
+＋
+</span>
+
 </button>
 
 <div class="faq-answer">
+
 نعم، المنصة مصممة للعمل على الهاتف والكمبيوتر.
+
 </div>
 
 </div>
@@ -1281,6 +1706,7 @@ CTA
 أنشئ متجرك الإلكتروني الآن وابدأ رحلتك مع LUNA&LEO MARKET.
 </p>
 
+
 <button
 class="btn btn-primary"
 onclick="createStore()">
@@ -1306,19 +1732,19 @@ FOOTER
 LUNA<span>&</span>LEO
 </div>
 
+
 <p>
 © 2026 LUNA&LEO MARKET — جميع الحقوق محفوظة
 </p>
 
-<div>
 
 <button
 class="btn btn-login"
 onclick="login()">
-تسجيل الدخول
-</button>
 
-</div>
+تسجيل الدخول
+
+</button>
 
 </div>
 
@@ -1326,32 +1752,42 @@ onclick="login()">
 
 
 <!-- =========================
-AUTH MODAL
+AUTH
 ========================= -->
 
 <div
 id="authModal"
 class="auth-modal">
 
+
 <div class="auth-box">
+
 
 <button
 class="auth-close"
 onclick="closeAuth()">
+
 ×
+
 </button>
 
+
 <div class="auth-logo">
+
 LUNA<span>&</span>LEO
+
 </div>
+
 
 <h2 id="authTitle">
 أنشئ حسابك 🚀
 </h2>
 
+
 <p id="authSubtitle">
 ابدأ متجرك الإلكتروني مع LUNA&LEO MARKET
 </p>
+
 
 <div id="nameField">
 
@@ -1363,17 +1799,20 @@ autocomplete="name">
 
 </div>
 
+
 <input
 type="email"
 id="authEmail"
 placeholder="البريد الإلكتروني"
 autocomplete="email">
 
+
 <input
 type="password"
 id="authPassword"
 placeholder="كلمة المرور"
-autocomplete="new-password">
+autocomplete="current-password">
+
 
 <div id="confirmField">
 
@@ -1385,6 +1824,7 @@ autocomplete="new-password">
 
 </div>
 
+
 <button
 class="auth-submit"
 id="authSubmit"
@@ -1394,10 +1834,51 @@ onclick="registerUser()">
 
 </button>
 
+
+<button
+id="forgotPassword"
+onclick="resetPassword()"
+style="
+display:none;
+background:none;
+border:none;
+color:#d6b35a;
+margin-top:15px;
+font-size:14px;
+">
+
+نسيت كلمة المرور؟
+
+</button>
+
+
+<div class="auth-or">
+
+<span>
+أو
+</span>
+
+</div>
+
+
+<button
+class="google-btn"
+onclick="loginWithGoogle()">
+
+<span>
+G
+</span>
+
+تسجيل الدخول باستخدام Google
+
+</button>
+
+
 <div
 class="auth-message"
 id="authMessage">
 </div>
+
 
 <div class="auth-switch">
 
@@ -1405,13 +1886,17 @@ id="authMessage">
 لديك حساب بالفعل؟
 </span>
 
+
 <button
 onclick="showLogin()"
 id="authSwitchButton">
+
 تسجيل الدخول
+
 </button>
 
 </div>
+
 
 </div>
 
@@ -1421,7 +1906,7 @@ id="authSwitchButton">
 <script>
 
 /* =========================
-SUPABASE
+   SUPABASE
 ========================= */
 
 const SUPABASE_URL =
@@ -1438,21 +1923,27 @@ supabase.createClient(
 
 
 /* =========================
-HEADER
+   HEADER
 ========================= */
 
-window.addEventListener("scroll",function(){
+window.addEventListener(
+"scroll",
+function(){
 
     const header =
     document.getElementById("header");
 
     if(window.scrollY > 30){
 
-        header.classList.add("scrolled");
+        header.classList.add(
+            "scrolled"
+        );
 
     }else{
 
-        header.classList.remove("scrolled");
+        header.classList.remove(
+            "scrolled"
+        );
 
     }
 
@@ -1460,7 +1951,7 @@ window.addEventListener("scroll",function(){
 
 
 /* =========================
-SCROLL
+   SCROLL
 ========================= */
 
 function scrollToSection(id){
@@ -1480,7 +1971,7 @@ function scrollToSection(id){
 
 
 /* =========================
-CREATE STORE
+   CREATE STORE
 ========================= */
 
 function createStore(){
@@ -1491,13 +1982,15 @@ function createStore(){
 
 
 /* =========================
-OPEN REGISTER
+   OPEN REGISTER
 ========================= */
 
 function openRegister(){
 
     const modal =
-    document.getElementById("authModal");
+    document.getElementById(
+        "authModal"
+    );
 
     modal.style.setProperty(
         "display",
@@ -1505,49 +1998,85 @@ function openRegister(){
         "important"
     );
 
-    document.getElementById("authTitle")
-    .textContent =
+
+    document.getElementById(
+        "authTitle"
+    ).textContent =
     "أنشئ حسابك 🚀";
 
-    document.getElementById("authSubtitle")
-    .textContent =
+
+    document.getElementById(
+        "authSubtitle"
+    ).textContent =
     "ابدأ متجرك الإلكتروني مع LUNA&LEO MARKET";
 
-    document.getElementById("nameField")
-    .style.display="block";
 
-    document.getElementById("confirmField")
-    .style.display="block";
+    document.getElementById(
+        "nameField"
+    ).style.display =
+    "block";
 
-    document.getElementById("authSubmit")
-    .textContent="إنشاء الحساب";
 
-    document.getElementById("authSubmit")
-    .onclick=registerUser;
+    document.getElementById(
+        "confirmField"
+    ).style.display =
+    "block";
 
-    document.getElementById("authSwitchText")
-    .textContent="لديك حساب بالفعل؟";
 
-    document.getElementById("authSwitchButton")
-    .textContent="تسجيل الدخول";
+    document.getElementById(
+        "forgotPassword"
+    ).style.display =
+    "none";
 
-    document.getElementById("authSwitchButton")
-    .onclick=showLogin;
 
-    document.getElementById("authMessage")
-    .textContent="";
+    document.getElementById(
+        "authSubmit"
+    ).textContent =
+    "إنشاء الحساب";
+
+
+    document.getElementById(
+        "authSubmit"
+    ).onclick =
+    registerUser;
+
+
+    document.getElementById(
+        "authSwitchText"
+    ).textContent =
+    "لديك حساب بالفعل؟";
+
+
+    document.getElementById(
+        "authSwitchButton"
+    ).textContent =
+    "تسجيل الدخول";
+
+
+    document.getElementById(
+        "authSwitchButton"
+    ).onclick =
+    showLogin;
+
+
+    document.getElementById(
+        "authMessage"
+    ).textContent =
+    "";
 
 }
 
 
 /* =========================
-LOGIN SCREEN
+   LOGIN SCREEN
 ========================= */
 
 function login(){
 
     const modal =
-    document.getElementById("authModal");
+    document.getElementById(
+        "authModal"
+    );
 
     modal.style.setProperty(
         "display",
@@ -1555,43 +2084,77 @@ function login(){
         "important"
     );
 
-    document.getElementById("authTitle")
-    .textContent =
+
+    document.getElementById(
+        "authTitle"
+    ).textContent =
     "تسجيل الدخول 🔐";
 
-    document.getElementById("authSubtitle")
-    .textContent =
+
+    document.getElementById(
+        "authSubtitle"
+    ).textContent =
     "أهلاً بك مرة أخرى في LUNA&LEO MARKET";
 
-    document.getElementById("nameField")
-    .style.display="none";
 
-    document.getElementById("confirmField")
-    .style.display="none";
+    document.getElementById(
+        "nameField"
+    ).style.display =
+    "none";
 
-    document.getElementById("authSubmit")
-    .textContent="تسجيل الدخول";
 
-    document.getElementById("authSubmit")
-    .onclick=loginUser;
+    document.getElementById(
+        "confirmField"
+    ).style.display =
+    "none";
 
-    document.getElementById("authSwitchText")
-    .textContent="ليس لديك حساب؟";
 
-    document.getElementById("authSwitchButton")
-    .textContent="إنشاء حساب";
+    document.getElementById(
+        "forgotPassword"
+    ).style.display =
+    "block";
 
-    document.getElementById("authSwitchButton")
-    .onclick=openRegister;
 
-    document.getElementById("authMessage")
-    .textContent="";
+    document.getElementById(
+        "authSubmit"
+    ).textContent =
+    "تسجيل الدخول";
+
+
+    document.getElementById(
+        "authSubmit"
+    ).onclick =
+    loginUser;
+
+
+    document.getElementById(
+        "authSwitchText"
+    ).textContent =
+    "ليس لديك حساب؟";
+
+
+    document.getElementById(
+        "authSwitchButton"
+    ).textContent =
+    "إنشاء حساب";
+
+
+    document.getElementById(
+        "authSwitchButton"
+    ).onclick =
+    openRegister;
+
+
+    document.getElementById(
+        "authMessage"
+    ).textContent =
+    "";
 
 }
 
 
 /* =========================
-SHOW LOGIN
+   SHOW LOGIN
 ========================= */
 
 function showLogin(){
@@ -1602,13 +2165,15 @@ function showLogin(){
 
 
 /* =========================
-CLOSE MODAL
+   CLOSE
 ========================= */
 
 function closeAuth(){
 
     const modal =
-    document.getElementById("authModal");
+    document.getElementById(
+        "authModal"
+    );
 
     modal.style.setProperty(
         "display",
@@ -1620,29 +2185,39 @@ function closeAuth(){
 
 
 /* =========================
-REGISTER
+   REGISTER
 ========================= */
 
 async function registerUser(){
 
     const name =
-    document.getElementById("authName")
-    .value.trim();
+    document.getElementById(
+        "authName"
+    ).value.trim();
+
 
     const email =
-    document.getElementById("authEmail")
-    .value.trim();
+    document.getElementById(
+        "authEmail"
+    ).value.trim();
+
 
     const password =
-    document.getElementById("authPassword")
-    .value;
+    document.getElementById(
+        "authPassword"
+    ).value;
+
 
     const password2 =
-    document.getElementById("authPassword2")
-    .value;
+    document.getElementById(
+        "authPassword2"
+    ).value;
+
 
     const message =
-    document.getElementById("authMessage");
+    document.getElementById(
+        "authMessage"
+    );
 
 
     if(
@@ -1695,9 +2270,11 @@ async function registerUser(){
         password:password,
 
         options:{
+
             data:{
                 full_name:name
             }
+
         }
 
     });
@@ -1716,35 +2293,31 @@ async function registerUser(){
     message.textContent =
     "🎉 تم إنشاء الحساب بنجاح!";
 
-
-    setTimeout(function(){
-
-        login();
-
-        document.getElementById("authEmail")
-        .value=email;
-
-    },1500);
-
 }
 
 
 /* =========================
-LOGIN USER
+   LOGIN USER
 ========================= */
 
 async function loginUser(){
 
     const email =
-    document.getElementById("authEmail")
-    .value.trim();
+    document.getElementById(
+        "authEmail"
+    ).value.trim();
+
 
     const password =
-    document.getElementById("authPassword")
-    .value;
+    document.getElementById(
+        "authPassword"
+    ).value;
+
 
     const message =
-    document.getElementById("authMessage");
+    document.getElementById(
+        "authMessage"
+    );
 
 
     if(!email || !password){
@@ -1765,7 +2338,8 @@ async function loginUser(){
         data,
         error
     } =
-    await supabaseClient.auth.signInWithPassword({
+    await supabaseClient.auth
+    .signInWithPassword({
 
         email:email,
 
@@ -1777,7 +2351,7 @@ async function loginUser(){
     if(error){
 
         message.textContent =
-        "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+        "❌ " + error.message;
 
         return;
 
@@ -1787,43 +2361,58 @@ async function loginUser(){
     message.textContent =
     "🎉 تم تسجيل الدخول بنجاح!";
 
+
+    setTimeout(
+        function(){
+
+            closeAuth();
+
+        },
+        1000
+    );
+
 }
 
 
 /* =========================
-MOBILE MENU
+   GOOGLE
 ========================= */
 
-function toggleMenu(){
+async function loginWithGoogle(){
 
-    const links =
-    document.querySelector(".nav-links");
+    const message =
+    document.getElementById(
+        "authMessage"
+    );
 
-    if(
-        links.style.display === "flex"
-    ){
 
-        links.style.display="none";
+    message.textContent =
+    "⏳ جاري فتح Google...";
 
-    }else{
 
-        links.style.display="flex";
+    const {
+        data,
+        error
+    } =
+    await supabaseClient.auth
+    .signInWithOAuth({
 
-        links.style.position="absolute";
+        provider:"google",
 
-        links.style.top="70px";
+        options:{
 
-        links.style.right="5%";
+            redirectTo:
+            "https://luna-leo.vercel.app/"
 
-        links.style.left="5%";
+        }
 
-        links.style.padding="20px";
+    });
 
-        links.style.flexDirection="column";
 
-        links.style.background="#071113";
+    if(error){
 
-        links.style.borderRadius="15px";
+        message.textContent =
+        "❌ " + error.message;
 
     }
 
@@ -1831,12 +2420,135 @@ function toggleMenu(){
 
 
 /* =========================
-FAQ
+   RESET PASSWORD
+========================= */
+
+async function resetPassword(){
+
+    const email =
+    document.getElementById(
+        "authEmail"
+    ).value.trim();
+
+
+    const message =
+    document.getElementById(
+        "authMessage"
+    );
+
+
+    if(!email){
+
+        message.textContent =
+        "⚠️ اكتب بريدك الإلكتروني أولاً.";
+
+        return;
+
+    }
+
+
+    message.textContent =
+    "⏳ جاري إرسال رابط الاستعادة...";
+
+
+    const {
+        error
+    } =
+    await supabaseClient.auth
+    .resetPasswordForEmail(
+
+        email,
+
+        {
+
+            redirectTo:
+            "https://luna-leo.vercel.app/"
+
+        }
+
+    );
+
+
+    if(error){
+
+        message.textContent =
+        "❌ " + error.message;
+
+        return;
+
+    }
+
+
+    message.textContent =
+    "📩 تم إرسال رابط استعادة كلمة المرور إلى بريدك.";
+
+}
+
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+function toggleMenu(){
+
+    const links =
+    document.querySelector(
+        ".nav-links"
+    );
+
+
+    if(
+        links.style.display ===
+        "flex"
+    ){
+
+        links.style.display =
+        "none";
+
+    }else{
+
+        links.style.display =
+        "flex";
+
+        links.style.position =
+        "absolute";
+
+        links.style.top =
+        "70px";
+
+        links.style.right =
+        "5%";
+
+        links.style.left =
+        "5%";
+
+        links.style.padding =
+        "20px";
+
+        links.style.flexDirection =
+        "column";
+
+        links.style.background =
+        "#071113";
+
+        links.style.borderRadius =
+        "15px";
+
+    }
+
+}
+
+
+/* =========================
+   FAQ
 ========================= */
 
 document
-.querySelectorAll(".faq-question")
-.forEach(function(button){
+.querySelectorAll(
+    ".faq-question"
+)
+.forEach(
+function(button){
 
     button.addEventListener(
         "click",
@@ -1845,9 +2557,13 @@ document
             const item =
             button.parentElement;
 
+
             document
-            .querySelectorAll(".faq-item")
-            .forEach(function(other){
+            .querySelectorAll(
+                ".faq-item"
+            )
+            .forEach(
+            function(other){
 
                 if(other !== item){
 
@@ -1857,6 +2573,7 @@ document
                 }
 
             });
+
 
             item.classList
             .toggle("active");
@@ -1868,11 +2585,13 @@ document
 
 
 /* =========================
-CLICK OUTSIDE MODAL
+   CLOSE OUTSIDE
 ========================= */
 
 document
-.getElementById("authModal")
+.getElementById(
+    "authModal"
+)
 .addEventListener(
     "click",
     function(e){
@@ -1888,43 +2607,43 @@ document
 
 
 /* =========================
-ESC CLOSE
+   ESC
 ========================= */
 
 document.addEventListener(
-    "keydown",
-    function(e){
+"keydown",
+function(e){
 
-        if(e.key === "Escape"){
+    if(e.key === "Escape"){
 
-            closeAuth();
-
-        }
+        closeAuth();
 
     }
-);
+
+});
 
 
 /* =========================
-PREVENT MODAL ON PAGE LOAD
+   FORCE HIDDEN ON LOAD
 ========================= */
 
 document.addEventListener(
-    "DOMContentLoaded",
-    function(){
+"DOMContentLoaded",
+function(){
 
-        document
-        .getElementById("authModal")
-        .style.setProperty(
-            "display",
-            "none",
-            "important"
-        );
+    document
+    .getElementById(
+        "authModal"
+    )
+    .style.setProperty(
+        "display",
+        "none",
+        "important"
+    );
 
-    }
-);
+});
 
 </script>
 
 </body>
-    </html>
+</html>
