@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>LUNA&LEO MARKET | أنشئ متجرك الإلكتروني</title>
 
 <meta name="description"
 content="LUNA&LEO MARKET منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة.">
-    
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -25,7 +31,7 @@ content="LUNA&LEO MARKET منصة متكاملة لإنشاء وإدارة مت�
     --text:#172022;
     --muted:#687577;
     --light:#f7f8f7;
-    --white:#ffffff;
+    --white:#fff;
     --border:#e7eaea;
     --green:#159b83;
 }
@@ -36,7 +42,7 @@ html{
 
 body{
     font-family:Tahoma,Arial,sans-serif;
-    background:var(--white);
+    background:white;
     color:var(--text);
     overflow-x:hidden;
 }
@@ -56,7 +62,7 @@ button{
     margin:auto;
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 
 .header{
     position:fixed;
@@ -84,7 +90,6 @@ button{
 .logo{
     font-size:25px;
     font-weight:900;
-    letter-spacing:1px;
     color:white;
 }
 
@@ -96,13 +101,8 @@ button{
     display:flex;
     align-items:center;
     gap:30px;
-    color:#fff;
+    color:white;
     font-size:14px;
-}
-
-.nav-links a{
-    opacity:.9;
-    transition:.25s;
 }
 
 .nav-links a:hover{
@@ -148,7 +148,7 @@ button{
     font-size:27px;
 }
 
-/* ================= HERO ================= */
+/* HERO */
 
 .hero{
     min-height:800px;
@@ -156,22 +156,15 @@ button{
     display:flex;
     align-items:center;
     overflow:hidden;
+
     background:
-    linear-gradient(90deg,rgba(5,15,17,.97),rgba(5,15,17,.78)),
+    linear-gradient(
+        90deg,
+        rgba(5,15,17,.97),
+        rgba(5,15,17,.78)
+    ),
     url("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=2000&q=85")
     center/cover;
-}
-
-.hero::after{
-    content:"";
-    position:absolute;
-    width:600px;
-    height:600px;
-    border-radius:50%;
-    background:rgba(214,179,90,.10);
-    filter:blur(100px);
-    left:-200px;
-    bottom:-250px;
 }
 
 .hero-content{
@@ -190,8 +183,6 @@ button{
 
 .hero-badge{
     display:inline-flex;
-    align-items:center;
-    gap:8px;
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.15);
     color:var(--gold-light);
@@ -252,9 +243,7 @@ button{
     letter-spacing:3px;
 }
 
-.hero-dashboard{
-    position:relative;
-}
+/* DASHBOARD */
 
 .dashboard-card{
     background:rgba(255,255,255,.95);
@@ -281,14 +270,11 @@ button{
 }
 
 .dashboard-menu{
-    width:35px;
-    height:10px;
     display:flex;
     gap:4px;
 }
 
 .dashboard-menu i{
-    display:block;
     width:7px;
     height:7px;
     border-radius:50%;
@@ -351,7 +337,6 @@ button{
     background:#f5f6f6;
     border-radius:14px;
     position:relative;
-    overflow:hidden;
 }
 
 .chart-line{
@@ -365,61 +350,7 @@ button{
     transform:skewY(-8deg);
 }
 
-.floating-card{
-    position:absolute;
-    background:white;
-    padding:15px 18px;
-    border-radius:14px;
-    box-shadow:0 15px 35px rgba(0,0,0,.18);
-    font-size:12px;
-}
-
-.floating-card.one{
-    right:-35px;
-    top:70px;
-}
-
-.floating-card.two{
-    left:-35px;
-    bottom:60px;
-}
-
-.floating-card strong{
-    display:block;
-    font-size:18px;
-    margin-top:5px;
-}
-
-/* ================= TRUST ================= */
-
-.trusted{
-    background:white;
-    padding:35px 0;
-    border-bottom:1px solid var(--border);
-}
-
-.trusted-title{
-    text-align:center;
-    color:#8a9293;
-    font-size:13px;
-    margin-bottom:25px;
-}
-
-.trusted-logos{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:45px;
-}
-
-.trusted-logos span{
-    color:#899293;
-    font-size:19px;
-    font-weight:900;
-}
-
-/* ================= SECTIONS ================= */
+/* SECTIONS */
 
 .section{
     padding:100px 0;
@@ -451,105 +382,70 @@ button{
 .section-heading p{
     color:var(--muted);
     line-height:1.9;
-    font-size:16px;
 }
 
-/* ================= PROBLEM ================= */
+/* CARDS */
 
-.problem-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:22px;
-}
-
-.problem-card{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:30px;
-    transition:.3s;
-}
-
-.problem-card:hover{
-    transform:translateY(-7px);
-    box-shadow:0 20px 50px rgba(0,0,0,.07);
-}
-
-.problem-icon{
-    width:55px;
-    height:55px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:15px;
-    background:#f6ecd1;
-    color:#9a7921;
-    font-size:24px;
-    margin-bottom:20px;
-}
-
-.problem-card h3{
-    margin-bottom:12px;
-    font-size:19px;
-}
-
-.problem-card p{
-    color:var(--muted);
-    line-height:1.8;
-    font-size:14px;
-}
-
-/* ================= FEATURES ================= */
-
+.problem-grid,
 .features-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:22px;
 }
 
+.problem-card,
 .feature{
-    padding:30px;
-    border-radius:20px;
     background:white;
     border:1px solid var(--border);
+    border-radius:20px;
+    padding:30px;
     transition:.3s;
 }
 
+.problem-card:hover,
 .feature:hover{
-    border-color:#ddc77f;
-    transform:translateY(-5px);
+    transform:translateY(-6px);
+    box-shadow:0 20px 50px rgba(0,0,0,.07);
 }
 
+.problem-icon,
 .feature-icon{
     width:55px;
     height:55px;
-    border-radius:15px;
     display:flex;
     align-items:center;
     justify-content:center;
-    background:#071719;
-    color:var(--gold-light);
-    font-size:24px;
+    border-radius:15px;
     margin-bottom:20px;
+    font-size:24px;
 }
 
+.problem-icon{
+    background:#f6ecd1;
+}
+
+.feature-icon{
+    background:#071719;
+    color:var(--gold-light);
+}
+
+.problem-card h3,
 .feature h3{
-    font-size:18px;
     margin-bottom:12px;
 }
 
+.problem-card p,
 .feature p{
     color:var(--muted);
-    font-size:14px;
     line-height:1.9;
+    font-size:14px;
 }
 
-/* ================= STORE ================= */
+/* STORE */
 
 .store-section{
     background:var(--dark);
     color:white;
-    overflow:hidden;
 }
 
 .store-grid{
@@ -585,8 +481,6 @@ button{
     display:flex;
     align-items:center;
     gap:10px;
-    color:#e5ebeb;
-    font-size:14px;
 }
 
 .check{
@@ -601,10 +495,9 @@ button{
 }
 
 .store-preview{
-    background:#fff;
+    background:white;
     border-radius:25px;
     padding:20px;
-    box-shadow:0 30px 80px rgba(0,0,0,.3);
 }
 
 .preview-header{
@@ -615,6 +508,7 @@ button{
 }
 
 .preview-brand{
+    color:#222;
     font-weight:900;
 }
 
@@ -646,18 +540,16 @@ button{
     font-size:12px;
 }
 
-/* ================= HOW ================= */
+/* STEPS */
 
 .steps{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:20px;
-    counter-reset:steps;
 }
 
 .step{
     text-align:center;
-    position:relative;
 }
 
 .step-number{
@@ -674,23 +566,18 @@ button{
     margin:0 auto 20px;
 }
 
-.step h3{
-    margin-bottom:10px;
-}
-
 .step p{
     color:var(--muted);
     font-size:13px;
     line-height:1.8;
 }
 
-/* ================= PRICING ================= */
+/* PRICING */
 
 .pricing{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:20px;
-    align-items:stretch;
 }
 
 .price-card{
@@ -698,36 +585,25 @@ button{
     border:1px solid var(--border);
     border-radius:22px;
     padding:30px;
-    position:relative;
 }
 
 .price-card.popular{
     border:2px solid var(--gold);
     transform:translateY(-10px);
-    box-shadow:0 25px 60px rgba(0,0,0,.08);
 }
 
 .popular-label{
-    position:absolute;
-    top:-13px;
-    right:25px;
+    display:inline-block;
     background:var(--gold);
-    color:#151515;
     padding:6px 14px;
     border-radius:20px;
     font-size:11px;
-    font-weight:bold;
-}
-
-.price-card h3{
-    font-size:20px;
-    margin-bottom:10px;
+    margin-bottom:15px;
 }
 
 .price-description{
     color:var(--muted);
     font-size:13px;
-    min-height:40px;
 }
 
 .price{
@@ -758,7 +634,6 @@ button{
 .price-features li::before{
     content:"✓";
     color:var(--green);
-    font-weight:bold;
     margin-left:8px;
 }
 
@@ -766,7 +641,7 @@ button{
     width:100%;
 }
 
-/* ================= FAQ ================= */
+/* FAQ */
 
 .faq{
     max-width:850px;
@@ -784,17 +659,14 @@ button{
     padding:22px 0;
     display:flex;
     justify-content:space-between;
-    align-items:center;
     text-align:right;
     font-size:16px;
     font-weight:bold;
-    color:var(--text);
 }
 
 .faq-question span{
-    font-size:24px;
     color:var(--gold);
-    transition:.3s;
+    font-size:24px;
 }
 
 .faq-answer{
@@ -803,63 +675,41 @@ button{
     transition:.35s;
 }
 
-.faq-answer p{
-    color:var(--muted);
-    line-height:1.9;
-    font-size:14px;
-    padding:0 0 20px;
-}
-
 .faq-item.active .faq-answer{
     max-height:150px;
 }
 
-.faq-item.active .faq-question span{
-    transform:rotate(45deg);
+.faq-answer p{
+    color:var(--muted);
+    line-height:1.9;
+    padding-bottom:20px;
 }
 
-/* ================= CTA ================= */
+/* CTA */
 
 .cta-section{
     padding:80px 0;
 }
 
 .cta{
-    background:
-    linear-gradient(135deg,#0a1a1c,#142b2d);
+    background:linear-gradient(135deg,#0a1a1c,#142b2d);
     border-radius:30px;
     padding:70px 40px;
     text-align:center;
     color:white;
-    position:relative;
-    overflow:hidden;
-}
-
-.cta::before{
-    content:"";
-    position:absolute;
-    width:300px;
-    height:300px;
-    border-radius:50%;
-    background:rgba(214,179,90,.12);
-    filter:blur(50px);
-    left:-100px;
-    bottom:-180px;
 }
 
 .cta h2{
-    position:relative;
     font-size:clamp(30px,4vw,45px);
     margin-bottom:15px;
 }
 
 .cta p{
-    position:relative;
     color:#c8d1d2;
     margin-bottom:28px;
 }
 
-/* ================= FOOTER ================= */
+/* FOOTER */
 
 .footer{
     background:#050d0f;
@@ -878,7 +728,6 @@ button{
     color:#899697;
     line-height:1.9;
     font-size:13px;
-    max-width:330px;
     margin-top:15px;
 }
 
@@ -892,11 +741,6 @@ button{
     color:#9ca8a9;
     font-size:13px;
     margin-bottom:12px;
-    transition:.2s;
-}
-
-.footer-column a:hover{
-    color:white;
 }
 
 .footer-bottom{
@@ -904,12 +748,116 @@ button{
     padding-top:22px;
     display:flex;
     justify-content:space-between;
-    gap:20px;
     color:#778485;
     font-size:12px;
 }
 
-/* ================= MOBILE ================= */
+/* AUTH */
+
+.auth-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:rgba(0,0,0,.78);
+    backdrop-filter:blur(8px);
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.auth-box{
+    width:100%;
+    max-width:430px;
+    background:#071113;
+    border:1px solid rgba(214,179,90,.35);
+    border-radius:25px;
+    padding:35px 25px;
+    position:relative;
+    box-shadow:0 25px 80px rgba(0,0,0,.6);
+    text-align:center;
+}
+
+.auth-close{
+    position:absolute;
+    top:10px;
+    left:15px;
+    border:0;
+    background:none;
+    color:white;
+    font-size:30px;
+}
+
+.auth-logo{
+    font-size:25px;
+    font-weight:900;
+    color:white;
+    margin-bottom:10px;
+}
+
+.auth-logo span{
+    color:var(--gold-light);
+}
+
+.auth-box h2{
+    color:white;
+    margin-bottom:8px;
+}
+
+.auth-box p{
+    color:#aaa;
+    font-size:14px;
+    margin-bottom:22px;
+}
+
+.auth-box input{
+    width:100%;
+    padding:14px;
+    margin-bottom:12px;
+    border-radius:12px;
+    border:1px solid #263438;
+    background:#101b1d;
+    color:white;
+    outline:none;
+    font-family:inherit;
+}
+
+.auth-box input:focus{
+    border-color:var(--gold);
+}
+
+.auth-submit{
+    width:100%;
+    padding:15px;
+    border:0;
+    border-radius:12px;
+    background:linear-gradient(135deg,#d4af37,#f1d477);
+    color:#071113;
+    font-weight:900;
+    font-size:16px;
+}
+
+.auth-message{
+    min-height:25px;
+    margin-top:12px;
+    color:var(--gold-light);
+    font-size:13px;
+}
+
+.auth-switch{
+    color:#aaa;
+    font-size:14px;
+    margin-top:18px;
+}
+
+.auth-switch button{
+    background:none;
+    border:0;
+    color:var(--gold-light);
+    font-weight:bold;
+}
+
+/* MOBILE */
 
 @media(max-width:900px){
 
@@ -926,38 +874,21 @@ button{
     }
 
     .hero{
-        min-height:auto;
         padding:130px 0 70px;
     }
 
     .hero-content{
         grid-template-columns:1fr;
-        gap:50px;
         text-align:center;
     }
 
     .hero-description{
-        margin-left:auto;
-        margin-right:auto;
+        margin:auto auto 30px;
     }
 
     .hero-buttons,
     .hero-trust{
         justify-content:center;
-    }
-
-    .hero-dashboard{
-        max-width:600px;
-        width:100%;
-        margin:auto;
-    }
-
-    .floating-card.one{
-        right:-5px;
-    }
-
-    .floating-card.two{
-        left:-5px;
     }
 
     .problem-grid,
@@ -967,12 +898,10 @@ button{
 
     .store-grid{
         grid-template-columns:1fr;
-        gap:40px;
     }
 
     .steps{
         grid-template-columns:1fr 1fr;
-        gap:35px;
     }
 
     .pricing{
@@ -988,26 +917,10 @@ button{
     .footer-grid{
         grid-template-columns:1fr 1fr;
     }
+
 }
 
 @media(max-width:600px){
-
-    .container{
-        width:90%;
-    }
-
-    .header{
-        padding:13px 0;
-    }
-
-    .logo{
-        font-size:20px;
-    }
-
-    .nav-actions .btn{
-        padding:9px 12px;
-        font-size:11px;
-    }
 
     .hero h1{
         font-size:40px;
@@ -1025,50 +938,14 @@ button{
         grid-template-columns:85px 1fr;
     }
 
-    .dashboard-side{
-        padding:10px;
-    }
-
     .dash-stat-row{
         grid-template-columns:1fr;
-    }
-
-    .chart{
-        height:120px;
-    }
-
-    .floating-card{
-        display:none;
-    }
-
-    .trusted-logos{
-        gap:20px;
-    }
-
-    .trusted-logos span{
-        font-size:14px;
-    }
-
-    .section{
-        padding:70px 0;
     }
 
     .problem-grid,
     .features-grid,
     .steps{
         grid-template-columns:1fr;
-    }
-
-    .preview-grid{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .preview-product img{
-        height:110px;
-    }
-
-    .cta{
-        padding:50px 20px;
     }
 
     .footer-grid{
@@ -1079,13 +956,14 @@ button{
         flex-direction:column;
         text-align:center;
     }
+
 }
+
 </style>
+
 </head>
 
 <body>
-
-<!-- ================= HEADER ================= -->
 
 <header class="header" id="header">
 
@@ -1096,33 +974,37 @@ LUNA<span>&</span>LEO
 </a>
 
 <nav class="nav-links">
+
 <a href="#home">الرئيسية</a>
 <a href="#features">المميزات</a>
 <a href="#how">كيف تعمل؟</a>
 <a href="#pricing">الباقات</a>
 <a href="#faq">الأسئلة الشائعة</a>
+
 </nav>
 
 <div class="nav-actions">
-<button class="btn btn-outline" onclick="login()">
+
+<button class="btn btn-outline"
+onclick="login()">
 تسجيل الدخول
 </button>
 
-<button class="btn btn-gold" onclick="createStore()">
+<button class="btn btn-gold"
+onclick="createStore()">
 أنشئ متجرك
 </button>
 
-<button class="mobile-menu" onclick="toggleMenu()">
+<button class="mobile-menu"
+onclick="toggleMenu()">
 ☰
 </button>
+
 </div>
 
 </div>
 
 </header>
-
-
-<!-- ================= HERO ================= -->
 
 <section class="hero" id="home">
 
@@ -1135,7 +1017,8 @@ LUNA<span>&</span>LEO
 </div>
 
 <h1>
-متجرك الإلكتروني<br>
+متجرك الإلكتروني
+<br>
 <span>يبدأ من هنا.</span>
 </h1>
 
@@ -1171,7 +1054,6 @@ onclick="scrollToSection('features')">
 
 </div>
 
-
 <div class="hero-dashboard">
 
 <div class="dashboard-card">
@@ -1183,9 +1065,7 @@ LUNA<span>&</span>LEO
 </div>
 
 <div class="dashboard-menu">
-<i></i>
-<i></i>
-<i></i>
+<i></i><i></i><i></i>
 </div>
 
 </div>
@@ -1233,49 +1113,11 @@ LUNA<span>&</span>LEO
 
 </div>
 
-
-<div class="floating-card one">
-المبيعات اليوم
-<strong>+24.8%</strong>
-</div>
-
-<div class="floating-card two">
-طلبات جديدة
-<strong>+18</strong>
-</div>
-
 </div>
 
 </div>
 
 </section>
-
-
-<!-- ================= TRUSTED ================= -->
-
-<section class="trusted">
-
-<div class="container">
-
-<div class="trusted-title">
-جاهز للربط مع أهم خدمات التجارة الإلكترونية
-</div>
-
-<div class="trusted-logos">
-<span>BOSTA</span>
-<span>STRIPE</span>
-<span>PayPal</span>
-<span>aramex</span>
-<span>Mylerz</span>
-<span>PayTabs</span>
-</div>
-
-</div>
-
-</section>
-
-
-<!-- ================= PROBLEM ================= -->
 
 <section class="section gray">
 
@@ -1298,49 +1140,40 @@ LUNA<span>&</span>LEO
 
 </div>
 
-
 <div class="problem-grid">
 
 <div class="problem-card">
 
 <div class="problem-icon">⏱</div>
 
-<h3>
-وقت ضائع
-</h3>
+<h3>وقت ضائع</h3>
 
 <p>
-إدارة المنتجات والطلبات والعملاء يدويًا قد تستهلك وقتك وتبعدك عن تطوير تجارتك.
+إدارة المنتجات والطلبات والعملاء يدويًا قد تستهلك وقتك.
 </p>
 
 </div>
-
 
 <div class="problem-card">
 
 <div class="problem-icon">▦</div>
 
-<h3>
-طلبات متفرقة
-</h3>
+<h3>طلبات متفرقة</h3>
 
 <p>
-اجمع طلبات عملائك في لوحة واحدة بدل البحث بينها في الرسائل والمنصات المختلفة.
+اجمع طلبات عملائك في لوحة واحدة بدل البحث بينها في الرسائل.
 </p>
 
 </div>
-
 
 <div class="problem-card">
 
 <div class="problem-icon">◉</div>
 
-<h3>
-صعوبة المتابعة
-</h3>
+<h3>صعوبة المتابعة</h3>
 
 <p>
-تابع مبيعاتك وأداء متجرك بشكل أوضح من خلال لوحة تحكم بسيطة.
+تابع مبيعاتك وأداء متجرك بشكل أوضح من لوحة تحكم بسيطة.
 </p>
 
 </div>
@@ -1350,9 +1183,6 @@ LUNA<span>&</span>LEO
 </div>
 
 </section>
-
-
-<!-- ================= FEATURES ================= -->
 
 <section class="section" id="features">
 
@@ -1369,90 +1199,47 @@ LUNA<span>&</span>LEO
 </h2>
 
 <p>
-LUNA&LEO MARKET تساعدك على تشغيل تجارتك الإلكترونية
-بدون الحاجة إلى أن تكون خبيرًا في البرمجة.
+LUNA&LEO MARKET تساعدك على تشغيل تجارتك الإلكترونية بدون خبرة برمجية.
 </p>
 
 </div>
-
 
 <div class="features-grid">
 
 <div class="feature">
-
 <div class="feature-icon">🛍</div>
-
 <h3>متجر إلكتروني احترافي</h3>
-
-<p>
-اعرض منتجاتك في واجهة جميلة ومتجاوبة مع الهاتف والكمبيوتر.
-</p>
-
+<p>اعرض منتجاتك في واجهة جميلة ومتجاوبة.</p>
 </div>
 
-
 <div class="feature">
-
 <div class="feature-icon">📦</div>
-
 <h3>إدارة المنتجات</h3>
-
-<p>
-أضف المنتجات والصور والأسعار والمخزون بسهولة من لوحة التحكم.
-</p>
-
+<p>أضف المنتجات والصور والأسعار والمخزون بسهولة.</p>
 </div>
 
-
 <div class="feature">
-
 <div class="feature-icon">🧾</div>
-
 <h3>إدارة الطلبات</h3>
-
-<p>
-استقبل طلبات العملاء وتابع حالتها من لحظة الطلب حتى التسليم.
-</p>
-
+<p>استقبل الطلبات وتابع حالتها حتى التسليم.</p>
 </div>
 
-
 <div class="feature">
-
 <div class="feature-icon">👥</div>
-
 <h3>إدارة العملاء</h3>
-
-<p>
-احتفظ ببيانات عملائك وسجل طلباتهم لتقديم تجربة أفضل.
-</p>
-
+<p>احتفظ ببيانات العملاء وسجل طلباتهم.</p>
 </div>
 
-
 <div class="feature">
-
 <div class="feature-icon">📊</div>
-
 <h3>تقارير المبيعات</h3>
-
-<p>
-تابع المبيعات والطلبات وأداء متجرك بطريقة واضحة وبسيطة.
-</p>
-
+<p>تابع المبيعات والطلبات بطريقة واضحة.</p>
 </div>
 
-
 <div class="feature">
-
 <div class="feature-icon">📱</div>
-
 <h3>متوافق مع الموبايل</h3>
-
-<p>
-متجرك ولوحة التحكم مصممان للعمل بشكل ممتاز على الهاتف.
-</p>
-
+<p>متجرك يعمل بشكل ممتاز على الهاتف والكمبيوتر.</p>
 </div>
 
 </div>
@@ -1460,9 +1247,6 @@ LUNA&LEO MARKET تساعدك على تشغيل تجارتك الإلكتروني
 </div>
 
 </section>
-
-
-<!-- ================= STORE ================= -->
 
 <section class="section store-section">
 
@@ -1475,45 +1259,25 @@ LUNA&LEO MARKET تساعدك على تشغيل تجارتك الإلكتروني
 </div>
 
 <h2>
-أنشئ متجرًا يعبر عن <span>علامتك التجارية</span>
+أنشئ متجرًا يعبر عن
+<span>علامتك التجارية</span>
 </h2>
 
 <p>
-اختار المنتجات، الصور، الأسعار والمعلومات الخاصة بمتجرك،
-واجعل عملاءك يتصفحون تجربة شراء بسيطة واحترافية.
+اختار المنتجات والصور والأسعار والمعلومات الخاصة بمتجرك.
 </p>
 
 <ul class="store-list">
 
-<li>
-<span class="check">✓</span>
-إدارة المنتجات والمخزون
-</li>
-
-<li>
-<span class="check">✓</span>
-استقبال طلبات العملاء
-</li>
-
-<li>
-<span class="check">✓</span>
-إدارة بيانات العملاء
-</li>
-
-<li>
-<span class="check">✓</span>
-واجهة متجاوبة مع جميع الأجهزة
-</li>
-
-<li>
-<span class="check">✓</span>
-لوحة تحكم سهلة الاستخدام
-</li>
+<li><span class="check">✓</span> إدارة المنتجات والمخزون</li>
+<li><span class="check">✓</span> استقبال طلبات العملاء</li>
+<li><span class="check">✓</span> إدارة بيانات العملاء</li>
+<li><span class="check">✓</span> واجهة متجاوبة</li>
+<li><span class="check">✓</span> لوحة تحكم سهلة</li>
 
 </ul>
 
 </div>
-
 
 <div class="store-preview">
 
@@ -1541,7 +1305,6 @@ LUNA<span>&</span>LEO STORE
 
 </div>
 
-
 <div class="preview-product">
 
 <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80">
@@ -1554,7 +1317,6 @@ LUNA<span>&</span>LEO STORE
 
 </div>
 
-
 <div class="preview-product">
 
 <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=80">
@@ -1566,7 +1328,6 @@ LUNA<span>&</span>LEO STORE
 </div>
 
 </div>
-
 
 <div class="preview-product">
 
@@ -1588,9 +1349,6 @@ LUNA<span>&</span>LEO STORE
 
 </section>
 
-
-<!-- ================= HOW ================= -->
-
 <section class="section" id="how">
 
 <div class="container">
@@ -1605,64 +1363,32 @@ LUNA<span>&</span>LEO STORE
 ابدأ تجارتك في 4 خطوات
 </h2>
 
-<p>
-لا تحتاج إلى خبرة برمجية لإنشاء متجرك والبدء في البيع.
-</p>
-
 </div>
-
 
 <div class="steps">
 
 <div class="step">
-
 <div class="step-number">01</div>
-
 <h3>أنشئ حسابك</h3>
-
-<p>
-سجل حسابك في LUNA&LEO وابدأ إعداد متجرك.
-</p>
-
+<p>سجل حسابك وابدأ إعداد متجرك.</p>
 </div>
 
-
 <div class="step">
-
 <div class="step-number">02</div>
-
 <h3>أنشئ متجرك</h3>
-
-<p>
-أضف اسم المتجر ومعلوماته وصورته.
-</p>
-
+<p>أضف اسم المتجر ومعلوماته.</p>
 </div>
 
-
 <div class="step">
-
 <div class="step-number">03</div>
-
 <h3>أضف منتجاتك</h3>
-
-<p>
-ارفع صور المنتجات وحدد الأسعار والمخزون.
-</p>
-
+<p>أضف الصور والأسعار والمخزون.</p>
 </div>
 
-
 <div class="step">
-
 <div class="step-number">04</div>
-
 <h3>ابدأ البيع</h3>
-
-<p>
-شارك متجرك مع عملائك واستقبل طلباتك.
-</p>
-
+<p>شارك متجرك واستقبل الطلبات.</p>
 </div>
 
 </div>
@@ -1670,9 +1396,6 @@ LUNA<span>&</span>LEO STORE
 </div>
 
 </section>
-
-
-<!-- ================= PRICING ================= -->
 
 <section class="section gray" id="pricing">
 
@@ -1688,15 +1411,9 @@ LUNA<span>&</span>LEO STORE
 ابدأ مجانًا وتوسع وقتما تريد
 </h2>
 
-<p>
-اختار الباقة المناسبة لحجم تجارتك، ويمكنك التطوير في أي وقت.
-</p>
-
 </div>
 
-
 <div class="pricing">
-
 
 <div class="price-card">
 
@@ -1721,14 +1438,12 @@ LUNA<span>&</span>LEO STORE
 
 </ul>
 
-<button class="btn btn-outline price-button"
-style="color:#222;border-color:#ddd"
+<button class="btn btn-gold price-button"
 onclick="createStore()">
 ابدأ مجانًا
 </button>
 
 </div>
-
 
 <div class="price-card popular">
 
@@ -1764,7 +1479,6 @@ onclick="createStore()">
 
 </div>
 
-
 <div class="price-card">
 
 <h3>أعمال</h3>
@@ -1784,12 +1498,10 @@ onclick="createStore()">
 <li>إدارة متقدمة</li>
 <li>تقارير موسعة</li>
 <li>أولوية الدعم</li>
-<li>مميزات مستقبلية</li>
 
 </ul>
 
-<button class="btn btn-outline price-button"
-style="color:#222;border-color:#ddd"
+<button class="btn btn-gold price-button"
 onclick="createStore()">
 اختر الباقة
 </button>
@@ -1801,9 +1513,6 @@ onclick="createStore()">
 </div>
 
 </section>
-
-
-<!-- ================= FAQ ================= -->
 
 <section class="section" id="faq">
 
@@ -1819,12 +1528,7 @@ onclick="createStore()">
 عندك سؤال؟
 </h2>
 
-<p>
-دي أهم الأسئلة التي قد تحتاج إلى معرفة إجابتها قبل البدء.
-</p>
-
 </div>
-
 
 <div class="faq">
 
@@ -1836,15 +1540,12 @@ onclick="createStore()">
 </button>
 
 <div class="faq-answer">
-
 <p>
-نعم. هدف LUNA&LEO أن تستطيع إنشاء متجرك وإضافة منتجاتك وإدارة طلباتك بدون خبرة برمجية.
+نعم، تستطيع إنشاء متجرك وإضافة منتجاتك بدون خبرة برمجية.
 </p>
-
 </div>
 
 </div>
-
 
 <div class="faq-item">
 
@@ -1854,51 +1555,12 @@ onclick="createStore()">
 </button>
 
 <div class="faq-answer">
-
 <p>
-نعم، تصميم المنصة متجاوب مع الهواتف والأجهزة اللوحية وأجهزة الكمبيوتر.
+نعم، المنصة متجاوبة مع الهواتف والأجهزة المختلفة.
 </p>
-
 </div>
 
 </div>
-
-
-<div class="faq-item">
-
-<button class="faq-question">
-هل أستطيع إضافة منتجات كثيرة؟
-<span>+</span>
-</button>
-
-<div class="faq-answer">
-
-<p>
-يمكنك إضافة منتجاتك وإدارتها من لوحة التحكم، وتختلف الحدود حسب الباقة المستخدمة.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="faq-item">
-
-<button class="faq-question">
-هل أستطيع تغيير شكل متجري؟
-<span>+</span>
-</button>
-
-<div class="faq-answer">
-
-<p>
-نعم، سنوفر خيارات لتخصيص شكل المتجر والألوان والصور والهوية التجارية.
-</p>
-
-</div>
-
-</div>
-
 
 <div class="faq-item">
 
@@ -1908,11 +1570,9 @@ onclick="createStore()">
 </button>
 
 <div class="faq-answer">
-
 <p>
-لا. المنصة مصممة لتكون بسيطة وسهلة حتى للمستخدم الذي ليس لديه خبرة في البرمجة.
+لا، المنصة مصممة لتكون سهلة للمستخدمين.
 </p>
-
 </div>
 
 </div>
@@ -1922,9 +1582,6 @@ onclick="createStore()">
 </div>
 
 </section>
-
-
-<!-- ================= CTA ================= -->
 
 <section class="cta-section">
 
@@ -1937,7 +1594,7 @@ onclick="createStore()">
 </h2>
 
 <p>
-أنشئ متجرك وابدأ في عرض منتجاتك مع LUNA&LEO MARKET.
+أنشئ متجرك وابدأ في عرض منتجاتك.
 </p>
 
 <button class="btn btn-gold hero-btn"
@@ -1950,9 +1607,6 @@ onclick="createStore()">
 </div>
 
 </section>
-
-
-<!-- ================= FOOTER ================= -->
 
 <footer class="footer">
 
@@ -1972,7 +1626,6 @@ LUNA<span>&</span>LEO
 
 </div>
 
-
 <div class="footer-column">
 
 <h4>المنصة</h4>
@@ -1984,17 +1637,19 @@ LUNA<span>&</span>LEO
 
 </div>
 
-
 <div class="footer-column">
 
 <h4>حسابك</h4>
 
-<a href="#" onclick="login();return false;">تسجيل الدخول</a>
-<a href="#" onclick="createStore();return false;">إنشاء متجر</a>
-<a href="#">لوحة التحكم</a>
+<a href="#" onclick="login();return false;">
+تسجيل الدخول
+</a>
+
+<a href="#" onclick="createStore();return false;">
+إنشاء متجر
+</a>
 
 </div>
-
 
 <div class="footer-column">
 
@@ -2008,7 +1663,6 @@ LUNA<span>&</span>LEO
 </div>
 
 </div>
-
 
 <div class="footer-bottom">
 
@@ -2026,98 +1680,394 @@ LUNA<span>&</span>LEO
 
 </footer>
 
+<!-- AUTH MODAL -->
+
+<div id="authModal" class="auth-modal">
+
+<div class="auth-box">
+
+<button class="auth-close"
+onclick="closeAuth()">
+×
+</button>
+
+<div class="auth-logo">
+LUNA<span>&</span>LEO
+</div>
+
+<h2 id="authTitle">
+أنشئ حسابك 🚀
+</h2>
+
+<p id="authSubtitle">
+ابدأ متجرك الإلكتروني مع LUNA&LEO MARKET
+</p>
+
+<div id="nameField">
+
+<input
+type="text"
+id="authName"
+placeholder="الاسم"
+autocomplete="name">
+
+</div>
+
+<input
+type="email"
+id="authEmail"
+placeholder="البريد الإلكتروني"
+autocomplete="email">
+
+<input
+type="password"
+id="authPassword"
+placeholder="كلمة المرور"
+autocomplete="new-password">
+
+<div id="confirmField">
+
+<input
+type="password"
+id="authPassword2"
+placeholder="تأكيد كلمة المرور"
+autocomplete="new-password">
+
+</div>
+
+<button
+class="auth-submit"
+id="authSubmit"
+onclick="registerUser()">
+
+إنشاء الحساب
+
+</button>
+
+<div
+class="auth-message"
+id="authMessage">
+</div>
+
+<div class="auth-switch">
+
+<span id="authSwitchText">
+لديك حساب بالفعل؟
+</span>
+
+<button
+onclick="showLogin()"
+id="authSwitchButton">
+تسجيل الدخول
+</button>
+
+</div>
+
+</div>
+
+</div>
 
 <script>
 
-/* ================= HEADER ================= */
+/* SUPABASE */
+
+const SUPABASE_URL =
+"https://zuljqdzinbndmesbarjn.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_thb5jIXk2pFDqs79kJMQRQ_N-HrFAt6";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* HEADER */
 
 window.addEventListener("scroll",function(){
 
-    const header=document.getElementById("header");
+    const header =
+    document.getElementById("header");
 
-    if(window.scrollY>30){
+    if(window.scrollY > 30){
+
         header.classList.add("scrolled");
+
     }else{
+
         header.classList.remove("scrolled");
+
     }
 
 });
 
 
-/* ================= SCROLL ================= */
+/* SCROLL */
 
 function scrollToSection(id){
 
-    const element=document.getElementById(id);
+    const element =
+    document.getElementById(id);
 
     if(element){
+
         element.scrollIntoView({
             behavior:"smooth"
         });
+
     }
 
 }
 
 
-/* ================= CREATE STORE ================= */
+/* CREATE STORE / REGISTER */
 
-async function createStore(){
+function createStore(){
 
-    const email = prompt("📧 اكتب البريد الإلكتروني:");
-
-    if(!email){
-        return;
-    }
-
-    const password = prompt("🔐 اكتب كلمة المرور (6 أحرف على الأقل):");
-
-    if(!password){
-        return;
-    }
-
-    if(password.length < 6){
-        alert("⚠️ كلمة المرور لازم تكون 6 أحرف على الأقل.");
-        return;
-    }
-
-    const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password
-    });
-
-    if(error){
-        alert("❌ حصل خطأ:\n\n" + error.message);
-        return;
-    }
-
-    alert(
-        "🎉 تم إنشاء الحساب بنجاح!\n\n" +
-        "📧 راجع بريدك الإلكتروني لتأكيد الحساب."
-    );
+    openRegister();
 
 }
 
 
-/* ================= LOGIN ================= */
+/* OPEN REGISTER */
+
+function openRegister(){
+
+    document.getElementById("authModal")
+    .style.display="flex";
+
+    document.getElementById("authTitle")
+    .textContent="أنشئ حسابك 🚀";
+
+    document.getElementById("authSubtitle")
+    .textContent=
+    "ابدأ متجرك الإلكتروني مع LUNA&LEO MARKET";
+
+    document.getElementById("nameField")
+    .style.display="block";
+
+    document.getElementById("confirmField")
+    .style.display="block";
+
+    document.getElementById("authSubmit")
+    .textContent="إنشاء الحساب";
+
+    document.getElementById("authSubmit")
+    .onclick=registerUser;
+
+    document.getElementById("authSwitchText")
+    .textContent="لديك حساب بالفعل؟";
+
+    document.getElementById("authSwitchButton")
+    .textContent="تسجيل الدخول";
+
+    document.getElementById("authSwitchButton")
+    .onclick=showLogin;
+
+    document.getElementById("authMessage")
+    .textContent="";
+
+}
+
+
+/* LOGIN */
 
 function login(){
 
-    alert(
-        "🔐 تسجيل الدخول\n\nسنربط تسجيل الدخول بـ Supabase بعد تثبيت التصميم."
-    );
+    document.getElementById("authModal")
+    .style.display="flex";
+
+    document.getElementById("authTitle")
+    .textContent="تسجيل الدخول 🔐";
+
+    document.getElementById("authSubtitle")
+    .textContent=
+    "أهلاً بك مرة أخرى في LUNA&LEO MARKET";
+
+    document.getElementById("nameField")
+    .style.display="none";
+
+    document.getElementById("confirmField")
+    .style.display="none";
+
+    document.getElementById("authSubmit")
+    .textContent="تسجيل الدخول";
+
+    document.getElementById("authSubmit")
+    .onclick=loginUser;
+
+    document.getElementById("authSwitchText")
+    .textContent="ليس لديك حساب؟";
+
+    document.getElementById("authSwitchButton")
+    .textContent="إنشاء حساب";
+
+    document.getElementById("authSwitchButton")
+    .onclick=openRegister;
+
+    document.getElementById("authMessage")
+    .textContent="";
 
 }
 
 
-/* ================= MOBILE MENU ================= */
+/* CLOSE */
+
+function closeAuth(){
+
+    document.getElementById("authModal")
+    .style.display="none";
+
+}
+
+
+/* REGISTER */
+
+async function registerUser(){
+
+    const name =
+    document.getElementById("authName")
+    .value.trim();
+
+    const email =
+    document.getElementById("authEmail")
+    .value.trim();
+
+    const password =
+    document.getElementById("authPassword")
+    .value;
+
+    const password2 =
+    document.getElementById("authPassword2")
+    .value;
+
+    const message =
+    document.getElementById("authMessage");
+
+    if(!name ||
+       !email ||
+       !password ||
+       !password2){
+
+        message.textContent=
+        "⚠️ من فضلك املأ كل البيانات.";
+
+        return;
+
+    }
+
+    if(password.length < 6){
+
+        message.textContent=
+        "⚠️ كلمة المرور لازم تكون 6 أحرف على الأقل.";
+
+        return;
+
+    }
+
+    if(password !== password2){
+
+        message.textContent=
+        "⚠️ كلمتا المرور غير متطابقتين.";
+
+        return;
+
+    }
+
+    message.textContent=
+    "⏳ جاري إنشاء الحساب...";
+
+    const {data,error} =
+    await supabaseClient.auth.signUp({
+
+        email:email,
+
+        password:password,
+
+        options:{
+            data:{
+                full_name:name
+            }
+        }
+
+    });
+
+    if(error){
+
+        message.textContent=
+        "❌ " + error.message;
+
+        return;
+
+    }
+
+    message.textContent=
+    "🎉 تم إنشاء الحساب بنجاح!";
+
+}
+
+
+/* LOGIN USER */
+
+async function loginUser(){
+
+    const email =
+    document.getElementById("authEmail")
+    .value.trim();
+
+    const password =
+    document.getElementById("authPassword")
+    .value;
+
+    const message =
+    document.getElementById("authMessage");
+
+    if(!email || !password){
+
+        message.textContent=
+        "⚠️ اكتب البريد الإلكتروني وكلمة المرور.";
+
+        return;
+
+    }
+
+    message.textContent=
+    "⏳ جاري تسجيل الدخول...";
+
+    const {data,error} =
+    await supabaseClient.auth.signInWithPassword({
+
+        email:email,
+
+        password:password
+
+    });
+
+    if(error){
+
+        message.textContent=
+        "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+
+        return;
+
+    }
+
+    message.textContent=
+    "🎉 تم تسجيل الدخول بنجاح!";
+
+}
+
+
+/* MOBILE MENU */
 
 function toggleMenu(){
 
-    const links=document.querySelector(".nav-links");
+    const links =
+    document.querySelector(".nav-links");
 
-    if(
-        links.style.display==="flex"
-    ){
+    if(links.style.display==="flex"){
 
         links.style.display="none";
 
@@ -2126,54 +2076,80 @@ function toggleMenu(){
         links.style.display="flex";
 
         links.style.position="absolute";
+
         links.style.top="70px";
+
         links.style.right="5%";
+
         links.style.left="5%";
+
         links.style.padding="20px";
+
         links.style.flexDirection="column";
+
         links.style.background="#071113";
+
         links.style.borderRadius="15px";
-        links.style.boxShadow="0 20px 50px rgba(0,0,0,.3)";
 
     }
 
 }
 
 
-/* ================= FAQ ================= */
+/* FAQ */
 
-document.querySelectorAll(".faq-question").forEach(function(button){
+document
+.querySelectorAll(".faq-question")
+.forEach(function(button){
 
-    button.addEventListener("click",function(){
+    button.addEventListener(
+        "click",
+        function(){
 
-        const item=button.parentElement;
+            const item =
+            button.parentElement;
 
-        document.querySelectorAll(".faq-item").forEach(function(other){
+            document
+            .querySelectorAll(".faq-item")
+            .forEach(function(other){
 
-            if(other!==item){
-                other.classList.remove("active");
-            }
+                if(other!==item){
 
-        });
+                    other.classList
+                    .remove("active");
 
-        item.classList.toggle("active");
+                }
 
-    });
+            });
+
+            item.classList
+            .toggle("active");
+
+        }
+    );
 
 });
 
-</script>
 
-</body><script>
-const SUPABASE_URL = "https://zuljqdzinbndmesbarjn.supabase.co";
+/* CLOSE MODAL WHEN CLICK OUTSIDE */
 
-const SUPABASE_KEY = "sb_publishable_thb5jIXk2pFDqs79kJMQRQ_N-HrFAt6";
+document
+.getElementById("authModal")
+.addEventListener(
+    "click",
+    function(e){
 
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
+        if(e.target === this){
+
+            closeAuth();
+
+        }
+
+    }
 );
 
-console.log("LUNA&LEO Supabase Connected");
 </script>
- </html>
+
+</body>
+
+    </html>
