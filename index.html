@@ -2061,10 +2061,38 @@ function scrollToSection(id){
 
 /* ================= CREATE STORE ================= */
 
-function createStore(){
+async function createStore(){
+
+    const email = prompt("📧 اكتب البريد الإلكتروني:");
+
+    if(!email){
+        return;
+    }
+
+    const password = prompt("🔐 اكتب كلمة المرور (6 أحرف على الأقل):");
+
+    if(!password){
+        return;
+    }
+
+    if(password.length < 6){
+        alert("⚠️ كلمة المرور لازم تكون 6 أحرف على الأقل.");
+        return;
+    }
+
+    const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password
+    });
+
+    if(error){
+        alert("❌ حصل خطأ:\n\n" + error.message);
+        return;
+    }
 
     alert(
-        "🚀 ممتاز!\n\nسنربط زر إنشاء المتجر بالتسجيل وإنشاء المتجر في الخطوة التالية."
+        "🎉 تم إنشاء الحساب بنجاح!\n\n" +
+        "📧 راجع بريدك الإلكتروني لتأكيد الحساب."
     );
 
 }
