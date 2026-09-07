@@ -9,7 +9,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
@@ -22,7 +21,7 @@ html{
 
 body{
     font-family:Arial,Tahoma,sans-serif;
-    background:#fff;
+    background:#f7f8f8;
     color:#171717;
 }
 
@@ -36,14 +35,14 @@ button{
 
 :root{
     --gold:#d8b43c;
+    --gold2:#f0d77a;
     --teal:#20a3a8;
     --dark:#061012;
+    --store-accent:#d8b43c;
 }
 
 
-/* =========================================================
-   HEADER
-========================================================= */
+/* ================= HEADER ================= */
 
 .site-header{
     position:absolute;
@@ -51,8 +50,8 @@ button{
     right:0;
     left:0;
     z-index:100;
-    padding:18px 5%;
-    background:rgba(3,12,13,.72);
+    padding:17px 5%;
+    background:rgba(3,12,13,.78);
     backdrop-filter:blur(18px);
     border-bottom:1px solid rgba(255,255,255,.08);
 }
@@ -67,11 +66,10 @@ button{
 }
 
 .logo{
-    color:white;
+    color:#fff;
     font-size:25px;
     font-weight:900;
     white-space:nowrap;
-    letter-spacing:.5px;
 }
 
 .logo span{
@@ -80,8 +78,7 @@ button{
 
 .nav-links{
     display:flex;
-    align-items:center;
-    gap:25px;
+    gap:23px;
 }
 
 .nav-links a{
@@ -97,11 +94,11 @@ button{
 
 .nav-buttons{
     display:flex;
-    gap:10px;
+    gap:9px;
 }
 
 .btn{
-    border:none;
+    border:0;
     padding:12px 20px;
     border-radius:30px;
     font-size:15px;
@@ -116,13 +113,19 @@ button{
 .btn-gold{
     background:var(--gold);
     color:#111;
-    box-shadow:0 8px 25px rgba(216,180,60,.18);
+    box-shadow:0 8px 25px rgba(216,180,60,.2);
+}
+
+.btn-teal{
+    background:var(--teal);
+    color:#fff;
+    box-shadow:0 10px 30px rgba(32,163,168,.2);
 }
 
 .btn-outline{
     background:transparent;
     border:1px solid rgba(255,255,255,.3);
-    color:white;
+    color:#fff;
 }
 
 .btn-outline:hover{
@@ -130,36 +133,31 @@ button{
     color:var(--gold);
 }
 
-.btn-teal{
-    background:var(--teal);
-    color:white;
-    box-shadow:0 10px 30px rgba(32,163,168,.2);
+.dark-btn{
+    background:#111;
+    color:#fff;
 }
 
 
-/* =========================================================
-   HERO
-========================================================= */
+/* ================= HERO ================= */
 
 .hero{
-    min-height:780px;
+    min-height:760px;
     position:relative;
     overflow:hidden;
     display:flex;
     align-items:center;
-    justify-content:center;
-    padding:145px 20px 80px;
-    color:white;
+    padding:140px 20px 80px;
+    color:#fff;
 
     background:
         linear-gradient(
             90deg,
-            rgba(2,8,9,.97) 0%,
-            rgba(2,12,14,.88) 40%,
-            rgba(2,12,14,.55) 72%,
-            rgba(2,8,9,.90) 100%
+            rgba(2,8,9,.97),
+            rgba(2,12,14,.82),
+            rgba(2,8,9,.72)
         ),
-        url("https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1800&q=90");
+        url("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1800&q=90");
 
     background-size:cover;
     background-position:center;
@@ -169,57 +167,28 @@ button{
     content:"";
     position:absolute;
     inset:0;
-
     background:
         radial-gradient(
-            circle at 75% 45%,
-            rgba(32,163,168,.30),
+            circle at 75% 40%,
+            rgba(32,163,168,.3),
             transparent 35%
         ),
         radial-gradient(
-            circle at 20% 85%,
+            circle at 15% 80%,
             rgba(216,180,60,.12),
             transparent 30%
         );
-
-    pointer-events:none;
-}
-
-.hero::after{
-    content:"";
-    position:absolute;
-
-    width:550px;
-    height:550px;
-
-    border-radius:50%;
-
-    right:-230px;
-    top:100px;
-
-    border:1px solid rgba(40,190,195,.18);
-
-    box-shadow:
-        0 0 100px rgba(32,163,168,.12),
-        inset 0 0 100px rgba(32,163,168,.06);
-
-    pointer-events:none;
 }
 
 .hero-content{
     position:relative;
-    z-index:3;
-
+    z-index:2;
     width:min(1150px,100%);
-
+    margin:auto;
     display:grid;
     grid-template-columns:1fr 1fr;
-
-    align-items:center;
-
     gap:55px;
-
-    text-align:right;
+    align-items:center;
 }
 
 .hero-copy{
@@ -227,219 +196,127 @@ button{
 }
 
 .badge{
-    display:inline-flex;
-    align-items:center;
-
+    display:inline-block;
     padding:10px 18px;
-
     border-radius:30px;
-
-    background:rgba(32,163,168,.12);
-
+    background:rgba(32,163,168,.13);
     border:1px solid rgba(66,205,210,.25);
-
-    color:#e4ce79;
-
-    margin-bottom:25px;
-
-    font-size:14px;
-
-    backdrop-filter:blur(10px);
+    color:#f0d77a;
+    margin-bottom:22px;
 }
 
 .hero h1{
     font-size:clamp(42px,6vw,72px);
     line-height:1.12;
+    margin-bottom:22px;
     font-weight:900;
-
-    margin-bottom:25px;
-
-    letter-spacing:-1px;
 }
 
 .hero h1 span{
-    color:#28b8bd;
-
-    text-shadow:
-        0 0 30px rgba(40,184,189,.25);
+    color:#29b9bd;
 }
 
 .hero-text{
-    max-width:620px;
-
-    margin:0;
-
-    color:#d4dddd;
-
+    color:#d6dddd;
     line-height:2;
-
     font-size:18px;
+    max-width:620px;
 }
 
 .hero-actions{
-    margin-top:32px;
-
+    margin-top:30px;
     display:flex;
-
-    justify-content:flex-start;
-
-    gap:15px;
-
+    gap:13px;
     flex-wrap:wrap;
 }
 
 .hero-actions .btn{
-    padding:15px 30px;
-    font-size:17px;
+    padding:15px 28px;
+    font-size:16px;
 }
 
 .trust{
-    margin-top:25px;
-
-    color:#c7cece;
-
-    font-size:14px;
+    margin-top:22px;
+    color:#c8d0d0;
 }
 
 .stars{
     color:#f0bd3e;
-
     font-size:19px;
-
-    margin-right:8px;
+    margin-right:7px;
 }
 
 
-/* =========================================================
-   HERO IMAGE
-========================================================= */
+/* ================= HERO VISUAL ================= */
 
-.hero-image{
+.hero-visual{
     position:relative;
-
     min-height:450px;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 }
 
-.hero-image::before{
-    content:"";
-
-    position:absolute;
-
-    width:430px;
-    height:430px;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(31,158,164,.35),
-            transparent 65%
-        );
-
-    filter:blur(5px);
-}
-
-.hero-image img{
+.hero-image{
     position:relative;
-
     z-index:2;
-
-    width:min(560px,100%);
-
+    width:min(530px,100%);
     height:420px;
-
     object-fit:cover;
-
     border-radius:30px;
-
-    border:1px solid rgba(255,255,255,.16);
-
-    box-shadow:
-        0 30px 80px rgba(0,0,0,.55),
-        0 0 70px rgba(25,157,163,.16);
-
+    border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 30px 80px rgba(0,0,0,.55);
     transform:rotate(-2deg);
-
-    transition:.5s;
 }
 
-.hero-image img:hover{
-    transform:rotate(0deg) scale(1.02);
-}
-
-
-/* =========================================================
-   FLOATING CARDS
-========================================================= */
-
-.hero-floating{
+.hero-card{
     position:absolute;
-
-    z-index:5;
-
+    z-index:4;
     background:rgba(255,255,255,.96);
-
     color:#111;
-
     padding:14px 18px;
-
-    border-radius:16px;
-
+    border-radius:17px;
     box-shadow:0 15px 40px rgba(0,0,0,.35);
-
     font-weight:bold;
-
-    font-size:13px;
-
-    backdrop-filter:blur(10px);
+    animation:float 4s ease-in-out infinite;
 }
 
-.hero-floating small{
+.hero-card small{
     display:block;
-
     color:#777;
-
     margin-top:5px;
-
     font-weight:normal;
 }
 
-.hero-floating.one{
-    top:35px;
-    right:-5px;
+.hero-card.one{
+    top:30px;
+    right:-10px;
 }
 
-.hero-floating.two{
-    bottom:35px;
-    left:-5px;
+.hero-card.two{
+    bottom:25px;
+    left:-10px;
+    animation-delay:1s;
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-9px)}
 }
 
 
-/* =========================================================
-   STATS
-========================================================= */
+/* ================= STATS ================= */
 
 .stats{
-    padding:50px 20px;
-
+    background:#fff;
+    padding:45px 20px;
     text-align:center;
-
     border-bottom:1px solid #eee;
-
-    background:white;
 }
 
 .stats h2{
-    font-size:28px;
-
     margin-bottom:10px;
+    font-size:28px;
 }
 
 .stats h2 span{
@@ -451,200 +328,200 @@ button{
 }
 
 
-/* =========================================================
-   SECTIONS
-========================================================= */
+/* ================= SECTIONS ================= */
 
 .section{
-    padding:95px 20px;
-}
-
-.section-light{
-    background:#fff;
+    padding:90px 20px;
 }
 
 .section-gray{
-    background:#f7f8f8;
+    background:#f1f3f3;
 }
 
 .section-title{
+    max-width:720px;
+    margin:0 auto 50px;
     text-align:center;
-
-    max-width:700px;
-
-    margin:0 auto 55px;
 }
 
-.section-title .mini{
-    color:#d39f22;
-
+.mini{
+    color:#c39420;
     font-weight:bold;
-
-    margin-bottom:15px;
+    margin-bottom:12px;
 }
 
 .section-title h2{
     font-size:clamp(30px,5vw,46px);
-
-    margin-bottom:15px;
+    margin-bottom:14px;
 }
 
 .section-title p{
     color:#777;
-
     line-height:1.9;
 }
 
 
-/* =========================================================
-   FEATURES
-========================================================= */
+/* ================= FEATURES ================= */
 
 .features{
     max-width:1100px;
-
     margin:auto;
-
     display:grid;
-
     grid-template-columns:repeat(3,1fr);
-
-    gap:22px;
+    gap:20px;
 }
 
 .feature{
-    padding:32px;
-
-    border-radius:22px;
-
     background:#fff;
-
+    padding:30px;
+    border-radius:22px;
     border:1px solid #eee;
-
     box-shadow:0 10px 35px rgba(0,0,0,.05);
-
     transition:.3s;
 }
 
 .feature:hover{
-    transform:translateY(-8px);
-
-    box-shadow:0 18px 45px rgba(0,0,0,.08);
+    transform:translateY(-7px);
+    box-shadow:0 18px 45px rgba(0,0,0,.09);
 }
 
 .feature-icon{
     width:58px;
     height:58px;
-
     display:flex;
-
     align-items:center;
     justify-content:center;
-
     border-radius:17px;
-
     background:#eaf7f7;
-
     font-size:27px;
-
-    margin-bottom:20px;
+    margin-bottom:18px;
 }
 
 .feature h3{
-    margin-bottom:12px;
-
-    font-size:20px;
+    margin-bottom:10px;
 }
 
 .feature p{
     color:#777;
-
     line-height:1.8;
 }
 
 
-/* =========================================================
-   CTA
-========================================================= */
+/* ================= FAQ ================= */
+
+.faq{
+    max-width:850px;
+    margin:auto;
+    display:grid;
+    gap:12px;
+}
+
+.faq details{
+    background:#fff;
+    border:1px solid #eee;
+    border-radius:15px;
+    padding:18px 20px;
+    box-shadow:0 6px 20px rgba(0,0,0,.04);
+}
+
+.faq summary{
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.faq p{
+    color:#777;
+    line-height:1.8;
+    padding-top:13px;
+}
+
+
+/* ================= CONTACT ================= */
+
+.contact-box{
+    max-width:850px;
+    margin:auto;
+    background:#071416;
+    color:#fff;
+    padding:45px 25px;
+    border-radius:25px;
+    text-align:center;
+}
+
+.contact-box p{
+    color:#cbd4d4;
+    line-height:1.9;
+    margin:12px 0 25px;
+}
+
+
+/* ================= CTA ================= */
 
 .cta{
-    margin:0 auto;
-
     max-width:1100px;
-
-    border-radius:30px;
-
-    padding:75px 25px;
-
+    margin:auto;
+    padding:70px 25px;
     text-align:center;
-
-    color:white;
-
+    color:#fff;
+    border-radius:28px;
     background:
         radial-gradient(
             circle at center,
-            rgba(31,158,164,.3),
-            transparent 50%
+            rgba(31,158,164,.32),
+            transparent 55%
         ),
         #071416;
-
-    box-shadow:0 25px 60px rgba(0,0,0,.08);
 }
 
 .cta h2{
     font-size:clamp(30px,5vw,48px);
-
-    margin-bottom:15px;
+    margin-bottom:14px;
 }
 
 .cta p{
     color:#c7cece;
-
-    margin-bottom:28px;
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-.dashboard{
-    display:none;
-
-    min-height:100vh;
-
-    background:#f4f4f4;
-
-    padding:110px 20px 60px;
-}
-
-.dashboard-box{
-    max-width:1000px;
-
-    margin:auto;
-
-    background:white;
-
-    border-radius:25px;
-
-    padding:30px;
-
-    box-shadow:0 15px 45px rgba(0,0,0,.06);
-}
-
-.dashboard-box h2{
     margin-bottom:25px;
 }
 
+
+/* ================= DASHBOARD ================= */
+
+.dashboard{
+    display:none;
+    min-height:100vh;
+    padding:110px 15px 60px;
+    background:#f2f4f4;
+}
+
+.dashboard-box{
+    max-width:1050px;
+    margin:auto;
+    background:#fff;
+    padding:30px;
+    border-radius:25px;
+    box-shadow:0 15px 45px rgba(0,0,0,.07);
+}
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.dashboard-header h2{
+    margin:0;
+}
+
 .form-group{
-    margin-bottom:18px;
+    margin-bottom:17px;
 }
 
 .form-group label{
     display:block;
-
-    margin-bottom:8px;
-
+    margin-bottom:7px;
     font-weight:bold;
 }
 
@@ -652,64 +529,107 @@ button{
 .form-group textarea,
 .form-group select{
     width:100%;
-
-    padding:14px;
-
+    padding:13px;
     border:1px solid #ddd;
-
     border-radius:12px;
-
     outline:none;
-
-    transition:.2s;
-
     background:#fff;
+}
+
+.form-group textarea{
+    min-height:100px;
+    resize:vertical;
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus{
-    border-color:#20a3a8;
-
+    border-color:var(--teal);
     box-shadow:0 0 0 3px rgba(32,163,168,.08);
-}
-
-.form-group textarea{
-    min-height:100px;
-
-    resize:vertical;
 }
 
 .dashboard-actions{
     display:flex;
-
     gap:10px;
-
     flex-wrap:wrap;
 }
 
-.dark-btn{
-    background:#111;
 
-    color:white;
+/* ================= PRODUCTS ================= */
+
+.products-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+}
+
+.product-card{
+    background:#fff;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.product-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+}
+
+.product-card img{
+    width:100%;
+    height:250px;
+    object-fit:cover;
+    background:#eee;
+}
+
+.product-info{
+    padding:20px;
+}
+
+.product-info h3{
+    margin-bottom:9px;
+}
+
+.product-price{
+    color:#bd9019;
+    font-size:21px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.product-info p{
+    color:#777;
+    line-height:1.7;
+    margin-bottom:15px;
+}
+
+.buy-btn{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:12px;
+    background:#111;
+    color:#fff;
+    font-weight:bold;
+}
+
+.buy-btn:hover{
+    background:var(--store-accent);
+    color:#111;
 }
 
 
-/* =========================================================
-   ORDERS
-========================================================= */
+/* ================= ORDERS ================= */
 
 .orders-section{
     margin-top:40px;
 }
 
-.orders-section h2{
-    margin-bottom:20px;
-}
-
 .orders-list{
     display:grid;
-    gap:18px;
+    gap:17px;
+    margin-top:20px;
 }
 
 .order-card{
@@ -717,12 +637,10 @@ button{
     border-radius:18px;
     padding:20px;
     background:#fff;
-    box-shadow:0 8px 25px rgba(0,0,0,.04);
 }
 
 .order-top{
     display:flex;
-    align-items:center;
     justify-content:space-between;
     gap:15px;
     flex-wrap:wrap;
@@ -737,13 +655,13 @@ button{
 .order-date{
     color:#777;
     font-size:13px;
+    margin-top:4px;
 }
 
 .order-info{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin-bottom:15px;
+    gap:10px;
 }
 
 .order-info-box{
@@ -754,35 +672,33 @@ button{
 
 .order-info-box strong{
     display:block;
-    margin-bottom:5px;
-    font-size:13px;
     color:#777;
+    font-size:12px;
+    margin-bottom:5px;
 }
 
 .order-products{
+    margin:15px 0;
+    padding:13px 0;
     border-top:1px solid #eee;
     border-bottom:1px solid #eee;
-    padding:14px 0;
-    margin-bottom:15px;
 }
 
 .order-product-row{
     display:flex;
     justify-content:space-between;
-    gap:10px;
-    padding:7px 0;
+    padding:6px 0;
 }
 
 .order-total{
+    color:#b58b13;
     font-size:20px;
     font-weight:bold;
-    color:#b58b13;
     margin-bottom:15px;
 }
 
 .order-status-row{
     display:flex;
-    align-items:center;
     gap:10px;
     flex-wrap:wrap;
 }
@@ -793,7 +709,6 @@ button{
     padding:11px;
     border:1px solid #ddd;
     border-radius:10px;
-    outline:none;
 }
 
 .order-status-btn{
@@ -816,301 +731,191 @@ button{
 
 .no-orders{
     text-align:center;
-    padding:45px 20px;
+    padding:40px;
+    background:#f7f7f7;
+    border-radius:17px;
     color:#777;
-    background:#f8f8f8;
-    border-radius:18px;
 }
 
 
-/* =========================================================
-   STORE
-========================================================= */
+/* ================= STORE ================= */
 
 .store-page{
     display:none;
-
     min-height:100vh;
-
     background:#f5f5f5;
 }
 
 .store-hero{
-    min-height:560px;
-
+    min-height:570px;
     position:relative;
-
     display:flex;
-
     align-items:flex-end;
-
     background:
-        linear-gradient(
-            to bottom,
-            rgba(0,0,0,.1),
-            rgba(0,0,0,.9)
-        ),
-        linear-gradient(
-            135deg,
-            #061112,
-            #172526
-        );
-
+        linear-gradient(to bottom,rgba(0,0,0,.08),rgba(0,0,0,.9)),
+        linear-gradient(135deg,#061112,#172526);
     background-size:cover;
-
     background-position:center;
-
-    color:white;
+    color:#fff;
 }
 
 .store-hero-content{
     width:100%;
-
     max-width:1100px;
-
     margin:auto;
-
-    padding:70px 25px;
-
+    padding:65px 20px;
     text-align:center;
 }
 
 .store-logo{
-    width:120px;
-    height:120px;
-
-    border-radius:50%;
-
+    width:125px;
+    height:125px;
     object-fit:cover;
-
-    border:4px solid white;
-
-    background:#222;
-
-    margin-bottom:20px;
-
+    border-radius:50%;
+    border:4px solid #fff;
+    margin-bottom:18px;
     box-shadow:0 15px 40px rgba(0,0,0,.4);
 }
 
 .store-hero h1{
     font-size:clamp(38px,6vw,65px);
-
-    margin-bottom:12px;
-
-    font-weight:900;
+    margin-bottom:10px;
 }
 
 .store-hero p{
     color:#ddd;
-
     max-width:650px;
-
     margin:auto;
-
     line-height:1.8;
-
-    font-size:18px;
 }
 
 .store-products{
     max-width:1150px;
-
     margin:auto;
-
-    padding:70px 20px;
+    padding:65px 20px;
 }
 
 .products-title{
     text-align:center;
-
-    margin-bottom:40px;
+    margin-bottom:35px;
 }
 
 .products-title h2{
     font-size:35px;
-
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
 .products-title p{
     color:#777;
 }
 
-.products-grid{
-    display:grid;
 
-    grid-template-columns:repeat(3,1fr);
-
-    gap:25px;
-}
-
-.product-card{
-    background:white;
-
-    border-radius:22px;
-
-    overflow:hidden;
-
-    box-shadow:0 8px 30px rgba(0,0,0,.08);
-
-    transition:.3s;
-}
-
-.product-card:hover{
-    transform:translateY(-6px);
-
-    box-shadow:0 15px 40px rgba(0,0,0,.13);
-}
-
-.product-card img{
-    width:100%;
-
-    height:260px;
-
-    object-fit:cover;
-
-    background:#eee;
-}
-
-.product-info{
-    padding:22px;
-}
-
-.product-info h3{
-    margin-bottom:10px;
-
-    font-size:20px;
-}
-
-.product-price{
-    color:#c69b20;
-
-    font-size:22px;
-
-    font-weight:bold;
-
-    margin-bottom:12px;
-}
-
-.product-info p{
-    color:#777;
-
-    line-height:1.7;
-
-    margin-bottom:18px;
-}
-
-.buy-btn{
-    width:100%;
-
-    padding:14px;
-
-    border:0;
-
-    border-radius:13px;
-
-    background:#111;
-
-    color:white;
-
-    font-weight:bold;
-
-    transition:.2s;
-}
-
-.buy-btn:hover{
-    background:#d7b238;
-
-    color:#111;
-}
-
-
-/* =========================================================
-   CART BUTTON
-========================================================= */
+/* ================= CART ================= */
 
 .cart-button{
     position:fixed;
-
     left:20px;
-
     bottom:20px;
-
     z-index:999;
-
     width:62px;
-
     height:62px;
-
     border:0;
-
     border-radius:50%;
-
-    background:#d7b238;
-
+    background:var(--gold);
     color:#111;
-
     font-size:25px;
-
     box-shadow:0 10px 30px rgba(0,0,0,.35);
-
-    transition:.25s;
-}
-
-.cart-button:hover{
-    transform:scale(1.08);
 }
 
 .cart-count{
     position:absolute;
-
     top:-5px;
-
     right:-5px;
-
     width:24px;
-
     height:24px;
-
     border-radius:50%;
-
     background:#e53935;
-
-    color:white;
-
-    font-size:12px;
-
+    color:#fff;
     display:flex;
-
     align-items:center;
-
     justify-content:center;
+    font-size:12px;
 }
 
 
-/* =========================================================
-   CART
-========================================================= */
+/* ================= MODALS ================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    background:rgba(0,0,0,.72);
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+    backdrop-filter:blur(4px);
+}
+
+.modal-box{
+    width:min(470px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#fff;
+    padding:28px;
+    border-radius:24px;
+    position:relative;
+    box-shadow:0 25px 70px rgba(0,0,0,.3);
+}
+
+.close{
+    position:absolute;
+    top:12px;
+    left:15px;
+    border:0;
+    background:none;
+    font-size:25px;
+}
+
+.modal-box h2{
+    margin-bottom:23px;
+}
+
+.modal-btn{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:12px;
+    margin-top:9px;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.google-btn{
+    background:#eee;
+}
+
+.error{
+    color:#d33;
+    font-size:14px;
+    margin-top:9px;
+}
+
+
+/* ================= CART ITEMS ================= */
 
 .cart-item{
     display:flex;
-
-    gap:12px;
-
     align-items:center;
-
-    padding:14px 0;
-
+    gap:12px;
+    padding:13px 0;
     border-bottom:1px solid #eee;
 }
 
 .cart-item img{
-    width:70px;
-
-    height:70px;
-
+    width:65px;
+    height:65px;
     object-fit:cover;
-
     border-radius:12px;
 }
 
@@ -1119,191 +924,79 @@ button{
 }
 
 .cart-item-info h4{
-    margin-bottom:6px;
+    margin-bottom:5px;
 }
 
 .cart-item-price{
     color:#b58b13;
-
     font-weight:bold;
 }
 
 .remove-cart{
     border:0;
-
     background:#fff0f0;
-
     color:#d33;
-
     border-radius:10px;
-
-    padding:9px;
+    padding:8px;
 }
 
 .cart-total{
-    margin-top:20px;
-
-    padding:16px;
-
+    margin-top:18px;
+    padding:15px;
     background:#f7f7f7;
-
-    border-radius:15px;
-
-    font-size:20px;
-
-    font-weight:bold;
-
+    border-radius:14px;
     text-align:center;
-}
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.modal{
-    display:none;
-
-    position:fixed;
-
-    inset:0;
-
-    background:rgba(0,0,0,.72);
-
-    z-index:1000;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:20px;
-
-    backdrop-filter:blur(4px);
-}
-
-.modal-box{
-    background:white;
-
-    width:min(460px,100%);
-
-    max-height:90vh;
-
-    overflow:auto;
-
-    border-radius:25px;
-
-    padding:30px;
-
-    position:relative;
-
-    box-shadow:0 25px 70px rgba(0,0,0,.25);
-}
-
-.close{
-    position:absolute;
-
-    top:15px;
-
-    left:18px;
-
-    border:0;
-
-    background:none;
-
-    font-size:25px;
-}
-
-.modal-box h2{
-    margin-bottom:25px;
-}
-
-.modal-btn{
-    width:100%;
-
-    padding:14px;
-
-    border:0;
-
-    border-radius:12px;
-
-    margin-top:10px;
-
-    font-size:16px;
-
+    font-size:20px;
     font-weight:bold;
 }
 
-.google-btn{
-    background:#eee;
 
-    color:#222;
-}
-
-.error{
-    color:#d33;
-
-    margin-top:10px;
-
-    font-size:14px;
-}
-
-
-/* =========================================================
-   USER
-========================================================= */
+/* ================= USER ================= */
 
 .userbox{
     display:none;
-
     align-items:center;
+    gap:8px;
+    color:#fff;
+}
 
-    gap:10px;
-
-    color:white;
+.userbox span{
+    max-width:170px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 .userbox button{
     border:1px solid #555;
-
     background:transparent;
-
-    color:white;
-
+    color:#fff;
     border-radius:20px;
-
-    padding:8px 12px;
+    padding:8px 11px;
 }
 
 
-/* =========================================================
-   FOOTER
-========================================================= */
+/* ================= FOOTER ================= */
 
 footer{
     background:#071011;
-
     color:#aaa;
-
     text-align:center;
-
     padding:40px 20px;
 }
 
 footer strong{
-    color:#d8b43c;
-
-    font-size:18px;
+    color:var(--gold);
+    font-size:19px;
 }
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* ================= MOBILE ================= */
 
 @media(max-width:800px){
 
     .site-header{
-        padding:13px 15px;
+        padding:13px 14px;
     }
 
     .nav{
@@ -1319,24 +1012,18 @@ footer strong{
     }
 
     .nav-buttons .btn{
-        padding:9px 12px;
-
+        padding:9px 11px;
         font-size:12px;
     }
 
     .hero{
         min-height:auto;
-
-        padding:125px 18px 65px;
-
-        background-position:center;
+        padding:125px 17px 60px;
     }
 
     .hero-content{
         grid-template-columns:1fr;
-
         gap:35px;
-
         text-align:center;
     }
 
@@ -1345,12 +1032,11 @@ footer strong{
     }
 
     .hero h1{
-        font-size:40px;
+        font-size:39px;
     }
 
     .hero-text{
         font-size:16px;
-
         margin:auto;
     }
 
@@ -1358,32 +1044,23 @@ footer strong{
         justify-content:center;
     }
 
-    .hero-image{
+    .hero-actions .btn{
+        flex:1;
+        min-width:145px;
+    }
+
+    .hero-visual{
         min-height:320px;
     }
 
-    .hero-image img{
+    .hero-image{
         width:100%;
-
         height:300px;
-
-        border-radius:24px;
-
         transform:none;
     }
 
-    .hero-image::before{
-        width:300px;
-
-        height:300px;
-    }
-
-    .hero-floating{
+    .hero-card{
         display:none;
-    }
-
-    .trust{
-        margin-top:20px;
     }
 
     .features{
@@ -1394,63 +1071,46 @@ footer strong{
         grid-template-columns:1fr;
     }
 
-    .store-hero{
-        min-height:500px;
-    }
-
-    .cta{
-        border-radius:20px;
-    }
-
-    .cart-button{
-        left:15px;
-
-        bottom:15px;
-    }
-
-    .dashboard{
-        padding:95px 12px 40px;
-    }
-
-    .dashboard-box{
-        padding:20px;
-
-        border-radius:18px;
-    }
-
-    .userbox{
-        width:100%;
-
-        justify-content:center;
-    }
-
     .order-info{
         grid-template-columns:1fr;
     }
 
+    .dashboard{
+        padding:95px 10px 40px;
+    }
+
+    .dashboard-box{
+        padding:20px;
+    }
+
+    .userbox{
+        width:100%;
+        justify-content:center;
+    }
+
+    .userbox span{
+        display:none;
+    }
+
+    .store-hero{
+        min-height:500px;
+    }
+
+    .cart-button{
+        left:15px;
+        bottom:15px;
+    }
 }
-
-
-/* =========================================================
-   SMALL PHONES
-========================================================= */
 
 @media(max-width:430px){
 
     .hero h1{
-        font-size:34px;
+        font-size:33px;
     }
 
     .hero-actions .btn{
         width:100%;
-    }
-
-    .hero-image{
-        min-height:270px;
-    }
-
-    .hero-image img{
-        height:260px;
+        flex:none;
     }
 
     .section{
@@ -1458,41 +1118,13 @@ footer strong{
     }
 
 }
-
-
-/* =========================================================
-   ANIMATION
-========================================================= */
-
-@keyframes floatCard{
-
-    0%,100%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-8px);
-    }
-
-}
-
-.hero-floating{
-    animation:floatCard 4s ease-in-out infinite;
-}
-
-.hero-floating.two{
-    animation-delay:1.2s;
-}
-
 </style>
 </head>
 
 <body>
 
 
-<!-- =========================================================
-     HEADER
-========================================================= -->
+<!-- ================= HEADER ================= -->
 
 <header class="site-header" id="mainHeader">
 
@@ -1502,397 +1134,209 @@ footer strong{
 LUNA<span>&</span>LEO
 </div>
 
-
 <nav class="nav-links">
-
 <a href="#home">الرئيسية</a>
-
 <a href="#about">من نحن</a>
-
 <a href="#features">المميزات</a>
-
-<a href="#faq">الأسئلة الشائعة</a>
-
+<a href="#faq">الأسئلة</a>
 <a href="#contact">تواصل معنا</a>
-
 </nav>
-
 
 <div class="nav-buttons" id="navButtons">
 
-<button
-class="btn btn-outline"
-id="homeLoginButton"
+<button class="btn btn-outline"
 onclick="openModal('loginModal')">
-
 تسجيل الدخول
-
 </button>
 
-
-<button
-class="btn btn-gold"
+<button class="btn btn-gold"
 onclick="startStoreCreation()">
-
 أنشئ متجرك
-
 </button>
 
 </div>
-
 
 <div class="userbox" id="userBox">
 
 <span id="userEmail"></span>
 
-<button onclick="viewMyStore()">
-🔗 متجري
-</button>
+<button onclick="viewMyStore()">🔗 متجري</button>
 
-<button onclick="openDashboard()">
-⚙️ الإدارة
-</button>
+<button onclick="openDashboard()">⚙️ الإدارة</button>
 
-<button onclick="logout()">
-خروج
-</button>
+<button onclick="logout()">خروج</button>
 
 </div>
 
 </div>
-
 </header>
 
 
-<!-- =========================================================
-     HOME
-========================================================= -->
+<!-- ================= HOME ================= -->
 
 <main id="homePage">
-
 
 <section class="hero" id="home">
 
 <div class="hero-content">
 
-
 <div class="hero-copy">
 
 <div class="badge">
-⭐ منصة LUNA&LEO المتكاملة
+⭐ LUNA&LEO MARKET
 </div>
 
-
 <h1>
-
-كل أدوات تجارتك الإلكترونية
-
+أنشئ متجرك الإلكتروني
 <br>
-
-<span>في منصة واحدة</span>
-
+<span>وابدأ تجارتك اليوم</span>
 </h1>
 
-
 <p class="hero-text">
-
-أنشئ متجرك الإلكتروني خلال دقائق،
-أضف منتجاتك، تحكم في شكل متجرك،
-وشارك رابطك مع عملائك بسهولة.
-
+أنشئ متجرك خلال دقائق، أضف منتجاتك وصورك وأسعارك،
+واستقبل طلبات العملاء من رابط متجرك الخاص.
 </p>
-
 
 <div class="hero-actions">
 
-<button
-class="btn btn-teal"
+<button class="btn btn-teal"
 onclick="startStoreCreation()">
-
 🚀 أنشئ متجرك
-
 </button>
 
-
-<button
-class="btn btn-outline"
+<button class="btn btn-outline"
 onclick="document.getElementById('features').scrollIntoView()">
-
 اكتشف المميزات
-
 </button>
 
 </div>
-
 
 <div class="trust">
-
-موثوق وسهل الاستخدام
-
-<span class="stars">
-★★★★★
-</span>
-
+سهل الاستخدام
+<span class="stars">★★★★★</span>
 </div>
 
 </div>
 
 
-<div class="hero-image">
+<div class="hero-visual">
 
-
-<div class="hero-floating one">
-
-📈 مبيعاتك بسهولة
-
-<small>
-تابع متجرك ومنتجاتك
-</small>
-
+<div class="hero-card one">
+📈 تجارتك أسهل
+<small>تحكم في منتجاتك وطلباتك</small>
 </div>
-
-
-<div class="hero-floating two">
-
-🛍️ متجرك جاهز
-
-<small>
-اعرض منتجاتك للعملاء
-</small>
-
-</div>
-
 
 <img
-src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=90"
-alt="LUNA&LEO متجر إلكتروني">
+class="hero-image"
+src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=90"
+alt="LUNA&LEO MARKET">
 
+<div class="hero-card two">
+🛍️ متجرك جاهز
+<small>شارك رابط متجرك مع عملائك</small>
 </div>
 
 </div>
 
+</div>
 </section>
 
-
-<!-- =========================================================
-     STATS
-========================================================= -->
 
 <section class="stats">
 
 <h2>
-
-ابدأ مع
-
-<span>
-LUNA&LEO MARKET
-</span>
-
+ابدأ مع <span>LUNA&LEO MARKET</span>
 </h2>
 
 <p>
-
-كل الأدوات الأساسية لإنشاء متجرك الإلكتروني في مكان واحد
-
+كل الأدوات الأساسية لبناء متجرك في مكان واحد
 </p>
 
 </section>
 
 
-<!-- =========================================================
-     ABOUT
-========================================================= -->
-
-<section class="section section-light" id="about">
+<section class="section" id="about">
 
 <div class="section-title">
 
-<div class="mini">
-✨ كل ما تحتاجه
-</div>
+<div class="mini">✨ منصتك الجديدة</div>
 
-<h2>
-تجارتك تبدأ من هنا
-</h2>
+<h2>كل ما تحتاجه لتبدأ</h2>
 
 <p>
-
-وفرنا لك الأدوات الأساسية لإنشاء متجر إلكتروني
-وعرض منتجاتك بشكل احترافي.
-
+بدون تعقيد وبدون الحاجة لمعرفة البرمجة.
+أنشئ متجرك وأضف منتجاتك وابدأ استقبال الطلبات.
 </p>
 
 </div>
-
 
 <div class="features">
 
+<div class="feature">
+<div class="feature-icon">🏪</div>
+<h3>متجرك الخاص</h3>
+<p>احصل على صفحة خاصة بمتجرك وشارك رابطها مع العملاء.</p>
+</div>
 
 <div class="feature">
-
-<div class="feature-icon">
-🛍️
+<div class="feature-icon">📦</div>
+<h3>إدارة المنتجات</h3>
+<p>أضف المنتجات والأسعار والوصف والصور بسهولة.</p>
 </div>
-
-<h3>
-متجرك الخاص
-</h3>
-
-<p>
-
-أنشئ صفحة خاصة بمتجرك تحمل اسمك
-وتقدر تشارك رابطها مع العملاء.
-
-</p>
-
-</div>
-
 
 <div class="feature">
-
-<div class="feature-icon">
-📦
+<div class="feature-icon">🎨</div>
+<h3>تخصيص المتجر</h3>
+<p>غيّر ألوان المتجر والشعار وصورة الغلاف.</p>
 </div>
-
-<h3>
-إدارة المنتجات
-</h3>
-
-<p>
-
-أضف منتجاتك بالصور والأسعار والوصف
-وقم بإدارتها بسهولة.
-
-</p>
-
-</div>
-
 
 <div class="feature">
-
-<div class="feature-icon">
-🎨
+<div class="feature-icon">🛒</div>
+<h3>سلة المشتريات</h3>
+<p>العميل يستطيع إضافة المنتجات للسلة وإرسال طلبه.</p>
 </div>
-
-<h3>
-تصميم متجرك
-</h3>
-
-<p>
-
-تحكم في ألوان المتجر والشعار والصورة
-واجعل متجرك يعبر عن علامتك.
-
-</p>
-
-</div>
-
 
 <div class="feature">
-
-<div class="feature-icon">
-📱
+<div class="feature-icon">📱</div>
+<h3>متوافق مع الهاتف</h3>
+<p>المتجر يعمل بشكل ممتاز على الموبايل والكمبيوتر.</p>
 </div>
-
-<h3>
-متوافق مع الموبايل
-</h3>
-
-<p>
-
-متجرك يظهر بشكل مرتب على الموبايل
-والتابلت والكمبيوتر.
-
-</p>
-
-</div>
-
 
 <div class="feature">
-
-<div class="feature-icon">
-🔗
+<div class="feature-icon">📊</div>
+<h3>إدارة الطلبات</h3>
+<p>شاهد طلبات العملاء وغيّر حالة كل طلب من لوحة التحكم.</p>
 </div>
 
-<h3>
-رابط متجرك
-</h3>
-
-<p>
-
-شارك رابط متجرك بسهولة على فيسبوك
-وواتساب وإنستجرام.
-
-</p>
-
 </div>
-
-
-<div class="feature">
-
-<div class="feature-icon">
-🚀
-</div>
-
-<h3>
-ابدأ بسهولة
-</h3>
-
-<p>
-
-لا تحتاج إلى خبرة في البرمجة لإنشاء
-متجرك والبدء في عرض منتجاتك.
-
-</p>
-
-</div>
-
-
-</div>
-
 </section>
 
-
-<!-- =========================================================
-     CTA
-========================================================= -->
 
 <section class="section section-gray" id="features">
 
 <div class="section-title">
 
-<div class="mini">
-🚀 ابدأ الآن
-</div>
+<div class="mini">🚀 ابدأ الآن</div>
 
-<h2>
-هل أنت مستعد لإنشاء متجرك؟
-</h2>
+<h2>متجرك يبدأ من هنا</h2>
 
 <p>
-ابدأ بخطوات بسيطة وأنشئ واجهتك الخاصة.
+خطوات بسيطة تفصلك عن امتلاك متجرك الإلكتروني.
 </p>
 
 </div>
-
 
 <div class="cta">
 
-<h2>
-متجرك الإلكتروني في انتظارك
-</h2>
+<h2>جاهز تبدأ؟</h2>
 
 <p>
-أنشئ حسابك وابدأ إضافة منتجاتك الآن.
+أنشئ حسابك مجاناً وابدأ إضافة منتجاتك.
 </p>
 
-
-<button
-class="btn btn-gold"
+<button class="btn btn-gold"
 onclick="startStoreCreation()">
-
-🚀 ابدأ إنشاء متجرك
-
+🚀 إنشاء متجري
 </button>
 
 </div>
@@ -1900,324 +1344,206 @@ onclick="startStoreCreation()">
 </section>
 
 
-<!-- =========================================================
-     FAQ
-========================================================= -->
-
-<section class="section section-light" id="faq">
+<section class="section" id="faq">
 
 <div class="section-title">
 
-<div class="mini">
-❓ الأسئلة الشائعة
+<div class="mini">❓ الأسئلة الشائعة</div>
+
+<h2>أسئلة مهمة</h2>
+
 </div>
 
-<h2>
-كل شيء بسيط
-</h2>
+<div class="faq">
 
+<details>
+<summary>هل إنشاء المتجر مجاني؟</summary>
 <p>
-
-أنشئ حسابك، أنشئ متجرك،
-أضف منتجاتك وشارك رابط المتجر.
-
+النسخة الحالية من المنصة مصممة للبدء مجاناً، وسيتم تطوير أنظمة الاشتراك لاحقاً.
 </p>
+</details>
+
+<details>
+<summary>هل أحتاج إلى معرفة البرمجة؟</summary>
+<p>
+لا. يمكنك إنشاء المتجر وإضافة المنتجات من لوحة التحكم.
+</p>
+</details>
+
+<details>
+<summary>هل يمكنني إضافة صور للمنتجات؟</summary>
+<p>
+نعم، يمكنك رفع صورة لكل منتج من لوحة الإدارة.
+</p>
+</details>
+
+<details>
+<summary>كيف يستقبل صاحب المتجر الطلبات؟</summary>
+<p>
+تظهر الطلبات داخل لوحة إدارة المتجر، ويمكن تغيير حالة الطلب.
+</p>
+</details>
+
+<details>
+<summary>هل الدفع الإلكتروني يعمل الآن؟</summary>
+<p>
+ليس بعد. الدفع عند الاستلام هو المتاح حالياً، وسيتم ربط الدفع الإلكتروني لاحقاً.
+</p>
+</details>
 
 </div>
-
 </section>
 
-
-<!-- =========================================================
-     CONTACT
-========================================================= -->
 
 <section class="section section-gray" id="contact">
 
-<div class="section-title">
+<div class="contact-box">
 
-<div class="mini">
-📩 تواصل معنا
-</div>
-
-<h2>
-نحن هنا لمساعدتك
-</h2>
+<h2>📩 تواصل معنا</h2>
 
 <p>
-
-LUNA&LEO MARKET — منصتك لإنشاء وإدارة المتاجر الإلكترونية.
-
+LUNA&LEO MARKET — منصة عربية لإنشاء وإدارة المتاجر الإلكترونية.
 </p>
+
+<button class="btn btn-gold"
+onclick="startStoreCreation()">
+🚀 ابدأ الآن
+</button>
 
 </div>
 
 </section>
-
 
 </main>
 
 
-<!-- =========================================================
-     DASHBOARD
-========================================================= -->
+<!-- ================= DASHBOARD ================= -->
 
 <section class="dashboard" id="dashboard">
 
 <div class="dashboard-box">
 
-<h2>
-⚙️ إدارة متجري
-</h2>
+<div class="dashboard-header">
 
+<h2>⚙️ إدارة متجري</h2>
 
-<div class="form-group">
-
-<label>
-اسم المتجر
-</label>
-
-<input
-id="storeName"
-placeholder="مثال: LUNA Store">
+<button class="btn dark-btn"
+onclick="showHome()">
+🏠 الرئيسية
+</button>
 
 </div>
 
 
 <div class="form-group">
+<label>اسم المتجر</label>
+<input id="storeName" placeholder="مثال: LUNA Store">
+</div>
 
-<label>
-وصف المتجر
-</label>
-
-<textarea
-id="storeDescription"
+<div class="form-group">
+<label>وصف المتجر</label>
+<textarea id="storeDescription"
 placeholder="اكتب وصف متجرك"></textarea>
-
 </div>
-
 
 <div class="form-group">
-
-<label>
-لون المتجر
-</label>
-
-<input
-type="color"
-id="themeColor"
-value="#111111">
-
+<label>لون المتجر</label>
+<input type="color" id="themeColor" value="#111111">
 </div>
-
 
 <div class="form-group">
-
-<label>
-اللون المميز
-</label>
-
-<input
-type="color"
-id="accentColor"
-value="#d7b238">
-
+<label>اللون المميز</label>
+<input type="color" id="accentColor" value="#d7b238">
 </div>
-
 
 <div class="form-group">
-
-<label>
-شعار المتجر
-</label>
-
-<input
-type="file"
-id="logoFile"
-accept="image/*">
-
+<label>شعار المتجر</label>
+<input type="file" id="logoFile" accept="image/*">
 </div>
-
 
 <div class="form-group">
-
-<label>
-صورة الغلاف
-</label>
-
-<input
-type="file"
-id="coverFile"
-accept="image/*">
-
+<label>صورة الغلاف</label>
+<input type="file" id="coverFile" accept="image/*">
 </div>
-
 
 <div class="dashboard-actions">
 
-<button
-class="btn btn-gold"
+<button class="btn btn-gold"
 onclick="saveStore()">
-
 💾 حفظ المتجر
-
 </button>
 
-
-<button
-class="btn dark-btn"
+<button class="btn dark-btn"
 onclick="viewMyStore()">
-
 🔗 مشاهدة متجري
-
-</button>
-
-
-<button
-class="btn"
-onclick="loadMyOrders()">
-
-🔄 تحديث الطلبات
-
-</button>
-
-
-<button
-class="btn"
-onclick="showHome()">
-
-🏠 الرئيسية
-
 </button>
 
 </div>
 
 
-<hr style="margin:30px 0">
+<hr style="margin:35px 0">
 
 
-<h2>
-📦 منتجاتي
-</h2>
-
+<h2 style="margin-bottom:20px">📦 إضافة منتج</h2>
 
 <div class="form-group">
-
-<label>
-اسم المنتج
-</label>
-
+<label>اسم المنتج</label>
 <input id="productName">
-
 </div>
 
-
 <div class="form-group">
-
-<label>
-السعر
-</label>
-
-<input
-id="productPrice"
-type="number">
-
+<label>السعر بالجنيه</label>
+<input id="productPrice" type="number" min="0">
 </div>
 
-
 <div class="form-group">
-
-<label>
-وصف المنتج
-</label>
-
+<label>وصف المنتج</label>
 <textarea id="productDescription"></textarea>
-
 </div>
-
 
 <div class="form-group">
-
-<label>
-صورة المنتج
-</label>
-
-<input
-id="productImage"
-type="file"
-accept="image/*">
-
+<label>صورة المنتج</label>
+<input id="productImage" type="file" accept="image/*">
 </div>
 
-
-<button
-class="btn btn-gold"
+<button class="btn btn-gold"
 onclick="addProduct()">
-
 ➕ إضافة المنتج
-
 </button>
 
 
-<div
-id="myProducts"
+<div id="myProducts"
 class="products-grid"
 style="margin-top:30px">
 </div>
 
 
-<!-- =========================================================
-     ORDERS
-========================================================= -->
-
 <div class="orders-section">
 
 <hr style="margin:40px 0">
 
+<div class="dashboard-header">
 
-<div style="
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-flex-wrap:wrap">
+<h2>📦 طلبات العملاء</h2>
 
-<h2>
-📦 طلبات العملاء
-</h2>
-
-<button
-class="btn btn-gold"
+<button class="btn btn-gold"
 onclick="loadMyOrders()">
-
 🔄 تحديث
-
 </button>
 
 </div>
 
-
-<div
-id="ordersList"
-class="orders-list">
-
-<div class="no-orders">
-⏳ جاري تحميل الطلبات...
+<div id="ordersList" class="orders-list">
+<div class="no-orders">⏳ جاري التحميل...</div>
 </div>
 
 </div>
 
 </div>
-
-
-</div>
-
 </section>
 
 
-<!-- =========================================================
-     PUBLIC STORE
-========================================================= -->
+<!-- ================= PUBLIC STORE ================= -->
 
 <section class="store-page" id="storePage">
 
@@ -2228,177 +1554,102 @@ class="orders-list">
 <img
 id="publicLogo"
 class="store-logo"
-style="display:none">
+style="display:none"
+alt="شعار المتجر">
 
-<h1 id="publicStoreName">
-المتجر
-</h1>
+<h1 id="publicStoreName">المتجر</h1>
 
 <p id="publicStoreDescription"></p>
 
 <br>
 
-
-<button
-class="btn btn-gold"
+<button class="btn btn-gold"
 onclick="scrollToProducts()">
-
 🛍️ تسوق الآن
-
 </button>
 
-
-<button
-class="btn btn-outline"
+<button class="btn btn-outline"
 onclick="showHome()">
-
 🏠 الرئيسية
-
 </button>
 
 </div>
-
 </div>
 
-
-<div
-class="store-products"
-id="publicProducts">
+<div class="store-products" id="publicProducts">
 
 <div class="products-title">
 
-<h2>
-🛍️ منتجاتنا
-</h2>
+<h2>🛍️ منتجاتنا</h2>
 
-<p>
-اختار المنتج المناسب لك
-</p>
+<p>اختار المنتج المناسب لك</p>
 
 </div>
 
-
-<div
-class="products-grid"
-id="productsGrid">
-</div>
+<div class="products-grid" id="productsGrid"></div>
 
 </div>
 
 </section>
 
 
-<!-- =========================================================
-     CART BUTTON
-========================================================= -->
+<!-- ================= CART BUTTON ================= -->
 
-<button
-class="cart-button"
+<button class="cart-button"
 onclick="openCart()">
 
 🛒
 
-<span
-class="cart-count"
-id="cartCount">
-0
-</span>
+<span class="cart-count" id="cartCount">0</span>
 
 </button>
 
 
-<!-- =========================================================
-     CART MODAL
-========================================================= -->
+<!-- ================= CART ================= -->
 
 <div class="modal" id="cartModal">
 
 <div class="modal-box">
 
-<button
-class="close"
+<button class="close"
 onclick="closeModal('cartModal')">
-
 ×
-
 </button>
 
+<h2>🛒 سلة المشتريات</h2>
 
-<h2>
-🛒 سلة المشتريات
-</h2>
-
-
-<div id="cartItems">
-</div>
-
+<div id="cartItems"></div>
 
 <div class="cart-total">
-
 الإجمالي:
-
-<span id="cartTotal">
-0
-</span>
-
+<span id="cartTotal">0</span>
 جنيه
-
 </div>
-
 
 <hr style="margin:25px 0">
 
-
-<h3>
-📦 بيانات الطلب
-</h3>
-
+<h3>📦 بيانات الطلب</h3>
 
 <div class="form-group">
-
-<label>
-الاسم
-</label>
-
-<input
-id="orderName"
-placeholder="اكتب اسمك">
-
+<label>الاسم</label>
+<input id="orderName" placeholder="اكتب اسمك">
 </div>
 
-
 <div class="form-group">
-
-<label>
-رقم الموبايل
-</label>
-
-<input
-id="orderPhone"
+<label>رقم الموبايل</label>
+<input id="orderPhone"
 placeholder="01xxxxxxxxx"
 type="tel">
-
 </div>
 
-
 <div class="form-group">
-
-<label>
-العنوان
-</label>
-
-<textarea
-id="orderAddress"
+<label>العنوان</label>
+<textarea id="orderAddress"
 placeholder="اكتب العنوان بالتفصيل"></textarea>
-
 </div>
 
-
 <div class="form-group">
-
-<label>
-طريقة الدفع
-</label>
+<label>طريقة الدفع</label>
 
 <select id="paymentMethod">
 
@@ -2411,94 +1662,51 @@ placeholder="اكتب العنوان بالتفصيل"></textarea>
 </option>
 
 </select>
-
 </div>
 
-
-<button
-class="modal-btn btn-gold"
+<button class="modal-btn btn-gold"
 onclick="sendOrder()">
-
 📲 تأكيد الطلب
-
 </button>
 
 </div>
-
 </div>
 
 
-<!-- =========================================================
-     LOGIN
-========================================================= -->
+<!-- ================= LOGIN ================= -->
 
 <div class="modal" id="loginModal">
 
 <div class="modal-box">
 
-<button
-class="close"
+<button class="close"
 onclick="closeModal('loginModal')">
-
 ×
-
 </button>
 
-
-<h2>
-🔐 تسجيل الدخول
-</h2>
-
+<h2>🔐 تسجيل الدخول</h2>
 
 <div class="form-group">
-
-<label>
-البريد الإلكتروني
-</label>
-
-<input
-id="loginEmail"
-type="email">
-
+<label>البريد الإلكتروني</label>
+<input id="loginEmail" type="email">
 </div>
-
 
 <div class="form-group">
-
-<label>
-كلمة المرور
-</label>
-
-<input
-id="loginPassword"
-type="password">
-
+<label>كلمة المرور</label>
+<input id="loginPassword" type="password">
 </div>
 
-
-<button
-class="modal-btn btn-gold"
+<button class="modal-btn btn-gold"
 onclick="login()">
-
 تسجيل الدخول
-
 </button>
 
-
-<button
-class="modal-btn google-btn"
+<button class="modal-btn google-btn"
 onclick="googleLogin()">
-
 🔵 الدخول باستخدام Google
-
 </button>
 
-
-<p
-id="loginError"
-class="error">
-</p>
-
+<p id="loginError" class="error"></p>
 
 <p style="text-align:center;margin-top:15px">
 
@@ -2507,90 +1715,52 @@ class="error">
 <button
 style="border:0;background:none;color:#b58b13;font-weight:bold"
 onclick="closeModal('loginModal');openModal('registerModal')">
-
 إنشاء حساب
-
 </button>
 
 </p>
 
 </div>
-
 </div>
 
 
-<!-- =========================================================
-     REGISTER
-========================================================= -->
+<!-- ================= REGISTER ================= -->
 
 <div class="modal" id="registerModal">
 
 <div class="modal-box">
 
-<button
-class="close"
+<button class="close"
 onclick="closeModal('registerModal')">
-
 ×
-
 </button>
 
-
-<h2>
-🚀 إنشاء حساب
-</h2>
-
+<h2>🚀 إنشاء حساب</h2>
 
 <div class="form-group">
-
-<label>
-البريد الإلكتروني
-</label>
-
-<input
-id="registerEmail"
-type="email">
-
+<label>البريد الإلكتروني</label>
+<input id="registerEmail" type="email">
 </div>
-
 
 <div class="form-group">
-
-<label>
-كلمة المرور
-</label>
-
-<input
-id="registerPassword"
-type="password">
-
+<label>كلمة المرور</label>
+<input id="registerPassword" type="password">
 </div>
 
-
-<button
-class="modal-btn btn-gold"
+<button class="modal-btn btn-gold"
 onclick="register()">
-
 إنشاء الحساب
-
 </button>
 
-
-<p
-id="registerError"
-class="error">
-</p>
+<p id="registerError" class="error"></p>
 
 </div>
-
 </div>
 
 
 <footer>
 
-<strong>
-LUNA&LEO MARKET
-</strong>
+<strong>LUNA&LEO MARKET</strong>
 
 <br><br>
 
@@ -2619,13 +1789,11 @@ SUPABASE_KEY
 
 
 /* =========================================================
-   CART
+   STATE
 ========================================================= */
 
 let cart = [];
-
 let currentStoreId = null;
-
 let publicProductsCache = {};
 
 
@@ -2634,16 +1802,11 @@ let publicProductsCache = {};
 ========================================================= */
 
 function openModal(id){
-
-document.getElementById(id).style.display="flex";
-
+    document.getElementById(id).style.display="flex";
 }
 
-
 function closeModal(id){
-
-document.getElementById(id).style.display="none";
-
+    document.getElementById(id).style.display="none";
 }
 
 
@@ -2653,22 +1816,18 @@ document.getElementById(id).style.display="none";
 
 function showHome(){
 
-document.getElementById("homePage").style.display="block";
+    document.getElementById("homePage").style.display="block";
+    document.getElementById("dashboard").style.display="none";
+    document.getElementById("storePage").style.display="none";
+    document.getElementById("mainHeader").style.display="block";
 
-document.getElementById("dashboard").style.display="none";
+    window.history.replaceState(
+        {},
+        "",
+        window.location.pathname
+    );
 
-document.getElementById("storePage").style.display="none";
-
-document.getElementById("mainHeader").style.display="block";
-
-window.history.replaceState(
-{},
-"",
-window.location.pathname
-);
-
-window.scrollTo(0,0);
-
+    window.scrollTo(0,0);
 }
 
 
@@ -2678,42 +1837,38 @@ window.scrollTo(0,0);
 
 async function getUser(){
 
-const {data}=await supabaseClient.auth.getUser();
+    const {data} =
+        await supabaseClient.auth.getUser();
 
-return data.user;
-
+    return data.user;
 }
 
 
 async function updateUser(){
 
-const user=await getUser();
+    const user = await getUser();
 
-const navButtons=
-document.getElementById("navButtons");
+    const navButtons =
+        document.getElementById("navButtons");
 
-const userBox=
-document.getElementById("userBox");
+    const userBox =
+        document.getElementById("userBox");
 
-if(user){
+    if(user){
 
-navButtons.style.display="none";
+        navButtons.style.display="none";
+        userBox.style.display="flex";
 
-userBox.style.display="flex";
+        document.getElementById("userEmail")
+            .textContent = user.email || "حسابي";
 
-document.getElementById("userEmail").textContent=
-user.email || "حسابي";
+        await ensureStore(user);
 
-await ensureStore(user);
+    }else{
 
-}else{
-
-navButtons.style.display="flex";
-
-userBox.style.display="none";
-
-}
-
+        navButtons.style.display="flex";
+        userBox.style.display="none";
+    }
 }
 
 
@@ -2723,57 +1878,64 @@ userBox.style.display="none";
 
 async function ensureStore(user){
 
-const {data:store}=await supabaseClient
-.from("stores")
-.select("*")
-.eq("user_id",user.id)
-.maybeSingle();
+    const {data:store,error} =
+        await supabaseClient
+        .from("stores")
+        .select("*")
+        .eq("user_id",user.id)
+        .maybeSingle();
 
-if(!store){
+    if(error){
+        console.error(error);
+        return;
+    }
 
-await supabaseClient
-.from("stores")
-.insert({
+    if(!store){
 
-user_id:user.id,
+        const {error:insertError} =
+            await supabaseClient
+            .from("stores")
+            .insert({
 
-store_name:"متجري الجديد",
+                user_id:user.id,
 
-description:"مرحباً بكم في متجري",
+                store_name:"متجري الجديد",
 
-theme_color:"#111111",
+                description:"مرحباً بكم في متجري",
 
-accent_color:"#d7b238",
+                theme_color:"#111111",
 
-layout:"grid"
+                accent_color:"#d7b238",
 
-});
+                layout:"grid"
 
-}
+            });
 
+        if(insertError){
+            console.error(insertError);
+        }
+    }
 }
 
 
 /* =========================================================
-   START STORE
+   CREATE STORE
 ========================================================= */
 
 async function startStoreCreation(){
 
-const user=await getUser();
+    const user = await getUser();
 
-if(user){
+    if(user){
 
-await ensureStore(user);
+        await ensureStore(user);
 
-openDashboard();
+        openDashboard();
 
-}else{
+    }else{
 
-openModal("registerModal");
-
-}
-
+        openModal("registerModal");
+    }
 }
 
 
@@ -2783,65 +1945,63 @@ openModal("registerModal");
 
 async function register(){
 
-const email=
-document.getElementById("registerEmail")
-.value.trim();
+    const email =
+        document.getElementById("registerEmail")
+        .value.trim();
 
-const password=
-document.getElementById("registerPassword")
-.value;
+    const password =
+        document.getElementById("registerPassword")
+        .value;
 
-const error=
-document.getElementById("registerError");
+    const error =
+        document.getElementById("registerError");
 
-error.textContent="";
+    error.textContent="";
 
-if(!email || !password){
+    if(!email || !password){
 
-error.textContent=
-"اكتب البريد وكلمة المرور";
+        error.textContent =
+            "اكتب البريد وكلمة المرور";
 
-return;
+        return;
+    }
 
-}
+    if(password.length < 6){
 
-if(password.length < 6){
+        error.textContent =
+            "كلمة المرور يجب أن تكون 6 أحرف على الأقل";
 
-error.textContent=
-"كلمة المرور يجب أن تكون 6 أحرف على الأقل";
+        return;
+    }
 
-return;
+    const {data,error:err} =
+        await supabaseClient.auth.signUp({
+            email,
+            password
+        });
 
-}
+    if(err){
 
-const {data,error:err}=
-await supabaseClient.auth.signUp({
+        error.textContent=err.message;
 
-email,
-password
+        return;
+    }
 
-});
+    if(data.user){
 
-if(err){
+        await ensureStore(data.user);
 
-error.textContent=err.message;
+        closeModal("registerModal");
 
-return;
+        await updateUser();
 
-}
+        openDashboard();
 
-if(data.user){
+    }else{
 
-await ensureStore(data.user);
-
-closeModal("registerModal");
-
-await updateUser();
-
-openDashboard();
-
-}
-
+        error.textContent =
+            "تم إنشاء الحساب. تحقق من بريدك الإلكتروني إذا طلب منك ذلك.";
+    }
 }
 
 
@@ -2851,56 +2011,50 @@ openDashboard();
 
 async function login(){
 
-const email=
-document.getElementById("loginEmail")
-.value.trim();
+    const email =
+        document.getElementById("loginEmail")
+        .value.trim();
 
-const password=
-document.getElementById("loginPassword")
-.value;
+    const password =
+        document.getElementById("loginPassword")
+        .value;
 
-const error=
-document.getElementById("loginError");
+    const error =
+        document.getElementById("loginError");
 
-error.textContent="";
+    error.textContent="";
 
-if(!email || !password){
+    if(!email || !password){
 
-error.textContent=
-"اكتب البريد وكلمة المرور";
+        error.textContent =
+            "اكتب البريد وكلمة المرور";
 
-return;
+        return;
+    }
 
-}
+    const {data,error:err} =
+        await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+        });
 
-const {data,error:err}=
-await supabaseClient.auth.signInWithPassword({
+    if(err){
 
-email,
-password
+        error.textContent=err.message;
 
-});
+        return;
+    }
 
-if(err){
+    if(data.user){
 
-error.textContent=err.message;
+        await ensureStore(data.user);
 
-return;
+        closeModal("loginModal");
 
-}
+        await updateUser();
 
-if(data.user){
-
-await ensureStore(data.user);
-
-closeModal("loginModal");
-
-await updateUser();
-
-openDashboard();
-
-}
-
+        openDashboard();
+    }
 }
 
 
@@ -2910,23 +2064,20 @@ openDashboard();
 
 async function googleLogin(){
 
-const {error}=
-await supabaseClient.auth.signInWithOAuth({
+    const {error} =
+        await supabaseClient.auth.signInWithOAuth({
 
-provider:"google",
+            provider:"google",
 
-options:{
-redirectTo:window.location.origin
-}
+            options:{
+                redirectTo:window.location.origin
+            }
 
-});
+        });
 
-if(error){
-
-alert(error.message);
-
-}
-
+    if(error){
+        alert(error.message);
+    }
 }
 
 
@@ -2936,12 +2087,14 @@ alert(error.message);
 
 async function logout(){
 
-await supabaseClient.auth.signOut();
+    await supabaseClient.auth.signOut();
 
-showHome();
+    cart=[];
+    currentStoreId=null;
 
-await updateUser();
+    showHome();
 
+    await updateUser();
 }
 
 
@@ -2951,68 +2104,70 @@ await updateUser();
 
 async function openDashboard(){
 
-const user=await getUser();
+    const user = await getUser();
 
-if(!user){
+    if(!user){
 
-openModal("loginModal");
+        openModal("loginModal");
 
-return;
+        return;
+    }
 
-}
+    await ensureStore(user);
 
-await ensureStore(user);
+    document.getElementById("homePage").style.display="none";
 
-document.getElementById("homePage").style.display="none";
+    document.getElementById("storePage").style.display="none";
 
-document.getElementById("storePage").style.display="none";
+    document.getElementById("dashboard").style.display="block";
 
-document.getElementById("dashboard").style.display="block";
+    document.getElementById("mainHeader").style.display="block";
 
-document.getElementById("mainHeader").style.display="block";
+    await loadMyStore();
+    await loadMyProducts();
+    await loadMyOrders();
 
-await loadMyStore();
-
-await loadMyProducts();
-
-await loadMyOrders();
-
-window.scrollTo(0,0);
-
+    window.scrollTo(0,0);
 }
 
 
 /* =========================================================
-   LOAD STORE
+   LOAD MY STORE
 ========================================================= */
 
 async function loadMyStore(){
 
-const user=await getUser();
+    const user=await getUser();
 
-if(!user)return;
+    if(!user)return;
 
-const {data:store}=
-await supabaseClient
-.from("stores")
-.select("*")
-.eq("user_id",user.id)
-.maybeSingle();
+    const {data:store,error} =
+        await supabaseClient
+        .from("stores")
+        .select("*")
+        .eq("user_id",user.id)
+        .maybeSingle();
 
-if(!store)return;
+    if(error){
 
-document.getElementById("storeName").value=
-store.store_name || "";
+        console.error(error);
 
-document.getElementById("storeDescription").value=
-store.description || "";
+        return;
+    }
 
-document.getElementById("themeColor").value=
-store.theme_color || "#111111";
+    if(!store)return;
 
-document.getElementById("accentColor").value=
-store.accent_color || "#d7b238";
+    document.getElementById("storeName").value =
+        store.store_name || "";
 
+    document.getElementById("storeDescription").value =
+        store.description || "";
+
+    document.getElementById("themeColor").value =
+        store.theme_color || "#111111";
+
+    document.getElementById("accentColor").value =
+        store.accent_color || "#d7b238";
 }
 
 
@@ -3022,46 +2177,50 @@ store.accent_color || "#d7b238";
 
 async function uploadImage(file,folder){
 
-if(!file)return null;
+    if(!file)return null;
 
-const ext=
-file.name.split(".").pop();
+    const ext =
+        file.name.split(".").pop().toLowerCase();
 
-const path=
-folder+"/"+
-Date.now()+"-"+
-Math.random().toString(36).substring(2)+
-"."+
-ext;
+    const safeExt =
+        ["jpg","jpeg","png","webp","gif"].includes(ext)
+        ? ext
+        : "jpg";
 
-const {error}=
-await supabaseClient
-.storage
-.from("products")
-.upload(
-path,
-file,
-{
-upsert:true
-}
-);
+    const path =
+        folder + "/" +
+        Date.now() + "-" +
+        Math.random().toString(36).substring(2) +
+        "." +
+        safeExt;
 
-if(error){
+    const {error} =
+        await supabaseClient
+        .storage
+        .from("products")
+        .upload(
+            path,
+            file,
+            {
+                upsert:false,
+                contentType:file.type
+            }
+        );
 
-alert(error.message);
+    if(error){
 
-return null;
+        alert("خطأ في رفع الصورة:\n"+error.message);
 
-}
+        return null;
+    }
 
-const {data}=
-supabaseClient
-.storage
-.from("products")
-.getPublicUrl(path);
+    const {data} =
+        supabaseClient
+        .storage
+        .from("products")
+        .getPublicUrl(path);
 
-return data.publicUrl;
-
+    return data.publicUrl;
 }
 
 
@@ -3071,94 +2230,80 @@ return data.publicUrl;
 
 async function saveStore(){
 
-const user=await getUser();
+    const user=await getUser();
 
-if(!user)return;
+    if(!user)return;
 
-let logoUrl=null;
+    let logoUrl=null;
+    let coverUrl=null;
 
-let coverUrl=null;
+    const logoFile =
+        document.getElementById("logoFile")
+        .files[0];
 
+    const coverFile =
+        document.getElementById("coverFile")
+        .files[0];
 
-const logoFile=
-document.getElementById("logoFile")
-.files[0];
+    if(logoFile){
 
+        logoUrl =
+            await uploadImage(
+                logoFile,
+                "logos"
+            );
+    }
 
-const coverFile=
-document.getElementById("coverFile")
-.files[0];
+    if(coverFile){
 
+        coverUrl =
+            await uploadImage(
+                coverFile,
+                "covers"
+            );
+    }
 
-if(logoFile){
+    const updateData={
 
-logoUrl=
-await uploadImage(
-logoFile,
-"logos"
-);
+        store_name:
+            document.getElementById("storeName")
+            .value.trim(),
 
-}
+        description:
+            document.getElementById("storeDescription")
+            .value.trim(),
 
+        theme_color:
+            document.getElementById("themeColor")
+            .value,
 
-if(coverFile){
+        accent_color:
+            document.getElementById("accentColor")
+            .value
+    };
 
-coverUrl=
-await uploadImage(
-coverFile,
-"covers"
-);
+    if(logoUrl)
+        updateData.logo_url=logoUrl;
 
-}
+    if(coverUrl)
+        updateData.cover_url=coverUrl;
 
+    const {error} =
+        await supabaseClient
+        .from("stores")
+        .update(updateData)
+        .eq("user_id",user.id);
 
-const updateData={
+    if(error){
 
-store_name:
-document.getElementById("storeName")
-.value.trim(),
+        alert(error.message);
 
-description:
-document.getElementById("storeDescription")
-.value.trim(),
+        return;
+    }
 
-theme_color:
-document.getElementById("themeColor")
-.value,
+    alert("✅ تم حفظ بيانات المتجر");
 
-accent_color:
-document.getElementById("accentColor")
-.value
-
-};
-
-
-if(logoUrl)
-updateData.logo_url=logoUrl;
-
-
-if(coverUrl)
-updateData.cover_url=coverUrl;
-
-
-const {error}=
-await supabaseClient
-.from("stores")
-.update(updateData)
-.eq("user_id",user.id);
-
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-
-alert("✅ تم حفظ بيانات المتجر");
-
+    await loadMyStore();
 }
 
 
@@ -3168,220 +2313,197 @@ alert("✅ تم حفظ بيانات المتجر");
 
 async function addProduct(){
 
-const user=await getUser();
+    const user=await getUser();
 
-if(!user)return;
+    if(!user)return;
 
+    const name =
+        document.getElementById("productName")
+        .value.trim();
 
-const name=
-document.getElementById("productName")
-.value.trim();
+    const price =
+        document.getElementById("productPrice")
+        .value;
 
+    const description =
+        document.getElementById("productDescription")
+        .value.trim();
 
-const price=
-document.getElementById("productPrice")
-.value;
+    const file =
+        document.getElementById("productImage")
+        .files[0];
 
+    if(!name || !price){
 
-const description=
-document.getElementById("productDescription")
-.value.trim();
+        alert("اكتب اسم المنتج والسعر");
 
+        return;
+    }
 
-const file=
-document.getElementById("productImage")
-.files[0];
+    if(Number(price)<0){
 
+        alert("السعر غير صحيح");
 
-if(!name || !price){
+        return;
+    }
 
-alert("اكتب اسم المنتج والسعر");
+    let imageUrl=null;
 
-return;
+    if(file){
 
-}
+        imageUrl =
+            await uploadImage(
+                file,
+                "product-images"
+            );
+    }
 
+    const {error} =
+        await supabaseClient
+        .from("products")
+        .insert({
 
-let imageUrl=null;
+            name:name,
 
+            price:Number(price),
 
-if(file){
+            description:description,
 
-imageUrl=
-await uploadImage(
-file,
-"product-images"
-);
+            image_url:imageUrl,
 
-}
+            user_id:user.id
+        });
 
+    if(error){
 
-const {error}=
-await supabaseClient
-.from("products")
-.insert({
+        alert(error.message);
 
-name:name,
+        return;
+    }
 
-price:Number(price),
+    document.getElementById("productName").value="";
+    document.getElementById("productPrice").value="";
+    document.getElementById("productDescription").value="";
+    document.getElementById("productImage").value="";
 
-description:description,
+    await loadMyProducts();
 
-image_url:imageUrl,
-
-user_id:user.id
-
-});
-
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-
-document.getElementById("productName").value="";
-
-document.getElementById("productPrice").value="";
-
-document.getElementById("productDescription").value="";
-
-document.getElementById("productImage").value="";
-
-
-await loadMyProducts();
-
-
-alert("✅ تمت إضافة المنتج");
-
+    alert("✅ تمت إضافة المنتج");
 }
 
 
 /* =========================================================
-   MY PRODUCTS
+   LOAD PRODUCTS
 ========================================================= */
 
 async function loadMyProducts(){
 
-const user=await getUser();
+    const user=await getUser();
 
-if(!user)return;
+    if(!user)return;
 
+    const {data:products,error} =
+        await supabaseClient
+        .from("products")
+        .select("*")
+        .eq("user_id",user.id)
+        .order("id",{ascending:false});
 
-const {data:products,error}=
-await supabaseClient
-.from("products")
-.select("*")
-.eq("user_id",user.id)
-.order("id",{ascending:false});
+    if(error){
 
+        console.error(error);
 
-if(error){
+        return;
+    }
 
-console.error(error);
-
-return;
-
+    renderMyProducts(products || []);
 }
 
 
-renderMyProducts(products || []);
-
-}
-
+/* =========================================================
+   RENDER MY PRODUCTS
+========================================================= */
 
 function renderMyProducts(products){
 
-const box=
-document.getElementById("myProducts");
+    const box =
+        document.getElementById("myProducts");
 
+    if(!products.length){
 
-if(!products.length){
+        box.innerHTML=`
 
-box.innerHTML=`
+        <p style="
+        grid-column:1/-1;
+        text-align:center;
+        color:#777;
+        padding:30px">
 
-<p style="
-grid-column:1/-1;
-text-align:center;
-color:#777;
-padding:30px">
+        لا توجد منتجات حتى الآن
 
-لا توجد منتجات حتى الآن
+        </p>
 
-</p>
+        `;
 
-`;
+        return;
+    }
 
-return;
+    box.innerHTML =
+        products.map(product=>`
 
-}
+        <div class="product-card">
 
+        ${
+            product.image_url
 
-box.innerHTML=
-products.map(product=>`
+            ?
 
-<div class="product-card">
+            `<img
+            src="${escapeHtml(product.image_url)}"
+            alt="${escapeHtml(product.name)}">`
 
-${
-product.image_url
+            :
 
-?
+            `<div style="
+            height:250px;
+            background:#eee;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:50px">
 
-`<img
-src="${escapeHtml(product.image_url)}"
-alt="${escapeHtml(product.name)}">`
+            🛍️
 
-:
+            </div>`
+        }
 
-`<div style="
-height:260px;
-background:#eee;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:50px">
+        <div class="product-info">
 
-🛍️
+        <h3>
+        ${escapeHtml(product.name)}
+        </h3>
 
-</div>`
+        <div class="product-price">
+        ${Number(product.price)} جنيه
+        </div>
 
-}
+        <p>
+        ${escapeHtml(product.description || "")}
+        </p>
 
+        <button
+        class="buy-btn"
+        onclick="deleteProduct('${escapeHtml(String(product.id))}')">
 
-<div class="product-info">
+        🗑️ حذف المنتج
 
-<h3>
-${escapeHtml(product.name)}
-</h3>
+        </button>
 
+        </div>
 
-<div class="product-price">
-${product.price} جنيه
-</div>
+        </div>
 
-
-<p>
-${escapeHtml(product.description || "")}
-</p>
-
-
-<button
-class="buy-btn"
-onclick="deleteProduct('${escapeHtml(String(product.id))}')">
-
-🗑️ حذف المنتج
-
-</button>
-
-</div>
-
-</div>
-
-`).join("");
-
+        `).join("");
 }
 
 
@@ -3391,60 +2513,55 @@ onclick="deleteProduct('${escapeHtml(String(product.id))}')">
 
 async function deleteProduct(id){
 
-if(!confirm("هل تريد حذف المنتج؟"))
-return;
+    if(!confirm("هل تريد حذف المنتج؟"))
+        return;
 
+    const user=await getUser();
 
-const {error}=
-await supabaseClient
-.from("products")
-.delete()
-.eq("id",id);
+    if(!user)return;
 
+    const {error} =
+        await supabaseClient
+        .from("products")
+        .delete()
+        .eq("id",id)
+        .eq("user_id",user.id);
 
-if(error){
+    if(error){
 
-alert(error.message);
+        alert(error.message);
 
-return;
+        return;
+    }
 
-}
+    await loadMyProducts();
 
-
-await loadMyProducts();
-
-alert("✅ تم حذف المنتج");
-
+    alert("✅ تم حذف المنتج");
 }
 
 
 /* =========================================================
-   MY STORE
+   VIEW STORE
 ========================================================= */
 
 async function viewMyStore(){
 
-const user=await getUser();
+    const user=await getUser();
 
+    if(!user){
 
-if(!user){
+        openModal("loginModal");
 
-openModal("loginModal");
+        return;
+    }
 
-return;
+    const url =
+        window.location.origin +
+        window.location.pathname +
+        "?store=" +
+        encodeURIComponent(user.id);
 
-}
-
-
-const url=
-window.location.origin+
-window.location.pathname+
-"?store="+
-user.id;
-
-
-window.location.href=url;
-
+    window.location.href=url;
 }
 
 
@@ -3454,124 +2571,107 @@ window.location.href=url;
 
 async function loadPublicStore(userId){
 
-currentStoreId=userId;
+    currentStoreId=userId;
 
+    const {data:store,error} =
+        await supabaseClient
+        .from("stores")
+        .select("*")
+        .eq("user_id",userId)
+        .maybeSingle();
 
-const {data:store,error}=
-await supabaseClient
-.from("stores")
-.select("*")
-.eq("user_id",userId)
-.maybeSingle();
+    if(error || !store){
 
+        alert("المتجر غير موجود");
 
-if(error || !store){
+        showHome();
 
-alert("المتجر غير موجود");
+        return;
+    }
 
-showHome();
+    document.getElementById("homePage").style.display="none";
 
-return;
+    document.getElementById("dashboard").style.display="none";
 
-}
+    document.getElementById("storePage").style.display="block";
 
+    document.getElementById("mainHeader").style.display="none";
 
-document.getElementById("homePage").style.display="none";
+    document.getElementById("publicStoreName")
+        .textContent =
+        store.store_name || "متجري";
 
-document.getElementById("dashboard").style.display="none";
+    document.getElementById("publicStoreDescription")
+        .textContent =
+        store.description || "";
 
-document.getElementById("storePage").style.display="block";
+    const accent =
+        store.accent_color || "#d8b43c";
 
-document.getElementById("mainHeader").style.display="none";
+    document.documentElement
+        .style.setProperty(
+            "--store-accent",
+            accent
+        );
 
+    const hero =
+        document.getElementById("storeHero");
 
-document.getElementById("publicStoreName").textContent=
-store.store_name || "متجري";
+    if(store.cover_url){
 
+        hero.style.backgroundImage =
+            `linear-gradient(
+                to bottom,
+                rgba(0,0,0,.1),
+                rgba(0,0,0,.9)
+            ),url("${escapeCssUrl(store.cover_url)}")`;
 
-document.getElementById("publicStoreDescription").textContent=
-store.description || "";
+    }else{
 
+        hero.style.backgroundImage =
+            `linear-gradient(
+                to bottom,
+                rgba(0,0,0,.1),
+                rgba(0,0,0,.9)
+            ),linear-gradient(
+                135deg,
+                ${store.theme_color || "#061112"},
+                #172526
+            )`;
+    }
 
-const hero=
-document.getElementById("storeHero");
+    const logo =
+        document.getElementById("publicLogo");
 
+    if(store.logo_url){
 
-hero.style.backgroundImage=
-store.cover_url
+        logo.src=store.logo_url;
+        logo.style.display="inline-block";
 
-?
+    }else{
 
-`linear-gradient(
-to bottom,
-rgba(0,0,0,.15),
-rgba(0,0,0,.9)
-),url("${store.cover_url}")`
+        logo.style.display="none";
+    }
 
-:
+    const {data:products,error:productsError} =
+        await supabaseClient
+        .from("products")
+        .select("*")
+        .eq("user_id",userId)
+        .order("id",{ascending:false});
 
-`linear-gradient(
-to bottom,
-rgba(0,0,0,.1),
-rgba(0,0,0,.9)
-),linear-gradient(
-135deg,
-${store.theme_color || "#061112"},
-#172526
-)`;
+    if(productsError){
 
+        console.error(productsError);
 
-if(store.accent_color){
+        alert("حدث خطأ في تحميل المنتجات");
 
-document.documentElement.style.setProperty(
-"--store-accent",
-store.accent_color
-);
+        return;
+    }
 
-}
+    renderPublicProducts(products || []);
 
-
-const logo=
-document.getElementById("publicLogo");
-
-
-if(store.logo_url){
-
-logo.src=store.logo_url;
-
-logo.style.display="inline-block";
-
-}else{
-
-logo.style.display="none";
-
-}
-
-
-const {data:products,error:productsError}=
-await supabaseClient
-.from("products")
-.select("*")
-.eq("user_id",userId)
-.order("id",{ascending:false});
-
-
-if(productsError){
-
-console.error(productsError);
-
-alert("حدث خطأ في تحميل المنتجات");
-
-return;
-
-}
-
-
-renderPublicProducts(products || []);
-
-
-window.scrollTo(0,0);
-
+    window.scrollTo(0,0);
 }
 
 
@@ -3581,360 +2681,302 @@ window.scrollTo(0,0);
 
 function renderPublicProducts(products){
 
-const grid=
-document.getElementById("productsGrid");
+    const grid =
+        document.getElementById("productsGrid");
 
-publicProductsCache={};
+    publicProductsCache={};
 
+    if(!products.length){
 
-if(!products.length){
+        grid.innerHTML=`
 
-grid.innerHTML=`
+        <div style="
+        grid-column:1/-1;
+        text-align:center;
+        padding:70px 20px">
 
-<div style="
-grid-column:1/-1;
-text-align:center;
-padding:70px 20px">
+        <div style="font-size:60px">
+        🛍️
+        </div>
 
-<div style="font-size:60px">
-🛍️
-</div>
+        <h3 style="margin-top:15px">
+        المتجر جديد
+        </h3>
 
-<h3 style="margin-top:15px">
-المتجر جديد
-</h3>
+        <p style="
+        color:#777;
+        margin-top:10px">
 
-<p style="
-color:#777;
-margin-top:10px">
+        لا توجد منتجات مضافة حتى الآن
 
-لا توجد منتجات مضافة حتى الآن
+        </p>
 
-</p>
+        </div>
 
-</div>
+        `;
 
-`;
+        return;
+    }
 
-return;
+    products.forEach(product=>{
 
-}
+        publicProductsCache[
+            String(product.id)
+        ]=product;
 
+    });
 
-products.forEach(product=>{
+    grid.innerHTML =
+        products.map(product=>`
 
-publicProductsCache[String(product.id)] =
-product;
+        <div class="product-card">
 
-});
+        ${
+            product.image_url
 
+            ?
 
-grid.innerHTML=
-products.map(product=>`
+            `<img
+            src="${escapeHtml(product.image_url)}"
+            alt="${escapeHtml(product.name)}">`
 
-<div class="product-card">
+            :
 
-${
-product.image_url
+            `<div style="
+            height:250px;
+            background:#eee;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:55px">
 
-?
+            🛍️
 
-`<img
-src="${escapeHtml(product.image_url)}"
-alt="${escapeHtml(product.name)}">`
+            </div>`
+        }
 
-:
+        <div class="product-info">
 
-`<div style="
-height:260px;
-background:#eee;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:55px">
+        <h3>
+        ${escapeHtml(product.name)}
+        </h3>
 
-🛍️
+        <div class="product-price">
+        ${Number(product.price)} جنيه
+        </div>
 
-</div>`
+        <p>
+        ${escapeHtml(product.description || "")}
+        </p>
 
-}
+        <button
+        class="buy-btn"
+        onclick="addToCartById('${escapeHtml(String(product.id))}')">
 
+        🛒 أضف للسلة
 
-<div class="product-info">
+        </button>
 
-<h3>
-${escapeHtml(product.name)}
-</h3>
+        </div>
 
+        </div>
 
-<div class="product-price">
-${product.price} جنيه
-</div>
-
-
-<p>
-${escapeHtml(product.description || "")}
-</p>
-
-
-<button
-class="buy-btn"
-onclick="addToCartById('${escapeHtml(String(product.id))}')">
-
-🛒 أضف للسلة
-
-</button>
-
-</div>
-
-</div>
-
-`).join("");
-
+        `).join("");
 }
 
 
 /* =========================================================
-   ADD TO CART BY ID
+   CART
 ========================================================= */
 
 function addToCartById(id){
 
-const product=
-publicProductsCache[String(id)];
+    const product =
+        publicProductsCache[String(id)];
 
+    if(!product){
 
-if(!product){
+        alert("❌ المنتج غير متاح");
 
-alert("❌ المنتج غير متاح");
+        return;
+    }
 
-return;
-
+    addToCart(product);
 }
 
-
-addToCart(product);
-
-}
-
-
-/* =========================================================
-   CART ADD
-========================================================= */
 
 function addToCart(product){
 
-if(!currentStoreId){
+    if(!currentStoreId){
 
-alert("⚠️ افتح متجرًا أولاً");
+        alert("⚠️ افتح متجرًا أولاً");
 
-return;
+        return;
+    }
 
+    const existing =
+        cart.find(
+            item =>
+            String(item.id) ===
+            String(product.id)
+        );
+
+    if(existing){
+
+        existing.quantity++;
+
+    }else{
+
+        cart.push({
+
+            id:product.id,
+
+            name:product.name,
+
+            price:Number(product.price),
+
+            image_url:product.image_url || null,
+
+            quantity:1
+        });
+    }
+
+    updateCart();
+
+    alert("✅ تمت إضافة المنتج للسلة");
 }
 
-
-const existing=
-cart.find(
-item=>String(item.id)===String(product.id)
-);
-
-
-if(existing){
-
-existing.quantity++;
-
-}else{
-
-cart.push({
-
-id:product.id,
-
-name:product.name,
-
-price:Number(product.price),
-
-image_url:product.image_url || null,
-
-quantity:1
-
-});
-
-}
-
-
-updateCart();
-
-
-alert("✅ تمت إضافة المنتج للسلة");
-
-}
-
-
-/* =========================================================
-   UPDATE CART
-========================================================= */
 
 function updateCart(){
 
-const count=
-cart.reduce(
-(total,item)=>
-total+item.quantity,
-0
-);
+    const count =
+        cart.reduce(
+            (total,item)=>
+            total + item.quantity,
+            0
+        );
 
+    document.getElementById("cartCount")
+        .textContent=count;
 
-document.getElementById("cartCount").textContent=
-count;
+    const total =
+        cart.reduce(
+            (sum,item)=>
+            sum + item.price * item.quantity,
+            0
+        );
 
+    document.getElementById("cartTotal")
+        .textContent=total;
 
-const total=
-cart.reduce(
-(sum,item)=>
-sum+(item.price*item.quantity),
-0
-);
-
-
-document.getElementById("cartTotal").textContent=
-total;
-
-
-renderCart();
-
+    renderCart();
 }
 
-
-/* =========================================================
-   RENDER CART
-========================================================= */
 
 function renderCart(){
 
-const box=
-document.getElementById("cartItems");
+    const box =
+        document.getElementById("cartItems");
 
+    if(!cart.length){
 
-if(!cart.length){
+        box.innerHTML=`
 
-box.innerHTML=`
+        <div style="
+        text-align:center;
+        padding:40px 10px">
 
-<div style="
-text-align:center;
-padding:40px 10px">
+        <div style="font-size:55px">
+        🛒
+        </div>
 
-<div style="font-size:55px">
-🛒
-</div>
+        <h3>السلة فارغة</h3>
 
-<h3>
-السلة فارغة
-</h3>
+        <p style="
+        color:#777;
+        margin-top:10px">
 
-<p style="
-color:#777;
-margin-top:10px">
+        أضف منتجاتك إلى السلة أولاً
 
-أضف منتجاتك إلى السلة أولاً
+        </p>
 
-</p>
+        </div>
 
-</div>
+        `;
 
-`;
+        return;
+    }
 
-return;
+    box.innerHTML =
+        cart.map((item,index)=>`
 
+        <div class="cart-item">
+
+        ${
+            item.image_url
+
+            ?
+
+            `<img
+            src="${escapeHtml(item.image_url)}"
+            alt="${escapeHtml(item.name)}">`
+
+            :
+
+            `<div style="
+            width:65px;
+            height:65px;
+            border-radius:12px;
+            background:#eee;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:28px">
+
+            🛍️
+
+            </div>`
+        }
+
+        <div class="cart-item-info">
+
+        <h4>
+        ${escapeHtml(item.name)}
+        </h4>
+
+        <div class="cart-item-price">
+        ${item.price} جنيه × ${item.quantity}
+        </div>
+
+        </div>
+
+        <button
+        class="remove-cart"
+        onclick="removeFromCart(${index})">
+
+        🗑️
+
+        </button>
+
+        </div>
+
+        `).join("");
 }
 
-
-box.innerHTML=
-cart.map((item,index)=>`
-
-<div class="cart-item">
-
-${
-item.image_url
-
-?
-
-`<img
-src="${escapeHtml(item.image_url)}"
-alt="${escapeHtml(item.name)}">`
-
-:
-
-`<div style="
-width:70px;
-height:70px;
-border-radius:12px;
-background:#eee;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:30px">
-
-🛍️
-
-</div>`
-
-}
-
-
-<div class="cart-item-info">
-
-<h4>
-${escapeHtml(item.name)}
-</h4>
-
-
-<div class="cart-item-price">
-
-${item.price} جنيه × ${item.quantity}
-
-</div>
-
-</div>
-
-
-<button
-class="remove-cart"
-onclick="removeFromCart(${index})">
-
-🗑️
-
-</button>
-
-</div>
-
-`).join("");
-
-}
-
-
-/* =========================================================
-   REMOVE CART
-========================================================= */
 
 function removeFromCart(index){
 
-cart.splice(index,1);
+    cart.splice(index,1);
 
-updateCart();
-
+    updateCart();
 }
 
 
-/* =========================================================
-   OPEN CART
-========================================================= */
-
 function openCart(){
 
-updateCart();
+    updateCart();
 
-openModal("cartModal");
-
+    openModal("cartModal");
 }
 
 
@@ -3944,618 +2986,413 @@ openModal("cartModal");
 
 async function sendOrder(){
 
-if(!cart.length){
+    if(!cart.length){
 
-alert("🛒 السلة فارغة");
+        alert("🛒 السلة فارغة");
 
-return;
+        return;
+    }
 
-}
+    if(!currentStoreId){
 
+        alert("⚠️ المتجر غير محدد");
 
-if(!currentStoreId){
+        return;
+    }
 
-alert(
-"⚠️ لا يمكن تسجيل الطلب لأن المتجر غير محدد."
-);
+    const name =
+        document.getElementById("orderName")
+        .value.trim();
 
-return;
+    const phone =
+        document.getElementById("orderPhone")
+        .value.trim();
 
-}
+    const address =
+        document.getElementById("orderAddress")
+        .value.trim();
 
+    const paymentMethod =
+        document.getElementById("paymentMethod")
+        .value;
 
-const name=
-document.getElementById("orderName")
-.value.trim();
+    if(!name || !phone || !address){
 
+        alert(
+            "⚠️ اكتب الاسم والموبايل والعنوان"
+        );
 
-const phone=
-document.getElementById("orderPhone")
-.value.trim();
+        return;
+    }
 
+    if(paymentMethod==="online"){
 
-const address=
-document.getElementById("orderAddress")
-.value.trim();
+        alert(
+            "💳 الدفع الإلكتروني غير متاح حالياً.\n\n"+
+            "اختار الدفع عند الاستلام."
+        );
 
+        return;
+    }
 
-const paymentMethod=
-document.getElementById("paymentMethod")
-.value;
+    const total =
+        cart.reduce(
+            (sum,item)=>
+            sum + item.price * item.quantity,
+            0
+        );
 
+    const orderItems =
+        cart.map(item=>({
 
-if(!name || !phone || !address){
+            product_id:item.id,
 
-alert(
-"⚠️ من فضلك اكتب الاسم والموبايل والعنوان"
-);
+            name:item.name,
 
-return;
+            price:item.price,
 
-}
+            quantity:item.quantity
+        }));
 
+    const {error} =
+        await supabaseClient
+        .from("orders")
+        .insert({
 
-/* =====================================================
-   ONLINE PAYMENT - NOT ACTIVE YET
-===================================================== */
+            store_id:currentStoreId,
 
-if(paymentMethod==="online"){
+            customer_name:name,
 
-alert(
-"💳 الدفع الإلكتروني لم يتم ربطه بعد.\n\n"+
-"اختار الدفع عند الاستلام حالياً."
-);
+            customer_phone:phone,
 
-return;
+            customer_address:address,
 
-}
+            items:orderItems,
 
+            total:total,
 
-/* =====================================================
-   TOTAL
-===================================================== */
+            payment_method:"cash",
 
-const total=
-cart.reduce(
-(sum,item)=>
-sum+
-(Number(item.price)*Number(item.quantity)),
-0
-);
+            payment_status:"pending",
 
+            order_status:"new"
+        });
 
-/* =====================================================
-   ITEMS
-===================================================== */
+    if(error){
 
-const orderItems=
-cart.map(item=>({
+        alert(
+            "❌ حدث خطأ أثناء إرسال الطلب:\n\n"+
+            error.message
+        );
 
-id:item.id,
+        return;
+    }
 
-name:item.name,
+    cart=[];
 
-price:Number(item.price),
+    updateCart();
 
-quantity:Number(item.quantity),
+    document.getElementById("orderName").value="";
+    document.getElementById("orderPhone").value="";
+    document.getElementById("orderAddress").value="";
+    document.getElementById("paymentMethod").value="cash";
 
-image_url:item.image_url || null
+    closeModal("cartModal");
 
-}));
-
-
-/* =====================================================
-   INSERT ORDER
-===================================================== */
-
-const {error}=
-await supabaseClient
-.from("orders")
-.insert({
-
-store_id:currentStoreId,
-
-customer_name:name,
-
-customer_phone:phone,
-
-customer_address:address,
-
-items:orderItems,
-
-total:total,
-
-payment_method:"cash",
-
-payment_status:"pending",
-
-order_status:"new"
-
-});
-
-
-if(error){
-
-console.error("ORDER ERROR:",error);
-
-alert(
-"❌ حصل خطأ أثناء تسجيل الطلب:\n\n"+
-error.message
-);
-
-return;
-
-}
-
-
-/* =====================================================
-   SUCCESS
-===================================================== */
-
-cart=[];
-
-updateCart();
-
-
-document.getElementById("orderName").value="";
-
-document.getElementById("orderPhone").value="";
-
-document.getElementById("orderAddress").value="";
-
-document.getElementById("paymentMethod").value="cash";
-
-
-closeModal("cartModal");
-
-
-alert(
-"✅ تم تسجيل طلبك بنجاح!\n\n"+
-"💵 الدفع عند الاستلام\n"+
-"📦 سيتم التواصل معك لتأكيد الطلب."
-);
-
+    alert(
+        "✅ تم إرسال طلبك بنجاح!\n\n"+
+        "سيتم التواصل معك لتأكيد الطلب."
+    );
 }
 
 
 /* =========================================================
-   LOAD MY ORDERS
+   ORDERS
 ========================================================= */
 
 async function loadMyOrders(){
 
-const user=await getUser();
+    const user=await getUser();
 
-if(!user){
+    if(!user)return;
 
-return;
+    const box =
+        document.getElementById("ordersList");
 
-}
+    const {data:orders,error} =
+        await supabaseClient
+        .from("orders")
+        .select("*")
+        .eq("store_id",user.id)
+        .order("id",{ascending:false});
 
+    if(error){
 
-const box=
-document.getElementById("ordersList");
+        console.error(error);
 
+        box.innerHTML=`
+        <div class="no-orders">
+        ❌ حدث خطأ أثناء تحميل الطلبات
+        </div>`;
 
-if(!box){
+        return;
+    }
 
-return;
+    if(!orders || !orders.length){
 
-}
+        box.innerHTML=`
+        <div class="no-orders">
+        📦 لا توجد طلبات حتى الآن
+        </div>`;
 
+        return;
+    }
 
-box.innerHTML=`
-
-<div class="no-orders">
-⏳ جاري تحميل الطلبات...
-</div>
-
-`;
-
-
-const {data:orders,error}=
-await supabaseClient
-.from("orders")
-.select("*")
-.eq("store_id",user.id)
-.order("created_at",{ascending:false});
-
-
-if(error){
-
-console.error("ORDERS ERROR:",error);
-
-box.innerHTML=`
-
-<div class="no-orders">
-
-❌ تعذر تحميل الطلبات
-
-<br><br>
-
-${escapeHtml(error.message)}
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-if(!orders || !orders.length){
-
-box.innerHTML=`
-
-<div class="no-orders">
-
-<div style="font-size:50px">
-📦
-</div>
-
-<h3 style="margin-top:10px">
-لا توجد طلبات حتى الآن
-</h3>
-
-<p style="margin-top:8px">
-عندما يطلب أحد العملاء منتجًا ستظهر الطلبات هنا.
-</p>
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-box.innerHTML=
-orders.map(order=>renderOrderCard(order))
-.join("");
-
+    box.innerHTML =
+        orders.map(order =>
+            renderOrderCard(order)
+        ).join("");
 }
 
 
 /* =========================================================
-   RENDER ORDER
+   ORDER CARD
 ========================================================= */
 
 function renderOrderCard(order){
 
-let items=[];
+    const items =
+        Array.isArray(order.items)
+        ? order.items
+        : [];
 
-try{
+    const itemsHtml =
+        items.map(item=>`
 
-items=
-Array.isArray(order.items)
-?
-order.items
-:
-JSON.parse(order.items || "[]");
+        <div class="order-product-row">
 
-}catch(e){
+        <span>
+        ${escapeHtml(item.name)}
+        × ${Number(item.quantity)}
+        </span>
 
-items=[];
+        <strong>
+        ${Number(item.price) * Number(item.quantity)}
+        جنيه
+        </strong>
 
-}
+        </div>
 
+        `).join("");
 
-const date=
-order.created_at
-?
-new Date(order.created_at).toLocaleString("ar-EG")
-:
-"";
+    const date =
+        order.created_at
+        ? new Date(order.created_at)
+            .toLocaleString("ar-EG")
+        : "";
 
+    const status =
+        order.order_status || "new";
 
-const status=
-order.order_status || "new";
+    return `
 
+    <div class="order-card">
 
-const payment=
-order.payment_method==="cash"
-?
-"💵 الدفع عند الاستلام"
-:
-"💳 الدفع الإلكتروني";
+    <div class="order-top">
 
+    <div>
 
-return `
+    <div class="order-number">
+    🧾 طلب #${escapeHtml(String(order.id))}
+    </div>
 
-<div class="order-card">
+    <div class="order-date">
+    ${escapeHtml(date)}
+    </div>
 
-<div class="order-top">
+    </div>
 
-<div class="order-number">
+    <div class="status-badge">
+    ${escapeHtml(status)}
+    </div>
 
-📦 طلب #${escapeHtml(String(order.id))}
+    </div>
 
-</div>
 
+    <div class="order-info">
 
-<div class="order-date">
+    <div class="order-info-box">
 
-${escapeHtml(date)}
+    <strong>👤 العميل</strong>
 
-</div>
+    ${escapeHtml(order.customer_name || "")}
 
-</div>
+    </div>
 
 
-<div class="order-info">
+    <div class="order-info-box">
 
+    <strong>📱 الموبايل</strong>
 
-<div class="order-info-box">
+    ${escapeHtml(order.customer_phone || "")}
 
-<strong>
-👤 العميل
-</strong>
+    </div>
 
-${escapeHtml(order.customer_name || "")}
 
-</div>
+    <div class="order-info-box">
 
+    <strong>📍 العنوان</strong>
 
-<div class="order-info-box">
+    ${escapeHtml(order.customer_address || "")}
 
-<strong>
-📱 الموبايل
-</strong>
+    </div>
 
-${escapeHtml(order.customer_phone || "")}
+    </div>
 
-</div>
 
+    <div class="order-products">
 
-<div class="order-info-box">
+    ${itemsHtml}
 
-<strong>
-📍 العنوان
-</strong>
+    </div>
 
-${escapeHtml(order.customer_address || "")}
 
-</div>
+    <div class="order-total">
 
+    الإجمالي:
+    ${Number(order.total || 0)}
+    جنيه
 
-</div>
+    </div>
 
 
-<div class="order-products">
+    <div class="order-status-row">
 
-<strong>
-🛍️ المنتجات
-</strong>
+    <select
+    class="order-status-select"
+    id="status-${escapeHtml(String(order.id))}">
 
+    <option value="new"
+    ${status==="new"?"selected":""}>
+    🆕 جديد
+    </option>
 
-${
-items.length
+    <option value="processing"
+    ${status==="processing"?"selected":""}>
+    ⚙️ جاري التجهيز
+    </option>
 
-?
+    <option value="shipped"
+    ${status==="shipped"?"selected":""}>
+    🚚 تم الشحن
+    </option>
 
-items.map(item=>`
+    <option value="completed"
+    ${status==="completed"?"selected":""}>
+    ✅ مكتمل
+    </option>
 
-<div class="order-product-row">
+    <option value="cancelled"
+    ${status==="cancelled"?"selected":""}>
+    ❌ ملغي
+    </option>
 
-<span>
-${escapeHtml(item.name || "منتج")}
-× ${Number(item.quantity || 1)}
-</span>
+    </select>
 
-<strong>
-${Number(item.price || 0) *
-Number(item.quantity || 1)}
- جنيه
-</strong>
 
-</div>
+    <button
+    class="order-status-btn"
+    onclick="updateOrderStatus('${escapeHtml(String(order.id))}')">
 
-`).join("")
+    حفظ الحالة
 
-:
+    </button>
 
-"<p style='color:#777;margin-top:10px'>لا توجد بيانات للمنتجات</p>"
+    </div>
 
-}
+    </div>
 
-</div>
-
-
-<div class="order-total">
-
-💰 الإجمالي:
-${Number(order.total || 0)}
-جنيه
-
-</div>
-
-
-<div style="
-margin-bottom:15px;
-color:#555">
-
-${payment}
-
-</div>
-
-
-<div class="order-status-row">
-
-<span class="status-badge">
-
-الحالة الحالية:
-${getStatusText(status)}
-
-</span>
-
-
-<select
-class="order-status-select"
-id="status-${escapeHtml(String(order.id))}">
-
-<option value="new" ${status==="new"?"selected":""}>
-🟡 جديد
-</option>
-
-<option value="confirmed" ${status==="confirmed"?"selected":""}>
-🟢 تم التأكيد
-</option>
-
-<option value="shipped" ${status==="shipped"?"selected":""}>
-🚚 تم الشحن
-</option>
-
-<option value="delivered" ${status==="delivered"?"selected":""}>
-✅ تم التسليم
-</option>
-
-<option value="cancelled" ${status==="cancelled"?"selected":""}>
-❌ ملغي
-</option>
-
-</select>
-
-
-<button
-class="order-status-btn"
-onclick="updateOrderStatus('${escapeHtml(String(order.id))}')">
-
-💾 حفظ الحالة
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
+    `;
 }
 
 
 /* =========================================================
-   STATUS TEXT
-========================================================= */
-
-function getStatusText(status){
-
-const statuses={
-
-new:"جديد",
-
-confirmed:"تم التأكيد",
-
-shipped:"تم الشحن",
-
-delivered:"تم التسليم",
-
-cancelled:"ملغي"
-
-};
-
-return statuses[status] || "جديد";
-
-}
-
-
-/* =========================================================
-   UPDATE ORDER STATUS
+   UPDATE ORDER
 ========================================================= */
 
 async function updateOrderStatus(orderId){
 
-const user=await getUser();
+    const user=await getUser();
 
-if(!user){
+    if(!user)return;
 
-alert("⚠️ يجب تسجيل الدخول");
+    const select =
+        document.getElementById(
+            "status-"+orderId
+        );
 
-return;
+    if(!select)return;
 
-}
+    const {error} =
+        await supabaseClient
+        .from("orders")
+        .update({
+            order_status:select.value
+        })
+        .eq("id",orderId)
+        .eq("store_id",user.id);
 
+    if(error){
 
-const select=
-document.getElementById(
-"status-"+orderId
-);
+        alert(
+            "❌ حدث خطأ:\n\n"+
+            error.message
+        );
 
+        return;
+    }
 
-if(!select){
+    alert("✅ تم تحديث حالة الطلب");
 
-return;
-
-}
-
-
-const newStatus=
-select.value;
-
-
-const {error}=
-await supabaseClient
-.from("orders")
-.update({
-
-order_status:newStatus
-
-})
-.eq("id",orderId)
-.eq("store_id",user.id);
-
-
-if(error){
-
-console.error(error);
-
-alert(
-"❌ تعذر تحديث حالة الطلب:\n\n"+
-error.message
-);
-
-return;
-
-}
-
-
-alert("✅ تم تحديث حالة الطلب");
-
-await loadMyOrders();
-
+    await loadMyOrders();
 }
 
 
 /* =========================================================
-   SCROLL PRODUCTS
+   SCROLL
 ========================================================= */
 
 function scrollToProducts(){
 
-document
-.getElementById("publicProducts")
-.scrollIntoView({
-behavior:"smooth"
-});
-
+    document
+        .getElementById("publicProducts")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
 }
 
 
 /* =========================================================
-   ESCAPE HTML
+   SECURITY HELPERS
 ========================================================= */
 
-function escapeHtml(text){
+function escapeHtml(value){
 
-const div=
-document.createElement("div");
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
 
-div.textContent=
-text || "";
 
-return div.innerHTML;
+function escapeCssUrl(value){
 
+    return String(value ?? "")
+        .replace(/\\/g,"\\\\")
+        .replace(/"/g,'\\"')
+        .replace(/\)/g,"\\)");
 }
 
 
@@ -4565,50 +3402,45 @@ return div.innerHTML;
 
 async function start(){
 
-await updateUser();
+    await updateUser();
 
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
 
-const params=
-new URLSearchParams(
-window.location.search
-);
+    const storeId =
+        params.get("store");
 
+    if(storeId){
 
-const storeId=
-params.get("store");
+        await loadPublicStore(storeId);
 
+    }else{
 
-if(storeId){
-
-await loadPublicStore(storeId);
-
-}
-
+        showHome();
+    }
 }
 
 
 /* =========================================================
-   AUTH LISTENER
+   AUTH STATE
 ========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
-async function(){
-
-setTimeout(
-async function(){
-
-await updateUser();
-
-},
-0
-);
-
-}
+    async ()=>{
+        setTimeout(
+            async ()=>{
+                await updateUser();
+            },
+            100
+        );
+    }
 );
 
 
 /* =========================================================
-   RUN
+   START APP
 ========================================================= */
 
 start();
