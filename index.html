@@ -3629,15 +3629,117 @@ function openProductForm(){
     );
 
 
-    form.style.display =
-    form.style.display === "none"
-    ?
-    "grid"
-    :
-    "none";
+    if(
+        form.style.display === "none" ||
+        form.style.display === ""
+    ){
+
+        /* فتح النموذج كمنتج جديد */
+
+        editingProductId = null;
+
+        editingProductImagePath = null;
+
+        editingProductImageUrl = null;
+
+
+        document.getElementById(
+            "productName"
+        ).value = "";
+
+
+        document.getElementById(
+            "productPrice"
+        ).value = "";
+
+
+        document.getElementById(
+            "productStock"
+        ).value = "";
+
+
+        document.getElementById(
+            "productDescription"
+        ).value = "";
+
+
+        document.getElementById(
+            "productImageFile"
+        ).value = "";
+
+
+        const preview =
+        document.getElementById(
+            "imagePreview"
+        );
+
+
+        preview.src = "";
+
+        preview.style.display =
+        "none";
+
+
+        const message =
+        document.getElementById(
+            "productMessage"
+        );
+
+
+        message.textContent = "";
+
+
+        const saveButton =
+        document.getElementById(
+            "saveProductButton"
+        );
+
+
+        saveButton.textContent =
+        "حفظ المنتج";
+
+
+        const cancelButton =
+        document.getElementById(
+            "cancelEditButton"
+        );
+
+
+        if(cancelButton){
+
+            cancelButton.style.display =
+            "none";
+
+        }
+
+
+        const formTitle =
+        document.getElementById(
+            "productFormTitle"
+        );
+
+
+        if(formTitle){
+
+            formTitle.textContent =
+            "➕ إضافة منتج جديد";
+
+        }
+
+
+        form.style.display =
+        "grid";
+
+    }
+
+    else{
+
+        form.style.display =
+        "none";
+
+    }
 
 }
-
 
 /* =========================
    UPLOAD PRODUCT IMAGE
