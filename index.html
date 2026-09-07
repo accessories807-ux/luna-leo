@@ -3484,42 +3484,136 @@ async function loadProducts(){
                         product.price || 0
                     ).toLocaleString("ar-EG")
                 }
+async function loadProducts(){
 
-                جنيه
+    const productsList =
+        document.getElementById("productsList");
+
+    if(!productsList){
+        return;
+    }
+
+    productsList.innerHTML =
+        `<div class="empty-state">⏳ جاري تحميل المنتجات...</div>`;
+
+    if(!currentStore){
+
+        productsList.innerHTML =
+            `<div class="empty-state">
+                🏪 أنشئ متجرك أولاً لإضافة المنتجات.
+            </div>`;
+
+        return;
+    }
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("products")
+        .select("*")
+        .eq("store_id", currentStore.id)
+        .order("created_at", {
+            ascending:false
+        });
+
+    if(error){
+
+        console.error(error);
+
+        productsList.innerHTML =
+            `<div class="empty-state">
+                ❌ حدث خطأ أثناء تحميل المنتجات.
+            </div>`;
+
+        return;
+    }
+
+    currentProducts = data || [];
+
+    if(currentProducts.length === 0){
+
+        productsList.innerHTML =
+            `<div class="empty-state">
+                📦 لا توجد منتجات حتى الآن.
+                <br>
+                اضغط على «إضافة منتج» لبدء إضافة منتجاتك.
+            </div>`;
+
+        return;
+    }
+
+    productsList.innerHTML =
+        currentProducts.map(product => {
+
+            const image =
+                product.image_url
+                ? `<img
+                    src="${product.image_url}"
+                    alt="${product.name || "منتج"}"
+                    class="product-image"
+                   >`
+                : `<div class="product-image no-image">
+                    📦
+                   </div>`;
+
+            return `
+                <div class="product-card">
+
+                    ${image}
+
+                    <div class="product-info">
+
+                        <h3>
+                            ${product.name || "بدون اسم"}
+                        </h3>
+
+                        <div class="product-price">
+                            💰 ${Number(product.price || 0).toFixed(2)} جنيه
+                        </div>
+
+                        <div class="product-stock">
+                            📦 المخزون:
+                            ${product.stock ?? 0}
+                        </div>
+
+                        ${
+                            product.description
+                            ?
+                            `<p class="product-description">
+                                ${product.description}
+                            </p>`
+                            :
+                            ""
+                        }
+
+                        <div class="product-actions">
+
+                            <button
+                                type="button"
+                                class="edit-product-btn"
+                                onclick="editProduct(${Number(product.id)})"
+                            >
+                                ✏️ تعديل
+                            </button>
+
+                            <button
+                                type="button"
+                                class="delete-product-btn"
+                                onclick="deleteProduct(${Number(product.id)})"
+                            >
+                                🗑️ حذف
+                            </button>
+
+                        </div>
+
+                    </div>
 
                 </div>
+            `;
 
-
-                <p
-                style="
-                color:#888;
-                margin-top:5px">
-
-                المخزون:
-                ${Number(product.stock || 0)}
-
-                </p>
-
-
-                <p
-                style="
-                color:#888;
-                margin-top:5px">
-
-                ${
-                    escapeHTML(
-                        product.description || ""
-                    )
-                }
-
-                </p>
-
-            </div>
-
-        </div>
-
-    `).join("");
-
+        }).join("");
 }
 
 
@@ -3852,13 +3946,374 @@ async function saveProduct(){
             700
         );
 
+async function saveProduct(){
+
+    if(!currentStore){
+
+        alert("أنشئ المتجر أولاً.");
+
+        return;
+
+    }
+
+    const name =
+    document.getElementById("productName")
+    .value.trim();
+
+    const price =
+    Number(
+        document.getElementById("productPrice")
+        .value
+    );
+
+    const stock =
+    Number(
+        document.getElementById("productStock")
+        .value || 0
+    );
+
+    const fileInput =
+    document.getElementById("productImageFile");
+
+    const file =
+    fileInput.files[0];
+
+    const description =
+    document.getElementById("productDescription")
+    .value.trim();
+
+    const message =
+    document.getElementById("productMessage");
+
+    const saveButton =
+    document.getElementById("saveProductButton");
+
+    if(!name || !price){
+
+        message.textContent =
+        "⚠️ اكتب اسم المنتج والسعر.";
+
+        return;
+
+    }
+
+    saveButton.disabled = true;
+
+    message.textContent =
+    editingProductId
+    ? "⏳ جاري تعديل المنتج..."
+    : "⏳ جاري حفظ المنتج...";
+
+    let uploadedFile = null;
+
+    try{
+
+        /* =========================
+           رفع الصورة الجديدة
+        ========================= */
+
+        if(file){
+
+            message.textContent =
+            "📸 جاري رفع الصورة...";
+
+            uploadedFile =
+            await uploadProductImage(file);
+
+        }
+
+
+        /* =========================
+           تعديل منتج موجود
+        ========================= */
+
+        if(editingProductId){
+
+            const updateData = {
+
+                name:name,
+
+                price:price,
+
+                stock:stock,
+
+                description:description
+
+            };
+
+
+            /*
+             * لو اختار صورة جديدة
+             * نغير الصورة
+             *
+             * لو لم يختر صورة
+             * تظل الصورة القديمة كما هي
+             */
+
+            if(uploadedFile){
+
+                updateData.image_url =
+                uploadedFile.url;
+
+            }
+
+
+            const {
+                error
+            } =
+            await supabaseClient
+            .from("products")
+            .update(updateData)
+            .eq(
+                "id",
+                editingProductId
+            )
+            .eq(
+                "store_id",
+                currentStore.id
+            );
+
+
+            if(error){
+
+                /*
+                 * لو حصل خطأ في تحديث قاعدة البيانات
+                 * نحذف الصورة الجديدة التي رفعناها
+                 */
+
+                if(
+                    uploadedFile &&
+                    uploadedFile.path
+                ){
+
+                    await supabaseClient
+                    .storage
+                    .from("products")
+                    .remove([
+                        uploadedFile.path
+                    ]);
+
+                }
+
+                throw error;
+
+            }
+
+
+            /*
+             * حذف الصورة القديمة
+             * فقط لو تم رفع صورة جديدة بنجاح
+             */
+
+            if(
+                uploadedFile &&
+                editingProductImagePath &&
+                editingProductImagePath !==
+                uploadedFile.path
+            ){
+
+                try{
+
+                    await supabaseClient
+                    .storage
+                    .from("products")
+                    .remove([
+                        editingProductImagePath
+                    ]);
+
+                }catch(storageError){
+
+                    console.error(
+                        "تعذر حذف الصورة القديمة:",
+                        storageError
+                    );
+
+                }
+
+            }
+
+
+            message.textContent =
+            "✅ تم تعديل المنتج بنجاح.";
+
+        }
+
+
+        /* =========================
+           إضافة منتج جديد
+        ========================= */
+
+        else{
+
+            const productData = {
+
+                store_id:
+                currentStore.id,
+
+                name:name,
+
+                price:price,
+
+                stock:stock,
+
+                description:description,
+
+                image_url:
+                uploadedFile
+                ? uploadedFile.url
+                : null
+
+            };
+
+
+            const {
+                error
+            } =
+            await supabaseClient
+            .from("products")
+            .insert([
+                productData
+            ]);
+
+
+            if(error){
+
+                /*
+                 * لو فشل حفظ المنتج
+                 * نحذف الصورة التي تم رفعها
+                 */
+
+                if(
+                    uploadedFile &&
+                    uploadedFile.path
+                ){
+
+                    await supabaseClient
+                    .storage
+                    .from("products")
+                    .remove([
+                        uploadedFile.path
+                    ]);
+
+                }
+
+                throw error;
+
+            }
+
+
+            message.textContent =
+            "🎉 تم إضافة المنتج بنجاح.";
+
+        }
+
+
+        /* =========================
+           تحديث القائمة
+        ========================= */
+
+        await loadProducts();
+
+
+        /* =========================
+           تنظيف النموذج
+        ========================= */
+
+        editingProductId = null;
+
+        editingProductImagePath = null;
+
+        editingProductImageUrl = null;
+
+
+        document.getElementById(
+            "productName"
+        ).value = "";
+
+
+        document.getElementById(
+            "productPrice"
+        ).value = "";
+
+
+        document.getElementById(
+            "productStock"
+        ).value = "";
+
+
+        document.getElementById(
+            "productDescription"
+        ).value = "";
+
+
+        fileInput.value = "";
+
+
+        const preview =
+        document.getElementById(
+            "imagePreview"
+        );
+
+
+        preview.src = "";
+
+        preview.style.display =
+        "none";
+
+
+        /*
+         * إعادة شكل الزر للوضع الطبيعي
+         */
+
+        saveButton.textContent =
+        "حفظ المنتج";
+
+
+        const cancelButton =
+        document.getElementById(
+            "cancelEditButton"
+        );
+
+        if(cancelButton){
+
+            cancelButton.style.display =
+            "none";
+
+        }
+
+
+        const formTitle =
+        document.getElementById(
+            "productFormTitle"
+        );
+
+        if(formTitle){
+
+            formTitle.textContent =
+            "➕ إضافة منتج جديد";
+
+        }
+
+
+        setTimeout(
+            ()=>{
+
+                document.getElementById(
+                    "productForm"
+                ).style.display =
+                "none";
+
+            },
+            700
+        );
+
 
     }catch(error){
 
         console.error(error);
 
 
-        message.textContent=
+        message.textContent =
         "❌ حدث خطأ: " +
         (
             error.message ||
@@ -3868,8 +4323,9 @@ async function saveProduct(){
     }
 
 
-    saveButton.disabled=false;
+    saveButton.disabled = false;
 
+        }
 }
 
 
