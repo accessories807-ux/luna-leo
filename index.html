@@ -473,6 +473,25 @@ footer{padding:40px 0;border-top:1px solid rgba(255,255,255,.07)}
 
 <div style="margin-top:15px;padding:15px;background:#0b191b;border-radius:15px;border:1px solid rgba(214,179,90,.15)">
     <h3 style="margin-bottom:10px;color:#d6b35a">📢 شارك متجرك</h3>
+   <div style="margin-bottom:12px">
+    <input
+        id="storeShareLink"
+        type="text"
+        readonly
+        onclick="this.select()"
+        style="
+            width:100%;
+            padding:12px;
+            border-radius:10px;
+            border:1px solid rgba(214,179,90,.25);
+            background:#071113;
+            color:#d6b35a;
+            outline:none;
+            direction:ltr;
+            text-align:left;
+        "
+        placeholder="رابط متجرك">
+   </div>
     <p style="color:#888;font-size:13px;margin-bottom:12px">
         شارك رابط متجرك مع عملائك على مواقع التواصل الاجتماعي
     </p>
@@ -482,6 +501,7 @@ footer{padding:40px 0;border-top:1px solid rgba(255,255,255,.07)}
         <button class="gold-btn" onclick="shareStoreFacebook()">🔵 Facebook</button>
         <button class="gold-btn" onclick="shareStoreTelegram()">✈️ Telegram</button>
         <button class="gold-btn" onclick="copyStoreLink()">🔗 نسخ الرابط</button>
+      
         <button class="gold-btn" onclick="shareStoreNative()">📤 مشاركة</button>
     </div>
 
