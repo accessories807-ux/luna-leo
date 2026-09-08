@@ -6645,44 +6645,74 @@ async function printOrderInvoice(orderId){
             error
         );
 
-        alert("❌ حدث خطأ أثناء تحميل الطلب.");
+        alert(
+            "❌ حدث خطأ أثناء تحميل الطلب."
+        );
 
         return;
     }
 
     if(!order){
 
-        alert("❌ لم يتم العثور على الطلب.");
+        alert(
+            "❌ لم يتم العثور على الطلب."
+        );
 
         return;
     }
 
+    /* =========================
+       STORE DATA
+    ========================= */
 
-    let items=[];
+    const storeName =
+        currentStore.name ||
+        "متجري";
 
+    const storePhone =
+        currentStore.phone ||
+        currentStore.phone_number ||
+        "";
+
+    const storeAddress =
+        currentStore.address ||
+        "";
+
+    const storeLogo =
+        currentStore.logo_url ||
+        currentStore.logo ||
+        "";
+
+    /* =========================
+       ORDER ITEMS
+    ========================= */
+
+    let items = [];
 
     if(Array.isArray(order.items)){
 
-        items=order.items;
+        items = order.items;
 
     }else if(
-        typeof order.items==="string"
+        typeof order.items === "string"
     ){
 
         try{
 
-            items=JSON.parse(order.items);
+            items =
+                JSON.parse(
+                    order.items
+                );
 
         }catch(error){
 
             console.error(error);
 
-            items=[];
+            items = [];
 
         }
 
     }
-
 
     const itemsHTML =
         items.map(item=>`
@@ -6705,15 +6735,23 @@ async function printOrderInvoice(orderId){
                 <td>
                     ${Number(
                         item.price || 0
-                    ).toLocaleString("ar-EG")}
+                    ).toLocaleString(
+                        "ar-EG"
+                    )}
                     جنيه
                 </td>
 
                 <td>
                     ${(
-                        Number(item.price || 0) *
-                        Number(item.quantity || 0)
-                    ).toLocaleString("ar-EG")}
+                        Number(
+                            item.price || 0
+                        ) *
+                        Number(
+                            item.quantity || 0
+                        )
+                    ).toLocaleString(
+                        "ar-EG"
+                    )}
                     جنيه
                 </td>
 
@@ -6721,9 +6759,11 @@ async function printOrderInvoice(orderId){
 
         `).join("");
 
+    /* =========================
+       INVOICE
+    ========================= */
 
-    const invoiceHTML=`
-
+    const invoiceHTML = `
 <!DOCTYPE html>
 
 <html lang="ar" dir="rtl">
@@ -6732,7 +6772,10 @@ async function printOrderInvoice(orderId){
 
 <meta charset="UTF-8">
 
-<title>فاتورة LUNA&LEO</title>
+<title>
+    ${escapeHTML(storeName)}
+    - فاتورة
+</title>
 
 <style>
 
@@ -6756,19 +6799,57 @@ body{
 
 }
 
-h1{
-
-    text-align:center;
-
-    margin:0;
-
-}
-
-.header{
+.store-header{
 
     text-align:center;
 
     margin-bottom:25px;
+
+    padding-bottom:20px;
+
+    border-bottom:2px solid #222;
+
+}
+
+.store-logo{
+
+    max-width:100px;
+
+    max-height:100px;
+
+    object-fit:contain;
+
+    margin-bottom:10px;
+
+}
+
+.store-name{
+
+    font-size:30px;
+
+    font-weight:bold;
+
+    margin:5px 0;
+
+}
+
+.invoice-title{
+
+    font-size:20px;
+
+    color:#555;
+
+    margin-top:8px;
+
+}
+
+.store-contact{
+
+    color:#666;
+
+    margin-top:8px;
+
+    line-height:1.8;
 
 }
 
@@ -6782,7 +6863,7 @@ h1{
 
     margin-bottom:20px;
 
-    line-height:1.8;
+    line-height:1.9;
 
 }
 
@@ -6814,7 +6895,7 @@ th{
 
     margin-top:20px;
 
-    font-size:21px;
+    font-size:22px;
 
     font-weight:bold;
 
@@ -6826,9 +6907,21 @@ th{
 
     text-align:center;
 
-    margin-top:35px;
+    margin-top:40px;
 
     color:#777;
+
+    line-height:1.8;
+
+}
+
+.platform{
+
+    font-size:12px;
+
+    color:#aaa;
+
+    margin-top:8px;
 
 }
 
@@ -6874,148 +6967,244 @@ th{
 
 </head>
 
-
 <body>
 
+    <div class="store-header">
 
-<div class="header">
+        ${
+            storeLogo
+            ?
 
-    <h1>
-        LUNA&LEO MARKET
-    </h1>
+            `
+            <img
+                src="${escapeHTML(
+                    storeLogo
+                )}"
+                class="store-logo"
+                alt="شعار المتجر"
+            >
+            `
 
-    <div>
-        فاتورة طلب
+            :
+
+            ""
+        }
+
+        <div class="store-name">
+
+            ${escapeHTML(
+                storeName
+            )}
+
+        </div>
+
+        <div class="invoice-title">
+
+            فاتورة طلب
+
+        </div>
+
+        ${
+            storePhone || storeAddress
+            ?
+
+            `
+            <div class="store-contact">
+
+                ${
+                    storePhone
+                    ?
+                    `📞 ${escapeHTML(
+                        storePhone
+                    )}`
+                    :
+                    ""
+                }
+
+                ${
+                    storeAddress
+                    ?
+                    `<br>📍 ${escapeHTML(
+                        storeAddress
+                    )}`
+                    :
+                    ""
+                }
+
+            </div>
+            `
+
+            :
+
+            ""
+        }
+
     </div>
 
-</div>
+
+    <div class="info">
+
+        <strong>
+            رقم الطلب:
+        </strong>
+
+        ${escapeHTML(
+            String(
+                order.id || ""
+            )
+        )}
+
+        <br>
+
+        <strong>
+            العميل:
+        </strong>
+
+        ${escapeHTML(
+            order.customer_name ||
+            "عميل"
+        )}
+
+        <br>
+
+        <strong>
+            الهاتف:
+        </strong>
+
+        ${escapeHTML(
+            order.customer_phone ||
+            "غير مضاف"
+        )}
+
+        <br>
+
+        <strong>
+            العنوان:
+        </strong>
+
+        ${escapeHTML(
+            order.customer_address ||
+            "غير مضاف"
+        )}
+
+        <br>
+
+        <strong>
+            طريقة الدفع:
+        </strong>
+
+        ${escapeHTML(
+            order.payment_method ||
+            "الدفع عند الاستلام"
+        )}
+
+    </div>
 
 
-<div class="info">
+    <table>
 
-    <strong>رقم الطلب:</strong>
+        <thead>
 
-    ${escapeHTML(
-        String(order.id || "")
-    )}
+            <tr>
 
-    <br>
+                <th>
+                    المنتج
+                </th>
 
-    <strong>العميل:</strong>
+                <th>
+                    الكمية
+                </th>
 
-    ${escapeHTML(
-        order.customer_name ||
-        "عميل"
-    )}
+                <th>
+                    سعر الوحدة
+                </th>
 
-    <br>
+                <th>
+                    الإجمالي
+                </th>
 
-    <strong>الهاتف:</strong>
+            </tr>
 
-    ${escapeHTML(
-        order.customer_phone ||
-        "غير مضاف"
-    )}
+        </thead>
 
-    <br>
+        <tbody>
 
-    <strong>العنوان:</strong>
+            ${
+                itemsHTML
+                ||
 
-    ${escapeHTML(
-        order.customer_address ||
-        "غير مضاف"
-    )}
+                `
+                <tr>
 
-    <br>
+                    <td colspan="4">
 
-    <strong>طريقة الدفع:</strong>
+                        لا توجد تفاصيل للمنتجات
 
-    ${escapeHTML(
-        order.payment_method ||
-        "الدفع عند الاستلام"
-    )}
+                    </td>
 
-</div>
+                </tr>
+                `
+            }
 
+        </tbody>
 
-<table>
-
-<thead>
-
-<tr>
-
-    <th>المنتج</th>
-
-    <th>الكمية</th>
-
-    <th>سعر الوحدة</th>
-
-    <th>الإجمالي</th>
-
-</tr>
-
-</thead>
+    </table>
 
 
-<tbody>
+    <div class="total">
 
-${
-    itemsHTML ||
-    `
-    <tr>
-        <td colspan="4">
-            لا توجد تفاصيل للمنتجات
-        </td>
-    </tr>
-    `
-}
+        الإجمالي:
 
-</tbody>
+        ${Number(
+            order.total || 0
+        ).toLocaleString(
+            "ar-EG"
+        )}
 
-</table>
+        جنيه
+
+    </div>
 
 
-<div class="total">
+    <div class="footer">
 
-    الإجمالي:
+        شكرًا لتعاملك مع
 
-    ${Number(
-        order.total || 0
-    ).toLocaleString("ar-EG")}
+        ${escapeHTML(
+            storeName
+        )}
 
-    جنيه
+        ❤️
 
-</div>
+        <div class="platform">
+
+            تم إنشاء هذه الفاتورة عبر
+            LUNA&LEO MARKET
+
+        </div>
+
+    </div>
 
 
-<div class="footer">
+    <button
+        class="print-btn"
+        onclick="window.print()"
+    >
 
-    شكرًا لتعاملك مع LUNA&LEO ❤️
+        🖨️ طباعة الفاتورة
 
-</div>
-
-
-<button
-    class="print-btn"
-    onclick="window.print()"
->
-    🖨️ طباعة الفاتورة
-</button>
-
+    </button>
 
 </body>
 
 </html>
-
 `;
-
 
     const invoiceWindow =
         window.open(
             "",
             "_blank"
         );
-
 
     if(!invoiceWindow){
 
@@ -7026,7 +7215,6 @@ ${
         return;
     }
 
-
     invoiceWindow.document.open();
 
     invoiceWindow.document.write(
@@ -7036,7 +7224,6 @@ ${
     invoiceWindow.document.close();
 
 }
-
 
 /* =====================================================
    CUSTOMERS
