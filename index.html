@@ -7745,9 +7745,7 @@ async function placeStoreOrder(){
         !publicStore ||
         !publicCart.length
     ){
-
         return;
-
     }
 
 
@@ -7797,7 +7795,6 @@ async function placeStoreOrder(){
             "⚠️ من فضلك املأ الاسم ورقم الهاتف والعنوان.";
 
         return;
-
     }
 
 
@@ -7855,7 +7852,19 @@ async function placeStoreOrder(){
         "";
 
 
+    /*
+       إنشاء رقم الطلب من الجهاز
+       حتى لا نحتاج لقراءة الطلب بعد إدخاله
+    */
+
+    const orderId =
+        makeUUID();
+
+
     const baseOrder = {
+
+        id:
+            orderId,
 
         store_id:
             publicStore.id,
@@ -7881,7 +7890,8 @@ async function placeStoreOrder(){
         payment_status:
             "pending",
 
-        status:"new",
+        status:
+            "new",
 
         cancel_token:
             makeUUID()
@@ -7889,40 +7899,12 @@ async function placeStoreOrder(){
     };
 
 
-    let result =
+    const result =
         await supabaseClient
             .from("orders")
             .insert(
                 baseOrder
-            )
-            .select("id")
-            .single();
-
-
-    /*
-       توافق مع حالة كون items
-       من نوع text بدل json/jsonb
-    */
-
-    if(result.error){
-
-        result =
-            await supabaseClient
-                .from("orders")
-                .insert({
-
-                    ...baseOrder,
-
-                    items:
-                        JSON.stringify(
-                            items
-                        )
-
-                })
-                .select("id")
-                .single();
-
-    }
+            );
 
 
     button.disabled =
@@ -7936,6 +7918,7 @@ async function placeStoreOrder(){
     if(result.error){
 
         console.error(
+            "ORDER ERROR:",
             result.error
         );
 
@@ -7945,14 +7928,12 @@ async function placeStoreOrder(){
 
 
         return;
-
     }
 
 
-    const orderId =
-        result.data?.id ||
-        "";
-
+    /*
+       الطلب تم بنجاح
+    */
 
     publicCart = [];
 
@@ -8009,7 +7990,9 @@ async function placeStoreOrder(){
     ).value =
         "";
 
-}
+    }
+
+
 
 
 /* =====================================================
