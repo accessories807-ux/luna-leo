@@ -469,7 +469,23 @@ footer{padding:40px 0;border-top:1px solid rgba(255,255,255,.07)}
 <p>📞 <span id="myStorePhone"></span></p>
 <p>💬 <span id="myStoreWhatsapp"></span></p><br>
 <button class="gold-btn" onclick="showDashboardSection('products')">📦 أضف منتج</button>
-    <button class="gold-btn" style="margin-top:10px" onclick="openMyPublicStore()">🌐 زيارة المتجر</button>
+<button class="gold-btn" style="margin-top:10px" onclick="openMyPublicStore()">🌐 زيارة المتجر</button>
+
+<div style="margin-top:15px;padding:15px;background:#0b191b;border-radius:15px;border:1px solid rgba(214,179,90,.15)">
+    <h3 style="margin-bottom:10px;color:#d6b35a">📢 شارك متجرك</h3>
+    <p style="color:#888;font-size:13px;margin-bottom:12px">
+        شارك رابط متجرك مع عملائك على مواقع التواصل الاجتماعي
+    </p>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="gold-btn" onclick="shareStoreWhatsApp()">🟢 WhatsApp</button>
+        <button class="gold-btn" onclick="shareStoreFacebook()">🔵 Facebook</button>
+        <button class="gold-btn" onclick="shareStoreTelegram()">✈️ Telegram</button>
+        <button class="gold-btn" onclick="copyStoreLink()">🔗 نسخ الرابط</button>
+        <button class="gold-btn" onclick="shareStoreNative()">📤 مشاركة</button>
+    </div>
+
+    <div id="storeShareMessage" class="form-message"></div>
 </div>
 </div>
 </div>
