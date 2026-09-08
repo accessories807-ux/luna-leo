@@ -5709,7 +5709,6 @@ async function loadOrders(){
 
     if(!currentStore) return;
 
-
     const {
         data,
         error
@@ -5727,7 +5726,6 @@ async function loadOrders(){
             }
         );
 
-
     if(error){
 
         console.error(
@@ -5738,10 +5736,8 @@ async function loadOrders(){
         return;
     }
 
-
     const orders =
         data || [];
-
 
     /* =========================
        STATISTICS
@@ -5759,9 +5755,7 @@ async function loadOrders(){
 
     }
 
-
     let sales = 0;
-
 
     orders.forEach(order=>{
 
@@ -5772,12 +5766,10 @@ async function loadOrders(){
 
     });
 
-
     const statSales =
         document.getElementById(
             "statSales"
         );
-
 
     if(statSales){
 
@@ -5788,7 +5780,6 @@ async function loadOrders(){
 
     }
 
-
     /* =========================
        STATUS
     ========================= */
@@ -5796,32 +5787,22 @@ async function loadOrders(){
     const statusArabic = {
 
         new:"جديد",
-
         processing:"قيد التجهيز",
-
         shipped:"تم الشحن",
-
         completed:"مكتمل",
-
         cancelled:"ملغي"
 
     };
 
-
     const statusEmoji = {
 
         new:"🆕",
-
         processing:"⚙️",
-
         shipped:"🚚",
-
         completed:"✅",
-
         cancelled:"❌"
 
     };
-
 
     /* =========================
        ORDERS CONTAINER
@@ -5832,15 +5813,12 @@ async function loadOrders(){
             "ordersContainer"
         );
 
-
     if(!container) return;
-
 
     if(!orders.length){
 
         container.className =
             "empty";
-
 
         container.innerHTML = `
 
@@ -5856,7 +5834,6 @@ async function loadOrders(){
 
         container.className = "";
 
-
         container.innerHTML =
             orders.map(order=>{
 
@@ -5864,6 +5841,18 @@ async function loadOrders(){
                     order.status ||
                     "new";
 
+                const orderId =
+                    String(
+                        order.id || ""
+                    )
+                    .replace(
+                        /\\/g,
+                        "\\\\"
+                    )
+                    .replace(
+                        /'/g,
+                        "\\'"
+                    );
 
                 const phone =
                     String(
@@ -5874,14 +5863,11 @@ async function loadOrders(){
                         ""
                     );
 
-
                 const whatsappPhone =
-                    phone
-                    .replace(
+                    phone.replace(
                         /^\+/,
                         ""
                     );
-
 
                 const orderDate =
                     order.created_at
@@ -5894,10 +5880,14 @@ async function loadOrders(){
                     :
                     "غير معروف";
 
+                /* =========================
+                   PRODUCTS
+                ========================= */
 
                 let itemsHTML =
                     "لا توجد تفاصيل للمنتجات";
 
+                let parsedItems = [];
 
                 if(
                     Array.isArray(
@@ -5905,8 +5895,47 @@ async function loadOrders(){
                     )
                 ){
 
+                    parsedItems =
+                        order.items;
+
+                }else if(
+                    typeof order.items ===
+                    "string"
+                ){
+
+                    try{
+
+                        const parsed =
+                            JSON.parse(
+                                order.items
+                            );
+
+                        if(
+                            Array.isArray(
+                                parsed
+                            )
+                        ){
+
+                            parsedItems =
+                                parsed;
+
+                        }
+
+                    }catch(e){
+
+                        console.error(
+                            "Items parse error:",
+                            e
+                        );
+
+                    }
+
+                }
+
+                if(parsedItems.length){
+
                     itemsHTML =
-                        order.items
+                        parsedItems
                         .map(item=>`
 
                             <div
@@ -5934,15 +5963,16 @@ async function loadOrders(){
                                             margin-top:4px
                                         "
                                     >
+
                                         الكمية:
                                         ${Number(
                                             item.quantity ||
                                             0
                                         )}
+
                                     </div>
 
                                 </div>
-
 
                                 <div
                                     style="
@@ -5967,100 +5997,7 @@ async function loadOrders(){
                         `)
                         .join("");
 
-                }else if(
-                    typeof order.items ===
-                    "string"
-                ){
-
-                    try{
-
-                        const parsedItems =
-                            JSON.parse(
-                                order.items
-                            );
-
-
-                        if(
-                            Array.isArray(
-                                parsedItems
-                            )
-                        ){
-
-                            itemsHTML =
-                                parsedItems
-                                .map(item=>`
-
-                                    <div
-                                        style="
-                                            display:flex;
-                                            justify-content:space-between;
-                                            gap:10px;
-                                            padding:10px 0;
-                                            border-bottom:1px solid rgba(255,255,255,.08)
-                                        "
-                                    >
-
-                                        <div>
-
-                                            <strong>
-                                                ${escapeHTML(
-                                                    item.name ||
-                                                    "منتج"
-                                                )}
-                                            </strong>
-
-                                            <div
-                                                style="
-                                                    color:#999;
-                                                    margin-top:4px
-                                                "
-                                            >
-                                                الكمية:
-                                                ${Number(
-                                                    item.quantity ||
-                                                    0
-                                                )}
-                                            </div>
-
-                                        </div>
-
-
-                                        <div
-                                            style="
-                                                color:#d6b35a;
-                                                white-space:nowrap
-                                            "
-                                        >
-
-                                            ${Number(
-                                                item.price ||
-                                                0
-                                            ).toLocaleString(
-                                                "ar-EG"
-                                            )}
-
-                                            جنيه
-
-                                        </div>
-
-                                    </div>
-
-                                `)
-                                .join("");
-
-                        }
-
-                    }catch(e){
-
-                        console.error(
-                            "Items parse error:",
-                            e
-                        );
-
-                    }
-
                 }
-
 
                 return `
 
@@ -6083,12 +6020,13 @@ async function loadOrders(){
                             color:#fff
                         "
                     >
+
                         ${escapeHTML(
                             order.customer_name ||
                             "عميل"
                         )}
-                    </strong>
 
+                    </strong>
 
                     <p
                         style="
@@ -6096,13 +6034,15 @@ async function loadOrders(){
                             margin:8px 0
                         "
                     >
+
                         📞
+
                         ${escapeHTML(
                             order.customer_phone ||
                             "غير مضاف"
                         )}
-                    </p>
 
+                    </p>
 
                     <p
                         style="
@@ -6110,13 +6050,15 @@ async function loadOrders(){
                             margin:8px 0
                         "
                     >
+
                         📍
+
                         ${escapeHTML(
                             order.customer_address ||
                             "غير مضاف"
                         )}
-                    </p>
 
+                    </p>
 
                     <p
                         style="
@@ -6126,7 +6068,9 @@ async function loadOrders(){
                             margin:10px 0
                         "
                     >
+
                         💰
+
                         ${Number(
                             order.total ||
                             0
@@ -6138,7 +6082,6 @@ async function loadOrders(){
 
                     </p>
 
-
                     <!-- DATE -->
 
                     <p
@@ -6148,10 +6091,11 @@ async function loadOrders(){
                             margin:8px 0
                         "
                     >
+
                         🕐
                         ${orderDate}
-                    </p>
 
+                    </p>
 
                     <!-- STATUS -->
 
@@ -6170,7 +6114,12 @@ async function loadOrders(){
                             "
                         >
 
-                            ${statusEmoji[orderStatus] || "📌"}
+                            ${
+                                statusEmoji[
+                                    orderStatus
+                                ] ||
+                                "📌"
+                            }
 
                             ${
                                 statusArabic[
@@ -6182,7 +6131,6 @@ async function loadOrders(){
                         </strong>
 
                     </p>
-
 
                     <!-- ACTION BUTTONS -->
 
@@ -6223,7 +6171,6 @@ async function loadOrders(){
                             ""
                         }
 
-
                         ${
                             phone
                             ?
@@ -6253,6 +6200,28 @@ async function loadOrders(){
 
                     </div>
 
+                    <!-- PRINT INVOICE -->
+
+                    <button
+                        type="button"
+                        onclick="printOrderInvoice('${orderId}')"
+                        style="
+                            width:100%;
+                            margin-top:8px;
+                            padding:12px;
+                            border:none;
+                            border-radius:10px;
+                            background:#d6b35a;
+                            color:#111;
+                            font-weight:bold;
+                            font-size:15px;
+                            cursor:pointer
+                        "
+                    >
+
+                        🖨️ طباعة الفاتورة
+
+                    </button>
 
                     <!-- ORDER DETAILS -->
 
@@ -6272,9 +6241,10 @@ async function loadOrders(){
                                 font-weight:bold
                             "
                         >
-                            👁️ تفاصيل الطلب
-                        </summary>
 
+                            👁️ تفاصيل الطلب
+
+                        </summary>
 
                         <div
                             style="
@@ -6288,9 +6258,10 @@ async function loadOrders(){
                                     margin-bottom:10px
                                 "
                             >
-                                🆔 رقم الطلب:
-                            </p>
 
+                                🆔 رقم الطلب:
+
+                            </p>
 
                             <div
                                 style="
@@ -6300,14 +6271,15 @@ async function loadOrders(){
                                     margin-bottom:15px
                                 "
                             >
+
                                 ${escapeHTML(
                                     String(
                                         order.id ||
                                         ""
                                     )
                                 )}
-                            </div>
 
+                            </div>
 
                             <h4
                                 style="
@@ -6315,14 +6287,16 @@ async function loadOrders(){
                                     margin-bottom:8px
                                 "
                             >
+
                                 📦 المنتجات
+
                             </h4>
 
-
                             <div>
-                                ${itemsHTML}
-                            </div>
 
+                                ${itemsHTML}
+
+                            </div>
 
                             <div
                                 style="
@@ -6338,19 +6312,23 @@ async function loadOrders(){
                                         margin:6px 0
                                     "
                                 >
+
                                     💳 طريقة الدفع:
+
                                     <strong
                                         style="color:#fff"
                                     >
+
                                         ${
                                             escapeHTML(
                                                 order.payment_method ||
                                                 "غير محددة"
                                             )
                                         }
-                                    </strong>
-                                </p>
 
+                                    </strong>
+
+                                </p>
 
                                 <p
                                     style="
@@ -6358,19 +6336,23 @@ async function loadOrders(){
                                         margin:6px 0
                                     "
                                 >
+
                                     💰 حالة الدفع:
+
                                     <strong
                                         style="color:#d6b35a"
                                     >
+
                                         ${
                                             escapeHTML(
                                                 order.payment_status ||
                                                 "pending"
                                             )
                                         }
-                                    </strong>
-                                </p>
 
+                                    </strong>
+
+                                </p>
 
                                 <p
                                     style="
@@ -6380,7 +6362,9 @@ async function loadOrders(){
                                         margin-top:10px
                                     "
                                 >
+
                                     الإجمالي:
+
                                     ${Number(
                                         order.total ||
                                         0
@@ -6389,6 +6373,7 @@ async function loadOrders(){
                                     )}
 
                                     جنيه
+
                                 </p>
 
                             </div>
@@ -6396,7 +6381,6 @@ async function loadOrders(){
                         </div>
 
                     </details>
-
 
                     <!-- STATUS SELECT -->
 
@@ -6413,19 +6397,15 @@ async function loadOrders(){
                                 margin-bottom:6px
                             "
                         >
-                            تغيير حالة الطلب
-                        </label>
 
+                            تغيير حالة الطلب
+
+                        </label>
 
                         <select
                             onchange="
                                 updateOrderStatus(
-                                    '${String(
-                                        order.id
-                                    ).replace(
-                                        /'/g,
-                                        "\\'"
-                                    )}',
+                                    '${orderId}',
                                     this.value
                                 )
                             "
@@ -6451,7 +6431,6 @@ async function loadOrders(){
                                 🆕 جديد
                             </option>
 
-
                             <option
                                 value="processing"
                                 ${
@@ -6462,7 +6441,6 @@ async function loadOrders(){
                             >
                                 ⚙️ قيد التجهيز
                             </option>
-
 
                             <option
                                 value="shipped"
@@ -6475,7 +6453,6 @@ async function loadOrders(){
                                 🚚 تم الشحن
                             </option>
 
-
                             <option
                                 value="completed"
                                 ${
@@ -6486,7 +6463,6 @@ async function loadOrders(){
                             >
                                 ✅ مكتمل
                             </option>
-
 
                             <option
                                 value="cancelled"
@@ -6512,7 +6488,6 @@ async function loadOrders(){
 
     }
 
-
     /* =========================
        RECENT ORDERS
     ========================= */
@@ -6522,15 +6497,12 @@ async function loadOrders(){
             "recentOrders"
         );
 
-
     if(!recent) return;
-
 
     if(!orders.length){
 
         recent.className =
             "empty";
-
 
         recent.innerHTML = `
 
@@ -6546,7 +6518,6 @@ async function loadOrders(){
 
         recent.className = "";
 
-
         recent.innerHTML =
             orders
             .slice(0,5)
@@ -6555,7 +6526,6 @@ async function loadOrders(){
                 const status =
                     order.status ||
                     "new";
-
 
                 return `
 
@@ -6612,7 +6582,7 @@ async function loadOrders(){
 
     }
 
-            }     
+            }
 /* =========================
    UPDATE ORDER STATUS
 ========================= */
