@@ -964,13 +964,28 @@ async function createMyStore(){
 }
 
 function displayStore(){
- if(!currentStore)return;
- document.getElementById("storeCreateArea").style.display="none";
- document.getElementById("storeCreated").style.display="block";
- document.getElementById("myStoreName").textContent=currentStore.name||"";
- document.getElementById("myStoreDescription").textContent=currentStore.description||"لا يوجد وصف للمتجر";
- document.getElementById("myStorePhone").textContent=currentStore.phone||"غير مضاف";
- document.getElementById("myStoreWhatsapp").textContent=currentStore.whatsapp||"غير مضاف";
+    if(!currentStore)return;
+
+    document.getElementById("storeCreateArea").style.display="none";
+    document.getElementById("storeCreated").style.display="block";
+
+    document.getElementById("myStoreName").textContent=
+        currentStore.name || "";
+
+    document.getElementById("myStoreDescription").textContent=
+        currentStore.description || "لا يوجد وصف للمتجر";
+
+    document.getElementById("myStorePhone").textContent=
+        currentStore.phone || "غير مضاف";
+
+    document.getElementById("myStoreWhatsapp").textContent=
+        currentStore.whatsapp || "غير مضاف";
+
+    const shareLink=document.getElementById("storeShareLink");
+
+    if(shareLink){
+        shareLink.value=getPublicStoreUrl();
+    }
 }
 
 /* =========================
