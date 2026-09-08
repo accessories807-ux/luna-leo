@@ -500,7 +500,26 @@ footer{padding:40px 0;border-top:1px solid rgba(255,255,255,.07)}
 <input id="productStock" type="number" min="0" placeholder="المخزون">
 <input id="productImage" type="url" placeholder="رابط صورة المنتج">
 <textarea id="productDescription" placeholder="وصف المنتج"></textarea>
-<button class="gold-btn" onclick="saveProduct()">حفظ المنتج</button>
+<<div style="display:flex;gap:10px;flex-wrap:wrap">
+
+<button
+ id="saveProductButton"
+ class="gold-btn"
+ onclick="saveProduct()">
+ حفظ المنتج
+</button>
+
+<button
+ id="cancelProductEditButton"
+ type="button"
+ class="gold-btn"
+ style="display:none;background:#253236;color:#fff"
+ onclick="cancelProductEdit()">
+ ❌ إلغاء
+</button>
+
+</div>
+
 <div id="productMessage" class="form-message"></div>
 </div>
 <div id="productsContainer" class="product-grid"><div class="empty"><div class="empty-icon">📦</div>لا توجد منتجات حتى الآن</div></div>
