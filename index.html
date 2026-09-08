@@ -1107,13 +1107,103 @@ function backToPlatform(){
   window.location.href=url.toString();
 }
 
+function getPublicStoreUrl(){
+    if(!currentStore) return "";
+
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+
+    // استخدام slug يجعل الرابط شكله احترافي
+    url.searchParams.set(
+        "store",
+        currentStore.slug || currentStore.id
+    );
+
+    return url.toString();
+}
+
 function openMyPublicStore(){
-  if(!currentStore){alert("أنشئ المتجر أولاً.");return}
-  const url=new URL(window.location.href);
-  url.search="";
-  url.hash="";
-  url.searchParams.set("store",currentStore.id);
-  window.open(url.toString(),"_blank");
+    if(!currentStore){
+        alert("أنشئ المتجر أولاً.");
+        return;
+    }
+
+    const url = getPublicStoreUrl();
+    window.open(url, "_blank");
+}
+
+function getStoreShareText(){
+    if(!currentStore) return "";
+
+    return `🛍️ ${currentStore.name}\n\n` +
+           `زوروا متجري الإلكتروني وشاهدوا المنتجات 👇\n` +
+           `${getPublicStoreUrl()}`;
+}
+
+function shareStoreWhatsApp(){
+    const text = encodeURIComponent(getStoreShareText());
+    window.open(
+        "https://wa.me/?text=" + text,
+        "_blank"
+    );
+}
+
+function shareStoreFacebook(){
+    const url = encodeURIComponent(getPublicStoreUrl());
+
+    window.open(
+        "https://www.facebook.com/sharer/sharer.php?u=" + url,
+        "_blank"
+    );
+}
+
+function shareStoreTelegram(){
+    const url = encodeURIComponent(getPublicStoreUrl());
+    const text = encodeURIComponent(
+        `🛍️ زوروا متجري ${currentStore?.name || ""}`
+    );
+
+    window.open(
+        "https://t.me/share/url?url=" + url + "&text=" + text,
+        "_blank"
+    );
+}
+
+async function copyStoreLink(){
+    const message = document.getElementById("storeShareMessage");
+    const url = getPublicStoreUrl();
+
+    try{
+        await navigator.clipboard.writeText(url);
+
+        if(message){
+            message.textContent = "✅ تم نسخ رابط المتجر.";
+        }
+    }catch(error){
+        prompt("انسخ رابط متجرك:",url);
+    }
+}
+
+async function shareStoreNative(){
+    if(!currentStore) return;
+
+    const url = getPublicStoreUrl();
+    const text = getStoreShareText();
+
+    if(navigator.share){
+        try{
+            await navigator.share({
+                title: currentStore.name,
+                text: text,
+                url: url
+            });
+        }catch(error){
+            // المستخدم أغلق نافذة المشاركة
+        }
+    }else{
+        await copyStoreLink();
+    }
 }
 
 async function loadPublicStore(){
