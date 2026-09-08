@@ -518,12 +518,116 @@ footer{padding:40px 0;border-top:1px solid rgba(255,255,255,.07)}
 <input id="productName" type="text" placeholder="اسم المنتج">
 <input id="productPrice" type="number" min="0" placeholder="السعر">
 <input id="productStock" type="number" min="0" placeholder="المخزون">
-<input id="productImage" type="url" placeholder="رابط صورة المنتج">
+<input id="productImage" type="file" accept="image/*">
+
+<div id="productImagePreview"
+style="
+display:none;
+margin-top:5px;
+padding:10px;
+background:#0b191b;
+border:1px solid rgba(214,179,90,.2);
+border-radius:12px;
+text-align:center;
+">
+</div>
 <textarea id="productDescription" placeholder="وصف المنتج"></textarea>
 <div style="display:flex;gap:10px;flex-wrap:wrap">
 <button
  id="saveProductButton"
- class="gold-btn"
+ class="gold-btn
+   /* =========================
+   PRODUCT IMAGE UPLOAD
+========================= */
+
+async function uploadProductImage(file){
+
+    if(!file){
+        return "";
+    }
+
+    if(!currentUser){
+        throw new Error("يجب تسجيل الدخول أولاً.");
+    }
+
+    if(!currentStore){
+        throw new Error("أنشئ المتجر أولاً.");
+    }
+
+    if(!file.type.startsWith("image/")){
+        throw new Error("الملف المختار يجب أن يكون صورة.");
+    }
+
+    if(file.size > 5 * 1024 * 1024){
+        throw new Error("حجم الصورة يجب ألا يتجاوز 5 ميجابايت.");
+    }
+
+    const extension =
+        file.name.split(".").pop().toLowerCase() || "jpg";
+
+    const filePath =
+        currentUser.id +
+        "/" +
+        currentStore.id +
+        "/" +
+        crypto.randomUUID() +
+        "." +
+        extension;
+
+    const {error:uploadError} =
+        await supabaseClient.storage
+        .from("products")
+        .upload(filePath,file,{
+            contentType:file.type,
+            upsert:false
+        });
+
+    if(uploadError){
+        throw uploadError;
+    }
+
+    const {data} =
+        supabaseClient.storage
+        .from("products")
+        .getPublicUrl(filePath);
+
+    return data.publicUrl;
+}
+
+
+/* معاينة الصورة */
+
+document.addEventListener("change",function(e){
+
+    if(e.target.id !== "productImage") return;
+
+    const file=e.target.files?.[0];
+    const preview=
+        document.getElementById("productImagePreview");
+
+    if(!file || !preview){
+        return;
+    }
+
+    const url=URL.createObjectURL(file);
+
+    preview.style.display="block";
+
+    preview.innerHTML=`
+        <img
+            src="${url}"
+            style="
+                max-width:100%;
+                max-height:220px;
+                border-radius:10px;
+                object-fit:contain;
+            "
+        >
+        <div style="margin-top:8px;color:#d6b35a">
+            📷 ${escapeHTML(file.name)}
+        </div>
+    `;
+});
  onclick="saveProduct()">
  حفظ المنتج
 </button>
