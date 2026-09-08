@@ -6617,25 +6617,18 @@ async function loadOrders(){
    UPDATE ORDER STATUS
 ========================= */
 
-async function updateOrderStatus(
-    orderId,
-    newStatus
-){
+async function updateOrderStatus(orderId,newStatus){
 
     if(!currentStore) return;
 
-    const {
-        error
-    } = await supabaseClient
-        .from("orders")
-        .update({
-            status:newStatus
-        })
-        .eq("id",orderId)
-        .eq(
-            "store_id",
-            currentStore.id
-        );
+    const {error} =
+        await supabaseClient
+            .from("orders")
+            .update({
+                status:newStatus
+            })
+            .eq("id",orderId)
+            .eq("store_id",currentStore.id);
 
     if(error){
 
@@ -6644,9 +6637,7 @@ async function updateOrderStatus(
             error
         );
 
-        alert(
-            "❌ لم يتم تغيير حالة الطلب."
-        );
+        alert("❌ لم يتم تغيير حالة الطلب.");
 
         return;
     }
@@ -6654,65 +6645,69 @@ async function updateOrderStatus(
     await loadOrders();
 
 }
- 
+
+
 /* =====================================================
    PRINT ORDER INVOICE
 ===================================================== */
 
-function printOrderInvoice(orderId){
+async function printOrderInvoice(orderId){
 
-    const orderCard =
-        document.querySelector(
-            `[data-order-id="${orderId}"]`
+    if(!currentStore){
+
+        alert("❌ يجب تسجيل الدخول أولاً.");
+
+        return;
+    }
+
+    const {data:order,error} =
+        await supabaseClient
+            .from("orders")
+            .select("*")
+            .eq("id",orderId)
+            .eq("store_id",currentStore.id)
+            .maybeSingle();
+
+    if(error){
+
+        console.error(
+            "Invoice order error:",
+            error
         );
 
-    if(!orderCard){
+        alert("❌ حدث خطأ أثناء تحميل الطلب.");
+
+        return;
+    }
+
+    if(!order){
 
         alert("❌ لم يتم العثور على الطلب.");
 
         return;
-
     }
 
 
-    const order =
-        window.currentOrders?.find(
-            item =>
-                String(item.id) ===
-                String(orderId)
-        );
-
-
-    if(!order){
-
-        alert("❌ بيانات الطلب غير موجودة.");
-
-        return;
-
-    }
-
-
-    let items = [];
+    let items=[];
 
 
     if(Array.isArray(order.items)){
 
-        items = order.items;
+        items=order.items;
 
     }else if(
-        typeof order.items === "string"
+        typeof order.items==="string"
     ){
 
         try{
 
-            items =
-                JSON.parse(
-                    order.items
-                );
+            items=JSON.parse(order.items);
 
-        }catch(e){
+        }catch(error){
 
-            items = [];
+            console.error(error);
+
+            items=[];
 
         }
 
@@ -6733,15 +6728,21 @@ function printOrderInvoice(orderId){
 
                 <td>
                     ${Number(
-                        item.quantity ||
-                        0
+                        item.quantity || 0
                     )}
                 </td>
 
                 <td>
                     ${Number(
-                        item.price ||
-                        0
+                        item.price || 0
+                    ).toLocaleString("ar-EG")}
+                    جنيه
+                </td>
+
+                <td>
+                    ${(
+                        Number(item.price || 0) *
+                        Number(item.quantity || 0)
                     ).toLocaleString("ar-EG")}
                     جنيه
                 </td>
@@ -6751,7 +6752,7 @@ function printOrderInvoice(orderId){
         `).join("");
 
 
-    const invoiceHTML = `
+    const invoiceHTML=`
 
 <!DOCTYPE html>
 
@@ -6761,11 +6762,13 @@ function printOrderInvoice(orderId){
 
 <meta charset="UTF-8">
 
-<title>
-فاتورة LUNA&LEO
-</title>
+<title>فاتورة LUNA&LEO</title>
 
 <style>
+
+*{
+    box-sizing:border-box;
+}
 
 body{
 
@@ -6775,13 +6778,19 @@ body{
 
     color:#111;
 
+    background:#fff;
+
+    max-width:900px;
+
+    margin:auto;
+
 }
 
 h1{
 
     text-align:center;
 
-    margin-bottom:5px;
+    margin:0;
 
 }
 
@@ -6802,6 +6811,8 @@ h1{
     border-radius:10px;
 
     margin-bottom:20px;
+
+    line-height:1.8;
 
 }
 
@@ -6833,7 +6844,7 @@ th{
 
     margin-top:20px;
 
-    font-size:20px;
+    font-size:21px;
 
     font-weight:bold;
 
@@ -6851,11 +6862,39 @@ th{
 
 }
 
+.print-btn{
+
+    display:block;
+
+    margin:25px auto;
+
+    padding:12px 25px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#111;
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+}
+
 @media print{
 
     body{
 
         padding:0;
+
+    }
+
+    .print-btn{
+
+        display:none;
 
     }
 
@@ -6884,48 +6923,46 @@ th{
 
 <div class="info">
 
-    <strong>
-        رقم الطلب:
-    </strong>
+    <strong>رقم الطلب:</strong>
 
     ${escapeHTML(
         String(order.id || "")
     )}
 
-    <br><br>
+    <br>
 
-
-    <strong>
-        العميل:
-    </strong>
+    <strong>العميل:</strong>
 
     ${escapeHTML(
         order.customer_name ||
         "عميل"
     )}
 
-    <br><br>
+    <br>
 
-
-    <strong>
-        الهاتف:
-    </strong>
+    <strong>الهاتف:</strong>
 
     ${escapeHTML(
         order.customer_phone ||
         "غير مضاف"
     )}
 
-    <br><br>
+    <br>
 
-
-    <strong>
-        العنوان:
-    </strong>
+    <strong>العنوان:</strong>
 
     ${escapeHTML(
         order.customer_address ||
         "غير مضاف"
+    )}
+
+    <br>
+
+    <strong>طريقة الدفع:</strong>
+
+    ${escapeHTML(
+        order.payment_method ||
+        "الدفع عند الاستلام"
     )}
 
 </div>
@@ -6937,17 +6974,13 @@ th{
 
 <tr>
 
-    <th>
-        المنتج
-    </th>
+    <th>المنتج</th>
 
-    <th>
-        الكمية
-    </th>
+    <th>الكمية</th>
 
-    <th>
-        السعر
-    </th>
+    <th>سعر الوحدة</th>
+
+    <th>الإجمالي</th>
 
 </tr>
 
@@ -6956,7 +6989,16 @@ th{
 
 <tbody>
 
-${itemsHTML}
+${
+    itemsHTML ||
+    `
+    <tr>
+        <td colspan="4">
+            لا توجد تفاصيل للمنتجات
+        </td>
+    </tr>
+    `
+}
 
 </tbody>
 
@@ -6968,8 +7010,7 @@ ${itemsHTML}
     الإجمالي:
 
     ${Number(
-        order.total ||
-        0
+        order.total || 0
     ).toLocaleString("ar-EG")}
 
     جنيه
@@ -6984,15 +7025,12 @@ ${itemsHTML}
 </div>
 
 
-<script>
-
-window.onload=function(){
-
-    window.print();
-
-};
-
-</script>
+<button
+    class="print-btn"
+    onclick="window.print()"
+>
+    🖨️ طباعة الفاتورة
+</button>
 
 
 </body>
@@ -7016,7 +7054,6 @@ window.onload=function(){
         );
 
         return;
-
     }
 
 
@@ -7037,34 +7074,36 @@ window.onload=function(){
 
 async function loadCustomers(){
 
-    if(!currentStore)return;
+    if(!currentStore) return;
 
 
     const {
         data,
         error
     } =
-    await supabaseClient
-        .from("orders")
-        .select(
-            "customer_name,customer_phone"
-        )
-        .eq(
-            "store_id",
-            currentStore.id
-        );
+        await supabaseClient
+            .from("orders")
+            .select(
+                "customer_name,customer_phone"
+            )
+            .eq(
+                "store_id",
+                currentStore.id
+            );
 
 
     if(error){
 
-        console.error(error);
+        console.error(
+            "Customers error:",
+            error
+        );
 
         return;
-
     }
 
 
-    const unique = {};
+    const unique={};
 
 
     (data || [])
@@ -7080,8 +7119,7 @@ async function loadCustomers(){
 
         if(key){
 
-            unique[key] =
-                row;
+            unique[key]=row;
 
         }
 
@@ -7092,10 +7130,18 @@ async function loadCustomers(){
         Object.values(unique);
 
 
-    document.getElementById(
-        "statCustomers"
-    ).textContent =
-        customers.length;
+    const stat =
+        document.getElementById(
+            "statCustomers"
+        );
+
+
+    if(stat){
+
+        stat.textContent =
+            customers.length;
+
+    }
 
 
     const container =
@@ -7104,64 +7150,28 @@ async function loadCustomers(){
         );
 
 
+    if(!container) return;
+
+
     if(!customers.length){
 
-        container.className =
-            "empty";
+        container.className="empty";
 
+        container.innerHTML=`
 
-        container.innerHTML =
-            `
             <div class="empty-icon">
                 👥
             </div>
+
             لا يوجد عملاء حتى الآن
-            `;
+
+        `;
 
         return;
-
     }
-                ""
-            ).trim();
 
 
-        if(key){
-
-            unique[key] =
-                row;
-
-        }
-
-    });
-
-
-    const customers =
-        Object.values(unique);
-
-
-    document.getElementById(
-        "statCustomers"
-    ).textContent =
-        customers.length;
-
-
-    const container =
-        document.getElementById(
-            "customersContainer"
-        );
-
-
-    if(!customers.length){
-
-        container.className =
-            "empty";
-
-
-        container.innerHTML =
-            `
-
-    container.className =
-        "";
+    container.className="";
 
 
     container.innerHTML =
@@ -7178,21 +7188,26 @@ async function loadCustomers(){
             >
 
                 <strong>
+
                     ${escapeHTML(
                         customer.customer_name ||
                         "عميل"
                     )}
+
                 </strong>
 
 
                 <p
                     style="color:#999"
                 >
+
                     📞
+
                     ${escapeHTML(
                         customer.customer_phone ||
                         "غير مضاف"
                     )}
+
                 </p>
 
             </div>
