@@ -683,110 +683,357 @@ function escapeHTML(value){
  .replace(/'/g,"&#039;");
 }
 
+
+async function registerUser(){
+
+
 /* =========================
    AUTH MODAL
 ========================= */
+
 function openAuth(){
- document.getElementById("authModal").style.display="flex";
+
+    const modal = document.getElementById("authModal");
+
+    if(!modal){
+        alert("خطأ: نافذة التسجيل غير موجودة في الصفحة.");
+        return;
+    }
+
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
 }
 
-function createStore(){ openRegister(); }
+
+function createStore(){
+
+    openRegister();
+
+}
+
 
 function openRegister(){
- openAuth();
- document.getElementById("authTitle").textContent="أنشئ حسابك 🚀";
- document.getElementById("authSubtitle").textContent="ابدأ متجرك الإلكتروني مع LUNA&LEO MARKET";
- document.getElementById("nameField").style.display="block";
- document.getElementById("confirmField").style.display="block";
- document.getElementById("forgotPassword").style.display="none";
- document.getElementById("authSubmit").textContent="إنشاء الحساب";
- document.getElementById("authSubmit").onclick=registerUser;
- document.getElementById("authSwitchText").textContent="لديك حساب بالفعل؟";
- document.getElementById("authSwitchButton").textContent="تسجيل الدخول";
- document.getElementById("authSwitchButton").onclick=showLogin;
- document.getElementById("authMessage").textContent="";
+
+    const modal = document.getElementById("authModal");
+
+    if(!modal){
+        alert("خطأ في نافذة التسجيل.");
+        return;
+    }
+
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+
+    document.getElementById("authTitle").textContent =
+        "أنشئ حسابك 🚀";
+
+    document.getElementById("authSubtitle").textContent =
+        "ابدأ متجرك الإلكتروني مع LUNA&LEO MARKET";
+
+    document.getElementById("nameField").style.display =
+        "block";
+
+    document.getElementById("confirmField").style.display =
+        "block";
+
+    document.getElementById("forgotPassword").style.display =
+        "none";
+
+    document.getElementById("authSubmit").textContent =
+        "إنشاء الحساب";
+
+    document.getElementById("authSubmit").onclick =
+        registerUser;
+
+    document.getElementById("authSwitchText").textContent =
+        "لديك حساب بالفعل؟";
+
+    document.getElementById("authSwitchButton").textContent =
+        "تسجيل الدخول";
+
+    document.getElementById("authSwitchButton").onclick =
+        login;
+
+    document.getElementById("authMessage").textContent = "";
+
+    document.getElementById("authName").value = "";
+    document.getElementById("authEmail").value = "";
+    document.getElementById("authPassword").value = "";
+    document.getElementById("authPassword2").value = "";
+
 }
+
 
 function login(){
- openAuth();
- document.getElementById("authTitle").textContent="تسجيل الدخول 🔐";
- document.getElementById("authSubtitle").textContent="أهلاً بك مرة أخرى في LUNA&LEO MARKET";
- document.getElementById("nameField").style.display="none";
- document.getElementById("confirmField").style.display="none";
- document.getElementById("forgotPassword").style.display="block";
- document.getElementById("authSubmit").textContent="تسجيل الدخول";
- document.getElementById("authSubmit").onclick=loginUser;
- document.getElementById("authSwitchText").textContent="ليس لديك حساب؟";
- document.getElementById("authSwitchButton").textContent="إنشاء حساب";
- document.getElementById("authSwitchButton").onclick=openRegister;
- document.getElementById("authMessage").textContent="";
+
+    const modal = document.getElementById("authModal");
+
+    if(!modal){
+        alert("خطأ في نافذة تسجيل الدخول.");
+        return;
+    }
+
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+
+    document.getElementById("authTitle").textContent =
+        "تسجيل الدخول 🔐";
+
+    document.getElementById("authSubtitle").textContent =
+        "أهلاً بك مرة أخرى في LUNA&LEO MARKET";
+
+    document.getElementById("nameField").style.display =
+        "none";
+
+    document.getElementById("confirmField").style.display =
+        "none";
+
+    document.getElementById("forgotPassword").style.display =
+        "block";
+
+    document.getElementById("authSubmit").textContent =
+        "تسجيل الدخول";
+
+    document.getElementById("authSubmit").onclick =
+        loginUser;
+
+    document.getElementById("authSwitchText").textContent =
+        "ليس لديك حساب؟";
+
+    document.getElementById("authSwitchButton").textContent =
+        "إنشاء حساب";
+
+    document.getElementById("authSwitchButton").onclick =
+        openRegister;
+
+    document.getElementById("authMessage").textContent = "";
+
 }
 
-function showLogin(){ login(); }
 
-function closeAuth(){ document.getElementById("authModal").style.display="none"; }
+function showLogin(){
 
-document.getElementById("authModal").addEventListener("click",e=>{
- if(e.target===e.currentTarget) closeAuth();
-});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAuth()});
+    login();
+
+}
+
+
+function closeAuth(){
+
+    const modal =
+        document.getElementById("authModal");
+
+    if(modal){
+        modal.style.display = "none";
+    }
+
+    document.body.style.overflow = "";
+
+}
+
+
+/* إغلاق النافذة بالضغط خارجها */
+
+document.getElementById("authModal").addEventListener(
+    "click",
+    function(e){
+
+        if(e.target === this){
+            closeAuth();
+        }
+
+    }
+);
+
+
+/* زر ESC */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key === "Escape"){
+            closeAuth();
+        }
+
+    }
+);
+
 
 /* =========================
    REGISTER
 ========================= */
+
 async function registerUser(){
- const name=document.getElementById("authName").value.trim();
- const email=document.getElementById("authEmail").value.trim();
- const password=document.getElementById("authPassword").value;
- const password2=document.getElementById("authPassword2").value;
- const message=document.getElementById("authMessage");
 
- if(!name||!email||!password||!password2){
-  message.textContent="⚠️ من فضلك املأ كل البيانات."; return;
- }
- if(password.length<6){
-  message.textContent="⚠️ كلمة المرور لازم تكون 6 أحرف على الأقل."; return;
- }
- if(password!==password2){
-  message.textContent="⚠️ كلمتا المرور غير متطابقتين."; return;
- }
+    const name =
+        document.getElementById("authName").value.trim();
 
- message.textContent="⏳ جاري إنشاء الحساب...";
- const {data,error}=await supabaseClient.auth.signUp({
-  email,password,options:{data:{full_name:name}}
- });
- if(error){message.textContent="❌ "+error.message;return}
+    const email =
+        document.getElementById("authEmail").value.trim();
 
- if(data.session){
-  currentUser=data.user;
-  message.textContent="🎉 تم إنشاء الحساب وتسجيل الدخول!";
-  setTimeout(()=>{closeAuth();showDashboard();loadUserStore()},700);
- }else{
-  message.textContent="🎉 تم إنشاء الحساب. راجع بريدك الإلكتروني لتأكيد الحساب إذا كان التأكيد مفعّلًا.";
- }
+    const password =
+        document.getElementById("authPassword").value;
+
+    const password2 =
+        document.getElementById("authPassword2").value;
+
+    const message =
+        document.getElementById("authMessage");
+
+    if(!name || !email || !password || !password2){
+
+        message.textContent =
+            "⚠️ من فضلك املأ كل البيانات.";
+
+        return;
+    }
+
+    if(password.length < 6){
+
+        message.textContent =
+            "⚠️ كلمة المرور لازم تكون 6 أحرف على الأقل.";
+
+        return;
+    }
+
+    if(password !== password2){
+
+        message.textContent =
+            "⚠️ كلمتا المرور غير متطابقتين.";
+
+        return;
+    }
+
+    message.textContent =
+        "⏳ جاري إنشاء الحساب...";
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.signUp({
+
+        email: email,
+
+        password: password,
+
+        options: {
+            data: {
+                full_name: name
+            }
+        }
+
+    });
+
+
+    if(error){
+
+        console.error(error);
+
+        message.textContent =
+            "❌ " + error.message;
+
+        return;
+    }
+
+
+    if(data && data.session){
+
+        currentUser = data.user;
+
+        message.textContent =
+            "🎉 تم إنشاء الحساب وتسجيل الدخول!";
+
+        setTimeout(async()=>{
+
+            closeAuth();
+
+            showDashboard();
+
+            await loadUserStore();
+
+        },700);
+
+    }else{
+
+        message.textContent =
+            "🎉 تم إنشاء الحساب بنجاح. راجع بريدك الإلكتروني لتأكيد الحساب.";
+
+    }
+
 }
+
 
 /* =========================
    LOGIN
 ========================= */
+
 async function loginUser(){
- const email=document.getElementById("authEmail").value.trim();
- const password=document.getElementById("authPassword").value;
- const message=document.getElementById("authMessage");
 
- if(!email||!password){
-  message.textContent="⚠️ اكتب البريد الإلكتروني وكلمة المرور."; return;
- }
+    const email =
+        document.getElementById("authEmail").value.trim();
 
- message.textContent="⏳ جاري تسجيل الدخول...";
- const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
- if(error){message.textContent="❌ "+error.message;return}
+    const password =
+        document.getElementById("authPassword").value;
 
- currentUser=data.user;
- message.textContent="🎉 تم تسجيل الدخول بنجاح!";
- setTimeout(()=>{closeAuth();showDashboard();loadUserStore()},500);
-}
+    const message =
+        document.getElementById("authMessage");
 
+
+    if(!email || !password){
+
+        message.textContent =
+            "⚠️ اكتب البريد الإلكتروني وكلمة المرور.";
+
+        return;
+    }
+
+
+    message.textContent =
+        "⏳ جاري تسجيل الدخول...";
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.signInWithPassword({
+
+        email: email,
+
+        password: password
+
+    });
+
+
+    if(error){
+
+        console.error(error);
+
+        message.textContent =
+            "❌ " + error.message;
+
+        return;
+    }
+
+
+    currentUser = data.user;
+
+
+    message.textContent =
+        "🎉 تم تسجيل الدخول بنجاح!";
+
+
+    setTimeout(async()=>{
+
+        closeAuth();
+
+        showDashboard();
+
+        await loadUserStore();
+
+    },500);
+
+           }
 /* =========================
    GOOGLE
 ========================= */
