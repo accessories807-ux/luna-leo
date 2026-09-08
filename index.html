@@ -5707,126 +5707,105 @@ async function deleteProduct(id){
 
 async function loadOrders(){
 
-    if(!currentStore)return;
-
+    if(!currentStore) return;
 
     const {
         data,
         error
-    } =
-    await supabaseClient
+    } = await supabaseClient
         .from("orders")
         .select("*")
-        .eq(
-            "store_id",
-            currentStore.id
-        )
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
-        );
-
+        .eq("store_id", currentStore.id)
+        .order("created_at", {
+            ascending:false
+        });
 
     if(error){
-
         console.error(error);
-
         return;
-
     }
 
+    const orders = data || [];
 
-    const orders =
-        data || [];
-
+    /* =========================
+       STATISTICS
+    ========================= */
 
     document.getElementById(
         "statOrders"
-    ).textContent =
-        orders.length;
-
+    ).textContent = orders.length;
 
     let sales = 0;
 
-
     orders.forEach(order=>{
-
-        sales +=
-            Number(
-                order.total || 0
-            );
-
+        sales += Number(order.total || 0);
     });
-
 
     document.getElementById(
         "statSales"
     ).textContent =
-        sales.toLocaleString(
-            "ar-EG"
-        );
+        sales.toLocaleString("ar-EG");
 
+
+    /* =========================
+       ORDERS
+    ========================= */
 
     const container =
         document.getElementById(
             "ordersContainer"
         );
 
-
     if(!orders.length){
 
-        container.className =
-            "empty";
+        container.className = "empty";
 
-
-        container.innerHTML =
-            `
+        container.innerHTML = `
             <div class="empty-icon">
                 🛒
             </div>
             لا توجد طلبات حتى الآن
-            `;
+        `;
 
     }else{
 
-        container.className =
-            "";
-
+        container.className = "";
 
         container.innerHTML =
-            orders
-            .map(order=>{
+            orders.map(order=>{
 
                 const orderStatus =
-                    order.order_status ||
-                    order.status ||
-                    "جديد";
+                    order.status || "new";
 
+                const statusArabic = {
+                    new: "جديد",
+                    processing: "قيد التجهيز",
+                    shipped: "تم الشحن",
+                    completed: "مكتمل",
+                    cancelled: "ملغي"
+                };
 
                 return `
 
                 <div
                     style="
                         background:#101f21;
-                        padding:16px;
+                        padding:18px;
                         border-radius:14px;
-                        margin-bottom:10px;
-                        text-align:right"
+                        margin-bottom:12px;
+                        text-align:right;
+                        border:1px solid rgba(214,179,90,.15)
+                    "
                 >
 
-                    <strong>
+                    <strong style="font-size:18px">
                         ${escapeHTML(
                             order.customer_name ||
                             "عميل"
                         )}
                     </strong>
 
-
-                    <p
-                        style="color:#999"
-                    >
+                    <p style="color:#999;margin:8px 0">
                         📞
                         ${escapeHTML(
                             order.customer_phone ||
@@ -5834,9 +5813,21 @@ async function loadOrders(){
                         )}
                     </p>
 
+                    <p style="color:#aaa;margin:8px 0">
+                        📍
+                        ${escapeHTML(
+                            order.customer_address ||
+                            "غير مضاف"
+                        )}
+                    </p>
 
                     <p
-                        style="color:#d6b35a"
+                        style="
+                            color:#d6b35a;
+                            font-size:18px;
+                            font-weight:bold;
+                            margin:10px 0
+                        "
                     >
                         💰
                         ${Number(
@@ -5845,56 +5836,137 @@ async function loadOrders(){
                         جنيه
                     </p>
 
-
-                    <p
-                        style="color:#888"
-                    >
-                        الحالة:
-                        ${escapeHTML(
-                            orderStatus
-                        )}
+                    <p style="color:#888;margin:8px 0">
+                        الحالة الحالية:
+                        <strong>
+                            ${
+                                statusArabic[
+                                    orderStatus
+                                ] ||
+                                orderStatus
+                            }
+                        </strong>
                     </p>
+
+                    <div style="margin-top:12px">
+
+                        <label
+                            style="
+                                display:block;
+                                color:#aaa;
+                                margin-bottom:6px
+                            "
+                        >
+                            تغيير حالة الطلب
+                        </label>
+
+                        <select
+                            onchange="
+                                updateOrderStatus(
+                                    '${order.id}',
+                                    this.value
+                                )
+                            "
+                            style="
+                                width:100%;
+                                padding:12px;
+                                border-radius:10px;
+                                background:#182a2c;
+                                color:white;
+                                border:1px solid #3b4b4d;
+                                font-size:15px
+                            "
+                        >
+
+                            <option
+                                value="new"
+                                ${orderStatus==="new" ? "selected":""}
+                            >
+                                🆕 جديد
+                            </option>
+
+                            <option
+                                value="processing"
+                                ${orderStatus==="processing" ? "selected":""}
+                            >
+                                ⚙️ قيد التجهيز
+                            </option>
+
+                            <option
+                                value="shipped"
+                                ${orderStatus==="shipped" ? "selected":""}
+                            >
+                                🚚 تم الشحن
+                            </option>
+
+                            <option
+                                value="completed"
+                                ${orderStatus==="completed" ? "selected":""}
+                            >
+                                ✅ مكتمل
+                            </option>
+
+                            <option
+                                value="cancelled"
+                                ${orderStatus==="cancelled" ? "selected":""}
+                            >
+                                ❌ ملغي
+                            </option>
+
+                        </select>
+
+                    </div>
 
                 </div>
 
                 `;
 
-            })
-            .join("");
+            }).join("");
 
     }
 
+
+    /* =========================
+       RECENT ORDERS
+    ========================= */
 
     const recent =
         document.getElementById(
             "recentOrders"
         );
 
-
     if(!orders.length){
 
-        recent.className =
-            "empty";
+        recent.className = "empty";
 
-
-        recent.innerHTML =
-            `
+        recent.innerHTML = `
             <div class="empty-icon">
                 🛒
             </div>
             لا توجد طلبات حتى الآن
-            `;
+        `;
 
     }else{
 
-        recent.className =
-            "";
-
+        recent.className = "";
 
         recent.innerHTML =
             orders
             .slice(0,5)
-            .map(order=>`
+            .map(order=>{
+
+                const statusArabic = {
+                    new:"جديد",
+                    processing:"قيد التجهيز",
+                    shipped:"تم الشحن",
+                    completed:"مكتمل",
+                    cancelled:"ملغي"
+                };
+
+                const status =
+                    order.status || "new";
+
+                return `
 
                 <div
                     style="
@@ -5902,7 +5974,8 @@ async function loadOrders(){
                         padding:14px;
                         border-radius:12px;
                         margin-bottom:8px;
-                        text-align:right"
+                        text-align:right
+                    "
                 >
 
                     🛒
@@ -5919,14 +5992,69 @@ async function loadOrders(){
 
                     جنيه
 
+                    <span
+                        style="
+                            color:#d6b35a;
+                            margin-right:8px
+                        "
+                    >
+                        (${statusArabic[status] || status})
+                    </span>
+
                 </div>
 
-            `)
-            .join("");
+                `;
+
+            }).join("");
 
     }
 
 }
+
+
+/* =========================
+   UPDATE ORDER STATUS
+========================= */
+
+async function updateOrderStatus(
+    orderId,
+    newStatus
+){
+
+    if(!currentStore) return;
+
+    const {
+        error
+    } = await supabaseClient
+        .from("orders")
+        .update({
+            status:newStatus
+        })
+        .eq("id",orderId)
+        .eq(
+            "store_id",
+            currentStore.id
+        );
+
+    if(error){
+
+        console.error(
+            "Order status update error:",
+            error
+        );
+
+        alert(
+            "❌ لم يتم تغيير حالة الطلب."
+        );
+
+        return;
+    }
+
+    await loadOrders();
+
+}
+ 
+
 
 
 /* =====================================================
