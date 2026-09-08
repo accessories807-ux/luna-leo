@@ -6655,7 +6655,380 @@ async function updateOrderStatus(
 
 }
  
+/* =====================================================
+   PRINT ORDER INVOICE
+===================================================== */
 
+function printOrderInvoice(orderId){
+
+    const orderCard =
+        document.querySelector(
+            `[data-order-id="${orderId}"]`
+        );
+
+    if(!orderCard){
+
+        alert("❌ لم يتم العثور على الطلب.");
+
+        return;
+
+    }
+
+
+    const order =
+        window.currentOrders?.find(
+            item =>
+                String(item.id) ===
+                String(orderId)
+        );
+
+
+    if(!order){
+
+        alert("❌ بيانات الطلب غير موجودة.");
+
+        return;
+
+    }
+
+
+    let items = [];
+
+
+    if(Array.isArray(order.items)){
+
+        items = order.items;
+
+    }else if(
+        typeof order.items === "string"
+    ){
+
+        try{
+
+            items =
+                JSON.parse(
+                    order.items
+                );
+
+        }catch(e){
+
+            items = [];
+
+        }
+
+    }
+
+
+    const itemsHTML =
+        items.map(item=>`
+
+            <tr>
+
+                <td>
+                    ${escapeHTML(
+                        item.name ||
+                        "منتج"
+                    )}
+                </td>
+
+                <td>
+                    ${Number(
+                        item.quantity ||
+                        0
+                    )}
+                </td>
+
+                <td>
+                    ${Number(
+                        item.price ||
+                        0
+                    ).toLocaleString("ar-EG")}
+                    جنيه
+                </td>
+
+            </tr>
+
+        `).join("");
+
+
+    const invoiceHTML = `
+
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+فاتورة LUNA&LEO
+</title>
+
+<style>
+
+body{
+
+    font-family:Arial,sans-serif;
+
+    padding:30px;
+
+    color:#111;
+
+}
+
+h1{
+
+    text-align:center;
+
+    margin-bottom:5px;
+
+}
+
+.header{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+}
+
+.info{
+
+    border:1px solid #ddd;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    margin-bottom:20px;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+th,td{
+
+    border:1px solid #ddd;
+
+    padding:10px;
+
+    text-align:center;
+
+}
+
+th{
+
+    background:#eee;
+
+}
+
+.total{
+
+    margin-top:20px;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    text-align:left;
+
+}
+
+.footer{
+
+    text-align:center;
+
+    margin-top:35px;
+
+    color:#777;
+
+}
+
+@media print{
+
+    body{
+
+        padding:0;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h1>
+        LUNA&LEO MARKET
+    </h1>
+
+    <div>
+        فاتورة طلب
+    </div>
+
+</div>
+
+
+<div class="info">
+
+    <strong>
+        رقم الطلب:
+    </strong>
+
+    ${escapeHTML(
+        String(order.id || "")
+    )}
+
+    <br><br>
+
+
+    <strong>
+        العميل:
+    </strong>
+
+    ${escapeHTML(
+        order.customer_name ||
+        "عميل"
+    )}
+
+    <br><br>
+
+
+    <strong>
+        الهاتف:
+    </strong>
+
+    ${escapeHTML(
+        order.customer_phone ||
+        "غير مضاف"
+    )}
+
+    <br><br>
+
+
+    <strong>
+        العنوان:
+    </strong>
+
+    ${escapeHTML(
+        order.customer_address ||
+        "غير مضاف"
+    )}
+
+</div>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+    <th>
+        المنتج
+    </th>
+
+    <th>
+        الكمية
+    </th>
+
+    <th>
+        السعر
+    </th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+${itemsHTML}
+
+</tbody>
+
+</table>
+
+
+<div class="total">
+
+    الإجمالي:
+
+    ${Number(
+        order.total ||
+        0
+    ).toLocaleString("ar-EG")}
+
+    جنيه
+
+</div>
+
+
+<div class="footer">
+
+    شكرًا لتعاملك مع LUNA&LEO ❤️
+
+</div>
+
+
+<script>
+
+window.onload=function(){
+
+    window.print();
+
+};
+
+</script>
+
+
+</body>
+
+</html>
+
+`;
+
+
+    const invoiceWindow =
+        window.open(
+            "",
+            "_blank"
+        );
+
+
+    if(!invoiceWindow){
+
+        alert(
+            "❌ المتصفح منع نافذة الفاتورة. اسمح بالنوافذ المنبثقة."
+        );
+
+        return;
+
+    }
+
+
+    invoiceWindow.document.open();
+
+    invoiceWindow.document.write(
+        invoiceHTML
+    );
+
+    invoiceWindow.document.close();
+
+}
 
 
 /* =====================================================
@@ -6748,7 +7121,44 @@ async function loadCustomers(){
         return;
 
     }
+                ""
+            ).trim();
 
+
+        if(key){
+
+            unique[key] =
+                row;
+
+        }
+
+    });
+
+
+    const customers =
+        Object.values(unique);
+
+
+    document.getElementById(
+        "statCustomers"
+    ).textContent =
+        customers.length;
+
+
+    const container =
+        document.getElementById(
+            "customersContainer"
+        );
+
+
+    if(!customers.length){
+
+        container.className =
+            "empty";
+
+
+        container.innerHTML =
+            `
 
     container.className =
         "";
