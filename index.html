@@ -1711,7 +1711,9 @@ async function deleteProduct(id){
 
  await loadProducts();
 
-   async function loadOrders(){
+}
+
+async function loadOrders(){
  const {data,error}=await supabaseClient.from("orders").select("*")
   .eq("store_id",currentStore.id).order("created_at",{ascending:false});
 
