@@ -944,69 +944,476 @@ async function loadDashboardData(){
  await loadCustomers();
 }
 
-/* =========================
+async/* =========================
    PRODUCTS
 ========================= */
+
 async function loadProducts(){
- const {data,error}=await supabaseClient.from("products").select("*")
-  .eq("store_id",currentStore.id).order("created_at",{ascending:false});
- if(error){console.error(error);return}
 
- document.getElementById("statProducts").textContent=data?.length||0;
- const container=document.getElementById("productsContainer");
+ const {data,error}=await supabaseClient
+  .from("products")
+  .select("*")
+  .eq("store_id",currentStore.id)
+  .order("created_at",{ascending:false});
 
- if(!data||!data.length){
-  container.innerHTML='<div class="empty"><div class="empty-icon">📦</div>لا توجد منتجات حتى الآن</div>';
+ if(error){
+  console.error(error);
   return;
  }
 
- container.innerHTML=data.map(product=>`
- <div class="product-card">
-  ${product.image_url
-   ? `<img src="${escapeHTML(product.image_url)}" alt="${escapeHTML(product.name)}">`
-   : `<div style="height:170px;display:flex;align-items:center;justify-content:center;background:#0b191b;font-size:50px">📦</div>`}
-  <div class="product-info">
-   <h3>${escapeHTML(product.name)}</h3>
-   <div class="product-price">${Number(product.price||0).toLocaleString("ar-EG")} جنيه</div>
-   <p style="color:#888;margin-top:5px">المخزون: ${Number(product.stock||0)}</p>
-   <p style="color:#888;margin-top:5px">${escapeHTML(product.description||"")}</p>
+ dashboardProducts=data||[];
+
+ document.getElementById("statProducts").textContent=
+  dashboardProducts.length;
+
+ const container=document.getElementById("productsContainer");
+
+ if(!dashboardProducts.length){
+
+  container.innerHTML=
+  '<div class="empty">'+
+  '<div class="empty-icon">📦</div>'+
+  'لا توجد منتجات حتى الآن'+
+  '</div>';
+
+  return;
+ }
+
+ container.innerHTML=dashboardProducts.map(product=>{
+
+  const productId=String(product.id)
+   .replace(/\\/g,"\\\\")
+   .replace(/'/g,"\\'");
+
+  return `
+  <div class="product-card">
+
+   ${
+    product.image_url
+    ?
+    `<img src="${escapeHTML(product.image_url)}"
+          alt="${escapeHTML(product.name)}">`
+    :
+    `<div style="
+      height:170px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#0b191b;
+      font-size:50px">
+      📦
+    </div>`
+   }
+
+   <div class="product-info">
+
+    <h3>${escapeHTML(product.name)}</h3>
+
+    <div class="product-price">
+      ${Number(product.price||0).toLocaleString("ar-EG")} جنيه
+    </div>
+
+    <p style="color:#888;margin-top:5px">
+      المخزون: ${Number(product.stock||0)}
+    </p>
+
+    ${
+      product.description
+      ?
+      `<p style="color:#888;margin-top:5px">
+        ${escapeHTML(product.description)}
+      </p>`
+      :
+      ""
+    }
+
+    <div style="
+      display:flex;
+      gap:8px;
+      margin-top:15px">
+
+      <button
+        class="gold-btn"
+        style="flex:1"
+        onclick="editProduct('${productId}')">
+        ✏️ تعديل
+      </button>
+
+      <button
+        class="gold-btn"
+        style="
+          flex:1;
+          background:#642b2b;
+          color:#fff"
+        onclick="deleteProduct('${productId}')">
+        🗑️ حذف
+      </button>
+
+    </div>
+
+   </div>
+
   </div>
- </div>`).join("");
+  `;
+
+ }).join("");
 }
 
-function openProductForm(){
- const form=document.getElementById("productForm");
- form.style.display=form.style.display==="none"?"grid":"none";
-}
-
-async function saveProduct(){
- if(!currentStore){alert("أنشئ المتجر أولاً.");return}
- const name=document.getElementById("productName").value.trim();
- const price=Number(document.getElementById("productPrice").value);
- const stock=Number(document.getElementById("productStock").value||0);
- const image_url=document.getElementById("productImage").value.trim();
- const description=document.getElementById("productDescription").value.trim();
- const message=document.getElementById("productMessage");
-
- if(!name||!price){message.textContent="⚠️ اكتب اسم المنتج والسعر.";return}
- message.textContent="⏳ جاري حفظ المنتج...";
-
- const {error}=await supabaseClient.from("products").insert({
-  store_id:currentStore.id,name,price,stock,image_url,description
- });
-
- if(error){console.error(error);message.textContent="❌ حدث خطأ: "+error.message;return}
-
- message.textContent="🎉 تم حفظ المنتج.";
- ["productName","productPrice","productStock","productImage","productDescription"].forEach(id=>document.getElementById(id).value="");
- await loadProducts();
- setTimeout(()=>document.getElementById("productForm").style.display="none",500);
-}
 
 /* =========================
-   ORDERS
+   OPEN PRODUCT FORM
 ========================= */
-async function loadOrders(){
+
+function openProductForm(){
+
+ const form=document.getElementById("productForm");
+
+ if(form.style.display==="none"){
+
+  editingProductId=null;
+
+  clearProductForm();
+
+  document.getElementById("saveProductButton").textContent=
+   "حفظ المنتج";
+
+  document.getElementById("cancelProductEditButton").style.display=
+   "none";
+
+  document.getElementById("productMessage").textContent="";
+
+  form.style.display="grid";
+
+ }else{
+
+  form.style.display="none";
+
+ }
+
+}
+
+
+/* =========================
+   EDIT PRODUCT
+========================= */
+
+function editProduct(id){
+
+ const product=dashboardProducts.find(
+  p=>String(p.id)===String(id)
+ );
+
+ if(!product){
+
+  alert("لم يتم العثور على المنتج.");
+
+  return;
+ }
+
+ editingProductId=product.id;
+
+ document.getElementById("productName").value=
+  product.name||"";
+
+ document.getElementById("productPrice").value=
+  product.price??"";
+
+ document.getElementById("productStock").value=
+  product.stock??0;
+
+ document.getElementById("productImage").value=
+  product.image_url||"";
+
+ document.getElementById("productDescription").value=
+  product.description||"";
+
+ document.getElementById("productForm").style.display=
+  "grid";
+
+ document.getElementById("saveProductButton").textContent=
+  "💾 حفظ التعديلات";
+
+ document.getElementById("cancelProductEditButton").style.display=
+  "inline-block";
+
+ document.getElementById("productMessage").textContent=
+  "✏️ أنت الآن تعدل المنتج.";
+
+ document.getElementById("productName").focus();
+
+ window.scrollTo({
+  top:document.getElementById("dashProducts").offsetTop-80,
+  behavior:"smooth"
+ });
+
+}
+
+
+/* =========================
+   CANCEL EDIT
+========================= */
+
+function cancelProductEdit(){
+
+ editingProductId=null;
+
+ clearProductForm();
+
+ document.getElementById("productMessage").textContent="";
+
+ document.getElementById("saveProductButton").textContent=
+  "حفظ المنتج";
+
+ document.getElementById("cancelProductEditButton").style.display=
+  "none";
+
+ document.getElementById("productForm").style.display=
+  "none";
+
+}
+
+
+/* =========================
+   CLEAR FORM
+========================= */
+
+function clearProductForm(){
+
+ [
+  "productName",
+  "productPrice",
+  "productStock",
+  "productImage",
+  "productDescription"
+ ].forEach(id=>{
+
+  const el=document.getElementById(id);
+
+  if(el) el.value="";
+
+ });
+
+}
+
+
+/* =========================
+   SAVE / UPDATE PRODUCT
+========================= */
+
+async function saveProduct(){
+
+ if(!currentStore){
+
+  alert("أنشئ المتجر أولاً.");
+
+  return;
+ }
+
+ const name=
+  document.getElementById("productName")
+  .value.trim();
+
+ const priceValue=
+  document.getElementById("productPrice")
+  .value;
+
+ const price=Number(priceValue);
+
+ const stock=Number(
+  document.getElementById("productStock")
+  .value||0
+ );
+
+ const image_url=
+  document.getElementById("productImage")
+  .value.trim();
+
+ const description=
+  document.getElementById("productDescription")
+  .value.trim();
+
+ const message=
+  document.getElementById("productMessage");
+
+ const button=
+  document.getElementById("saveProductButton");
+
+
+ if(!name || priceValue==="" || price<0){
+
+  message.textContent=
+   "⚠️ اكتب اسم المنتج والسعر بشكل صحيح.";
+
+  return;
+ }
+
+ button.disabled=true;
+
+ button.textContent=
+  editingProductId
+  ?
+  "⏳ جاري حفظ التعديلات..."
+  :
+  "⏳ جاري حفظ المنتج...";
+
+ message.textContent="";
+
+
+ const productData={
+  name,
+  price,
+  stock,
+  image_url,
+  description
+ };
+
+
+ let result;
+
+
+ /* تعديل */
+
+ if(editingProductId){
+
+  result=await supabaseClient
+   .from("products")
+   .update(productData)
+   .eq("id",editingProductId)
+   .eq("store_id",currentStore.id);
+
+ }
+
+
+ /* إضافة */
+
+ else{
+
+  result=await supabaseClient
+   .from("products")
+   .insert({
+    store_id:currentStore.id,
+    ...productData
+   });
+
+ }
+
+
+ if(result.error){
+
+  console.error(result.error);
+
+  button.disabled=false;
+
+  button.textContent=
+   editingProductId
+   ?
+   "💾 حفظ التعديلات"
+   :
+   "حفظ المنتج";
+
+  message.textContent=
+   "❌ حدث خطأ: "+result.error.message;
+
+  return;
+ }
+
+
+ message.textContent=
+  editingProductId
+  ?
+  "🎉 تم تعديل المنتج بنجاح."
+  :
+  "🎉 تم إضافة المنتج بنجاح.";
+
+
+ editingProductId=null;
+
+ clearProductForm();
+
+ document.getElementById("saveProductButton").textContent=
+  "حفظ المنتج";
+
+ document.getElementById("cancelProductEditButton").style.display=
+  "none";
+
+ await loadProducts();
+
+ button.disabled=false;
+
+ setTimeout(()=>{
+
+  document.getElementById("productForm").style.display=
+   "none";
+
+  message.textContent="";
+
+ },700);
+
+}
+
+
+/* =========================
+   DELETE PRODUCT
+========================= */
+
+async function deleteProduct(id){
+
+ if(!currentStore){
+
+  alert("أنشئ المتجر أولاً.");
+
+  return;
+ }
+
+ const product=dashboardProducts.find(
+  p=>String(p.id)===String(id)
+ );
+
+ if(!product){
+
+  alert("لم يتم العثور على المنتج.");
+
+  return;
+ }
+
+
+ const confirmed=confirm(
+  `هل أنت متأكد من حذف المنتج "${product.name}"؟`
+ );
+
+ if(!confirmed)return;
+
+
+ const {error}=await supabaseClient
+  .from("products")
+  .delete()
+  .eq("id",id)
+  .eq("store_id",currentStore.id);
+
+
+ if(error){
+
+  console.error(error);
+
+  alert(
+   "❌ لم يتم حذف المنتج:\n"+
+   error.message
+  );
+
+  return;
+ }
+
+
+ if(String(editingProductId)===String(id)){
+
+  cancelProductEdit();
+
+ }
+
+
+ await loadProducts();
+
+   } function loadOrders(){
  const {data,error}=await supabaseClient.from("orders").select("*")
   .eq("store_id",currentStore.id).order("created_at",{ascending:false});
 
