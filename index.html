@@ -1618,155 +1618,235 @@ function clearProductForm(){
    SAVE / UPDATE PRODUCT
 ========================= */
 
-async function saveProduct(){
 
- if(!currentStore){
+ const 
+ await async function saveProduct(){
 
-  alert("أنشئ المتجر أولاً.");
+    if(!currentStore){
 
-  return;
+        alert("أنشئ المتجر أولاً.");
+
+        return;
+    }
+
+    const name=
+        document.getElementById("productName")
+        .value.trim();
+
+    const priceValue=
+        document.getElementById("productPrice")
+        .value;
+
+    const price=Number(priceValue);
+
+    const stock=Number(
+        document.getElementById("productStock")
+        .value || 0
+    );
+
+    const imageInput=
+        document.getElementById("productImage");
+
+    const selectedFile=
+        imageInput.files?.[0] || null;
+
+    const description=
+        document.getElementById("productDescription")
+        .value.trim();
+
+    const message=
+        document.getElementById("productMessage");
+
+    const button=
+        document.getElementById("saveProductButton");
+
+
+    if(!name || priceValue==="" || price<0){
+
+        message.textContent=
+            "⚠️ اكتب اسم المنتج والسعر بشكل صحيح.";
+
+        return;
+    }
+
+
+    button.disabled=true;
+
+    button.textContent=
+        editingProductId
+        ?
+        "⏳ جاري حفظ التعديلات..."
+        :
+        "⏳ جاري حفظ المنتج...";
+
+    message.textContent="";
+
+
+    try{
+
+        let image_url="";
+
+
+        /*
+         * لو اخترنا صورة جديدة
+         * نرفعها إلى Supabase
+         */
+
+        if(selectedFile){
+
+            message.textContent=
+                "⏳ جاري رفع الصورة...";
+
+            image_url=
+                await uploadProductImage(selectedFile);
+
+        }
+
+
+        /*
+         * لو تعديل منتج ولم يختر المستخدم
+         * صورة جديدة، نحافظ على الصورة القديمة
+         */
+
+        else if(editingProductId){
+
+            const oldProduct=
+                dashboardProducts.find(
+                    p=>String(p.id)===String(editingProductId)
+                );
+
+            image_url=
+                oldProduct?.image_url || "";
+        }
+
+
+        const productData={
+
+            name,
+
+            price,
+
+            stock,
+
+            image_url,
+
+            description
+        };
+
+
+        let result;
+
+
+        /* =========================
+           تعديل المنتج
+        ========================= */
+
+        if(editingProductId){
+
+            result=
+                await supabaseClient
+                .from("products")
+                .update(productData)
+                .eq("id",editingProductId)
+                .eq("store_id",currentStore.id);
+
+        }
+
+
+        /* =========================
+           إضافة منتج
+        ========================= */
+
+        else{
+
+            result=
+                await supabaseClient
+                .from("products")
+                .insert({
+
+                    store_id:currentStore.id,
+
+                    ...productData
+
+                });
+
+        }
+
+
+        if(result.error){
+
+            console.error(result.error);
+
+            throw result.error;
+        }
+
+
+        message.textContent=
+            editingProductId
+            ?
+            "🎉 تم تعديل المنتج بنجاح."
+            :
+            "🎉 تم إضافة المنتج بنجاح.";
+
+
+        editingProductId=null;
+
+
+        clearProductForm();
+
+
+        document.getElementById(
+            "saveProductButton"
+        ).textContent="حفظ المنتج";
+
+
+        document.getElementById(
+            "cancelProductEditButton"
+        ).style.display="none";
+
+
+        await loadProducts();
+
+
+        button.disabled=false;
+
+
+        setTimeout(()=>{
+
+            document.getElementById(
+                "productForm"
+            ).style.display="none";
+
+            message.textContent="";
+
+        },700);
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        button.disabled=false;
+
+
+        button.textContent=
+            editingProductId
+            ?
+            "💾 حفظ التعديلات"
+            :
+            "حفظ المنتج";
+
+
+        message.textContent=
+            "❌ "+(
+                error.message ||
+                "حدث خطأ أثناء رفع الصورة أو حفظ المنتج."
+            );
+
+    }
+
  }
-
- const name=
-  document.getElementById("productName")
-  .value.trim();
-
- const priceValue=
-  document.getElementById("productPrice")
-  .value;
-
- const price=Number(priceValue);
-
- const stock=Number(
-  document.getElementById("productStock")
-  .value||0
- );
-
- const image_url=
-  document.getElementById("productImage")
-  .value.trim();
-
- const description=
-  document.getElementById("productDescription")
-  .value.trim();
-
- const message=
-  document.getElementById("productMessage");
-
- const button=
-  document.getElementById("saveProductButton");
-
-
- if(!name || priceValue==="" || price<0){
-
-  message.textContent=
-   "⚠️ اكتب اسم المنتج والسعر بشكل صحيح.";
-
-  return;
- }
-
- button.disabled=true;
-
- button.textContent=
-  editingProductId
-  ?
-  "⏳ جاري حفظ التعديلات..."
-  :
-  "⏳ جاري حفظ المنتج...";
-
- message.textContent="";
-
-
- const productData={
-  name,
-  price,
-  stock,
-  image_url,
-  description
- };
-
-
- let result;
-
-
- /* تعديل */
-
- if(editingProductId){
-
-  result=await supabaseClient
-   .from("products")
-   .update(productData)
-   .eq("id",editingProductId)
-   .eq("store_id",currentStore.id);
-
- }
-
-
- /* إضافة */
-
- else{
-
-  result=await supabaseClient
-   .from("products")
-   .insert({
-    store_id:currentStore.id,
-    ...productData
-   });
-
- }
-
-
- if(result.error){
-
-  console.error(result.error);
-
-  button.disabled=false;
-
-  button.textContent=
-   editingProductId
-   ?
-   "💾 حفظ التعديلات"
-   :
-   "حفظ المنتج";
-
-  message.textContent=
-   "❌ حدث خطأ: "+result.error.message;
-
-  return;
- }
-
-
- message.textContent=
-  editingProductId
-  ?
-  "🎉 تم تعديل المنتج بنجاح."
-  :
-  "🎉 تم إضافة المنتج بنجاح.";
-
-
- editingProductId=null;
-
- clearProductForm();
-
- document.getElementById("saveProductButton").textContent=
-  "حفظ المنتج";
-
- document.getElementById("cancelProductEditButton").style.display=
-  "none";
-
- await loadProducts();
-
- button.disabled=false;
-
- setTimeout(()=>{
-
-  document.getElementById("productForm").style.display=
-   "none";
-
-  message.textContent="";
-
- },700);
-
 }
 
 
