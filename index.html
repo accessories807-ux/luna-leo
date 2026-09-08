@@ -5709,46 +5709,122 @@ async function loadOrders(){
 
     if(!currentStore) return;
 
+
     const {
         data,
         error
     } = await supabaseClient
         .from("orders")
         .select("*")
-        .eq("store_id", currentStore.id)
-        .order("created_at", {
-            ascending:false
-        });
+        .eq(
+            "store_id",
+            currentStore.id
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
 
     if(error){
-        console.error(error);
+
+        console.error(
+            "Load orders error:",
+            error
+        );
+
         return;
     }
 
-    const orders = data || [];
+
+    const orders =
+        data || [];
+
 
     /* =========================
        STATISTICS
     ========================= */
 
-    document.getElementById(
-        "statOrders"
-    ).textContent = orders.length;
+    const statOrders =
+        document.getElementById(
+            "statOrders"
+        );
+
+    if(statOrders){
+
+        statOrders.textContent =
+            orders.length;
+
+    }
+
 
     let sales = 0;
 
+
     orders.forEach(order=>{
-        sales += Number(order.total || 0);
+
+        sales +=
+            Number(
+                order.total || 0
+            );
+
     });
 
-    document.getElementById(
-        "statSales"
-    ).textContent =
-        sales.toLocaleString("ar-EG");
+
+    const statSales =
+        document.getElementById(
+            "statSales"
+        );
+
+
+    if(statSales){
+
+        statSales.textContent =
+            sales.toLocaleString(
+                "ar-EG"
+            );
+
+    }
 
 
     /* =========================
-       ORDERS
+       STATUS
+    ========================= */
+
+    const statusArabic = {
+
+        new:"جديد",
+
+        processing:"قيد التجهيز",
+
+        shipped:"تم الشحن",
+
+        completed:"مكتمل",
+
+        cancelled:"ملغي"
+
+    };
+
+
+    const statusEmoji = {
+
+        new:"🆕",
+
+        processing:"⚙️",
+
+        shipped:"🚚",
+
+        completed:"✅",
+
+        cancelled:"❌"
+
+    };
+
+
+    /* =========================
+       ORDERS CONTAINER
     ========================= */
 
     const container =
@@ -5756,34 +5832,235 @@ async function loadOrders(){
             "ordersContainer"
         );
 
+
+    if(!container) return;
+
+
     if(!orders.length){
 
-        container.className = "empty";
+        container.className =
+            "empty";
+
 
         container.innerHTML = `
+
             <div class="empty-icon">
                 🛒
             </div>
+
             لا توجد طلبات حتى الآن
+
         `;
 
     }else{
 
         container.className = "";
 
+
         container.innerHTML =
             orders.map(order=>{
 
                 const orderStatus =
-                    order.status || "new";
+                    order.status ||
+                    "new";
 
-                const statusArabic = {
-                    new: "جديد",
-                    processing: "قيد التجهيز",
-                    shipped: "تم الشحن",
-                    completed: "مكتمل",
-                    cancelled: "ملغي"
-                };
+
+                const phone =
+                    String(
+                        order.customer_phone ||
+                        ""
+                    ).replace(
+                        /[^0-9+]/g,
+                        ""
+                    );
+
+
+                const whatsappPhone =
+                    phone
+                    .replace(
+                        /^\+/,
+                        ""
+                    );
+
+
+                const orderDate =
+                    order.created_at
+                    ?
+                    new Date(
+                        order.created_at
+                    ).toLocaleString(
+                        "ar-EG"
+                    )
+                    :
+                    "غير معروف";
+
+
+                let itemsHTML =
+                    "لا توجد تفاصيل للمنتجات";
+
+
+                if(
+                    Array.isArray(
+                        order.items
+                    )
+                ){
+
+                    itemsHTML =
+                        order.items
+                        .map(item=>`
+
+                            <div
+                                style="
+                                    display:flex;
+                                    justify-content:space-between;
+                                    gap:10px;
+                                    padding:10px 0;
+                                    border-bottom:1px solid rgba(255,255,255,.08)
+                                "
+                            >
+
+                                <div>
+
+                                    <strong>
+                                        ${escapeHTML(
+                                            item.name ||
+                                            "منتج"
+                                        )}
+                                    </strong>
+
+                                    <div
+                                        style="
+                                            color:#999;
+                                            margin-top:4px
+                                        "
+                                    >
+                                        الكمية:
+                                        ${Number(
+                                            item.quantity ||
+                                            0
+                                        )}
+                                    </div>
+
+                                </div>
+
+
+                                <div
+                                    style="
+                                        color:#d6b35a;
+                                        white-space:nowrap
+                                    "
+                                >
+
+                                    ${Number(
+                                        item.price ||
+                                        0
+                                    ).toLocaleString(
+                                        "ar-EG"
+                                    )}
+
+                                    جنيه
+
+                                </div>
+
+                            </div>
+
+                        `)
+                        .join("");
+
+                }else if(
+                    typeof order.items ===
+                    "string"
+                ){
+
+                    try{
+
+                        const parsedItems =
+                            JSON.parse(
+                                order.items
+                            );
+
+
+                        if(
+                            Array.isArray(
+                                parsedItems
+                            )
+                        ){
+
+                            itemsHTML =
+                                parsedItems
+                                .map(item=>`
+
+                                    <div
+                                        style="
+                                            display:flex;
+                                            justify-content:space-between;
+                                            gap:10px;
+                                            padding:10px 0;
+                                            border-bottom:1px solid rgba(255,255,255,.08)
+                                        "
+                                    >
+
+                                        <div>
+
+                                            <strong>
+                                                ${escapeHTML(
+                                                    item.name ||
+                                                    "منتج"
+                                                )}
+                                            </strong>
+
+                                            <div
+                                                style="
+                                                    color:#999;
+                                                    margin-top:4px
+                                                "
+                                            >
+                                                الكمية:
+                                                ${Number(
+                                                    item.quantity ||
+                                                    0
+                                                )}
+                                            </div>
+
+                                        </div>
+
+
+                                        <div
+                                            style="
+                                                color:#d6b35a;
+                                                white-space:nowrap
+                                            "
+                                        >
+
+                                            ${Number(
+                                                item.price ||
+                                                0
+                                            ).toLocaleString(
+                                                "ar-EG"
+                                            )}
+
+                                            جنيه
+
+                                        </div>
+
+                                    </div>
+
+                                `)
+                                .join("");
+
+                        }
+
+                    }catch(e){
+
+                        console.error(
+                            "Items parse error:",
+                            e
+                        );
+
+                    }
+
+                }
+
 
                 return `
 
@@ -5791,21 +6068,34 @@ async function loadOrders(){
                     style="
                         background:#101f21;
                         padding:18px;
-                        border-radius:14px;
-                        margin-bottom:12px;
+                        border-radius:16px;
+                        margin-bottom:14px;
                         text-align:right;
                         border:1px solid rgba(214,179,90,.15)
                     "
                 >
 
-                    <strong style="font-size:18px">
+                    <!-- CUSTOMER -->
+
+                    <strong
+                        style="
+                            font-size:19px;
+                            color:#fff
+                        "
+                    >
                         ${escapeHTML(
                             order.customer_name ||
                             "عميل"
                         )}
                     </strong>
 
-                    <p style="color:#999;margin:8px 0">
+
+                    <p
+                        style="
+                            color:#999;
+                            margin:8px 0
+                        "
+                    >
                         📞
                         ${escapeHTML(
                             order.customer_phone ||
@@ -5813,7 +6103,13 @@ async function loadOrders(){
                         )}
                     </p>
 
-                    <p style="color:#aaa;margin:8px 0">
+
+                    <p
+                        style="
+                            color:#aaa;
+                            margin:8px 0
+                        "
+                    >
                         📍
                         ${escapeHTML(
                             order.customer_address ||
@@ -5821,34 +6117,294 @@ async function loadOrders(){
                         )}
                     </p>
 
+
                     <p
                         style="
                             color:#d6b35a;
-                            font-size:18px;
+                            font-size:19px;
                             font-weight:bold;
                             margin:10px 0
                         "
                     >
                         💰
                         ${Number(
-                            order.total || 0
-                        ).toLocaleString("ar-EG")}
+                            order.total ||
+                            0
+                        ).toLocaleString(
+                            "ar-EG"
+                        )}
+
                         جنيه
+
                     </p>
 
-                    <p style="color:#888;margin:8px 0">
+
+                    <!-- DATE -->
+
+                    <p
+                        style="
+                            color:#777;
+                            font-size:13px;
+                            margin:8px 0
+                        "
+                    >
+                        🕐
+                        ${orderDate}
+                    </p>
+
+
+                    <!-- STATUS -->
+
+                    <p
+                        style="
+                            color:#aaa;
+                            margin:10px 0
+                        "
+                    >
+
                         الحالة الحالية:
-                        <strong>
+
+                        <strong
+                            style="
+                                color:#d6b35a
+                            "
+                        >
+
+                            ${statusEmoji[orderStatus] || "📌"}
+
                             ${
                                 statusArabic[
                                     orderStatus
                                 ] ||
                                 orderStatus
                             }
+
                         </strong>
+
                     </p>
 
-                    <div style="margin-top:12px">
+
+                    <!-- ACTION BUTTONS -->
+
+                    <div
+                        style="
+                            display:grid;
+                            grid-template-columns:1fr 1fr;
+                            gap:8px;
+                            margin-top:14px
+                        "
+                    >
+
+                        ${
+                            whatsappPhone
+                            ?
+
+                            `
+                            <a
+                                href="https://wa.me/${whatsappPhone}"
+                                target="_blank"
+                                style="
+                                    display:block;
+                                    text-align:center;
+                                    padding:12px;
+                                    border-radius:10px;
+                                    background:#168c4b;
+                                    color:#fff;
+                                    text-decoration:none;
+                                    font-weight:bold
+                                "
+                            >
+                                📲 واتساب
+                            </a>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+
+                        ${
+                            phone
+                            ?
+
+                            `
+                            <a
+                                href="tel:${phone}"
+                                style="
+                                    display:block;
+                                    text-align:center;
+                                    padding:12px;
+                                    border-radius:10px;
+                                    background:#263f43;
+                                    color:#fff;
+                                    text-decoration:none;
+                                    font-weight:bold
+                                "
+                            >
+                                📞 اتصال
+                            </a>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+                    </div>
+
+
+                    <!-- ORDER DETAILS -->
+
+                    <details
+                        style="
+                            margin-top:12px;
+                            background:#0b191b;
+                            border-radius:12px;
+                            padding:12px
+                        "
+                    >
+
+                        <summary
+                            style="
+                                cursor:pointer;
+                                color:#d6b35a;
+                                font-weight:bold
+                            "
+                        >
+                            👁️ تفاصيل الطلب
+                        </summary>
+
+
+                        <div
+                            style="
+                                margin-top:12px
+                            "
+                        >
+
+                            <p
+                                style="
+                                    color:#aaa;
+                                    margin-bottom:10px
+                                "
+                            >
+                                🆔 رقم الطلب:
+                            </p>
+
+
+                            <div
+                                style="
+                                    color:#777;
+                                    font-size:12px;
+                                    word-break:break-all;
+                                    margin-bottom:15px
+                                "
+                            >
+                                ${escapeHTML(
+                                    String(
+                                        order.id ||
+                                        ""
+                                    )
+                                )}
+                            </div>
+
+
+                            <h4
+                                style="
+                                    color:#fff;
+                                    margin-bottom:8px
+                                "
+                            >
+                                📦 المنتجات
+                            </h4>
+
+
+                            <div>
+                                ${itemsHTML}
+                            </div>
+
+
+                            <div
+                                style="
+                                    margin-top:14px;
+                                    padding-top:12px;
+                                    border-top:1px solid rgba(255,255,255,.1)
+                                "
+                            >
+
+                                <p
+                                    style="
+                                        color:#aaa;
+                                        margin:6px 0
+                                    "
+                                >
+                                    💳 طريقة الدفع:
+                                    <strong
+                                        style="color:#fff"
+                                    >
+                                        ${
+                                            escapeHTML(
+                                                order.payment_method ||
+                                                "غير محددة"
+                                            )
+                                        }
+                                    </strong>
+                                </p>
+
+
+                                <p
+                                    style="
+                                        color:#aaa;
+                                        margin:6px 0
+                                    "
+                                >
+                                    💰 حالة الدفع:
+                                    <strong
+                                        style="color:#d6b35a"
+                                    >
+                                        ${
+                                            escapeHTML(
+                                                order.payment_status ||
+                                                "pending"
+                                            )
+                                        }
+                                    </strong>
+                                </p>
+
+
+                                <p
+                                    style="
+                                        color:#d6b35a;
+                                        font-size:18px;
+                                        font-weight:bold;
+                                        margin-top:10px
+                                    "
+                                >
+                                    الإجمالي:
+                                    ${Number(
+                                        order.total ||
+                                        0
+                                    ).toLocaleString(
+                                        "ar-EG"
+                                    )}
+
+                                    جنيه
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </details>
+
+
+                    <!-- STATUS SELECT -->
+
+                    <div
+                        style="
+                            margin-top:14px
+                        "
+                    >
 
                         <label
                             style="
@@ -5860,10 +6416,16 @@ async function loadOrders(){
                             تغيير حالة الطلب
                         </label>
 
+
                         <select
                             onchange="
                                 updateOrderStatus(
-                                    '${order.id}',
+                                    '${String(
+                                        order.id
+                                    ).replace(
+                                        /'/g,
+                                        "\\'"
+                                    )}',
                                     this.value
                                 )
                             "
@@ -5880,35 +6442,59 @@ async function loadOrders(){
 
                             <option
                                 value="new"
-                                ${orderStatus==="new" ? "selected":""}
+                                ${
+                                    orderStatus === "new"
+                                    ? "selected"
+                                    : ""
+                                }
                             >
                                 🆕 جديد
                             </option>
 
+
                             <option
                                 value="processing"
-                                ${orderStatus==="processing" ? "selected":""}
+                                ${
+                                    orderStatus === "processing"
+                                    ? "selected"
+                                    : ""
+                                }
                             >
                                 ⚙️ قيد التجهيز
                             </option>
 
+
                             <option
                                 value="shipped"
-                                ${orderStatus==="shipped" ? "selected":""}
+                                ${
+                                    orderStatus === "shipped"
+                                    ? "selected"
+                                    : ""
+                                }
                             >
                                 🚚 تم الشحن
                             </option>
 
+
                             <option
                                 value="completed"
-                                ${orderStatus==="completed" ? "selected":""}
+                                ${
+                                    orderStatus === "completed"
+                                    ? "selected"
+                                    : ""
+                                }
                             >
                                 ✅ مكتمل
                             </option>
 
+
                             <option
                                 value="cancelled"
-                                ${orderStatus==="cancelled" ? "selected":""}
+                                ${
+                                    orderStatus === "cancelled"
+                                    ? "selected"
+                                    : ""
+                                }
                             >
                                 ❌ ملغي
                             </option>
@@ -5921,7 +6507,8 @@ async function loadOrders(){
 
                 `;
 
-            }).join("");
+            })
+            .join("");
 
     }
 
@@ -5935,36 +6522,40 @@ async function loadOrders(){
             "recentOrders"
         );
 
+
+    if(!recent) return;
+
+
     if(!orders.length){
 
-        recent.className = "empty";
+        recent.className =
+            "empty";
+
 
         recent.innerHTML = `
+
             <div class="empty-icon">
                 🛒
             </div>
+
             لا توجد طلبات حتى الآن
+
         `;
 
     }else{
 
         recent.className = "";
 
+
         recent.innerHTML =
             orders
             .slice(0,5)
             .map(order=>{
 
-                const statusArabic = {
-                    new:"جديد",
-                    processing:"قيد التجهيز",
-                    shipped:"تم الشحن",
-                    completed:"مكتمل",
-                    cancelled:"ملغي"
-                };
-
                 const status =
-                    order.status || "new";
+                    order.status ||
+                    "new";
+
 
                 return `
 
@@ -5979,6 +6570,7 @@ async function loadOrders(){
                 >
 
                     🛒
+
                     ${escapeHTML(
                         order.customer_name ||
                         "عميل"
@@ -5987,8 +6579,11 @@ async function loadOrders(){
                     —
 
                     ${Number(
-                        order.total || 0
-                    ).toLocaleString("ar-EG")}
+                        order.total ||
+                        0
+                    ).toLocaleString(
+                        "ar-EG"
+                    )}
 
                     جنيه
 
@@ -5998,20 +6593,26 @@ async function loadOrders(){
                             margin-right:8px
                         "
                     >
-                        (${statusArabic[status] || status})
+
+                        ${
+                            statusArabic[
+                                status
+                            ] ||
+                            status
+                        }
+
                     </span>
 
                 </div>
 
                 `;
 
-            }).join("");
+            })
+            .join("");
 
     }
 
-}
-
-
+            }     
 /* =========================
    UPDATE ORDER STATUS
 ========================= */
