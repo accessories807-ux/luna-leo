@@ -9673,24 +9673,32 @@ document.addEventListener(
    START
 ===================================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    async()=>{
+    
+document.addEventListener("DOMContentLoaded", async function(){
 
-        if(
-            isPublicStoreMode()
-        ){
+    const storeKey =
+        getStoreQuery();
 
-            await loadPublicStore();
+    if(storeKey){
 
-        }else{
+        console.log(
+            "PUBLIC STORE MODE:",
+            storeKey
+        );
 
-            await checkUserSession();
+        document.getElementById("landingPage").style.display = "none";
+        document.getElementById("dashboardApp").style.display = "none";
+        document.getElementById("authModal").style.display = "none";
+        document.getElementById("storefrontApp").style.display = "block";
 
-        }
+        await loadPublicStore();
 
+        return;
     }
-);
+
+    await checkUserSession();
+
+});
 
 </script>
 
