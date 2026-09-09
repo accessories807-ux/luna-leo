@@ -3073,7 +3073,36 @@ id="sfCartItems"
 class="sf-cart-items">
 </div>
 
+<!-- الطلبات السابقة -->
+<div style="padding:10px 15px;">
+    <button
+        type="button"
+        onclick="showMyOrders()"
+        style="
+            width:100%;
+            padding:12px;
+            border:1px solid #d4af37;
+            border-radius:10px;
+            background:#fff;
+            color:#8a681c;
+            font-weight:bold;
+            cursor:pointer;
+        "
+    >
+        📦 طلباتي السابقة
+    </button>
+</div>
 
+<!-- مكان عرض الطلبات السابقة -->
+<div
+    id="myOrdersBox"
+    style="
+        display:none;
+        padding:10px 15px;
+        overflow:auto;
+        max-height:350px;
+    "
+></div>
 <div class="sf-cart-bottom">
 
 <div class="sf-total">
@@ -9688,7 +9717,407 @@ async function placeStoreOrder(){
 
 }
 
+/* =====================================================
+   طلباتي السابقة
+===================================================== */
 
+async function showMyOrders(){
+/* =====================================================
+   إلغاء طلب العميل
+===================================================== */
+
+async function cancelMyOrder(orderId){
+
+    if(!publicStore){
+        alert("❌ المتجر غير متاح.");
+        return;
+    }
+
+    const key =
+        "lunaLeoOrderTokens_" +
+        publicStore.id;
+
+    const savedOrders =
+        JSON.parse(
+            localStorage.getItem(key) || "[]"
+        );
+
+    const saved =
+        savedOrders.find(
+            x => x.orderId === orderId
+        );
+
+    if(!saved || !saved.cancelToken){
+
+        alert(
+            "❌ لا يمكن إلغاء هذا الطلب من هذا الجهاز."
+        );
+
+        return;
+    }
+
+    const confirmCancel =
+        confirm(
+            "هل أنت متأكد من إلغاء الطلب؟\n\nلا يمكن التراجع عن الإلغاء."
+        );
+
+    if(!confirmCancel) return;
+
+    try{
+
+        const {data,error} =
+            await supabaseClient
+                .from("orders")
+                .update({
+                    status:"cancelled"
+                })
+                .eq("id",orderId)
+                .eq("store_id",publicStore.id)
+                .eq("cancel_token",saved.cancelToken)
+                .select()
+                .maybeSingle();
+
+        if(error){
+
+            console.error(
+                "CANCEL ORDER ERROR:",
+                error
+            );
+
+            alert(
+                "❌ حصل خطأ أثناء إلغاء الطلب."
+            );
+
+            return;
+        }
+
+        if(!data){
+
+            alert(
+                "❌ لا يمكن إلغاء الطلب.\nقد يكون تم تغييره أو إلغاؤه بالفعل."
+            );
+
+            return;
+        }
+
+        alert(
+            "✅ تم إلغاء الطلب بنجاح."
+        );
+
+        await showMyOrders();
+
+    }catch(error){
+
+        console.error(
+            "CANCEL ERROR:",
+            error
+        );
+
+        alert(
+            "❌ حدث خطأ غير متوقع."
+        );
+    }
+    }
+    const box =
+        document.getElementById("myOrdersBox");
+
+    if(!box) return;
+
+    box.style.display = "block";
+
+    box.innerHTML = `
+        <div style="text-align:center;padding:20px">
+            ⏳ جاري تحميل طلباتك...
+        </div>
+    `;
+
+    try{
+
+        const key =
+            "lunaLeoOrderTokens_" +
+            publicStore.id;
+
+        const savedOrders =
+            JSON.parse(
+                localStorage.getItem(key) || "[]"
+            );
+
+        if(!savedOrders.length){
+
+            box.innerHTML = `
+                <div style="
+                    text-align:center;
+                    padding:25px 10px;
+                    color:#777;
+                ">
+                    📦<br>
+                    <strong>لا توجد طلبات سابقة</strong>
+                </div>
+            `;
+
+            return;
+        }
+
+        const orderIds =
+            savedOrders.map(
+                x => x.orderId
+            );
+
+        const {data,error} =
+            await supabaseClient
+                .from("orders")
+                .select("*")
+                .in("id",orderIds)
+                .eq(
+                    "store_id",
+                    publicStore.id
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending:false
+                    }
+                );
+
+        if(error){
+
+            console.error(
+                "MY ORDERS ERROR:",
+                error
+            );
+
+            box.innerHTML = `
+                <div style="
+                    text-align:center;
+                    padding:20px;
+                    color:#b33;
+                ">
+                    ❌ حصل خطأ أثناء تحميل الطلبات
+                </div>
+            `;
+
+            return;
+        }
+
+        if(!data || !data.length){
+
+            box.innerHTML = `
+                <div style="
+                    text-align:center;
+                    padding:20px;
+                ">
+                    📦 لا توجد طلبات سابقة
+                </div>
+            `;
+
+            return;
+        }
+
+        const statusArabic = {
+            new:"🆕 جديد",
+            confirmed:"✅ تم التأكيد",
+            preparing:"📦 قيد التجهيز",
+            shipped:"🚚 تم الشحن",
+            delivered:"🎉 تم التسليم",
+            cancelled:"❌ ملغي"
+        };
+
+        box.innerHTML =
+            data.map(order => {
+
+                const items =
+                    Array.isArray(order.items)
+                    ? order.items
+                    : [];
+
+                const products =
+                    items.map(item => `
+                        <div style="
+                            display:flex;
+                            align-items:center;
+                            gap:8px;
+                            padding:6px 0;
+                            border-bottom:1px solid #eee;
+                        ">
+
+                            ${
+                                item.image_url
+                                ?
+                                `<img
+                                    src="${escapeHTML(item.image_url)}"
+                                    style="
+                                        width:45px;
+                                        height:45px;
+                                        object-fit:cover;
+                                        border-radius:8px;
+                                    "
+                                >`
+                                :
+                                `<div style="
+                                    width:45px;
+                                    height:45px;
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    background:#eee;
+                                    border-radius:8px;
+                                ">📦</div>`
+                            }
+
+                            <div style="flex:1">
+                                <div style="font-weight:bold">
+                                    ${escapeHTML(
+                                        item.name || "منتج"
+                                    )}
+                                </div>
+
+                                <small>
+                                    الكمية: ${item.qty || 1}
+                                </small>
+                            </div>
+
+                            <strong>
+                                ${Number(
+                                    item.price || 0
+                                ).toLocaleString("ar-EG")}
+                                ج
+                            </strong>
+
+                        </div>
+                    `).join("");
+
+                const canCancel =
+                    order.status === "new" ||
+                    order.status === "confirmed" ||
+                    order.status === "preparing";
+
+                return `
+                    <div style="
+                        background:#fff;
+                        border:1px solid #e5e5e5;
+                        border-radius:14px;
+                        padding:12px;
+                        margin-bottom:12px;
+                        box-shadow:0 2px 8px rgba(0,0,0,.05);
+                    ">
+
+                        <div style="
+                            display:flex;
+                            justify-content:space-between;
+                            gap:8px;
+                            margin-bottom:10px;
+                        ">
+
+                            <strong>
+                                📦 طلب #${escapeHTML(
+                                    String(order.id).slice(0,8)
+                                )}
+                            </strong>
+
+                            <span style="
+                                color:#9b771f;
+                                font-weight:bold;
+                            ">
+                                ${
+                                    statusArabic[
+                                        order.status
+                                    ] ||
+                                    order.status ||
+                                    "جديد"
+                                }
+                            </span>
+
+                        </div>
+
+                        <div>
+                            ${products}
+                        </div>
+
+                        <div style="
+                            display:flex;
+                            justify-content:space-between;
+                            margin-top:10px;
+                            padding-top:8px;
+                            font-weight:bold;
+                        ">
+                            <span>الإجمالي</span>
+
+                            <span>
+                                ${Number(
+                                    order.total || 0
+                                ).toLocaleString("ar-EG")}
+                                جنيه
+                            </span>
+                        </div>
+
+                        <div style="
+                            display:flex;
+                            gap:7px;
+                            margin-top:10px;
+                        ">
+
+                            ${
+                                canCancel
+                                ?
+                                `
+                                <button
+                                    onclick="cancelMyOrder('${escapeHTML(order.id)}')"
+                                    style="
+                                        flex:1;
+                                        border:0;
+                                        border-radius:9px;
+                                        padding:10px;
+                                        background:#f3dddd;
+                                        color:#a33;
+                                        font-weight:bold;
+                                    "
+                                >
+                                    ❌ إلغاء الطلب
+                                </button>
+                                `
+                                :
+                                ""
+                            }
+
+                            <button
+                                onclick="contactOrderWhatsApp('${escapeHTML(order.id)}')"
+                                style="
+                                    flex:1;
+                                    border:0;
+                                    border-radius:9px;
+                                    padding:10px;
+                                    background:#d6b35a;
+                                    color:#111;
+                                    font-weight:bold;
+                                "
+                            >
+                                🟢 واتساب
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+
+            }).join("");
+
+    }catch(error){
+
+        console.error(
+            "SHOW ORDERS ERROR:",
+            error
+        );
+
+        box.innerHTML = `
+            <div style="
+                text-align:center;
+                padding:20px;
+            ">
+                ❌ حدث خطأ
+            </div>
+        `;
+    }
+    }
 /* =====================================================
    LOGOUT
 ===================================================== */
