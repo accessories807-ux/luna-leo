@@ -9681,7 +9681,12 @@ document.addEventListener(
 document.addEventListener("DOMContentLoaded", async function(){
 
     const storeKey =
-        getStoreQuery();
+    getStoreQuery();
+
+alert(
+    "DOMContentLoaded اشتغل\nStore = " +
+    (storeKey || "NOT FOUND")
+);
 
     if(storeKey){
 
