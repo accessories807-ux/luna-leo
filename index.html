@@ -7517,18 +7517,21 @@ async function loadCustomers(){
 
 function getStoreQuery(){
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-
-    return (
-        params.get("store") ||
-        params.get("shop") ||
-        params.get("slug")
+    const params = new URLSearchParams(
+        window.location.search
     );
 
+    const store =
+        params.get("store") ||
+        params.get("shop") ||
+        params.get("slug");
+
+    alert(
+        "Store Key = " +
+        (store || "NOT FOUND")
+    );
+
+    return store;
 }
 
 
