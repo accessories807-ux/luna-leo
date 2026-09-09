@@ -9695,8 +9695,20 @@ document.addEventListener("DOMContentLoaded", async function(){
         document.getElementById("authModal").style.display = "none";
         document.getElementById("storefrontApp").style.display = "block";
 
-        await loadPublicStore();
+        try{
 
+    await loadPublicStore();
+
+}catch(error){
+
+    alert(
+        "خطأ في صفحة العميل:\n" +
+        error.message
+    );
+
+    console.error(error);
+
+}
         return;
     }
 
