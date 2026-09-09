@@ -3831,7 +3831,6 @@ function closeAuth(){
 /* =====================================================
    REGISTER
 ===================================================== */
-
 async function registerUser(){
 
     const name =
@@ -3913,13 +3912,13 @@ async function registerUser(){
         } =
         await supabaseClient.auth.signUp({
 
-            email:email,
+            email: email,
 
-            password:password,
+            password: password,
 
             options:{
                 data:{
-                    full_name:name
+                    full_name: name
                 }
             }
 
@@ -3927,45 +3926,17 @@ async function registerUser(){
 
 
         if(error){
-
             throw error;
-
         }
-// إنشاء الاشتراك التجريبي لمدة 15 يوم
-if(data && data.user){
 
-    const { error: subscriptionError } =
-        await supabaseClient
-            .from("subscriptions")
-            .insert({
 
-                user_id: data.user.id,
+        /*
+         * الاشتراك التجريبي يتم إنشاؤه تلقائيًا
+         * من قاعدة البيانات عند إنشاء المستخدم.
+         * لا نقوم بعمل INSERT هنا حتى لا يحدث
+         * تعارض مع تأكيد البريد الإلكتروني أو RLS.
+         */
 
-                plan: "trial",
-
-                trial_started_at:
-                    new Date().toISOString(),
-
-                trial_ends_at:
-                    new Date(
-                        Date.now() +
-                        15 * 24 * 60 * 60 * 1000
-                    ).toISOString(),
-
-                is_lifetime: false
-
-            });
-
-    if(subscriptionError){
-
-        console.error(
-            "Subscription creation error:",
-            subscriptionError
-        );
-
-    }
-
-    }
 
         if(
             data &&
@@ -4019,7 +3990,9 @@ if(data && data.user){
     button.textContent =
         "إنشاء الحساب";
 
-}
+    }
+
+
 
 
 /* =====================================================
