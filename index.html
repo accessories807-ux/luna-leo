@@ -2095,6 +2095,77 @@ LUNA<span>&</span>LEO
 
 </div>
 
+<!-- =========================
+     PUBLIC STOREFRONT (واجهة المتجر العام)
+========================= -->
+<div id="storefrontApp">
+
+  <!-- شريط الملاحة العلوي للمتجر -->
+  <header class="sf-topbar">
+    <div class="sf-topbar-inner">
+      <div class="sf-brand">LUNA<span>&</span>LEO</div>
+      <div class="sf-top-actions">
+        <button class="sf-small-btn" onclick="openCustomerOrders()">طلباتي</button>
+        <button class="sf-cart-btn" onclick="toggleCart()">
+          🛒 السلة (<span id="sfCartCount">0</span>)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- القسم التعريفي للمتجر (Hero) -->
+  <section class="sf-hero">
+    <div class="sf-hero-inner">
+      <h1 class="sf-store-name" id="sfStoreName">اسم المتجر</h1>
+      <p class="sf-store-desc" id="sfStoreDesc">وصف المتجر يظهر هنا...</p>
+      <div class="sf-contact-row" id="sfContactRow">
+        <!-- بيانات التواصل تظهر هنا تلقائياً -->
+      </div>
+    </div>
+  </section>
+
+  <!-- المحتوى الرئيسي والأقسام والمنتجات -->
+  <main class="sf-main">
+    <div class="sf-toolbar">
+      <input type="text" id="sfSearchInput" class="sf-search" placeholder="ابحث عن منتج..." oninput="filterStorefrontProducts()">
+      <div class="sf-categories" id="sfCategories">
+        <!-- تصنيفات المنتجات تظهر هنا -->
+      </div>
+      <span class="sf-count" id="sfProductCount">0 منتج</span>
+    </div>
+
+    <!-- شبكة عرض المنتجات -->
+    <div class="sf-products" id="sfProductsGrid">
+      <!-- المنتجات تظهر هنا تلقائياً بواسطة JavaScript -->
+    </div>
+  </main>
+
+  <!-- الفوتر الخاص بالمتجر -->
+  <footer class="sf-footer">
+    <p>© 2026 جميع الحقوق محفوظة للمتجر</p>
+  </footer>
+
+  <!-- النافذة الجانبية لسلة التسوق -->
+  <div class="sf-cart-overlay" id="sfCartOverlay" onclick="closeCartOnOverlay(event)">
+    <div class="sf-cart">
+      <div class="sf-cart-head">
+        <h2>سلة التسوق</h2>
+        <button class="sf-cart-close" onclick="toggleCart()">&times;</button>
+      </div>
+      <div class="sf-cart-items" id="sfCartItems">
+        <!-- عناصر السلة تظهر هنا -->
+      </div>
+      <div class="sf-cart-bottom">
+        <div class="sf-total">
+          <span>إجمالي المبلغ:</span>
+          <span id="sfCartTotal">0 ج.م</span>
+        </div>
+        <button class="sf-checkout-btn" onclick="showCheckoutForm()">إتمام الطلب</button>
+      </div>
+    </div>
+  </div>
+
+</div>
 
 <!-- =====================================================
      AUTH MODAL
