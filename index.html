@@ -9873,87 +9873,72 @@ async function cancelMyOrder(orderId){
         "lunaLeoOrderTokens_" +
         publicStore.id;
 
-    const savedOrders =
-        JSON.parse(
+    let savedOrders = [];
+
+    try{
+        savedOrders = JSON.parse(
             localStorage.getItem(key) || "[]"
         );
+    }catch(error){
+        console.error("ORDER TOKENS ERROR:", error);
+    }
 
-    const saved =
-        savedOrders.find(
-            x => x.orderId === orderId
-        );
+    const saved = savedOrders.find(
+        x => String(x.orderId) === String(orderId)
+    );
 
     if(!saved || !saved.cancelToken){
-
-        alert(
-            "❌ لا يمكن إلغاء هذا الطلب من هذا الجهاز."
-        );
-
+        alert("❌ لا يمكن إلغاء هذا الطلب من هذا الجهاز.");
         return;
     }
 
-    const confirmCancel =
-        confirm(
-            "هل أنت متأكد من إلغاء الطلب؟\n\nلا يمكن التراجع عن الإلغاء."
-        );
+    const confirmCancel = confirm(
+        "هل أنت متأكد من إلغاء الطلب؟\n\nسيتم حذف الطلب الملغي نهائيًا من قائمة طلباتك."
+    );
 
     if(!confirmCancel) return;
 
     try{
 
-        const {data,error} =
-            await supabaseClient
-                .from("orders")
-                .update({
-                    status:"cancelled"
-                })
-                .eq("id",orderId)
-                .eq("store_id",publicStore.id)
-                .eq("cancel_token",saved.cancelToken)
-                .select()
-                .maybeSingle();
+        /*
+         * الإلغاء هنا حذف نهائي للطلب من قاعدة البيانات،
+         * وليس مجرد تحويل حالته إلى "ملغي".
+         */
+        const {data,error} = await supabaseClient
+            .from("orders")
+            .delete()
+            .eq("id",orderId)
+            .eq("store_id",publicStore.id)
+            .eq("cancel_token",saved.cancelToken)
+            .select("id")
+            .maybeSingle();
 
         if(error){
-
-            console.error(
-                "CANCEL ORDER ERROR:",
-                error
-            );
-
-            alert(
-                "❌ حصل خطأ أثناء إلغاء الطلب."
-            );
-
+            console.error("DELETE CANCELLED ORDER ERROR:",error);
+            alert("❌ لم نتمكن من حذف الطلب. تأكد من صلاحية الحذف في Supabase.");
             return;
         }
 
-        if(!data){
-
-            alert(
-                "❌ لا يمكن إلغاء الطلب.\nقد يكون تم تغييره أو إلغاؤه بالفعل."
-            );
-
-            return;
-        }
-
-        alert(
-            "✅ تم إلغاء الطلب بنجاح."
+        /* حذف بيانات الطلب من الجهاز أيضًا */
+        savedOrders = savedOrders.filter(
+            x => String(x.orderId) !== String(orderId)
         );
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(savedOrders)
+        );
+
+        alert("✅ تم إلغاء الطلب وحذفه نهائيًا.");
 
         await showMyOrders();
 
     }catch(error){
 
-        console.error(
-            "CANCEL ERROR:",
-            error
-        );
-
-        alert(
-            "❌ حدث خطأ غير متوقع."
-        );
+        console.error("CANCEL/DELETE ERROR:",error);
+        alert("❌ حدث خطأ غير متوقع أثناء حذف الطلب.");
     }
-    }
+}
     const box =
         document.getElementById("myOrdersBox");
 
@@ -10007,6 +9992,10 @@ async function cancelMyOrder(orderId){
                 .eq(
                     "store_id",
                     publicStore.id
+                )
+                .neq(
+                    "status",
+                    "cancelled"
                 )
                 .order(
                     "created_at",
