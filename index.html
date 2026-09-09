@@ -19,7 +19,7 @@ content="LUNA&LEO MARKET منصة متكاملة لإنشاء وإدارة مت�
 
 <style>
 /* =====================================================
-   CSS (نفس الكود السابق ولكن مختصر لتوفير المساحة)
+   CSS - نفس الكود السابق مع تعديلات
    ===================================================== */
 :root {
     --primary: #b8943c;
@@ -756,12 +756,227 @@ footer{
 }
 
 /* =========================
+   DASHBOARD - محسن وجاهز
+========================= */
+
+#dashboardApp {
+    display:none;
+    min-height:100vh;
+    background:var(--bg-primary);
+    color:var(--text-primary);
+}
+
+.dash-header {
+    background:var(--bg-white);
+    padding:15px 0;
+    border-bottom:1px solid rgba(0,0,0,0.05);
+    box-shadow:var(--shadow-sm);
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.dash-header-inner {
+    width:92%;
+    max-width:1250px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.dash-user-info {
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.dash-user-name {
+    font-weight:700;
+    font-size:16px;
+    color:var(--text-primary);
+}
+
+.dash-user-avatar {
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:var(--primary-gradient);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-weight:700;
+    font-size:18px;
+}
+
+.logout-btn {
+    background:#f0f0f0;
+    border:1px solid rgba(0,0,0,0.08);
+    color:var(--text-primary);
+    padding:9px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    transition:var(--transition);
+    font-size:13px;
+}
+
+.logout-btn:hover {
+    background:#e0e0e0;
+}
+
+.dash-content {
+    width:92%;
+    max-width:1250px;
+    margin:25px auto;
+}
+
+.dash-welcome {
+    background:var(--bg-white);
+    border-radius:var(--border-radius);
+    padding:30px;
+    box-shadow:var(--shadow-sm);
+    margin-bottom:25px;
+    border-right:4px solid var(--primary);
+}
+
+.dash-welcome h1 {
+    font-size:26px;
+    font-weight:800;
+    color:var(--text-primary);
+    margin-bottom:5px;
+}
+
+.dash-welcome p {
+    color:var(--text-secondary);
+    font-size:15px;
+}
+
+.dash-stats {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:30px;
+}
+
+.dash-stat {
+    background:var(--bg-white);
+    border-radius:var(--border-radius);
+    padding:25px 20px;
+    box-shadow:var(--shadow-sm);
+    text-align:center;
+    transition:var(--transition);
+    cursor:pointer;
+    border:1px solid rgba(0,0,0,0.04);
+    position:relative;
+    overflow:hidden;
+}
+
+.dash-stat::before {
+    content:'';
+    position:absolute;
+    top:0;
+    right:0;
+    width:4px;
+    height:0;
+    background:var(--primary-gradient);
+    transition:var(--transition);
+    border-radius:0 0 0 8px;
+}
+
+.dash-stat:hover::before {
+    height:100%;
+}
+
+.dash-stat:hover {
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-md);
+    border-color:rgba(184,148,60,0.15);
+}
+
+.dash-stat .stat-icon {
+    font-size:30px;
+    margin-bottom:8px;
+    display:block;
+}
+
+.dash-stat .stat-number {
+    font-size:32px;
+    font-weight:900;
+    color:var(--primary);
+    display:block;
+}
+
+.dash-stat .stat-label {
+    font-size:14px;
+    color:var(--text-secondary);
+    font-weight:600;
+    display:block;
+    margin-top:4px;
+}
+
+.dash-stat .stat-hint {
+    font-size:12px;
+    color:var(--text-muted);
+    display:block;
+    margin-top:6px;
+}
+
+.dash-actions {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-top:10px;
+}
+
+.dash-action-btn {
+    background:var(--bg-white);
+    border:1px solid rgba(0,0,0,0.06);
+    border-radius:var(--border-radius);
+    padding:20px;
+    text-align:center;
+    transition:var(--transition);
+    cursor:pointer;
+    box-shadow:var(--shadow-sm);
+    font-weight:700;
+    font-size:15px;
+    color:var(--text-primary);
+}
+
+.dash-action-btn:hover {
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-md);
+    border-color:var(--primary);
+}
+
+.dash-action-btn .action-icon {
+    font-size:28px;
+    display:block;
+    margin-bottom:8px;
+}
+
+.dash-action-btn .action-label {
+    display:block;
+    font-size:14px;
+}
+
+.dash-action-btn .action-count {
+    display:block;
+    font-size:12px;
+    color:var(--text-muted);
+    margin-top:4px;
+}
+
+/* =========================
    RESPONSIVE
 ========================= */
 @media(max-width:1050px){
     .pricing{ grid-template-columns:1fr; max-width:400px; margin:0 auto }
     .price-card.featured{ transform:none }
     .footer-grid{ grid-template-columns:1fr 1fr; gap:30px }
+    .dash-stats{ grid-template-columns:repeat(2,1fr) }
+    .dash-actions{ grid-template-columns:repeat(2,1fr) }
 }
 
 @media(max-width:900px){
@@ -772,6 +987,8 @@ footer{
     .hero-buttons{ justify-content:center }
     .cards{ grid-template-columns:1fr; max-width:400px; margin:0 auto }
     .steps{ grid-template-columns:1fr 1fr }
+    .dash-stats{ grid-template-columns:1fr 1fr }
+    .dash-actions{ grid-template-columns:1fr 1fr }
 }
 
 @media(max-width:600px){
@@ -781,6 +998,9 @@ footer{
     .hero-text h1{ font-size:32px }
     .section-title h2{ font-size:28px }
     .cta h2{ font-size:30px }
+    .dash-stats{ grid-template-columns:1fr }
+    .dash-actions{ grid-template-columns:1fr }
+    .dash-header-inner{ flex-direction:column; gap:10px }
 }
 </style>
 </head>
@@ -1150,52 +1370,95 @@ LUNA&LEO MARKET تساعدك على إنشاء متجرك الإلكتروني �
 
 
 <!-- =====================================================
-   DASHBOARD (مبسط)
+     DASHBOARD - محسن مع أزرار مفعلة
 ===================================================== -->
 
-<div id="dashboardApp" style="display:none;min-height:100vh;background:var(--bg-primary);color:var(--text-primary)">
+<div id="dashboardApp">
 
-<header style="background:var(--bg-white);padding:15px 0;border-bottom:1px solid rgba(0,0,0,0.05);box-shadow:var(--shadow-sm)">
-<div style="width:92%;max-width:1250px;margin:auto;display:flex;justify-content:space-between;align-items:center">
-<div class="logo" style="font-size:23px">LUNA<span>&</span>LEO</div>
-<div style="display:flex;align-items:center;gap:10px">
-<span id="dashboardEmail" style="color:var(--text-secondary);font-size:13px"></span>
-<button onclick="logoutUser()" style="background:#f0f0f0;border:1px solid rgba(0,0,0,0.08);color:var(--text-primary);padding:9px 14px;border-radius:10px;cursor:pointer">خروج 🚪</button>
+<header class="dash-header">
+
+<div class="dash-header-inner">
+
+<div class="dash-user-info">
+<div class="dash-user-avatar" id="userAvatar">م</div>
+<div>
+<div class="dash-user-name" id="userName">مرحباً</div>
 </div>
+</div>
+
+<button class="logout-btn" onclick="logoutUser()">
+<i class="fas fa-sign-out-alt"></i> خروج
+</button>
+
 </div>
 </header>
 
-<div style="width:92%;max-width:1250px;margin:25px auto">
+<div class="dash-content">
 
-<div style="background:var(--bg-white);border-radius:var(--border-radius);padding:25px;box-shadow:var(--shadow-sm);margin-bottom:22px">
-<h1 style="font-size:28px;color:var(--text-primary)">أهلاً بك في لوحة التحكم 👋</h1>
-<p style="color:var(--text-secondary)">مرحباً بعودتك، يمكنك إدارة متجرك من هنا</p>
-</div>
-
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:25px">
-<div style="background:var(--bg-white);border-radius:16px;padding:22px;text-align:center;box-shadow:var(--shadow-sm)">
-<div style="font-size:25px;margin-bottom:10px">📦</div>
-<h3 id="statProducts" style="font-size:28px;color:var(--primary)">0</h3>
-<p style="color:var(--text-secondary);font-size:14px">المنتجات</p>
-</div>
-<div style="background:var(--bg-white);border-radius:16px;padding:22px;text-align:center;box-shadow:var(--shadow-sm)">
-<div style="font-size:25px;margin-bottom:10px">🛒</div>
-<h3 id="statOrders" style="font-size:28px;color:var(--primary)">0</h3>
-<p style="color:var(--text-secondary);font-size:14px">الطلبات</p>
-</div>
-<div style="background:var(--bg-white);border-radius:16px;padding:22px;text-align:center;box-shadow:var(--shadow-sm)">
-<div style="font-size:25px;margin-bottom:10px">👥</div>
-<h3 id="statCustomers" style="font-size:28px;color:var(--primary)">0</h3>
-<p style="color:var(--text-secondary);font-size:14px">العملاء</p>
-</div>
-<div style="background:var(--bg-white);border-radius:16px;padding:22px;text-align:center;box-shadow:var(--shadow-sm)">
-<div style="font-size:25px;margin-bottom:10px">💰</div>
-<h3 id="statSales" style="font-size:28px;color:var(--primary)">0</h3>
-<p style="color:var(--text-secondary);font-size:14px">المبيعات</p>
-</div>
+<div class="dash-welcome">
+<h1 id="welcomeMessage">أهلاً بك في لوحة التحكم 👋</h1>
+<p id="welcomeSubtext">مرحباً بعودتك، يمكنك إدارة متجرك من هنا</p>
 </div>
 
-<button onclick="createStore()" style="background:var(--primary-gradient);color:#fff;border:none;padding:12px 24px;border-radius:12px;font-weight:700;cursor:pointer">أنشئ متجرك الآن</button>
+<div class="dash-stats">
+
+<div class="dash-stat" onclick="showSection('products')">
+<span class="stat-icon">📦</span>
+<span class="stat-number" id="statProducts">0</span>
+<span class="stat-label">المنتجات</span>
+<span class="stat-hint">انقر لعرض الكل</span>
+</div>
+
+<div class="dash-stat" onclick="showSection('orders')">
+<span class="stat-icon">🛒</span>
+<span class="stat-number" id="statOrders">0</span>
+<span class="stat-label">الطلبات</span>
+<span class="stat-hint">انقر لعرض الكل</span>
+</div>
+
+<div class="dash-stat" onclick="showSection('customers')">
+<span class="stat-icon">👥</span>
+<span class="stat-number" id="statCustomers">0</span>
+<span class="stat-label">العملاء</span>
+<span class="stat-hint">انقر لعرض الكل</span>
+</div>
+
+<div class="dash-stat" onclick="showSection('sales')">
+<span class="stat-icon">💰</span>
+<span class="stat-number" id="statSales">0</span>
+<span class="stat-label">المبيعات</span>
+<span class="stat-hint">انقر لعرض التفاصيل</span>
+</div>
+
+</div>
+
+<div class="dash-actions">
+
+<button class="dash-action-btn" onclick="showSection('products')">
+<span class="action-icon">📦</span>
+<span class="action-label">إدارة المنتجات</span>
+<span class="action-count" id="productCount">0 منتج</span>
+</button>
+
+<button class="dash-action-btn" onclick="showSection('orders')">
+<span class="action-icon">🛒</span>
+<span class="action-label">إدارة الطلبات</span>
+<span class="action-count" id="orderCount">0 طلب</span>
+</button>
+
+<button class="dash-action-btn" onclick="showSection('customers')">
+<span class="action-icon">👥</span>
+<span class="action-label">إدارة العملاء</span>
+<span class="action-count" id="customerCount">0 عميل</span>
+</button>
+
+<button class="dash-action-btn" onclick="createStore()">
+<span class="action-icon">🏪</span>
+<span class="action-label">إنشاء متجر</span>
+<span class="action-count">ابدأ الآن</span>
+</button>
+
+</div>
 
 </div>
 </div>
@@ -1214,6 +1477,7 @@ const supabaseClient = window.supabase.createClient(
 );
 
 let currentUser = null;
+let currentStore = null;
 
 /* =====================================================
    GENERAL FUNCTIONS
@@ -1303,7 +1567,14 @@ function closeAuth() {
 }
 
 function createStore() {
-    openRegister();
+    // التحقق من وجود متجر
+    if(currentUser) {
+        showDashboard();
+        // إظهار رسالة لإنشاء المتجر
+        alert("قم بإنشاء متجرك الآن من لوحة التحكم");
+    } else {
+        openRegister();
+    }
 }
 
 function openRegister() {
@@ -1512,6 +1783,7 @@ async function checkUserSession() {
         currentUser = data.session.user;
         showDashboard();
         updateUserInfo();
+        await loadStoreData();
     }
 }
 
@@ -1524,11 +1796,31 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     }
 });
 
+/* =====================================================
+   UPDATE USER INFO - بدون بريد وبدون اسم منصة
+===================================================== */
+
 function updateUserInfo() {
     if(!currentUser) return;
-    const email = currentUser.email || "";
-    const dashboardEmail = document.getElementById("dashboardEmail");
-    if(dashboardEmail) dashboardEmail.textContent = email;
+    
+    const name = currentUser.user_metadata?.full_name || 
+                 currentUser.user_metadata?.name || 
+                 "مستخدم";
+    
+    // تحديث اسم المستخدم في الداشبورد
+    const userNameEl = document.getElementById("userName");
+    if(userNameEl) userNameEl.textContent = name;
+    
+    // تحديث صورة المستخدم
+    const avatarEl = document.getElementById("userAvatar");
+    if(avatarEl) avatarEl.textContent = name.charAt(0);
+    
+    // تحديث رسالة الترحيب
+    const welcomeEl = document.getElementById("welcomeMessage");
+    if(welcomeEl) welcomeEl.textContent = `أهلاً بك ${name} 👋`;
+    
+    const welcomeSubEl = document.getElementById("welcomeSubtext");
+    if(welcomeSubEl) welcomeSubEl.textContent = "مرحباً بعودتك، يمكنك إدارة متجرك من هنا";
 }
 
 /* =====================================================
@@ -1547,22 +1839,111 @@ function showLanding() {
 }
 
 /* =====================================================
+   SHOW SECTIONS - تفعيل الأزرار
+===================================================== */
+
+function showSection(section) {
+    const messages = {
+        products: "📦 سيتم عرض جميع المنتجات هنا قريباً",
+        orders: "🛒 سيتم عرض جميع الطلبات هنا قريباً",
+        customers: "👥 سيتم عرض جميع العملاء هنا قريباً",
+        sales: "💰 سيتم عرض تقرير المبيعات هنا قريباً"
+    };
+    
+    alert(messages[section] || "جاري التحميل...");
+    
+    // يمكنك لاحقاً إضافة كود لعرض المحتوى الفعلي لكل قسم
+}
+
+/* =====================================================
+   LOAD STORE DATA
+===================================================== */
+
+async function loadStoreData() {
+    if(!currentUser) return;
+    
+    try {
+        // البحث عن متجر المستخدم
+        const { data, error } = await supabaseClient
+            .from("stores")
+            .select("*")
+            .eq("owner_id", currentUser.id)
+            .maybeSingle();
+        
+        if(error) throw error;
+        
+        if(data) {
+            currentStore = data;
+            // تحديث الإحصائيات
+            await updateStats();
+        }
+    } catch(error) {
+        console.error("Error loading store:", error);
+    }
+}
+
+async function updateStats() {
+    if(!currentStore) return;
+    
+    try {
+        // جلب عدد المنتجات
+        const { count: productsCount } = await supabaseClient
+            .from("products")
+            .select("*", { count: 'exact', head: true })
+            .eq("store_id", currentStore.id);
+        
+        // جلب عدد الطلبات
+        const { count: ordersCount } = await supabaseClient
+            .from("orders")
+            .select("*", { count: 'exact', head: true })
+            .eq("store_id", currentStore.id);
+        
+        // تحديث الأرقام
+        document.getElementById("statProducts").textContent = productsCount || 0;
+        document.getElementById("statOrders").textContent = ordersCount || 0;
+        document.getElementById("productCount").textContent = (productsCount || 0) + " منتج";
+        document.getElementById("orderCount").textContent = (ordersCount || 0) + " طلب";
+        
+        // جلب العملاء (من الطلبات)
+        const { data: orders } = await supabaseClient
+            .from("orders")
+            .select("customer_name, customer_phone")
+            .eq("store_id", currentStore.id);
+        
+        const uniqueCustomers = new Set();
+        if(orders) {
+            orders.forEach(o => {
+                if(o.customer_phone) uniqueCustomers.add(o.customer_phone);
+            });
+        }
+        const customersCount = uniqueCustomers.size;
+        document.getElementById("statCustomers").textContent = customersCount;
+        document.getElementById("customerCount").textContent = customersCount + " عميل";
+        
+        // حساب المبيعات
+        let salesTotal = 0;
+        if(orders) {
+            orders.forEach(o => {
+                salesTotal += Number(o.total || 0);
+            });
+        }
+        document.getElementById("statSales").textContent = salesTotal.toLocaleString("ar-EG");
+        
+    } catch(error) {
+        console.error("Error updating stats:", error);
+    }
+}
+
+/* =====================================================
    LOGOUT
 ===================================================== */
 
 async function logoutUser() {
     await supabaseClient.auth.signOut();
     currentUser = null;
+    currentStore = null;
     showLanding();
     window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-/* =====================================================
-   LOAD STORE DATA (لاحقاً)
-===================================================== */
-
-async function loadUserStore() {
-    // سيتم إضافة وظائف المتجر لاحقاً
 }
 
 /* =====================================================
@@ -1595,4 +1976,4 @@ document.addEventListener("keydown", function(e) {
 });
 </script>
 </body>
-    </html>
+   </html>
