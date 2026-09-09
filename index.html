@@ -9058,6 +9058,10 @@ function backToCart(){
    PLACE ORDER
 ===================================================== */
 
+/* =====================================================
+   PLACE ORDER
+===================================================== */
+
 async function placeStoreOrder(){
 
     if(
@@ -9068,9 +9072,25 @@ async function placeStoreOrder(){
     }
 
 
-    const name =
+    /* =========================
+       بيانات العميل
+    ========================= */
+
+    const firstName =
         document.getElementById(
-            "orderName"
+            "orderFirstName"
+        ).value.trim();
+
+
+    const lastName =
+        document.getElementById(
+            "orderLastName"
+        ).value.trim();
+
+
+    const email =
+        document.getElementById(
+            "orderEmail"
         ).value.trim();
 
 
@@ -9080,9 +9100,51 @@ async function placeStoreOrder(){
         ).value.trim();
 
 
-    const address =
+    const country =
         document.getElementById(
-            "orderAddress"
+            "orderCountry"
+        ).value;
+
+
+    const governorate =
+        document.getElementById(
+            "orderGovernorate"
+        ).value;
+
+
+    const city =
+        document.getElementById(
+            "orderCity"
+        ).value.trim();
+
+
+    const district =
+        document.getElementById(
+            "orderDistrict"
+        ).value.trim();
+
+
+    const street =
+        document.getElementById(
+            "orderStreet"
+        ).value.trim();
+
+
+    const addressDetails =
+        document.getElementById(
+            "orderAddressDetails"
+        ).value.trim();
+
+
+    const shippingMethod =
+        document.getElementById(
+            "orderShipping"
+        ).value;
+
+
+    const orderNote =
+        document.getElementById(
+            "orderNote"
         ).value.trim();
 
 
@@ -9104,20 +9166,32 @@ async function placeStoreOrder(){
         );
 
 
+    /* =========================
+       التحقق من البيانات
+    ========================= */
+
     if(
-        !name ||
+        !firstName ||
+        !lastName ||
         !phone ||
-        !address
+        !governorate ||
+        !city ||
+        !street ||
+        !addressDetails
     ){
 
         message.textContent =
-            "⚠️ من فضلك املأ الاسم ورقم الهاتف والعنوان.";
+            "⚠️ من فضلك أكمل البيانات المطلوبة.";
 
         return;
     }
 
 
-    const total =
+    /* =========================
+       حساب المنتجات
+    ========================= */
+
+    const subtotal =
         publicCart.reduce(
             (sum,item)=>
                 sum +
@@ -9130,6 +9204,25 @@ async function placeStoreOrder(){
             0
         );
 
+
+    /* =========================
+       تكلفة الشحن
+       حاليًا 0
+       ويمكن تحديدها لاحقًا
+       حسب المحافظة
+    ========================= */
+
+    const shippingCost = 0;
+
+
+    const total =
+        subtotal +
+        shippingCost;
+
+
+    /* =========================
+       تجهيز المنتجات
+    ========================= */
 
     const items =
         publicCart.map(
@@ -9159,26 +9252,57 @@ async function placeStoreOrder(){
         );
 
 
+    /* =========================
+       تجهيز الاسم والعنوان
+    ========================= */
+
+    const customerName =
+        firstName +
+        " " +
+        lastName;
+
+
+    const fullAddress =
+        [
+            governorate,
+            city,
+            district,
+            street,
+            addressDetails
+        ]
+        .filter(Boolean)
+        .join("، ");
+
+
+    /* =========================
+       تعطيل الزر
+    ========================= */
+
     button.disabled =
         true;
 
-
     button.textContent =
         "⏳ جاري إرسال الطلب...";
-
 
     message.textContent =
         "";
 
 
-    /*
-       إنشاء رقم الطلب من الجهاز
-       حتى لا نحتاج لقراءة الطلب بعد إدخاله
-    */
+    /* =========================
+       إنشاء أرقام الطلب
+    ========================= */
 
     const orderId =
         makeUUID();
 
+
+    const cancelToken =
+        makeUUID();
+
+
+    /* =========================
+       بيانات الطلب
+    ========================= */
 
     const baseOrder = {
 
@@ -9188,20 +9312,71 @@ async function placeStoreOrder(){
         store_id:
             publicStore.id,
 
+
+        /* البيانات القديمة */
+
         customer_name:
-            name,
+            customerName,
 
         customer_phone:
             phone,
 
         customer_address:
-            address,
+            fullAddress,
+
+
+        /* البيانات الجديدة */
+
+        customer_first_name:
+            firstName,
+
+        customer_last_name:
+            lastName,
+
+        customer_email:
+            email || null,
+
+        country:
+            country || "مصر",
+
+        governorate:
+            governorate,
+
+        city:
+            city,
+
+        district:
+            district || null,
+
+        street:
+            street,
+
+        address_details:
+            addressDetails,
+
+        shipping_method:
+            shippingMethod,
+
+        shipping_cost:
+            shippingCost,
+
+        order_note:
+            orderNote || null,
+
+
+        /* المنتجات */
 
         items:
             items,
 
+
+        /* الأسعار */
+
         total:
             total,
+
+
+        /* الدفع */
 
         payment_method:
             payment,
@@ -9209,14 +9384,24 @@ async function placeStoreOrder(){
         payment_status:
             "pending",
 
+
+        /* حالة الطلب */
+
         status:
             "new",
 
+
+        /* إلغاء الطلب */
+
         cancel_token:
-            makeUUID()
+            cancelToken
 
     };
 
+
+    /* =========================
+       إرسال الطلب
+    ========================= */
 
     const result =
         await supabaseClient
@@ -9226,13 +9411,20 @@ async function placeStoreOrder(){
             );
 
 
+    /* =========================
+       إعادة الزر
+    ========================= */
+
     button.disabled =
         false;
-
 
     button.textContent =
         "تأكيد الطلب 🚀";
 
+
+    /* =========================
+       في حالة الخطأ
+    ========================= */
 
     if(result.error){
 
@@ -9250,15 +9442,66 @@ async function placeStoreOrder(){
     }
 
 
-    /*
-       الطلب تم بنجاح
-    */
+    /* =========================
+       حفظ بيانات الطلب
+       لاستخدامها في طلباتي
+    ========================= */
+
+    try{
+
+        const key =
+            "lunaLeoOrderTokens_" +
+            publicStore.id;
+
+
+        const oldOrders =
+            JSON.parse(
+                localStorage.getItem(key) ||
+                "[]"
+            );
+
+
+        oldOrders.push({
+
+            orderId:
+                orderId,
+
+            cancelToken:
+                cancelToken
+
+        });
+
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(
+                oldOrders
+            )
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Order token save error:",
+            error
+        );
+
+    }
+
+
+    /* =========================
+       تفريغ السلة
+    ========================= */
 
     publicCart = [];
 
 
     savePublicCart();
 
+
+    /* =========================
+       إظهار نجاح الطلب
+    ========================= */
 
     document.getElementById(
         "sfCartView"
@@ -9288,12 +9531,24 @@ async function placeStoreOrder(){
         " — شكرًا لك، سيتم التواصل معك لتأكيد الطلب.";
 
 
-    /*
-       تنظيف بيانات العميل
-    */
+    /* =========================
+       تنظيف الحقول
+    ========================= */
 
     document.getElementById(
-        "orderName"
+        "orderFirstName"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "orderLastName"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "orderEmail"
     ).value =
         "";
 
@@ -9305,13 +9560,41 @@ async function placeStoreOrder(){
 
 
     document.getElementById(
-        "orderAddress"
+        "orderGovernorate"
     ).value =
         "";
 
-    }
+
+    document.getElementById(
+        "orderCity"
+    ).value =
+        "";
 
 
+    document.getElementById(
+        "orderDistrict"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "orderStreet"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "orderAddressDetails"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "orderNote"
+    ).value =
+        "";
+
+}
 
 
 /* =====================================================
