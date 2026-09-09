@@ -3105,97 +3105,187 @@ onclick="showCheckout()"
 <div
 id="sfCheckout"
 class="sf-checkout"
->
-
-<h3>
-بيانات استلام الطلب
-</h3>
-
-
-<div class="sf-field">
-
-<label>
-الاسم *
-</label>
-
-<input
-id="orderName"
+><h3>
+🛍️ إتمام الطلب
+</h3><p style="
+    color:#777;
+    font-size:13px;
+    margin-bottom:20px;
+">
+أدخل بياناتك بدقة لتوصيل طلبك إليك.
+</p><!-- 1 - معلومات الاتصال --><div style="
+    font-weight:bold;
+    color:#a67c25;
+    margin-bottom:12px;
+">
+1️⃣ معلومات الاتصال
+</div><div class="sf-field"><label>
+الاسم الأول *
+</label><input
+id="orderFirstName"
 type="text"
-placeholder="اسم العميل"
->
+placeholder="مثال: أحمد"
+autocomplete="given-name"
 
-</div>
+«»
 
+</div><div class="sf-field"><label>
+الاسم الأخير *
+</label><input
+id="orderLastName"
+type="text"
+placeholder="مثال: محمد"
+autocomplete="family-name"
 
-<div class="sf-field">
+«»
 
-<label>
-رقم الهاتف *
-</label>
+</div><div class="sf-field"><label>
+البريد الإلكتروني (اختياري)
+</label><input
+id="orderEmail"
+type="email"
+placeholder="example@email.com"
+autocomplete="email"
 
-<input
+«»
+
+</div><div class="sf-field"><label>
+رقم الموبايل *
+</label><input
 id="orderPhone"
 type="tel"
 placeholder="01xxxxxxxxx"
->
+autocomplete="tel"
 
-</div>
+«»
 
+</div><!-- 2 - عنوان الشحن --><div style="
+    font-weight:bold;
+    color:#a67c25;
+    margin:22px 0 12px;
+">
+2️⃣ عنوان الشحن
+</div><div class="sf-field"><label>
+الدولة
+</label><select id="orderCountry"><option value="مصر">
+🇪🇬 مصر (+20)
+</option></select></div><div class="sf-field"><label>
+المحافظة *
+</label><select id="orderGovernorate"><option value="">
+اختر المحافظة
+</option><option value="القاهرة">القاهرة</option>
+<option value="الجيزة">الجيزة</option>
+<option value="الإسكندرية">الإسكندرية</option>
+<option value="القليوبية">القليوبية</option>
+<option value="الدقهلية">الدقهلية</option>
+<option value="الشرقية">الشرقية</option>
+<option value="الغربية">الغربية</option>
+<option value="المنوفية">المنوفية</option>
+<option value="البحيرة">البحيرة</option>
+<option value="كفر الشيخ">كفر الشيخ</option>
+<option value="دمياط">دمياط</option>
+<option value="بورسعيد">بورسعيد</option>
+<option value="الإسماعيلية">الإسماعيلية</option>
+<option value="السويس">السويس</option>
+<option value="الفيوم">الفيوم</option>
+<option value="بني سويف">بني سويف</option>
+<option value="المنيا">المنيا</option>
+<option value="أسيوط">أسيوط</option>
+<option value="سوهاج">سوهاج</option>
+<option value="قنا">قنا</option>
+<option value="الأقصر">الأقصر</option>
+<option value="أسوان">أسوان</option>
+<option value="البحر الأحمر">البحر الأحمر</option>
+<option value="الوادي الجديد">الوادي الجديد</option>
+<option value="شمال سيناء">شمال سيناء</option>
+<option value="جنوب سيناء">جنوب سيناء</option>
+<option value="مطروح">مرسى مطروح</option></select></div><div class="sf-field"><label>
+المدينة / المنطقة *
+</label><input
+id="orderCity"
+type="text"
+placeholder="مثال: مدينة نصر"
+autocomplete="address-level2"
 
-<div class="sf-field">
+«»
 
-<label>
-العنوان *
-</label>
+</div><div class="sf-field"><label>
+الحي
+</label><input
+id="orderDistrict"
+type="text"
+placeholder="اسم الحي"
 
-<textarea
-id="orderAddress"
-placeholder="المحافظة، المنطقة، العنوان بالتفصيل"
-></textarea>
+«»
 
-</div>
+</div><div class="sf-field"><label>
+الشارع *
+</label><input
+id="orderStreet"
+type="text"
+placeholder="اسم الشارع"
+autocomplete="street-address"
 
+«»
 
-<div class="sf-field">
-
-<label>
+</div><div class="sf-field"><label>
+تفاصيل العنوان *
+</label><textarea
+id="orderAddressDetails"
+placeholder="رقم العمارة، الدور، الشقة، علامة مميزة..."
+></textarea></div><!-- 3 - الشحن --><div style="
+    font-weight:bold;
+    color:#a67c25;
+    margin:22px 0 12px;
+">
+3️⃣ طريقة الشحن
+</div><div class="sf-field"><label>
+طريقة الشحن
+</label><select id="orderShipping"><option value="standard">
+🚚 الشحن للعنوان
+</option></select></div><!-- 4 - الملاحظة --><div style="
+    font-weight:bold;
+    color:#a67c25;
+    margin:22px 0 12px;
+">
+4️⃣ ملاحظة على الطلب
+</div><div class="sf-field"><textarea
+id="orderNote"
+maxlength="500"
+placeholder="مثال: اتصل بي قبل التوصيل (اختياري)"
+></textarea></div><!-- 5 - الدفع --><div style="
+    font-weight:bold;
+    color:#a67c25;
+    margin:22px 0 12px;
+">
+5️⃣ طريقة الدفع
+</div><div class="sf-field"><label>
 طريقة الدفع
-</label>
-
-<select id="orderPayment">
-
-<option value="cash">
-الدفع عند الاستلام
-</option>
-
-</select>
-
-</div>
-
-
-<button
+</label><select id="orderPayment"><option value="cash">
+💵 الدفع عند الاستلام
+</option></select></div><!-- رسالة الخطأ --><div
+id="sfOrderMessage"
+class="sf-order-message">
+</div><!-- تأكيد --><button
 class="sf-checkout-btn"
 id="placeOrderBtn"
 onclick="placeStoreOrder()"
->
+
+«»
+
 تأكيد الطلب 🚀
 </button>
-
-
-<div
-id="sfOrderMessage"
-class="sf-order-message">
-</div>
-
 
 <button
 class="sf-back-cart"
 onclick="backToCart()"
->
+
+«»
+
 ← الرجوع للسلة
 </button>
 
-</div>
+    </div>
 
 
 <!-- SUCCESS -->
@@ -3230,28 +3320,7 @@ onclick="closeCart()"
 </div>
 
 </div>
-
-
-<script>
-
-/* =====================================================
-   SUPABASE
-===================================================== */
-
-const SUPABASE_URL =
-"https://zuljqdzinbndmesbarjn.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_thb5jIXk2pFDqs79kJMQRQ_N-HrFAt6";
-
-const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-
-
-/* =====================================================
+==============
    GLOBAL VARIABLES
 ===================================================== */
 
