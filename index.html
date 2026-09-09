@@ -3328,6 +3328,17 @@ onclick="closeCart()"
 let currentUser = null;
 let currentStore = null;
 
+/* =====================================================
+   SUPABASE CONFIGURATION
+===================================================== */
+const SUPABASE_URL = "https://zuljqdzinbndmesbarjn.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_thb5jIXk2pFDqs79kJMQRQ_N-HrFAt6";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
 let publicStore = null;
 let publicProducts = [];
 let publicCart = [];
@@ -3947,7 +3958,7 @@ async function loginWithGoogle(){
 
             options:{
                 redirectTo:
-                    "https://luna-leo.vercel.app/"
+                    window.location.origin + window.location.pathname
             }
 
         });
@@ -7332,6 +7343,86 @@ th{
 
     </button>
 
+
+<style id="luna-leo-light-theme">
+:root{
+  --light-bg:#ffffff;
+  --light-surface:#ffffff;
+  --light-surface-2:#f7f7f7;
+  --light-text:#171717;
+  --light-muted:#666;
+  --light-border:#e7e7e7;
+}
+html,body{
+  background:#fff !important;
+  color:var(--light-text) !important;
+}
+body{
+  color-scheme:light;
+}
+header,
+header.scrolled{
+  background:rgba(255,255,255,.96) !important;
+  color:#171717 !important;
+  box-shadow:0 5px 30px rgba(0,0,0,.08) !important;
+}
+.hero,
+section,
+main{
+  background:#fff !important;
+  color:#171717 !important;
+}
+.card,
+.product-card,
+.service-card,
+.feature-card,
+.stat-card,
+.modal-content,
+.form-container,
+.dashboard-card,
+.admin-card,
+.panel,
+.box,
+.table-container{
+  background:#fff !important;
+  color:#171717 !important;
+  border-color:#e7e7e7 !important;
+  box-shadow:0 8px 28px rgba(0,0,0,.07) !important;
+}
+input,
+textarea,
+select{
+  background:#fff !important;
+  color:#171717 !important;
+  border-color:#dcdcdc !important;
+}
+input::placeholder,
+textarea::placeholder{
+  color:#999 !important;
+}
+p,
+label,
+small,
+.muted,
+.description,
+.text-muted{
+  color:#666 !important;
+}
+h1,h2,h3,h4,h5,h6,
+.title,
+.heading{
+  color:#171717 !important;
+}
+footer{
+  background:#f7f7f7 !important;
+  color:#333 !important;
+  border-top:1px solid #e7e7e7 !important;
+}
+.hero:before{
+  background:rgba(214,179,90,.07) !important;
+}
+</style>
+
 </body>
 
 </html>
@@ -9681,12 +9772,7 @@ document.addEventListener(
 document.addEventListener("DOMContentLoaded", async function(){
 
     const storeKey =
-    getStoreQuery();
-
-alert(
-    "DOMContentLoaded اشتغل\nStore = " +
-    (storeKey || "NOT FOUND")
-);
+        getStoreQuery();
 
     if(storeKey){
 
@@ -9700,20 +9786,8 @@ alert(
         document.getElementById("authModal").style.display = "none";
         document.getElementById("storefrontApp").style.display = "block";
 
-        try{
+        await loadPublicStore();
 
-    await loadPublicStore();
-
-}catch(error){
-
-    alert(
-        "خطأ في صفحة العميل:\n" +
-        error.message
-    );
-
-    console.error(error);
-
-}
         return;
     }
 
