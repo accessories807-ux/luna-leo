@@ -4090,24 +4090,44 @@ async function loginUser(){
 
 
         currentUser =
-            data.user;
+    data.user;
 
 
-        message.textContent =
-            "🎉 تم تسجيل الدخول بنجاح!";
+// فحص الاشتراك
+const subscriptionActive =
+    await checkSubscription();
 
 
-        setTimeout(async()=>{
+if(!subscriptionActive){
 
-            closeAuth();
+    message.textContent =
+        "🔒 انتهت الفترة التجريبية. يرجى اختيار باقة للمتابعة.";
 
-            showDashboard();
+    button.disabled = false;
 
-            updateUserInfo();
+    button.textContent =
+        "تسجيل الدخول";
 
-            await loadUserStore();
+    return;
 
-        },500);
+}
+
+
+message.textContent =
+    "🎉 تم تسجيل الدخول بنجاح!";
+
+
+setTimeout(async()=>{
+
+    closeAuth();
+
+    showDashboard();
+
+    updateUserInfo();
+
+    await loadUserStore();
+
+},500);
 
 
     }catch(error){
