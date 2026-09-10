@@ -4179,18 +4179,18 @@ async function loginUser(){
 const subscriptionActive =
     await checkSubscription();
 
-
 if(!subscriptionActive){
 
-    message.textContent =
-        "🔒 انتهت الفترة التجريبية. يرجى اختيار باقة للمتابعة.";
+    closeAuth();
 
-    button.disabled = false;
-
-    button.textContent =
-        "تسجيل الدخول";
+    document
+        .getElementById("pricing")
+        ?.scrollIntoView({
+            behavior: "smooth"
+        });
 
     return;
+    }
 
 }
 
