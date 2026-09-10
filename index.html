@@ -4630,22 +4630,21 @@ async function checkSubscription(){
         return true;
     }
 
-    // Trial
-    if(data.plan === "trial"){
+// Trial
+if(data.plan === "trial"){
 
-        if(
-            data.trial_ends_at &&
-            new Date(data.trial_ends_at) > new Date()
-        ){
+    currentUser.subscription = data;
 
-            currentUser.subscription = data;
+    if(
+        data.trial_ends_at &&
+        new Date(data.trial_ends_at) > new Date()
+    ){
 
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
+    return false;
+        }
     // Paid Plans
     if(
         data.plan === "starter" ||
