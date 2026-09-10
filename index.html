@@ -4450,6 +4450,86 @@ document
 
 function showDashboard(){
 
+    if(
+        !currentUser ||
+        !currentUser.subscription
+    ){
+
+        console.warn(
+            "Dashboard blocked: no active subscription"
+        );
+
+        return;
+    }
+
+
+    const subscription =
+        currentUser.subscription;
+
+
+    // Lifetime
+    if(
+        subscription.is_lifetime === true
+    ){
+        openDashboardView();
+        return;
+    }
+
+
+    // Trial
+    if(
+        subscription.plan === "trial"
+    ){
+
+        if(
+            !subscription.trial_ends_at ||
+            new Date(
+                subscription.trial_ends_at
+            ) <= new Date()
+        ){
+
+            console.warn(
+                "Dashboard blocked: trial expired"
+            );
+
+            return;
+        }
+
+        openDashboardView();
+        return;
+    }
+
+
+    // Paid plans
+    if(
+        (
+            subscription.plan === "starter" ||
+            subscription.plan === "growth" ||
+            subscription.plan === "business"
+        ) &&
+        subscription.subscription_ends_at &&
+        new Date(
+            subscription.subscription_ends_at
+        ) > new Date()
+    ){
+
+        openDashboardView();
+        return;
+    }
+
+
+    console.warn(
+        "Dashboard blocked: subscription expired"
+    );
+}
+
+
+/* =====================================================
+   OPEN DASHBOARD
+===================================================== */
+
+function openDashboardView(){
+
     document.getElementById(
         "landingPage"
     ).style.display =
@@ -4472,8 +4552,8 @@ function showDashboard(){
         "dashboardApp"
     ).style.display =
         "block";
+    }
 
-}
 
 
 function showLanding(){
