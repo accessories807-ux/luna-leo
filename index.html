@@ -4174,29 +4174,6 @@ async function loginUser(){
             data.user;
 
 
-        // فحص الاشتراك
-        const subscriptionActive =
-            await checkSubscription();
-
-
-        if(!subscriptionActive){
-
-            closeAuth();
-
-            document
-                .getElementById("pricing")
-                ?.scrollIntoView({
-                    behavior: "smooth"
-                });
-
-            button.disabled = false;
-
-            button.textContent =
-                "تسجيل الدخول";
-
-            return;
-        }
-
 
         message.textContent =
             "🎉 تم تسجيل الدخول بنجاح!";
