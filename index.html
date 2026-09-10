@@ -4729,112 +4729,129 @@ console.log("SUBSCRIPTION ACTIVE:", data);
         }
 
         return false;
-    }
 
-
-    // Growth
-    if(
-        data.plan === "growth"
-    ){
-
-        if(
-            data.subscription_ends_at &&
-            new Date(
-                data.subscription_ends_at
-            ) > new Date()
-        ){
-
-            currentUser.subscription =
-                data;
-
-            return true;
-        }
-
-        return false;
-    }
-
-
-    // Business
-    if(
-        data.plan === "business"
-    ){
-
-        if(
-            data.subscription_ends_at &&
-            new Date(
-                data.subscription_ends_at
-            ) > new Date()
-        ){
-
-            currentUser.subscription =
-                data;
-
-            return true;
-        }
-
-        return false;
-    }
-
-console.log("SUBSCRIPTION RESULT:", {
-    user: currentUser?.id,
-    plan: data?.plan,
-    trialEnds: data?.trial_ends_at,
-    subscriptionEnds: data?.subscription_ends_at,
-    lifetime: data?.is_lifetime
-});
-    return false;
-    }
 /* =====================================================
    SESSION
 ===================================================== */
 
-async function checkUserSession(){
+async function checkSubscription(){
 
-    const {
-        data
-    } =
-    await supabaseClient.auth
-        .getSession();
-
-
-    if(
-        data &&
-        data.session
-    ){
-
-        currentUser =
-            data.session.user;
-
-
-        // فحص الاشتراك
-        const subscriptionActive =
-            await checkSubscription();
-
-
-        if(!subscriptionActive){
-
-            console.warn(
-                "Session blocked: subscription expired"
-            );
-
-            showLanding();
-
-            return;
-        }
-
-
-        showDashboard();
-
-        updateUserInfo();
-
-        await loadUserStore();
-
-    }else{
-
-        showLanding();
-
+    if(!currentUser){
+        return false;
     }
 
+    console.log("SUBSCRIPTION CHECK START");
+    console.log("CURRENT USER:", currentUser.id);
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("subscriptions")
+        .select("*")
+        .eq(
+            "user_id",
+            currentUser.id
+        )
+        .single();
+
+    if(error){
+
+        console.error(
+            "Subscription check error:",
+            error
+        );
+
+        return false;
+    }
+
+    console.log(
+        "SUBSCRIPTION DATA:",
+        data
+    );
+
+    if(!data){
+        return false;
+    }
+
+    /*
+     * Lifetime
+     */
+    if(data.is_lifetime === true){
+
+        currentUser.subscription = data;
+
+        console.log(
+            "SUBSCRIPTION ACTIVE: LIFETIME"
+        );
+
+        return true;
+    }
+
+    /*
+     * Trial
+     */
+    if(data.plan === "trial"){
+
+        const active =
+            data.trial_ends_at &&
+            new Date(data.trial_ends_at) > new Date();
+
+        console.log(
+            "TRIAL ACTIVE:",
+            active,
+            "ENDS:",
+            data.trial_ends_at
+        );
+
+        if(active){
+
+            currentUser.subscription = data;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /*
+     * Paid Plans
+     */
+    if(
+        data.plan === "starter" ||
+        data.plan === "growth" ||
+        data.plan === "business"
+    ){
+
+        const active =
+            data.subscription_ends_at &&
+            new Date(data.subscription_ends_at) > new Date();
+
+        console.log(
+            "PAID PLAN:",
+            data.plan,
+            "ACTIVE:",
+            active,
+            "ENDS:",
+            data.subscription_ends_at
+        );
+
+        if(active){
+
+            currentUser.subscription = data;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    console.log(
+        "SUBSCRIPTION INVALID:",
+        data
+    );
+
+    return false;
     }
             
 
