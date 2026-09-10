@@ -1710,32 +1710,25 @@ border-color:#29231d
         grid-template-columns:1fr
     }
 }
+</style>
 
-/* =========================
-   LUNA&LEO PROFESSIONAL WHITE THEME
-========================= */
-:root{color-scheme:light}
-html,body{background:#ffffff !important;color:#263238 !important}
-body{background:#ffffff !important;color:#263238 !important}
-header,header.scrolled{background:rgba(255,255,255,.96) !important;color:#263238 !important;box-shadow:0 5px 24px rgba(30,41,59,.08) !important}
-.nav-links a{color:#475467 !important}
-.btn-login{color:#344054 !important;background:#fff !important}
-.hero,.preview,section,.cta,footer{background:#fff !important;color:#263238 !important}
-.hero-text p,.section-title p,.card p,.preview-text p,.cta p,.footer p,.auth-box p,.user-email,.dash-welcome p{color:#667085 !important}
-.card,.price-card,.dashboard-card,.auth-box,.sidebar,.stat-card,.dash-welcome,.dash-header{background:#fff !important;color:#263238 !important;border-color:#e5e7eb !important;box-shadow:0 8px 30px rgba(16,24,40,.06) !important}
-.price-card li,.check,.sidebar button{color:#475467 !important}
-.price small{color:#667085 !important}
-.auth-modal{background:rgba(255,255,255,.94) !important}
-.auth-box input{background:#fff !important;color:#263238 !important;border-color:#d0d5dd !important}
-.auth-close,.logout-btn{background:#f8fafc !important;color:#344054 !important;border-color:#e4e7ec !important}
-.auth-or:before,.auth-or:after,.faq-item{background:#e5e7eb !important;border-color:#e5e7eb !important}
-#dashboardApp{background:#fff !important;color:#263238 !important}
-.dash-header{background:#fff !important}
-.sidebar button:hover,.sidebar button.active{background:#fff8e7 !important;color:#a67c25 !important}
-.dash-content,.dash-section{background:#fff !important;color:#263238 !important}
-input,textarea,select{background:#fff !important;color:#263238 !important;border-color:#d0d5dd !important}
-[style*="background:#0"],[style*="background: #0"],[style*="background:#1"],[style*="background: #1"],[style*="background:#07"],[style*="background:#08"],[style*="background:#09"],[style*="background:#0a"],[style*="background:#0b"],[style*="background:#0c"],[style*="background:#0d"]{background:#fff !important;color:#263238 !important}
-[style*="color:#fff"],[style*="color: #fff"]{color:#263238 !important}
+<style id="luna-leo-modern-ui">
+:root{--ll-gold:#b89445;--ll-gold-soft:#d8c28a;--ll-ink:#17202a;--ll-muted:#6b7280;--ll-border:#e8e5de;--ll-bg:#f7f7f5;--ll-card:#fff}
+html,body{background:#fff!important;color:var(--ll-ink)}
+body{font-family:Cairo,system-ui,sans-serif}
+.card,.panel,.modal-content,.dashboard-card,.stat-card,.product-card,.order-card,.customer-card,.settings-card{background:rgba(255,255,255,.96)!important;border:1px solid var(--ll-border)!important;border-radius:18px!important;box-shadow:0 8px 28px rgba(20,20,20,.06)!important}
+button,.btn,.primary-btn{border-radius:12px!important;transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+button:hover,.btn:hover,.primary-btn:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(184,148,69,.16)}
+input,select,textarea{border-radius:12px!important;border:1px solid #e4e1da!important;background:#fff!important}
+input:focus,select:focus,textarea:focus{border-color:var(--ll-gold)!important;box-shadow:0 0 0 3px rgba(184,148,69,.12)!important;outline:none}
+.nav-item,.sidebar-item{border-radius:12px!important;transition:background .18s ease,transform .18s ease}
+.nav-item:hover,.sidebar-item:hover{transform:translateX(-2px)}
+.product-card img,.product-image{transition:transform .35s ease}
+.product-card:hover img,.product-card:hover .product-image{transform:scale(1.025)}
+.ll-enter{animation:llEnter .45s ease both}
+@keyframes llEnter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ll-discount-badge{position:absolute;top:12px;right:12px;z-index:4;background:var(--ll-gold);color:#fff;font-weight:700;font-size:12px;padding:6px 10px;border-radius:999px;box-shadow:0 6px 14px rgba(184,148,69,.24)}
+@media(max-width:768px){.card,.panel,.modal-content,.dashboard-card,.stat-card,.product-card,.order-card,.customer-card,.settings-card{border-radius:14px!important}.ll-discount-badge{top:8px;right:8px;font-size:11px}}
 </style>
 </head>
 
@@ -2370,7 +2363,7 @@ onclick="showDashboardSection('home',this)"
 </aside>
 
 
-<main class="dash-content">
+<main class="ll-enter dash-content">
 
 
 <!-- HOME -->
@@ -3764,43 +3757,38 @@ async function requestPlanChange(plan){
         alert("أنشئ متجرك أولًا وسجّل الدخول.");
         return;
     }
+
     if(plan==="trial"){
         alert("الفترة التجريبية تُمنح تلقائيًا مرة واحدة عند إنشاء المتجر.");
         return;
     }
+
     const cfg=PLAN_CONFIG[plan];
     if(!cfg || !["starter","growth","business"].includes(plan)){
         alert("الباقة غير صالحة.");
         return;
     }
-    const ok=confirm(`اختيار باقة ${cfg.name} بسعر ${cfg.price.toLocaleString("ar-EG")} جنيه/شهر؟\n\nسيتم فتح صفحة الدفع الآمنة عبر Paymob مباشرة.`);
+
+    const ok=confirm(
+        `طلب اشتراك ${cfg.name} بسعر ${cfg.price.toLocaleString("ar-EG")} جنيه/شهر؟\n\nلن يتم تفعيل الباقة الآن. سيتم تسجيل طلب الاشتراك فقط، والتفعيل سيكون بعد تأكيد الدفع من الخادم.`
+    );
     if(!ok) return;
+
     try{
-        const {data:sessionData,error:sessionError}=await supabaseClient.auth.getSession();
-        if(sessionError || !sessionData?.session?.access_token){
-            alert("انتهت جلسة الدخول. سجّل الدخول مرة أخرى ثم حاول.");
-            return;
-        }
-        const accessToken=sessionData.session.access_token;
-        const response=await fetch(`${SUPABASE_URL}/functions/v1/create-paymob-payment`,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json",
-                "Authorization":`Bearer ${accessToken}`,
-                "apikey":SUPABASE_PUBLISHABLE_KEY
-            },
-            body:JSON.stringify({plan})
+        const {data,error}=await supabaseClient.rpc("create_subscription_request",{
+            p_plan:plan
         });
-        const result=await response.json().catch(()=>({}));
-        if(!response.ok || !result.checkout_url){
-            console.error("Paymob payment error:",result);
-            alert(result?.error || "تعذر فتح صفحة الدفع حاليًا. حاول مرة أخرى.");
+
+        if(error){
+            console.error("Subscription request error:",error);
+            alert("تعذر تسجيل طلب الاشتراك حاليًا. تأكد من تشغيل إعدادات طلبات الاشتراك الآمنة في Supabase ثم حاول مرة أخرى.");
             return;
         }
-        window.location.href=result.checkout_url;
+
+        alert(`✅ تم تسجيل طلب ${cfg.name} بنجاح.\n\nالسعر: ${cfg.price.toLocaleString("ar-EG")} جنيه/شهر\nالحالة: في انتظار الدفع\n\nلن تتغير باقتك الحالية إلا بعد تأكيد الدفع.`);
     }catch(err){
         console.error(err);
-        alert("حدث خطأ أثناء فتح الدفع. حاول مرة أخرى.");
+        alert("حدث خطأ أثناء تسجيل طلب الاشتراك. لم يتم تفعيل أي باقة مدفوعة.");
     }
 }
 
@@ -7657,288 +7645,6 @@ th{
 
     }
 
-}
-
-
-/* =========================
-   LUNA&LEO PROFESSIONAL LIGHT UI
-========================= */
-:root{
-    --ui-bg:#f5f7fa;
-    --ui-surface:#ffffff;
-    --ui-surface-soft:#f8fafc;
-    --ui-text:#172033;
-    --ui-muted:#667085;
-    --ui-border:#e6e9ef;
-    --ui-gold:#b58a35;
-    --ui-gold-light:#fbf6e9;
-    --ui-shadow:0 10px 30px rgba(15,23,42,.07);
-}
-
-html,body{
-    background:var(--ui-bg) !important;
-    color:var(--ui-text) !important;
-}
-
-body{
-    color-scheme:light;
-}
-
-header,
-header.scrolled{
-    background:rgba(255,255,255,.94) !important;
-    color:var(--ui-text) !important;
-    border-bottom:1px solid rgba(230,233,239,.85);
-    box-shadow:0 4px 24px rgba(15,23,42,.06) !important;
-    backdrop-filter:blur(18px);
-}
-
-.logo,
-.nav-links a{
-    color:var(--ui-text) !important;
-}
-
-.nav-links a:hover{
-    color:var(--ui-gold) !important;
-}
-
-.btn-login{
-    color:var(--ui-text) !important;
-    border-color:#d9c28b !important;
-    background:#fff !important;
-}
-
-.menu-btn{
-    color:var(--ui-text) !important;
-}
-
-.hero,
-section{
-    background:var(--ui-bg) !important;
-    color:var(--ui-text) !important;
-}
-
-.hero{
-    background:linear-gradient(180deg,#fff 0%,#f5f7fa 100%) !important;
-}
-
-.hero-text h1,
-.section-title h2,
-.preview-text h2,
-.card h3,
-.step h3,
-.price-card h3{
-    color:var(--ui-text) !important;
-}
-
-.hero-text p,
-.section-title p,
-.preview-text p,
-.card p,
-.hero-text .description{
-    color:var(--ui-muted) !important;
-}
-
-.hero:before{
-    background:rgba(181,138,53,.09) !important;
-}
-
-.dashboard-card{
-    background:#fff !important;
-    color:var(--ui-text) !important;
-    border:1px solid #eee3c9 !important;
-    box-shadow:0 18px 45px rgba(15,23,42,.12) !important;
-}
-
-.card,
-.price-card{
-    background:#fff !important;
-    color:var(--ui-text) !important;
-    border:1px solid var(--ui-border) !important;
-    box-shadow:var(--ui-shadow) !important;
-}
-
-.card:hover{
-    box-shadow:0 16px 38px rgba(15,23,42,.10) !important;
-}
-
-.preview{
-    background:#fff !important;
-}
-
-.check{
-    color:#475467 !important;
-}
-
-/* Dashboard */
-#dashboardApp{
-    background:var(--ui-bg) !important;
-    color:var(--ui-text) !important;
-}
-
-.dash-header{
-    background:rgba(255,255,255,.96) !important;
-    color:var(--ui-text) !important;
-    border-bottom:1px solid var(--ui-border) !important;
-    box-shadow:0 4px 18px rgba(15,23,42,.05);
-}
-
-.dash-logo{
-    color:var(--ui-text) !important;
-}
-
-.user-email{
-    color:#667085 !important;
-}
-
-.logout-btn{
-    background:#fff !important;
-    color:#344054 !important;
-    border:1px solid var(--ui-border) !important;
-}
-
-.dash-layout{
-    gap:22px;
-}
-
-.sidebar,
-.panel,
-.stat-card,
-.store-card,
-.product-card{
-    background:#fff !important;
-    color:var(--ui-text) !important;
-    border:1px solid var(--ui-border) !important;
-    box-shadow:var(--ui-shadow) !important;
-}
-
-.sidebar button{
-    color:#475467 !important;
-}
-
-.sidebar button:hover,
-.sidebar button.active{
-    background:var(--ui-gold-light) !important;
-    color:var(--ui-gold) !important;
-}
-
-.dash-welcome{
-    background:linear-gradient(135deg,#ffffff,#fbfaf6) !important;
-    color:var(--ui-text) !important;
-    border:1px solid #eee3c9 !important;
-    box-shadow:var(--ui-shadow) !important;
-}
-
-.dash-welcome p,
-.stat-card p,
-.store-card p,
-.empty,
-.form-message{
-    color:#667085 !important;
-}
-
-.stat-card h3,
-.store-card h3,
-.product-price{
-    color:var(--ui-gold) !important;
-}
-
-.panel-title h2,
-.stat-card h3,
-.store-card h3,
-.product-info h3{
-    color:var(--ui-text) !important;
-}
-
-.stat-card h3{
-    color:var(--ui-gold) !important;
-}
-
-.store-form input,
-.store-form textarea,
-.auth-box input,
-#dashboardApp input,
-#dashboardApp textarea,
-#dashboardApp select{
-    background:#fff !important;
-    color:var(--ui-text) !important;
-    border:1px solid #dfe3ea !important;
-}
-
-.store-form input:focus,
-.store-form textarea:focus,
-.auth-box input:focus{
-    border-color:#c7a65d !important;
-    box-shadow:0 0 0 3px rgba(181,138,53,.10);
-}
-
-.gold-btn,
-.btn-primary,
-.auth-submit{
-    background:linear-gradient(135deg,#c9a653,#a9802f) !important;
-    color:#fff !important;
-    box-shadow:0 8px 18px rgba(169,128,47,.18);
-}
-
-.gold-btn:hover,
-.btn-primary:hover,
-.auth-submit:hover{
-    filter:brightness(1.04);
-}
-
-/* Auth */
-.auth-modal{
-    background:rgba(15,23,42,.48) !important;
-    backdrop-filter:blur(12px);
-}
-
-.auth-box{
-    background:#fff !important;
-    color:var(--ui-text) !important;
-    border:1px solid #eee3c9 !important;
-    box-shadow:0 25px 70px rgba(15,23,42,.20) !important;
-}
-
-.auth-box p,
-.auth-switch{
-    color:#667085 !important;
-}
-
-.auth-close{
-    background:#f2f4f7 !important;
-    color:#344054 !important;
-}
-
-.auth-or:before,
-.auth-or:after{
-    background:#e4e7ec !important;
-}
-
-/* Override old inline dark surfaces inside the dashboard */
-#dashboardApp [style*="background:#0b191b"],
-#dashboardApp [style*="background:#071113"],
-#dashboardApp [style*="background:#101f21"],
-#dashboardApp [style*="background:#253236"]{
-    background:#fff !important;
-    color:var(--ui-text) !important;
-    border-color:var(--ui-border) !important;
-}
-
-#dashboardApp [style*="color:#888"],
-#dashboardApp [style*="color:#999"],
-#dashboardApp [style*="color:#bbb"],
-#dashboardApp [style*="color:#929d9f"]{
-    color:#667085 !important;
-}
-
-@media(max-width:750px){
-    header,
-    header.scrolled{
-        padding:12px 0;
-    }
-    .dash-layout{
-        margin-top:18px;
-    }
 }
 
 </style>
