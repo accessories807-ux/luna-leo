@@ -4799,6 +4799,23 @@ async function checkUserSession(){
             data.session.user;
 
 
+        // فحص الاشتراك
+        const subscriptionActive =
+            await checkSubscription();
+
+
+        if(!subscriptionActive){
+
+            console.warn(
+                "Session blocked: subscription expired"
+            );
+
+            showLanding();
+
+            return;
+        }
+
+
         showDashboard();
 
         updateUserInfo();
@@ -4811,68 +4828,8 @@ async function checkUserSession(){
 
     }
 
-}
-
-
-supabaseClient.auth.onAuthStateChange(
-    (event,session)=>{
-
-        if(session){
-
-            currentUser =
-                session.user;
-
-            updateUserInfo();
-
-        }else{
-
-            currentUser =
-                null;
-
-        }
-
     }
-);
-
-
-function updateUserInfo(){
-
-    if(!currentUser)return;
-
-
-    const email =
-        currentUser.email || "";
-
-
-    const dashboardEmail =
-        document.getElementById(
-            "dashboardEmail"
-        );
-
-
-    const settingsEmail =
-        document.getElementById(
-            "settingsEmail"
-        );
-
-
-    if(dashboardEmail){
-
-        dashboardEmail.textContent =
-            email;
-
-    }
-
-
-    if(settingsEmail){
-
-        settingsEmail.textContent =
-            email;
-
-    }
-
-}
-
+            
 
 /* =====================================================
    STORE
