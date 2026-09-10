@@ -4644,7 +4644,8 @@ async function checkSubscription(){
 
     if(!currentUser){
         return false;
-    }
+    }console.log("SUBSCRIPTION CHECK START");
+console.log("CURRENT USER:", currentUser);
 
     const {
         data,
@@ -4669,7 +4670,7 @@ async function checkSubscription(){
         return false;
     }
 
-
+console.log("SUBSCRIPTION BLOCKED:", data);
     if(!data){
         return false;
     }
@@ -4682,7 +4683,7 @@ async function checkSubscription(){
 
         currentUser.subscription =
             data;
-
+console.log("SUBSCRIPTION ACTIVE:", data);
         return true;
     }
 
@@ -4774,7 +4775,13 @@ async function checkSubscription(){
         return false;
     }
 
-
+console.log("SUBSCRIPTION RESULT:", {
+    user: currentUser?.id,
+    plan: data?.plan,
+    trialEnds: data?.trial_ends_at,
+    subscriptionEnds: data?.subscription_ends_at,
+    lifetime: data?.is_lifetime
+});
     return false;
     }
 /* =====================================================
