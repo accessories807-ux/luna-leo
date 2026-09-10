@@ -366,7 +366,7 @@ section{
 
 .pricing{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
     gap:25px
 }
 
@@ -1483,6 +1483,74 @@ background:#29231d;
 color:#fff;
 border-color:#29231d
 } 
+
+/* =========================
+   SUBSCRIPTIONS
+========================= */
+.subscription-banner{
+    background:linear-gradient(135deg,#101f21,#0a1719);
+    border:1px solid rgba(214,179,90,.28);
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:22px;
+}
+.subscription-banner.expired{
+    border-color:rgba(220,90,90,.45);
+}
+.subscription-grid{
+    display:grid;
+    grid-template-columns:1.2fr 1fr auto;
+    gap:15px;
+    align-items:center;
+}
+.subscription-label{color:#929d9f;font-size:13px;margin-bottom:4px}
+.subscription-plan{font-size:24px;font-weight:bold;color:#d6b35a}
+.subscription-countdown{
+    font-size:18px;
+    font-weight:bold;
+    color:#fff;
+}
+.subscription-countdown.expired{color:#ff8b8b}
+.subscription-actions{display:flex;gap:8px;flex-wrap:wrap}
+.plan-badge{
+    display:inline-flex;
+    align-items:center;
+    padding:5px 10px;
+    border-radius:999px;
+    background:rgba(214,179,90,.12);
+    color:#d6b35a;
+    font-size:12px;
+}
+.feature-lock{
+    opacity:.55;
+    position:relative;
+}
+.feature-lock::after{
+    content:"🔒";
+    margin-right:6px;
+}
+.ai-panel{
+    background:linear-gradient(145deg,#111f23,#091517);
+    border:1px solid rgba(214,179,90,.22);
+    border-radius:20px;
+    padding:25px;
+}
+.ai-message{
+    background:#101f21;
+    border-radius:14px;
+    padding:15px;
+    color:#cbd3d4;
+    margin:15px 0;
+}
+.pricing-note{
+    color:#9ca8aa;
+    font-size:13px;
+    margin-top:8px;
+}
+@media(max-width:900px){
+    .subscription-grid{grid-template-columns:1fr}
+}
+
 /* =========================
    RESPONSIVE
 ========================= */
@@ -1639,142 +1707,6 @@ border-color:#29231d
     }
 }
 </style>
-
-<style id="luna-pro-theme">
-/* =====================================================
-   LUNA&LEO — PREMIUM SAAS THEME
-   مستوحى من لغة منصات التجارة الحديثة مع هوية LUNA&LEO
-===================================================== */
-:root{
-  --ll-bg:#05090b;
-  --ll-bg-2:#081316;
-  --ll-panel:rgba(13,25,29,.72);
-  --ll-panel-strong:#0b191d;
-  --ll-line:rgba(214,179,90,.16);
-  --ll-gold:#d6b35a;
-  --ll-gold-2:#a98532;
-  --ll-text:#f8f5ee;
-  --ll-muted:#a7b0b2;
-}
-
-#landingPage{
-  position:relative;
-  isolation:isolate;
-  overflow:hidden;
-  background:
-    radial-gradient(900px 500px at 88% 4%,rgba(214,179,90,.12),transparent 62%),
-    radial-gradient(700px 450px at 8% 42%,rgba(30,104,110,.10),transparent 65%),
-    linear-gradient(180deg,#05090b 0%,#071114 48%,#05090b 100%);
-}
-#landingPage::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:-2;
-  pointer-events:none;
-  opacity:.34;
-  background-image:
-    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-  background-size:54px 54px;
-  mask-image:linear-gradient(to bottom,black,transparent 78%);
-}
-#landingPage::after{
-  content:"";
-  position:absolute;
-  width:520px;height:520px;
-  left:-260px;top:1150px;
-  z-index:-1;
-  border-radius:50%;
-  background:rgba(214,179,90,.07);
-  filter:blur(90px);
-  pointer-events:none;
-}
-
-#landingPage header{background:rgba(5,9,11,.38);backdrop-filter:blur(16px)}
-#landingPage header.scrolled{background:rgba(5,9,11,.86);border-bottom:1px solid rgba(214,179,90,.10)}
-
-.hero{
-  background:
-    radial-gradient(650px 420px at 78% 42%,rgba(214,179,90,.10),transparent 65%),
-    radial-gradient(500px 350px at 18% 80%,rgba(56,126,132,.08),transparent 68%);
-}
-.hero::after{
-  content:"";
-  position:absolute;
-  inset:auto 0 0;
-  height:1px;
-  background:linear-gradient(90deg,transparent,rgba(214,179,90,.35),transparent);
-}
-.hero-text h1{letter-spacing:-1.5px;text-shadow:0 12px 45px rgba(0,0,0,.35)}
-.hero-text p{color:#aeb8ba}
-.hero-image::before{
-  content:"";
-  position:absolute;
-  inset:-18px;
-  border-radius:38px;
-  background:linear-gradient(135deg,rgba(214,179,90,.20),transparent 38%,rgba(255,255,255,.04));
-  z-index:-1;
-  filter:blur(1px);
-}
-.hero-image img{border:1px solid rgba(214,179,90,.20);background:#0b1518}
-.dashboard-card{backdrop-filter:blur(18px);background:rgba(13,28,32,.82)!important}
-
-section:not(.hero){position:relative}
-section:not(.hero)::before{
-  content:"";
-  position:absolute;
-  top:0;left:8%;right:8%;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.045),transparent);
-}
-.section-title h2{letter-spacing:-.5px}
-.section-title p{color:#8f9a9d}
-
-.card,.price-card,.panel,.stat-card,.store-card{
-  background:linear-gradient(145deg,rgba(16,31,35,.88),rgba(7,16,19,.92))!important;
-  border-color:rgba(255,255,255,.065)!important;
-  box-shadow:0 18px 55px rgba(0,0,0,.18);
-  backdrop-filter:blur(14px);
-}
-.card:hover,.price-card:hover{box-shadow:0 24px 70px rgba(0,0,0,.28);transform:translateY(-7px)}
-.price-card.featured{box-shadow:0 25px 80px rgba(214,179,90,.10)}
-
-.preview{background:linear-gradient(180deg,rgba(8,21,23,.72),rgba(5,12,14,.92))!important}
-.cta{background:radial-gradient(ellipse at center,rgba(214,179,90,.13),transparent 55%),linear-gradient(180deg,transparent,rgba(214,179,90,.025))}
-
-/* Public store: نفس اللغة البصرية لكن أنظف وأفخم */
-#storefrontApp{
-  background:
-    radial-gradient(900px 430px at 80% 0%,rgba(214,179,90,.08),transparent 65%),
-    linear-gradient(180deg,#f8f7f4,#f3f1ec);
-}
-.sf-topbar{background:rgba(255,255,255,.84)!important;backdrop-filter:blur(18px);border-bottom-color:rgba(184,138,46,.15)!important}
-.sf-hero{
-  position:relative;
-  overflow:hidden;
-  background:
-    radial-gradient(500px 260px at 78% 25%,rgba(214,179,90,.18),transparent 65%),
-    linear-gradient(135deg,#fffdf9,#f1eadf)!important;
-}
-.sf-hero::before{
-  content:"";position:absolute;width:360px;height:360px;right:-170px;top:-190px;border-radius:50%;
-  border:1px solid rgba(166,124,37,.12);box-shadow:0 0 0 35px rgba(166,124,37,.025),0 0 0 75px rgba(166,124,37,.018);
-}
-.sf-product{box-shadow:0 12px 35px rgba(70,50,25,.055);transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
-.sf-product:hover{transform:translateY(-7px);box-shadow:0 22px 48px rgba(70,50,25,.12)}
-.sf-cart{box-shadow:-25px 0 70px rgba(50,35,20,.20)}
-
-@media(max-width:900px){
-  #landingPage::before{background-size:42px 42px}
-  .hero{min-height:auto;padding-bottom:105px}
-}
-@media(max-width:550px){
-  .hero-text h1{letter-spacing:-1px}
-  .dashboard-card{right:5px;left:5px;width:auto}
-  .sf-cart{width:min(100%,430px)}
-}
-</style>
-
 </head>
 
 <body>
@@ -2042,77 +1974,58 @@ alt="متجر LUNA&LEO"
 
 </div>
 
-<div class="pricing">
+<div class="pricing" style="grid-template-columns:repeat(4,1fr)">
 
 <div class="price-card">
-
-<h3>مجاني</h3>
-
-<div class="price">
-0
-<small>جنيه / شهر</small>
-</div>
-
+<h3>Trial</h3>
+<div class="price">0 <small>جنيه</small></div>
 <ul>
-<li>إنشاء متجر</li>
-<li>إضافة المنتجات</li>
-<li>إدارة الطلبات</li>
-<li>إدارة العملاء</li>
+<li>تجربة مجانية لمدة 15 يوم</li>
+<li>إنشاء وإدارة المتجر</li>
+<li>مروان AI متاح</li>
+<li>بدون حذف البيانات عند الانتهاء</li>
 </ul>
-
-<button class="btn btn-primary" onclick="createStore()">
-ابدأ مجانًا
-</button>
-
+<button class="btn btn-primary" onclick="createStore()">ابدأ مجانًا</button>
 </div>
 
+<div class="price-card">
+<h3>Starter</h3>
+<div class="price">199 <small>جنيه / شهر</small></div>
+<ul>
+<li>إدارة المنتجات والمخزون</li>
+<li>إدارة الطلبات والعملاء</li>
+<li>1 Admin</li>
+<li>مميزات المتجر الأساسية</li>
+</ul>
+<button class="btn btn-primary" onclick="openPlans()">اشترك الآن</button>
+</div>
 
 <div class="price-card featured">
-
-<h3>احترافي</h3>
-
-<div class="price">
-199
-<small>جنيه / شهر</small>
-</div>
-
+<h3>Growth</h3>
+<div class="price">449 <small>جنيه / شهر</small></div>
 <ul>
-<li>كل مميزات المجاني</li>
-<li>مميزات إضافية</li>
-<li>تخصيص أكبر للمتجر</li>
-<li>دعم أفضل</li>
+<li>كل مميزات Starter</li>
+<li>QumraQL Smart Analytics</li>
+<li>مروان AI متاح</li>
+<li>حتى 5 Admins</li>
 </ul>
-
-<button class="btn btn-primary" onclick="createStore()">
-ابدأ الآن
-</button>
-
+<button class="btn btn-primary" onclick="openPlans()">اشترك الآن</button>
 </div>
-
 
 <div class="price-card">
-
 <h3>Business</h3>
-
-<div class="price">
-499
-<small>جنيه / شهر</small>
-</div>
-
+<div class="price">1,199 <small>جنيه / شهر</small></div>
 <ul>
-<li>كل مميزات الاحترافي</li>
-<li>مميزات متقدمة</li>
-<li>إدارة احترافية</li>
-<li>أولوية الدعم</li>
+<li>كل مميزات Growth</li>
+<li>Admin غير محدود</li>
+<li>مروان AI غير محدود</li>
+<li>Business Success & دعم مخصص</li>
 </ul>
-
-<button class="btn btn-primary" onclick="createStore()">
-ابدأ الآن
-</button>
-
+<button class="btn btn-primary" onclick="openPlans()">اشترك الآن</button>
 </div>
 
 </div>
+
 </div>
 </section>
 
@@ -2376,49 +2289,7 @@ onclick="logoutUser()"
 </div>
 </header>
 
-<!-- =====================================================
-     SUBSCRIPTION EXPIRED NOTICE
-===================================================== -->
 
-<div
-id="subscriptionExpiredNotice"
-style="
-display:none;
-margin:20px;
-padding:18px;
-border-radius:12px;
-background:#fff3cd;
-border:1px solid #ffe69c;
-text-align:center;
-"
->
-
-<div style="font-size:22px;margin-bottom:8px;">
-🔒
-</div>
-
-<div style="font-size:18px;font-weight:bold;margin-bottom:8px;">
-انتهى اشتراك متجرك
-</div>
-
-<div style="margin-bottom:15px;color:#555;">
-متجرك وبياناتك وأوردراتك محفوظة، لكن بعض مميزات لوحة التحكم متوقفة حتى تجدد الاشتراك.
-</div>
-
-<button
-onclick="document.getElementById('pricing')?.scrollIntoView({behavior:'smooth'});"
-style="
-padding:12px 24px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-"
->
-تجديد الاشتراك
-</button>
-
-</div>
 <div class="dash-layout">
 
 <aside class="sidebar">
@@ -2444,6 +2315,22 @@ onclick="showDashboardSection('home',this)"
 
 <button onclick="showDashboardSection('customers',this)">
 👥 العملاء
+</button>
+
+<button onclick="showDashboardSection('subscription',this)">
+💳 الاشتراك
+</button>
+
+<button onclick="showDashboardSection('analytics',this)">
+📊 التحليلات
+</button>
+
+<button onclick="showDashboardSection('marwan',this)">
+🤖 مروان AI
+</button>
+
+<button onclick="showDashboardSection('team',this)">
+👥 الفريق
 </button>
 
 <button onclick="showDashboardSection('settings',this)">
@@ -3032,6 +2919,53 @@ class="empty"
 </section>
 
 
+<!-- SUBSCRIPTION -->
+
+<section id="dashSubscription" class="dash-section" style="display:none">
+<div class="panel">
+<div class="panel-title"><h2>💳 الاشتراكات</h2></div>
+<div id="plansContainer" class="pricing" style="grid-template-columns:repeat(4,1fr)"></div>
+<div class="pricing-note">الدفع الإلكتروني سيتم ربطه لاحقًا. حاليًا النظام يجهز الاشتراك والصلاحيات والتجديد.</div>
+</div>
+</section>
+
+<!-- ANALYTICS -->
+
+<section id="dashAnalytics" class="dash-section" style="display:none">
+<div class="panel">
+<div class="panel-title"><h2>📊 QumraQL Smart Analytics</h2></div>
+<div class="stats">
+<div class="stat-card"><div class="stat-icon">💰</div><h3 id="analyticsSales">0</h3><p>إجمالي المبيعات</p></div>
+<div class="stat-card"><div class="stat-icon">🛒</div><h3 id="analyticsOrders">0</h3><p>إجمالي الطلبات</p></div>
+<div class="stat-card"><div class="stat-icon">📦</div><h3 id="analyticsProducts">0</h3><p>المنتجات</p></div>
+<div class="stat-card"><div class="stat-icon">👥</div><h3 id="analyticsCustomers">0</h3><p>العملاء</p></div>
+</div>
+<div id="analyticsLock" class="pricing-note"></div>
+</div>
+</section>
+
+<!-- MARWAN AI -->
+
+<section id="dashMarwan" class="dash-section" style="display:none">
+<div class="panel">
+<div class="panel-title"><h2>🤖 مروان AI</h2><span id="marwanPlanBadge" class="plan-badge"></span></div>
+<div class="ai-panel">
+<h3>مساعدك الذكي في LUNA&LEO MARKET</h3>
+<div class="ai-message">أهلاً بيك 👋 أنا مروان AI. الواجهة جاهزة لإضافة وظائف ذكية للمتجر لاحقًا، مثل تحليل المبيعات ومساعدة إدارة المنتجات والعملاء.</div>
+<div id="marwanStatus" class="pricing-note"></div>
+</div>
+</div>
+</section>
+
+<!-- TEAM -->
+
+<section id="dashTeam" class="dash-section" style="display:none">
+<div class="panel">
+<div class="panel-title"><h2>👥 إدارة الفريق</h2></div>
+<div id="teamPlanInfo" class="pricing-note"></div>
+</div>
+</section>
+
 <!-- SETTINGS -->
 
 <section
@@ -3553,6 +3487,314 @@ let publicCategory = "all";
 
 let dashboardProducts = [];
 let editingProductId = null;
+let dashboardOrdersCount = 0;
+let currentSubscription = null;
+let subscriptionTimer = null;
+
+const PLAN_CONFIG = {
+    trial:{
+        name:"Trial", label:"تجريبي",
+        price:0, durationDays:15,
+        marwan:"available", admins:1
+    },
+    starter:{
+        name:"Starter", label:"Starter",
+        price:199, durationDays:30,
+        marwan:"unavailable", admins:1
+    },
+    growth:{
+        name:"Growth", label:"Growth",
+        price:449, durationDays:30,
+        marwan:"available", admins:5
+    },
+    business:{
+        name:"Business", label:"Business",
+        price:1199, durationDays:30,
+        marwan:"unlimited", admins:Infinity
+    },
+    lifetime:{
+        name:"Lifetime", label:"Lifetime",
+        price:0, durationDays:null,
+        marwan:"unlimited", admins:Infinity
+    }
+};
+
+const FEATURE_PLAN = {
+    products:"trial",
+    orders:"trial",
+    customers:"trial",
+    inventory:"trial",
+    analytics:"growth",
+    marwan:"growth",
+    team:"starter",
+    coupons:"growth",
+    abandoned_carts:"growth",
+    themes:"growth",
+    apps:"growth",
+    landing_pages:"growth",
+    custom_domain:"business"
+};
+
+
+
+
+/* =====================================================
+   SUBSCRIPTIONS
+===================================================== */
+
+function normalizePlan(plan){
+    const p=String(plan||"trial").toLowerCase();
+    return PLAN_CONFIG[p] ? p : "trial";
+}
+
+function subscriptionIsActive(sub=currentSubscription){
+    if(!sub) return false;
+    if(String(sub.plan).toLowerCase()==="lifetime") return true;
+    if(String(sub.status||"").toLowerCase()==="expired") return false;
+    return !!sub.end_date && new Date(sub.end_date).getTime() > Date.now();
+}
+
+function hasFeature(feature){
+    const required=FEATURE_PLAN[feature] || "trial";
+    const order={trial:0,starter:1,growth:2,business:3,lifetime:4};
+    const current=normalizePlan(currentSubscription?.plan);
+    if(!subscriptionIsActive()) return false;
+    return order[current] >= order[required];
+}
+
+function subscriptionStatusText(){
+    if(!currentSubscription) return "غير مهيأ";
+    if(String(currentSubscription.plan).toLowerCase()==="lifetime") return "مدى الحياة";
+    return subscriptionIsActive() ? "نشط" : "انتهى الاشتراك";
+}
+
+function formatRemaining(ms){
+    if(ms<=0) return "انتهى الاشتراك";
+    const total=Math.floor(ms/1000);
+    const days=Math.floor(total/86400);
+    const hours=Math.floor((total%86400)/3600);
+    const mins=Math.floor((total%3600)/60);
+    const secs=total%60;
+    return `متبقي ${days} يوم و ${hours} ساعة و ${mins} دقيقة و ${secs} ثانية`;
+}
+
+function renderSubscriptionUI(){
+    const plan=normalizePlan(currentSubscription?.plan);
+    const cfg=PLAN_CONFIG[plan];
+    const active=subscriptionIsActive();
+    const banner=document.getElementById("subscriptionBanner");
+    const planEl=document.getElementById("subscriptionPlanName");
+    const badge=document.getElementById("subscriptionStatusBadge");
+    const countdown=document.getElementById("subscriptionCountdown");
+    const notice=document.getElementById("subscriptionNotice");
+    if(!planEl) return;
+
+    planEl.textContent=cfg.name;
+    badge.textContent=subscriptionStatusText();
+    banner.classList.toggle("expired",!active);
+
+    if(plan==="lifetime"){
+        countdown.textContent="♾️ مدى الحياة";
+        countdown.classList.remove("expired");
+    }else{
+        const end=currentSubscription?.end_date ? new Date(currentSubscription.end_date).getTime() : 0;
+        countdown.textContent=formatRemaining(end-Date.now());
+        countdown.classList.toggle("expired",!active);
+    }
+
+    notice.textContent=active
+        ? (plan==="trial"
+            ? "أنت حاليًا في الفترة التجريبية المجانية لمدة 15 يومًا."
+            : "اشتراكك نشط ويمكنك استخدام المميزات المتاحة لباقتك.")
+        : "⚠️ انتهى الاشتراك. المتجر العام والطلبات مستمران، بينما مميزات صاحب المتجر المدفوعة متوقفة حتى التجديد.";
+
+    const badge2=document.getElementById("marwanPlanBadge");
+    if(badge2) badge2.textContent=cfg.name;
+
+    const msEnd=currentSubscription?.end_date ? new Date(currentSubscription.end_date).getTime() : 0;
+    if(subscriptionTimer) clearInterval(subscriptionTimer);
+    if(plan!=="lifetime"){
+        subscriptionTimer=setInterval(()=>{
+            if(!currentSubscription) return;
+            if(Date.now()>=msEnd){
+                currentSubscription.status="expired";
+            }
+            renderSubscriptionUI();
+        },1000);
+    }
+    renderPlanCards();
+    updateFeatureAccessUI();
+}
+
+async function loadSubscription(){
+    if(!currentStore || !currentUser) return;
+    const {data,error}=await supabaseClient
+        .from("subscriptions")
+        .select("*")
+        .eq("store_id",currentStore.id)
+        .maybeSingle();
+
+    if(error){
+        console.warn("Subscription table not ready:",error.message);
+        currentSubscription=null;
+        renderSubscriptionSetupWarning(error.message);
+        return;
+    }
+
+    if(!data){
+        const start=new Date();
+        const end=new Date(start.getTime()+15*86400000);
+        const {data:created,error:createError}=await supabaseClient
+            .from("subscriptions")
+            .insert({
+                store_id:currentStore.id,
+                plan:"trial",
+                status:"active",
+                start_date:start.toISOString(),
+                end_date:end.toISOString(),
+                auto_renew:false
+            })
+            .select()
+            .single();
+        if(createError){
+            console.warn("Could not create Trial subscription:",createError.message);
+            currentSubscription=null;
+            renderSubscriptionSetupWarning(createError.message);
+            return;
+        }
+        currentSubscription=created;
+    }else{
+        currentSubscription=data;
+        if(currentSubscription.plan==="lifetime") currentSubscription.status="active";
+        else if(currentSubscription.end_date && new Date(currentSubscription.end_date)<=new Date()){
+            currentSubscription.status="expired";
+        }
+    }
+    renderSubscriptionUI();
+}
+
+function renderSubscriptionSetupWarning(message){
+    const notice=document.getElementById("subscriptionNotice");
+    if(notice){
+        notice.textContent="⚠️ لم يتم تفعيل جدول الاشتراكات في Supabase بعد. نفّذ ملف migration المرفق ثم أعد تحميل الصفحة.";
+    }
+    console.warn(message);
+}
+
+function planOrder(plan){
+    return {trial:0,starter:1,growth:2,business:3,lifetime:4}[normalizePlan(plan)];
+}
+
+function renderPlanCards(){
+    const box=document.getElementById("plansContainer");
+    if(!box) return;
+    const current=normalizePlan(currentSubscription?.plan);
+    const plans=["trial","starter","growth","business"];
+    box.innerHTML=plans.map(key=>{
+        const p=PLAN_CONFIG[key];
+        const selected=current===key;
+        return `<div class="price-card ${selected?"featured":""}">
+            <h3>${p.name}</h3>
+            <div class="price">${p.price.toLocaleString("ar-EG")} <small>${p.price?"جنيه / شهر":"جنيه"}</small></div>
+            <ul>
+                <li>${key==="trial"?"15 يوم تجربة مجانية":"اشتراك شهري"}</li>
+                <li>${p.marwan==="unlimited"?"مروان AI غير محدود":p.marwan==="available"?"مروان AI متاح":"مروان AI غير متاح"}</li>
+                <li>${p.admins===Infinity?"Admins غير محدود":`${p.admins} Admin`}</li>
+                <li>المتجر والبيانات لا يتم حذفها عند الانتهاء</li>
+            </ul>
+            <button class="btn btn-primary" onclick="requestPlanChange('${key}')" ${selected?"disabled":""}>
+                ${selected?"الباقة الحالية":"اختيار الباقة"}
+            </button>
+        </div>`;
+    }).join("");
+}
+
+async function requestPlanChange(plan){
+    if(!currentStore){
+        alert("أنشئ متجرك أولًا.");
+        return;
+    }
+    if(plan==="trial"){
+        alert("الفترة التجريبية تُمنح تلقائيًا مرة واحدة عند إنشاء المتجر.");
+        return;
+    }
+    const ok=confirm(`اختيار ${PLAN_CONFIG[plan].name} بسعر ${PLAN_CONFIG[plan].price.toLocaleString("ar-EG")} جنيه/شهر.\nالدفع الإلكتروني غير مربوط حاليًا. هل تريد تجهيز الطلب للترقية؟`);
+    if(!ok) return;
+    alert("تم تجهيز الباقة. ربط الدفع الإلكتروني سيتم في الخطوة التالية.");
+}
+
+function openPlans(){
+    if(!currentUser){
+        openRegister();
+        return;
+    }
+    showDashboard();
+    showDashboardSection("subscription",document.querySelectorAll(".sidebar button")[6]);
+    renderPlanCards();
+}
+
+function updateFeatureAccessUI(){
+    const analyticsLock=document.getElementById("analyticsLock");
+    if(analyticsLock){
+        analyticsLock.textContent=hasFeature("analytics")
+            ?"التحليلات متاحة في باقة Growth وBusiness."
+            :"🔒 التحليلات متاحة بدايةً من Growth. قم بالترقية لفتحها.";
+    }
+    const marwanStatus=document.getElementById("marwanStatus");
+    if(marwanStatus){
+        const plan=normalizePlan(currentSubscription?.plan);
+        marwanStatus.textContent=hasFeature("marwan")
+            ? (plan==="business"||plan==="lifetime"?"مروان AI غير محدود ومجهز للتوسع في الوظائف الذكية.":"مروان AI متاح في هذه الباقة.")
+            :"🔒 مروان AI غير متاح في Starter. الترقية إلى Growth تفتحه.";
+    }
+    const team=document.getElementById("teamPlanInfo");
+    if(team){
+        const plan=normalizePlan(currentSubscription?.plan);
+        const admins=PLAN_CONFIG[plan].admins;
+        team.textContent=hasFeature("team")
+            ? `حد إدارة الفريق: ${admins===Infinity?"غير محدود":admins+" Admin"}`
+            :"🔒 إدارة الفريق متاحة بدايةً من Starter.";
+    }
+}
+
+function enforceSubscriptionFor(feature, action){
+    if(hasFeature(feature)) return true;
+    const message=feature==="marwan"
+        ?"مروان AI متاح بدايةً من Growth."
+        :feature==="analytics"
+        ?"التحليلات متاحة بدايةً من Growth."
+        :"هذه الميزة غير متاحة في باقتك أو أن الاشتراك منتهٍ.";
+    alert("🔒 "+message);
+    if(typeof action==="function") return false;
+    openPlans();
+    return false;
+}
+
+async function renewSubscription(plan="starter"){
+    if(!currentStore) return;
+    const cfg=PLAN_CONFIG[plan];
+    const start=new Date();
+    const end=new Date(start.getTime()+cfg.durationDays*86400000);
+    const {data,error}=await supabaseClient
+        .from("subscriptions")
+        .update({
+            plan:plan,
+            status:"active",
+            start_date:start.toISOString(),
+            end_date:end.toISOString(),
+            auto_renew:false
+        })
+        .eq("store_id",currentStore.id)
+        .select()
+        .single();
+    if(error){
+        alert("❌ لم يتم التجديد. تأكد من تفعيل جدول subscriptions في Supabase.");
+        console.error(error);
+        return;
+    }
+    currentSubscription=data;
+    renderSubscriptionUI();
+}
 
 
 /* =====================================================
@@ -3869,119 +4111,11 @@ function closeAuth(){
 
 }
 
-// ===============================
-// LUNA&LEO - Subscription System
-// ===============================
 
-const PLAN_FEATURES = {
-
-    trial: [
-        "products",
-        "orders",
-        "app_store",
-        "theme_store",
-        "landing_pages",
-        "inventory",
-        "coupons",
-        "abandoned_carts",
-        "store_customization",
-        "analytics",
-        "shihab",
-        "admin_1",
-        "whatsapp_support"
-    ],
-
-    starter: [
-        "products",
-        "orders",
-        "app_store",
-        "theme_store",
-        "landing_pages",
-        "inventory",
-        "coupons",
-        "abandoned_carts",
-        "store_customization",
-        "analytics",
-        "custom_domain",
-        "admin_1",
-        "brand_badge",
-        "whatsapp_support"
-    ],
-
-    growth: [
-        "products",
-        "orders",
-        "app_store",
-        "theme_store",
-        "landing_pages",
-        "inventory",
-        "coupons",
-        "abandoned_carts",
-        "store_customization",
-        "analytics",
-        "custom_domain",
-        "shihab",
-        "pos",
-        "remove_brand_badge",
-        "admin_5",
-        "phone_support"
-    ],
-
-    business: [
-        "products",
-        "orders",
-        "app_store",
-        "theme_store",
-        "landing_pages",
-        "inventory",
-        "coupons",
-        "abandoned_carts",
-        "store_customization",
-        "analytics",
-        "custom_domain",
-        "shihab",
-        "shihab_unlimited",
-        "pos",
-        "remove_brand_badge",
-        "admin_unlimited",
-        "international_markets",
-        "custom_store_design",
-        "personal_success_manager",
-        "dedicated_phone_support"
-    ]
-
-};function hasFeature(feature){
-
-    if(
-        !currentUser ||
-        !currentUser.subscription
-    ){
-        return false;
-    }
-
-    const subscription =
-        currentUser.subscription;
-
-    // الحساب Lifetime له كل الصلاحيات
-    if(
-        subscription.is_lifetime === true
-    ){
-        return true;
-    }
-
-    const plan =
-        subscription.plan;
-
-    if(!PLAN_FEATURES[plan]){
-        return false;
-    }
-
-    return PLAN_FEATURES[plan]
-        .includes(feature);
-    }
 /* =====================================================
    REGISTER
 ===================================================== */
+
 async function registerUser(){
 
     const name =
@@ -4063,13 +4197,13 @@ async function registerUser(){
         } =
         await supabaseClient.auth.signUp({
 
-            email: email,
+            email:email,
 
-            password: password,
+            password:password,
 
             options:{
                 data:{
-                    full_name: name
+                    full_name:name
                 }
             }
 
@@ -4077,16 +4211,10 @@ async function registerUser(){
 
 
         if(error){
+
             throw error;
+
         }
-
-
-        /*
-         * الاشتراك التجريبي يتم إنشاؤه تلقائيًا
-         * من قاعدة البيانات عند إنشاء المستخدم.
-         * لا نقوم بعمل INSERT هنا حتى لا يحدث
-         * تعارض مع تأكيد البريد الإلكتروني أو RLS.
-         */
 
 
         if(
@@ -4141,8 +4269,7 @@ async function registerUser(){
     button.textContent =
         "إنشاء الحساب";
 
-    }
-
+}
 
 
 /* =====================================================
@@ -4198,9 +4325,9 @@ async function loginUser(){
         await supabaseClient.auth
             .signInWithPassword({
 
-                email: email,
+                email:email,
 
-                password: password
+                password:password
 
             });
 
@@ -4214,7 +4341,6 @@ async function loginUser(){
 
         currentUser =
             data.user;
-
 
 
         message.textContent =
@@ -4253,10 +4379,8 @@ async function loginUser(){
     button.textContent =
         "تسجيل الدخول";
 
-    }
-            
+}
 
-    
 
 /* =====================================================
    GOOGLE
@@ -4467,21 +4591,12 @@ document
 
 });
 
+
 /* =====================================================
-   DASHBOARD
+   DASHBOARD VIEW
 ===================================================== */
 
 function showDashboard(){
-
-    openDashboardView();
-
-}
-
-/* =====================================================
-   OPEN DASHBOARD
-===================================================== */
-
-function openDashboardView(){
 
     document.getElementById(
         "landingPage"
@@ -4505,8 +4620,8 @@ function openDashboardView(){
         "dashboardApp"
     ).style.display =
         "block";
-    }
 
+}
 
 
 function showLanding(){
@@ -4589,81 +4704,7 @@ function showDashboardSection(
 
 }
 
-/* =====================================================
-   SUBSCRIPTION CHECK
-===================================================== */
 
-async function checkSubscription(){
-
-    if(!currentUser){
-        return false;
-    }
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("subscriptions")
-        .select("*")
-        .eq("user_id", currentUser.id)
-        .single();
-
-    if(error){
-        console.error(
-            "Subscription check error:",
-            error
-        );
-
-        return false;
-    }
-
-    if(!data){
-        return false;
-    }
-
-    // Lifetime
-    if(data.is_lifetime === true){
-
-        currentUser.subscription = data;
-
-        return true;
-    }
-
-// Trial
-if(data.plan === "trial"){
-
-    currentUser.subscription = data;
-
-    if(
-        data.trial_ends_at &&
-        new Date(data.trial_ends_at) > new Date()
-    ){
-
-        return true;
-    }
-
-    return false;
-        }
-    // Paid Plans
-    if(
-    data.plan === "starter" ||
-    data.plan === "growth" ||
-    data.plan === "business"
-){
-
-    currentUser.subscription = data;
-
-    if(
-        data.subscription_ends_at &&
-        new Date(data.subscription_ends_at) > new Date()
-    ){
-
-        return true;
-    }
-
-    return false;
-    }
-    
 /* =====================================================
    SESSION
 ===================================================== */
@@ -4672,7 +4713,9 @@ async function checkUserSession(){
 
     const {
         data
-    } = await supabaseClient.auth.getSession();
+    } =
+    await supabaseClient.auth
+        .getSession();
 
 
     if(
@@ -4684,15 +4727,11 @@ async function checkUserSession(){
             data.session.user;
 
 
-        await checkSubscription();
-
-
         showDashboard();
 
         updateUserInfo();
 
         await loadUserStore();
-
 
     }else{
 
@@ -4700,7 +4739,68 @@ async function checkUserSession(){
 
     }
 
+}
+
+
+supabaseClient.auth.onAuthStateChange(
+    (event,session)=>{
+
+        if(session){
+
+            currentUser =
+                session.user;
+
+            updateUserInfo();
+
+        }else{
+
+            currentUser =
+                null;
+
+        }
+
     }
+);
+
+
+function updateUserInfo(){
+
+    if(!currentUser)return;
+
+
+    const email =
+        currentUser.email || "";
+
+
+    const dashboardEmail =
+        document.getElementById(
+            "dashboardEmail"
+        );
+
+
+    const settingsEmail =
+        document.getElementById(
+            "settingsEmail"
+        );
+
+
+    if(dashboardEmail){
+
+        dashboardEmail.textContent =
+            email;
+
+    }
+
+
+    if(settingsEmail){
+
+        settingsEmail.textContent =
+            email;
+
+    }
+
+}
+
 
 /* =====================================================
    STORE
@@ -4908,6 +5008,7 @@ async function createMyStore(){
         currentStore =
             data;
 
+        await loadSubscription();
 
         message.textContent =
             "🎉 تم إنشاء متجرك بنجاح!";
@@ -5036,9 +5137,23 @@ async function loadDashboardData(){
     await loadOrders();
 
     await loadCustomers();
+    renderAnalyticsFromDashboard();
+    renderSubscriptionUI();
 
 }
 
+
+
+function renderAnalyticsFromDashboard(){
+    const sales=document.getElementById("analyticsSales");
+    const orders=document.getElementById("analyticsOrders");
+    const products=document.getElementById("analyticsProducts");
+    const customers=document.getElementById("analyticsCustomers");
+    if(sales) sales.textContent=(window.__dashboardSales||0).toLocaleString("ar-EG")+" ج";
+    if(orders) orders.textContent=String(dashboardOrdersCount||0);
+    if(products) products.textContent=String(dashboardProducts.length||0);
+    if(customers) customers.textContent=String(window.__dashboardCustomersCount||0);
+}
 
 /* =====================================================
    PRODUCT IMAGE UPLOAD
@@ -5481,6 +5596,7 @@ async function loadProducts(){
 
 function openProductForm(){
 
+    if(!enforceSubscriptionFor("products")) return;
     const form =
         document.getElementById(
             "productForm"
@@ -6235,6 +6351,9 @@ async function loadOrders(){
 
     const orders =
         data || [];
+
+    dashboardOrdersCount = orders.length;
+    window.__dashboardSales = orders.reduce((sum,order)=>sum+Number(order.total||0),0);
 
     /* =========================
        STATISTICS
@@ -10057,72 +10176,87 @@ async function cancelMyOrder(orderId){
         "lunaLeoOrderTokens_" +
         publicStore.id;
 
-    let savedOrders = [];
-
-    try{
-        savedOrders = JSON.parse(
+    const savedOrders =
+        JSON.parse(
             localStorage.getItem(key) || "[]"
         );
-    }catch(error){
-        console.error("ORDER TOKENS ERROR:", error);
-    }
 
-    const saved = savedOrders.find(
-        x => String(x.orderId) === String(orderId)
-    );
+    const saved =
+        savedOrders.find(
+            x => x.orderId === orderId
+        );
 
     if(!saved || !saved.cancelToken){
-        alert("❌ لا يمكن إلغاء هذا الطلب من هذا الجهاز.");
+
+        alert(
+            "❌ لا يمكن إلغاء هذا الطلب من هذا الجهاز."
+        );
+
         return;
     }
 
-    const confirmCancel = confirm(
-        "هل أنت متأكد من إلغاء الطلب؟\n\nسيتم حذف الطلب الملغي نهائيًا من قائمة طلباتك."
-    );
+    const confirmCancel =
+        confirm(
+            "هل أنت متأكد من إلغاء الطلب؟\n\nلا يمكن التراجع عن الإلغاء."
+        );
 
     if(!confirmCancel) return;
 
     try{
 
-        /*
-         * الإلغاء هنا حذف نهائي للطلب من قاعدة البيانات،
-         * وليس مجرد تحويل حالته إلى "ملغي".
-         */
-        const {data,error} = await supabaseClient
-            .from("orders")
-            .delete()
-            .eq("id",orderId)
-            .eq("store_id",publicStore.id)
-            .eq("cancel_token",saved.cancelToken)
-            .select("id")
-            .maybeSingle();
+        const {data,error} =
+            await supabaseClient
+                .from("orders")
+                .update({
+                    status:"cancelled"
+                })
+                .eq("id",orderId)
+                .eq("store_id",publicStore.id)
+                .eq("cancel_token",saved.cancelToken)
+                .select()
+                .maybeSingle();
 
         if(error){
-            console.error("DELETE CANCELLED ORDER ERROR:",error);
-            alert("❌ لم نتمكن من حذف الطلب. تأكد من صلاحية الحذف في Supabase.");
+
+            console.error(
+                "CANCEL ORDER ERROR:",
+                error
+            );
+
+            alert(
+                "❌ حصل خطأ أثناء إلغاء الطلب."
+            );
+
             return;
         }
 
-        /* حذف بيانات الطلب من الجهاز أيضًا */
-        savedOrders = savedOrders.filter(
-            x => String(x.orderId) !== String(orderId)
-        );
+        if(!data){
 
-        localStorage.setItem(
-            key,
-            JSON.stringify(savedOrders)
-        );
+            alert(
+                "❌ لا يمكن إلغاء الطلب.\nقد يكون تم تغييره أو إلغاؤه بالفعل."
+            );
 
-        alert("✅ تم إلغاء الطلب وحذفه نهائيًا.");
+            return;
+        }
+
+        alert(
+            "✅ تم إلغاء الطلب بنجاح."
+        );
 
         await showMyOrders();
 
     }catch(error){
 
-        console.error("CANCEL/DELETE ERROR:",error);
-        alert("❌ حدث خطأ غير متوقع أثناء حذف الطلب.");
+        console.error(
+            "CANCEL ERROR:",
+            error
+        );
+
+        alert(
+            "❌ حدث خطأ غير متوقع."
+        );
     }
-}
+    }
     const box =
         document.getElementById("myOrdersBox");
 
@@ -10176,10 +10310,6 @@ async function cancelMyOrder(orderId){
                 .eq(
                     "store_id",
                     publicStore.id
-                )
-                .neq(
-                    "status",
-                    "cancelled"
                 )
                 .order(
                     "created_at",
