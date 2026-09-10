@@ -4556,7 +4556,147 @@ function showDashboardSection(
 
 }
 
+/* =====================================================
+   SUBSCRIPTION CHECK
+===================================================== */
 
+async function checkSubscription(){
+
+    if(!currentUser){
+        return false;
+    }
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("subscriptions")
+        .select("*")
+        .eq(
+            "user_id",
+            currentUser.id
+        )
+        .single();
+
+
+    if(error){
+
+        console.error(
+            "Subscription check error:",
+            error
+        );
+
+        return false;
+    }
+
+
+    if(!data){
+        return false;
+    }
+
+
+    // حساب Lifetime
+    if(
+        data.is_lifetime === true
+    ){
+
+        currentUser.subscription =
+            data;
+
+        return true;
+    }
+
+
+    // Trial
+    if(
+        data.plan === "trial"
+    ){
+
+        if(
+            data.trial_ends_at &&
+            new Date(
+                data.trial_ends_at
+            ) > new Date()
+        ){
+
+            currentUser.subscription =
+                data;
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    // Starter
+    if(
+        data.plan === "starter"
+    ){
+
+        if(
+            data.subscription_ends_at &&
+            new Date(
+                data.subscription_ends_at
+            ) > new Date()
+        ){
+
+            currentUser.subscription =
+                data;
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    // Growth
+    if(
+        data.plan === "growth"
+    ){
+
+        if(
+            data.subscription_ends_at &&
+            new Date(
+                data.subscription_ends_at
+            ) > new Date()
+        ){
+
+            currentUser.subscription =
+                data;
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    // Business
+    if(
+        data.plan === "business"
+    ){
+
+        if(
+            data.subscription_ends_at &&
+            new Date(
+                data.subscription_ends_at
+            ) > new Date()
+        ){
+
+            currentUser.subscription =
+                data;
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    return false;
+    }
 /* =====================================================
    SESSION
 ===================================================== */
