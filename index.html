@@ -3827,7 +3827,116 @@ function closeAuth(){
 
 }
 
+// ===============================
+// LUNA&LEO - Subscription System
+// ===============================
 
+const PLAN_FEATURES = {
+
+    trial: [
+        "products",
+        "orders",
+        "app_store",
+        "theme_store",
+        "landing_pages",
+        "inventory",
+        "coupons",
+        "abandoned_carts",
+        "store_customization",
+        "analytics",
+        "shihab",
+        "admin_1",
+        "whatsapp_support"
+    ],
+
+    starter: [
+        "products",
+        "orders",
+        "app_store",
+        "theme_store",
+        "landing_pages",
+        "inventory",
+        "coupons",
+        "abandoned_carts",
+        "store_customization",
+        "analytics",
+        "custom_domain",
+        "admin_1",
+        "brand_badge",
+        "whatsapp_support"
+    ],
+
+    growth: [
+        "products",
+        "orders",
+        "app_store",
+        "theme_store",
+        "landing_pages",
+        "inventory",
+        "coupons",
+        "abandoned_carts",
+        "store_customization",
+        "analytics",
+        "custom_domain",
+        "shihab",
+        "pos",
+        "remove_brand_badge",
+        "admin_5",
+        "phone_support"
+    ],
+
+    business: [
+        "products",
+        "orders",
+        "app_store",
+        "theme_store",
+        "landing_pages",
+        "inventory",
+        "coupons",
+        "abandoned_carts",
+        "store_customization",
+        "analytics",
+        "custom_domain",
+        "shihab",
+        "shihab_unlimited",
+        "pos",
+        "remove_brand_badge",
+        "admin_unlimited",
+        "international_markets",
+        "custom_store_design",
+        "personal_success_manager",
+        "dedicated_phone_support"
+    ]
+
+};function hasFeature(feature){
+
+    if(
+        !currentUser ||
+        !currentUser.subscription
+    ){
+        return false;
+    }
+
+    const subscription =
+        currentUser.subscription;
+
+    // الحساب Lifetime له كل الصلاحيات
+    if(
+        subscription.is_lifetime === true
+    ){
+        return true;
+    }
+
+    const plan =
+        subscription.plan;
+
+    if(!PLAN_FEATURES[plan]){
+        return false;
+    }
+
+    return PLAN_FEATURES[plan]
+        .includes(feature);
+    }
 /* =====================================================
    REGISTER
 ===================================================== */
