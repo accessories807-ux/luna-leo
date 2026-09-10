@@ -3734,8 +3734,8 @@ function renderPlanCards(){
 }
 
 async function requestPlanChange(plan){
-    if(!currentStore){
-        alert("أنشئ متجرك أولًا.");
+    if(!currentUser || !currentStore){
+        alert("أنشئ متجرك أولًا وسجّل الدخول.");
         return;
     }
 
@@ -3745,12 +3745,32 @@ async function requestPlanChange(plan){
     }
 
     const cfg=PLAN_CONFIG[plan];
+    if(!cfg || !["starter","growth","business"].includes(plan)){
+        alert("الباقة غير صالحة.");
+        return;
+    }
+
     const ok=confirm(
-        `اختيار باقة ${cfg.name} بسعر ${cfg.price.toLocaleString("ar-EG")} جنيه/شهر.\n\nالدفع الإلكتروني غير مربوط حاليًا. سيتم تجهيز الباقة للربط مع بوابة الدفع لاحقًا.`
+        `طلب اشتراك ${cfg.name} بسعر ${cfg.price.toLocaleString("ar-EG")} جنيه/شهر؟\n\nلن يتم تفعيل الباقة الآن. سيتم تسجيل طلب الاشتراك فقط، والتفعيل سيكون بعد تأكيد الدفع من الخادم.`
     );
     if(!ok) return;
 
-    alert("✅ تم اختيار الباقة. بعد ربط بوابة الدفع سيتم تفعيل الاشتراك تلقائيًا بعد تأكيد الدفع.");
+    try{
+        const {data,error}=await supabaseClient.rpc("create_subscription_request",{
+            p_plan:plan
+        });
+
+        if(error){
+            console.error("Subscription request error:",error);
+            alert("تعذر تسجيل طلب الاشتراك حاليًا. تأكد من تشغيل إعدادات طلبات الاشتراك الآمنة في Supabase ثم حاول مرة أخرى.");
+            return;
+        }
+
+        alert(`✅ تم تسجيل طلب ${cfg.name} بنجاح.\n\nالسعر: ${cfg.price.toLocaleString("ar-EG")} جنيه/شهر\nالحالة: في انتظار الدفع\n\nلن تتغير باقتك الحالية إلا بعد تأكيد الدفع.`);
+    }catch(err){
+        console.error(err);
+        alert("حدث خطأ أثناء تسجيل طلب الاشتراك. لم يتم تفعيل أي باقة مدفوعة.");
+    }
 }
 
 function openPlans(){
