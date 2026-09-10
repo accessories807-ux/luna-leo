@@ -1547,6 +1547,10 @@ border-color:#29231d
     font-size:13px;
     margin-top:8px;
 }
+.subscription-banner.expired .subscription-plan{
+    color:#ff8b8b;
+}
+
 @media(max-width:900px){
     .subscription-grid{grid-template-columns:1fr}
 }
@@ -2360,6 +2364,24 @@ class="dash-section"
 لوحة التحكم الخاصة بمتجرك الإلكتروني
 </p>
 
+</div>
+
+<div id="subscriptionBanner" class="subscription-banner">
+  <div class="subscription-grid">
+    <div>
+      <div class="subscription-label">💳 حالة الاشتراك</div>
+      <div id="subscriptionPlanName" class="subscription-plan">Trial</div>
+      <span id="subscriptionStatusBadge" class="plan-badge">جاري التحميل</span>
+    </div>
+    <div>
+      <div class="subscription-label">⏱️ المدة المتبقية</div>
+      <div id="subscriptionCountdown" class="subscription-countdown">جاري الحساب...</div>
+    </div>
+    <div class="subscription-actions">
+      <button class="gold-btn" onclick="openPlans()">تجديد / ترقية</button>
+    </div>
+  </div>
+  <div id="subscriptionNotice" class="pricing-note"></div>
 </div>
 
 
@@ -3543,15 +3565,28 @@ const FEATURE_PLAN = {
 ===================================================== */
 
 function normalizePlan(plan){
-    const p=String(plan||"trial").toLowerCase();
+    const p=String(plan||"trial").toLowerCase().trim();
     return PLAN_CONFIG[p] ? p : "trial";
+}
+
+function getSubscriptionEnd(sub=currentSubscription){
+    if(!sub) return null;
+    if(sub.is_lifetime === true || normalizePlan(sub.plan)==="lifetime") return null;
+
+    const plan=normalizePlan(sub.plan);
+    const raw=plan==="trial"
+        ? sub.trial_ends_at
+        : sub.subscription_ends_at;
+
+    return raw ? new Date(raw).getTime() : null;
 }
 
 function subscriptionIsActive(sub=currentSubscription){
     if(!sub) return false;
-    if(String(sub.plan).toLowerCase()==="lifetime") return true;
-    if(String(sub.status||"").toLowerCase()==="expired") return false;
-    return !!sub.end_date && new Date(sub.end_date).getTime() > Date.now();
+    if(sub.is_lifetime === true || normalizePlan(sub.plan)==="lifetime") return true;
+
+    const end=getSubscriptionEnd(sub);
+    return !!end && end > Date.now();
 }
 
 function hasFeature(feature){
@@ -3564,7 +3599,7 @@ function hasFeature(feature){
 
 function subscriptionStatusText(){
     if(!currentSubscription) return "غير مهيأ";
-    if(String(currentSubscription.plan).toLowerCase()==="lifetime") return "مدى الحياة";
+    if(currentSubscription.is_lifetime === true || normalizePlan(currentSubscription.plan)==="lifetime") return "مدى الحياة";
     return subscriptionIsActive() ? "نشط" : "انتهى الاشتراك";
 }
 
@@ -3582,101 +3617,85 @@ function renderSubscriptionUI(){
     const plan=normalizePlan(currentSubscription?.plan);
     const cfg=PLAN_CONFIG[plan];
     const active=subscriptionIsActive();
+
     const banner=document.getElementById("subscriptionBanner");
     const planEl=document.getElementById("subscriptionPlanName");
     const badge=document.getElementById("subscriptionStatusBadge");
     const countdown=document.getElementById("subscriptionCountdown");
     const notice=document.getElementById("subscriptionNotice");
-    if(!planEl) return;
+
+    if(!planEl || !badge || !countdown || !notice) return;
 
     planEl.textContent=cfg.name;
     badge.textContent=subscriptionStatusText();
-    banner.classList.toggle("expired",!active);
 
-    if(plan==="lifetime"){
+    if(banner) banner.classList.toggle("expired",!active);
+
+    const end=getSubscriptionEnd(currentSubscription);
+
+    if(currentSubscription?.is_lifetime === true || plan==="lifetime"){
         countdown.textContent="♾️ مدى الحياة";
         countdown.classList.remove("expired");
     }else{
-        const end=currentSubscription?.end_date ? new Date(currentSubscription.end_date).getTime() : 0;
-        countdown.textContent=formatRemaining(end-Date.now());
-        countdown.classList.toggle("expired",!active);
+        const remaining=(end || 0)-Date.now();
+        countdown.textContent=formatRemaining(remaining);
+        countdown.classList.toggle("expired",remaining<=0 || !active);
     }
 
     notice.textContent=active
         ? (plan==="trial"
             ? "أنت حاليًا في الفترة التجريبية المجانية لمدة 15 يومًا."
             : "اشتراكك نشط ويمكنك استخدام المميزات المتاحة لباقتك.")
-        : "⚠️ انتهى الاشتراك. المتجر العام والطلبات مستمران، بينما مميزات صاحب المتجر المدفوعة متوقفة حتى التجديد.";
+        : "⚠️ انتهى الاشتراك. بيانات متجرك لا يتم حذفها، ويتم إيقاف المميزات المقفولة حتى التجديد.";
 
     const badge2=document.getElementById("marwanPlanBadge");
     if(badge2) badge2.textContent=cfg.name;
 
-    const msEnd=currentSubscription?.end_date ? new Date(currentSubscription.end_date).getTime() : 0;
     if(subscriptionTimer) clearInterval(subscriptionTimer);
-    if(plan!=="lifetime"){
+
+    if(end){
         subscriptionTimer=setInterval(()=>{
             if(!currentSubscription) return;
-            if(Date.now()>=msEnd){
-                currentSubscription.status="expired";
-            }
             renderSubscriptionUI();
         },1000);
     }
+
     renderPlanCards();
     updateFeatureAccessUI();
 }
 
 async function loadSubscription(){
-    if(!currentStore || !currentUser) return;
+    if(!currentUser) return;
+
     const {data,error}=await supabaseClient
         .from("subscriptions")
         .select("*")
-        .eq("store_id",currentStore.id)
+        .eq("user_id",currentUser.id)
+        .order("created_at",{ascending:false})
+        .limit(1)
         .maybeSingle();
 
     if(error){
-        console.warn("Subscription table not ready:",error.message);
+        console.warn("Subscription load error:",error.message);
         currentSubscription=null;
         renderSubscriptionSetupWarning(error.message);
         return;
     }
 
     if(!data){
-        const start=new Date();
-        const end=new Date(start.getTime()+15*86400000);
-        const {data:created,error:createError}=await supabaseClient
-            .from("subscriptions")
-            .insert({
-                store_id:currentStore.id,
-                plan:"trial",
-                status:"active",
-                start_date:start.toISOString(),
-                end_date:end.toISOString(),
-                auto_renew:false
-            })
-            .select()
-            .single();
-        if(createError){
-            console.warn("Could not create Trial subscription:",createError.message);
-            currentSubscription=null;
-            renderSubscriptionSetupWarning(createError.message);
-            return;
-        }
-        currentSubscription=created;
-    }else{
-        currentSubscription=data;
-        if(currentSubscription.plan==="lifetime") currentSubscription.status="active";
-        else if(currentSubscription.end_date && new Date(currentSubscription.end_date)<=new Date()){
-            currentSubscription.status="expired";
-        }
+        currentSubscription=null;
+        renderSubscriptionSetupWarning("لا يوجد اشتراك مرتبط بهذا الحساب بعد.");
+        return;
     }
+
+    currentSubscription=data;
     renderSubscriptionUI();
 }
 
 function renderSubscriptionSetupWarning(message){
     const notice=document.getElementById("subscriptionNotice");
     if(notice){
-        notice.textContent="⚠️ لم يتم تفعيل جدول الاشتراكات في Supabase بعد. نفّذ ملف migration المرفق ثم أعد تحميل الصفحة.";
+        notice.textContent="⚠️ لا يوجد اشتراك مرتبط بالحساب حاليًا. إذا كان المتجر جديدًا، تأكد من تشغيل Trigger التجربة المجانية في Supabase.";
     }
     console.warn(message);
 }
@@ -3688,11 +3707,14 @@ function planOrder(plan){
 function renderPlanCards(){
     const box=document.getElementById("plansContainer");
     if(!box) return;
+
     const current=normalizePlan(currentSubscription?.plan);
     const plans=["trial","starter","growth","business"];
+
     box.innerHTML=plans.map(key=>{
         const p=PLAN_CONFIG[key];
-        const selected=current===key;
+        const selected=current===key && subscriptionIsActive();
+
         return `<div class="price-card ${selected?"featured":""}">
             <h3>${p.name}</h3>
             <div class="price">${p.price.toLocaleString("ar-EG")} <small>${p.price?"جنيه / شهر":"جنيه"}</small></div>
@@ -3702,8 +3724,10 @@ function renderPlanCards(){
                 <li>${p.admins===Infinity?"Admins غير محدود":`${p.admins} Admin`}</li>
                 <li>المتجر والبيانات لا يتم حذفها عند الانتهاء</li>
             </ul>
-            <button class="btn btn-primary" onclick="requestPlanChange('${key}')" ${selected?"disabled":""}>
-                ${selected?"الباقة الحالية":"اختيار الباقة"}
+            <button class="btn btn-primary"
+                onclick="requestPlanChange('${key}')"
+                ${selected?"disabled":""}>
+                ${selected?"الباقة الحالية":key==="trial"?"التجربة المجانية":"اختيار الباقة"}
             </button>
         </div>`;
     }).join("");
@@ -3714,13 +3738,19 @@ async function requestPlanChange(plan){
         alert("أنشئ متجرك أولًا.");
         return;
     }
+
     if(plan==="trial"){
         alert("الفترة التجريبية تُمنح تلقائيًا مرة واحدة عند إنشاء المتجر.");
         return;
     }
-    const ok=confirm(`اختيار ${PLAN_CONFIG[plan].name} بسعر ${PLAN_CONFIG[plan].price.toLocaleString("ar-EG")} جنيه/شهر.\nالدفع الإلكتروني غير مربوط حاليًا. هل تريد تجهيز الطلب للترقية؟`);
+
+    const cfg=PLAN_CONFIG[plan];
+    const ok=confirm(
+        `اختيار باقة ${cfg.name} بسعر ${cfg.price.toLocaleString("ar-EG")} جنيه/شهر.\n\nالدفع الإلكتروني غير مربوط حاليًا. سيتم تجهيز الباقة للربط مع بوابة الدفع لاحقًا.`
+    );
     if(!ok) return;
-    alert("تم تجهيز الباقة. ربط الدفع الإلكتروني سيتم في الخطوة التالية.");
+
+    alert("✅ تم اختيار الباقة. بعد ربط بوابة الدفع سيتم تفعيل الاشتراك تلقائيًا بعد تأكيد الدفع.");
 }
 
 function openPlans(){
@@ -3728,8 +3758,11 @@ function openPlans(){
         openRegister();
         return;
     }
+
     showDashboard();
-    showDashboardSection("subscription",document.querySelectorAll(".sidebar button")[6]);
+    const subscriptionButton=[...document.querySelectorAll(".sidebar button")]
+        .find(btn=>btn.textContent.includes("الاشتراك"));
+    showDashboardSection("subscription",subscriptionButton);
     renderPlanCards();
 }
 
@@ -3737,65 +3770,54 @@ function updateFeatureAccessUI(){
     const analyticsLock=document.getElementById("analyticsLock");
     if(analyticsLock){
         analyticsLock.textContent=hasFeature("analytics")
-            ?"التحليلات متاحة في باقة Growth وBusiness."
-            :"🔒 التحليلات متاحة بدايةً من Growth. قم بالترقية لفتحها.";
+            ? "التحليلات متاحة في باقة Growth وBusiness."
+            : "🔒 التحليلات متاحة بدايةً من Growth. قم بالترقية لفتحها.";
     }
+
     const marwanStatus=document.getElementById("marwanStatus");
     if(marwanStatus){
         const plan=normalizePlan(currentSubscription?.plan);
         marwanStatus.textContent=hasFeature("marwan")
-            ? (plan==="business"||plan==="lifetime"?"مروان AI غير محدود ومجهز للتوسع في الوظائف الذكية.":"مروان AI متاح في هذه الباقة.")
-            :"🔒 مروان AI غير متاح في Starter. الترقية إلى Growth تفتحه.";
+            ? (plan==="business"||plan==="lifetime"
+                ?"مروان AI غير محدود ومجهز للتوسع في الوظائف الذكية."
+                :"مروان AI متاح في هذه الباقة.")
+            :"🔒 مروان AI غير متاح في Starter أو بعد انتهاء الاشتراك. الترقية إلى Growth تفتحه.";
     }
+
     const team=document.getElementById("teamPlanInfo");
     if(team){
         const plan=normalizePlan(currentSubscription?.plan);
-        const admins=PLAN_CONFIG[plan].admins;
+        const admins=PLAN_CONFIG[plan]?.admins ?? 0;
         team.textContent=hasFeature("team")
             ? `حد إدارة الفريق: ${admins===Infinity?"غير محدود":admins+" Admin"}`
             :"🔒 إدارة الفريق متاحة بدايةً من Starter.";
     }
 }
 
-function enforceSubscriptionFor(feature, action){
+function enforceSubscriptionFor(feature){
     if(hasFeature(feature)) return true;
+
     const message=feature==="marwan"
         ?"مروان AI متاح بدايةً من Growth."
         :feature==="analytics"
         ?"التحليلات متاحة بدايةً من Growth."
+        :feature==="team"
+        ?"إدارة الفريق متاحة بدايةً من Starter."
         :"هذه الميزة غير متاحة في باقتك أو أن الاشتراك منتهٍ.";
+
     alert("🔒 "+message);
-    if(typeof action==="function") return false;
     openPlans();
     return false;
 }
 
 async function renewSubscription(plan="starter"){
     if(!currentStore) return;
-    const cfg=PLAN_CONFIG[plan];
-    const start=new Date();
-    const end=new Date(start.getTime()+cfg.durationDays*86400000);
-    const {data,error}=await supabaseClient
-        .from("subscriptions")
-        .update({
-            plan:plan,
-            status:"active",
-            start_date:start.toISOString(),
-            end_date:end.toISOString(),
-            auto_renew:false
-        })
-        .eq("store_id",currentStore.id)
-        .select()
-        .single();
-    if(error){
-        alert("❌ لم يتم التجديد. تأكد من تفعيل جدول subscriptions في Supabase.");
-        console.error(error);
+    if(!PLAN_CONFIG[plan] || plan==="trial" || plan==="lifetime"){
+        alert("اختيار الباقة غير صالح للتجديد.");
         return;
     }
-    currentSubscription=data;
-    renderSubscriptionUI();
+    alert("الدفع الإلكتروني غير مربوط حاليًا. عند ربط البوابة سيتم تنفيذ التجديد بعد تأكيد الدفع.");
 }
-
 
 /* =====================================================
    GENERAL
@@ -4650,60 +4672,40 @@ function showDashboardSection(
     section,
     button
 ){
+    const requiredFeature={
+        products:"products",
+        orders:"orders",
+        customers:"customers",
+        analytics:"analytics",
+        marwan:"marwan",
+        team:"team"
+    }[section];
+
+    if(requiredFeature && !enforceSubscriptionFor(requiredFeature)){
+        return;
+    }
 
     document
-    .querySelectorAll(
-        ".dash-section"
-    )
+    .querySelectorAll(".dash-section")
     .forEach(el=>{
-
-        el.style.display =
-            "none";
-
+        el.style.display="none";
     });
 
+    const id="dash"+section.charAt(0).toUpperCase()+section.slice(1);
+    const target=document.getElementById(id);
 
-    const id =
-        "dash" +
-        section.charAt(0).toUpperCase() +
-        section.slice(1);
-
-
-    const target =
-        document.getElementById(id);
-
-
-    if(target){
-
-        target.style.display =
-            "block";
-
-    }
-
+    if(target) target.style.display="block";
 
     document
-    .querySelectorAll(
-        ".sidebar button"
-    )
-    .forEach(btn=>{
+    .querySelectorAll(".sidebar button")
+    .forEach(btn=>btn.classList.remove("active"));
 
-        btn.classList.remove(
-            "active"
-        );
+    if(button) button.classList.add("active");
 
-    });
-
-
-    if(button){
-
-        button.classList.add(
-            "active"
-        );
-
+    if(section==="analytics" && hasFeature("analytics")){
+        renderAnalyticsFromDashboard();
     }
-
 }
-
 
 /* =====================================================
    SESSION
@@ -5132,14 +5134,30 @@ async function loadDashboardData(){
 
     if(!currentStore)return;
 
-    await loadProducts();
+    await loadSubscription();
 
-    await loadOrders();
+    if(subscriptionIsActive()){
+        await loadProducts();
+        await loadOrders();
+        await loadCustomers();
+    }else{
+        dashboardProducts=[];
+        dashboardOrdersCount=0;
+        window.__dashboardSales=0;
+        window.__dashboardCustomersCount=0;
 
-    await loadCustomers();
+        const productsBox=document.getElementById("productsContainer");
+        if(productsBox) productsBox.innerHTML='<div class="empty"><div class="empty-icon">🔒</div>انتهى الاشتراك. جدّد الاشتراك لاستعادة إدارة المنتجات.</div>';
+
+        const ordersBox=document.getElementById("ordersContainer");
+        if(ordersBox) ordersBox.innerHTML='<div class="empty"><div class="empty-icon">🔒</div>انتهى الاشتراك. جدّد الاشتراك لعرض الطلبات المتراكمة.</div>';
+
+        const customersBox=document.getElementById("customersContainer");
+        if(customersBox) customersBox.innerHTML='<div class="empty"><div class="empty-icon">🔒</div>انتهى الاشتراك. جدّد الاشتراك لعرض العملاء.</div>';
+    }
+
     renderAnalyticsFromDashboard();
     renderSubscriptionUI();
-
 }
 
 
@@ -5597,6 +5615,9 @@ async function loadProducts(){
 function openProductForm(){
 
     if(!enforceSubscriptionFor("products")) return;
+
+
+    if(!enforceSubscriptionFor("products")) return;
     const form =
         document.getElementById(
             "productForm"
@@ -5912,6 +5933,8 @@ function clearProductForm(){
 ===================================================== */
 
 async function saveProduct(){
+
+    if(!enforceSubscriptionFor("products")) return;
 
     if(!currentUser){
 
@@ -6319,6 +6342,8 @@ async function deleteProduct(id){
 ===================================================== */
 
 async function loadOrders(){
+
+    if(!enforceSubscriptionFor("orders")) return;
 
     if(!currentStore) return;
 
@@ -7205,6 +7230,8 @@ async function loadOrders(){
 
 async function updateOrderStatus(orderId,newStatus){
 
+    if(!enforceSubscriptionFor("orders")) return;
+
     if(!currentStore) return;
 
     const {error} =
@@ -7238,6 +7265,8 @@ async function updateOrderStatus(orderId,newStatus){
 ===================================================== */
 
 async function printOrderInvoice(orderId){
+
+    if(!enforceSubscriptionFor("orders")) return;
 
     if(!currentStore){
 
@@ -7926,6 +7955,8 @@ footer{
 ===================================================== */
 
 async function loadCustomers(){
+
+    if(!enforceSubscriptionFor("customers")) return;
 
     if(!currentStore) return;
 
