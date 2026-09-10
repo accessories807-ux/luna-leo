@@ -4649,7 +4649,43 @@ async function checkSubscription(){
 
     return false;
 }
+/* =====================================================
+   SESSION
+===================================================== */
 
+async function checkUserSession(){
+
+    const {
+        data
+    } = await supabaseClient.auth.getSession();
+
+
+    if(
+        data &&
+        data.session
+    ){
+
+        currentUser =
+            data.session.user;
+
+
+        await checkSubscription();
+
+
+        showDashboard();
+
+        updateUserInfo();
+
+        await loadUserStore();
+
+
+    }else{
+
+        showLanding();
+
+    }
+
+    }
 
 /* =====================================================
    STORE
