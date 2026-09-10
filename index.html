@@ -4103,7 +4103,6 @@ async function registerUser(){
 
 
 
-
 /* =====================================================
    LOGIN
 ===================================================== */
@@ -4157,9 +4156,9 @@ async function loginUser(){
         await supabaseClient.auth
             .signInWithPassword({
 
-                email:email,
+                email: email,
 
-                password:password
+                password: password
 
             });
 
@@ -4172,44 +4171,48 @@ async function loginUser(){
 
 
         currentUser =
-    data.user;
+            data.user;
 
 
-// فحص الاشتراك
-const subscriptionActive =
-    await checkSubscription();
-
-if(!subscriptionActive){
-
-    closeAuth();
-
-    document
-        .getElementById("pricing")
-        ?.scrollIntoView({
-            behavior: "smooth"
-        });
-
-    return;
-    }
-
-}
+        // فحص الاشتراك
+        const subscriptionActive =
+            await checkSubscription();
 
 
-message.textContent =
-    "🎉 تم تسجيل الدخول بنجاح!";
+        if(!subscriptionActive){
+
+            closeAuth();
+
+            document
+                .getElementById("pricing")
+                ?.scrollIntoView({
+                    behavior: "smooth"
+                });
+
+            button.disabled = false;
+
+            button.textContent =
+                "تسجيل الدخول";
+
+            return;
+        }
 
 
-setTimeout(async()=>{
+        message.textContent =
+            "🎉 تم تسجيل الدخول بنجاح!";
 
-    closeAuth();
 
-    showDashboard();
+        setTimeout(async()=>{
 
-    updateUserInfo();
+            closeAuth();
 
-    await loadUserStore();
+            showDashboard();
 
-},500);
+            updateUserInfo();
+
+            await loadUserStore();
+
+        },500);
 
 
     }catch(error){
@@ -4231,8 +4234,10 @@ setTimeout(async()=>{
     button.textContent =
         "تسجيل الدخول";
 
-}
+    }
+            
 
+    
 
 /* =====================================================
    GOOGLE
