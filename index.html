@@ -4720,18 +4720,7 @@ async function checkSubscription(){
    SESSION
 ===================================================== */
 
-/* =====================================================
-   SESSION
-===================================================== */
-
-
-
-    if(!currentUser){
-        return false;
-    }
-
-    console.log("SUBSCRIPTION CHECK START");
-    console.log("CURRENT USER:", currentUser.id);
+async function checkUserSession(){
 
     const {
         data,
