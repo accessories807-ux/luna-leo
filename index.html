@@ -1730,28 +1730,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ll-gold)!important;bo
 .ll-discount-badge{position:absolute;top:12px;right:12px;z-index:4;background:var(--ll-gold);color:#fff;font-weight:700;font-size:12px;padding:6px 10px;border-radius:999px;box-shadow:0 6px 14px rgba(184,148,69,.24)}
 @media(max-width:768px){.card,.panel,.modal-content,.dashboard-card,.stat-card,.product-card,.order-card,.customer-card,.settings-card{border-radius:14px!important}.ll-discount-badge{top:8px;right:8px;font-size:11px}}
 </style>
-
-<style id="ll-v2-premium">
-:root{--ll-gold:#c6a15b;--ll-gold2:#e8d09a;--ll-ink:#111318;--ll-muted:#6b7280;--ll-line:#e9e5dc;--ll-bg:#f8f8f6;--ll-card:#fff;--ll-green:#16845a;--ll-red:#c63c3c;--ll-blue:#2f6fed;}
-body{background:var(--ll-bg)!important;color:var(--ll-ink)!important}
-#dashboardApp{background:linear-gradient(180deg,#fbfbf9 0%,#f5f5f2 100%);min-height:100vh}
-.dash-header{background:rgba(255,255,255,.9)!important;border-bottom:1px solid var(--ll-line)!important;backdrop-filter:blur(16px)}
-.dash-logo{letter-spacing:1.5px}.dash-logo span{color:var(--ll-gold)!important}
-.sidebar{background:#fff!important;border-left:1px solid var(--ll-line)!important;box-shadow:0 10px 35px rgba(17,19,24,.04)}
-.sidebar button{border-radius:14px!important;transition:.22s ease!important}.sidebar button:hover{transform:translateX(-3px);background:#faf7ef!important}.sidebar button.active{background:linear-gradient(135deg,#17181c,#2a2b30)!important;color:#fff!important;box-shadow:0 10px 24px rgba(17,19,24,.12)}
-.dash-content{padding-bottom:60px}.dash-welcome{position:relative;overflow:hidden;border:1px solid var(--ll-line)!important;background:linear-gradient(135deg,#fff 0%,#fbf7ed 100%)!important;box-shadow:0 20px 50px rgba(17,19,24,.05)!important}
-.dash-welcome:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#e9d39d55 0%,transparent 70%);left:-60px;top:-90px;animation:llPulse 5s ease-in-out infinite}
-.stat-card,.card,.panel,.subscription-banner{border:1px solid var(--ll-line)!important;background:#fff!important;box-shadow:0 12px 32px rgba(17,19,24,.045)!important;border-radius:20px!important}
-.stat-card{transition:.25s ease}.stat-card:hover{transform:translateY(-5px);box-shadow:0 18px 42px rgba(17,19,24,.09)!important}
-.gold-btn,.primary-btn,button{transition:transform .2s ease,box-shadow .2s ease}.gold-btn:hover,.primary-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(198,161,91,.22)}
-.ll-v2-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:18px 0}.ll-v2-card{background:#fff;border:1px solid var(--ll-line);border-radius:20px;padding:18px;box-shadow:0 12px 30px rgba(17,19,24,.045);position:relative;overflow:hidden}.ll-v2-card:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,#c6a15b10);pointer-events:none}.ll-v2-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#f8f2e4;font-size:21px;margin-bottom:12px}.ll-v2-card h3{margin:0 0 7px;font-size:15px}.ll-v2-card p{margin:0;color:var(--ll-muted);font-size:13px;line-height:1.6}.ll-v2-chip{display:inline-flex;padding:6px 9px;border-radius:999px;background:#f5f5f2;color:#4b5563;font-size:11px;margin-top:12px}.ll-v2-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.ll-v2-actions button{border:1px solid var(--ll-line);background:#fff;border-radius:12px;padding:9px 12px;font-weight:700;cursor:pointer}.ll-v2-actions .gold{background:#17181c;color:#fff;border-color:#17181c}.ll-feature-panel{margin-top:18px;padding:22px;border-radius:22px;border:1px solid var(--ll-line);background:#fff;box-shadow:0 14px 36px rgba(17,19,24,.05)}.ll-panel-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:16px}.ll-panel-head h2{margin:0;font-size:18px}.ll-panel-head p{margin:4px 0 0;color:var(--ll-muted);font-size:12px}.ll-table{width:100%;border-collapse:separate;border-spacing:0 8px}.ll-table th{font-size:11px;color:#8a8f98;text-align:right;padding:0 12px 6px}.ll-table td{background:#fbfbf9;padding:12px;font-size:13px;border-top:1px solid #efeee9;border-bottom:1px solid #efeee9}.ll-table td:first-child{border-right:1px solid #efeee9;border-radius:0 12px 12px 0}.ll-table td:last-child{border-left:1px solid #efeee9;border-radius:12px 0 0 12px}.ll-status{display:inline-flex;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:800}.ll-status.green{background:#e8f7f0;color:#14734f}.ll-status.orange{background:#fff3df;color:#9a6411}.ll-status.red{background:#fdecec;color:#a52d2d}.ll-status.blue{background:#eaf1ff;color:#285fc4}
-.ll-product-visual{height:210px;border-radius:18px;background:linear-gradient(145deg,#fafafa,#eeeae1);display:grid;place-items:center;position:relative;overflow:hidden}.ll-product-visual:before,.ll-product-visual:after{content:"";position:absolute;border-radius:50%;border:1px solid #c6a15b55;animation:llOrbit 8s linear infinite}.ll-product-visual:before{width:180px;height:180px}.ll-product-visual:after{width:120px;height:120px;animation-duration:5s;animation-direction:reverse}.ll-product-emoji{font-size:72px;filter:drop-shadow(0 16px 14px #0002);animation:llFloat 3.8s ease-in-out infinite}.ll-discount{position:absolute;top:12px;right:12px;background:#17181c;color:#fff;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:800;z-index:2}.ll-store-cover{height:220px;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,#15161a,#3b3425);position:relative}.ll-store-cover:before{content:"";position:absolute;inset:-30%;background:conic-gradient(from 0deg,transparent,#c6a15b33,transparent 30%);animation:llSpin 10s linear infinite}.ll-store-brand{position:absolute;inset:0;display:grid;place-items:center;color:#fff;text-align:center}.ll-store-brand strong{font-size:34px;letter-spacing:3px}.ll-store-brand small{display:block;color:#e8d09a;margin-top:6px}.ll-live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#27b879;box-shadow:0 0 0 0 #27b87966;animation:llPing 1.8s infinite;margin-left:6px}.ll-kpi{font-size:25px;font-weight:900}.ll-progress{height:8px;background:#efeee9;border-radius:99px;overflow:hidden;margin-top:10px}.ll-progress span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#c6a15b,#e8d09a);width:72%;animation:llShimmer 2.4s infinite}
-.ll-marwan{background:linear-gradient(135deg,#111318,#24252b);color:#fff}.ll-marwan p{color:#c9cbd0}.ll-marwan .ll-v2-icon{background:#ffffff12}.ll-modal-v2{position:fixed;inset:0;background:#11131899;backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;z-index:9999;padding:18px}.ll-modal-v2.open{display:flex}.ll-modal-box{width:min(560px,100%);background:#fff;border-radius:24px;padding:22px;box-shadow:0 30px 80px #0003;animation:llModal .25s ease}.ll-modal-box input,.ll-modal-box select{width:100%;padding:12px;border:1px solid #dedbd2;border-radius:12px;margin-top:6px;box-sizing:border-box}.ll-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ll-label{font-size:12px;font-weight:800;color:#4b5563;margin-top:12px;display:block}.ll-close{float:left;border:0;background:#f3f2ee;border-radius:10px;padding:7px 10px;cursor:pointer}
-@keyframes llFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-13px) rotate(2deg)}}@keyframes llOrbit{to{transform:rotate(360deg)}}@keyframes llSpin{to{transform:rotate(360deg)}}@keyframes llPulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.15);opacity:1}}@keyframes llPing{70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}@keyframes llShimmer{0%{transform:translateX(-120%);opacity:.5}50%{transform:translateX(0);opacity:1}100%{transform:translateX(120%);opacity:.5}}@keyframes llModal{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
-@media(max-width:900px){.ll-v2-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ll-form-row{grid-template-columns:1fr}.ll-store-cover{height:180px}}
-@media(max-width:560px){.ll-v2-grid{grid-template-columns:1fr}.ll-feature-panel{padding:15px}.ll-panel-head{align-items:flex-start;flex-direction:column}.ll-table{font-size:12px}.ll-table th:nth-child(3),.ll-table td:nth-child(3){display:none}}
-</style>
-</head>
+<style id="luna-v2-redesign">:root{--g:#b98a38;--gs:#f4ead7;--ink:#111318;--muted:#707681;--line:#e7e8eb;--bg:#f7f7f5;--card:#fff;--sh:0 20px 65px rgba(17,19,24,.08)}html{scroll-behavior:smooth}body{background:var(--bg)!important;color:var(--ink)!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif!important}body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(900px 500px at 85% -10%,rgba(185,138,56,.12),transparent 60%),radial-gradient(700px 450px at -10% 35%,rgba(17,19,24,.025),transparent 65%)}.navbar{background:rgba(255,255,255,.9)!important;border-bottom:1px solid var(--line)!important;box-shadow:0 8px 35px rgba(17,19,24,.04)!important;backdrop-filter:blur(18px)}.navbar a,.nav-link{color:#22252b!important;font-weight:800!important}.navbar a:hover,.nav-link:hover{color:var(--g)!important}.hero{background:linear-gradient(135deg,#fff 0%,#faf9f6 58%,#f3eee4 100%)!important;min-height:640px!important;overflow:hidden!important}.hero:after{content:"";position:absolute;width:620px;height:620px;border:1px solid rgba(185,138,56,.18);border-radius:50%;left:-260px;bottom:-380px;box-shadow:0 0 0 85px rgba(185,138,56,.025),0 0 0 170px rgba(185,138,56,.014);pointer-events:none}.hero-text h1{font-weight:950!important;letter-spacing:-2.5px!important;line-height:1.08!important}.hero-text p{color:var(--muted)!important;line-height:1.9!important}.btn,.btn-primary,.btn-login,.auth-submit,button{border-radius:14px!important;transition:transform .2s ease,box-shadow .2s ease,background .2s ease!important}.btn:hover,.btn-primary:hover,.btn-login:hover,.auth-submit:hover,button:hover{transform:translateY(-2px)!important}.card,.feature-card,.pricing-card,.product-card,.panel,.stat-card,.dashboard-card,.auth-box{background:rgba(255,255,255,.97)!important;border:1px solid var(--line)!important;border-radius:24px!important;box-shadow:var(--sh)!important}.card:hover,.feature-card:hover,.pricing-card:hover,.product-card:hover{transform:translateY(-5px);box-shadow:0 28px 75px rgba(17,19,24,.12)!important}.sidebar{background:rgba(255,255,255,.95)!important;border-left:1px solid var(--line)!important;box-shadow:10px 0 40px rgba(17,19,24,.045)!important;backdrop-filter:blur(18px)}.sidebar button,.sidebar a{border-radius:13px!important;color:#4a4e57!important;font-weight:800!important}.sidebar button.active,.sidebar button:hover,.sidebar a:hover{background:var(--gs)!important;color:#815e24!important}input,select,textarea{background:#fff!important;color:#17191e!important;border:1px solid #dfe1e5!important;border-radius:13px!important;box-shadow:none!important}input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--g)!important;box-shadow:0 0 0 4px rgba(185,138,56,.13)!important}.auth-modal{background:rgba(9,10,13,.55)!important;backdrop-filter:blur(11px)}.auth-box{max-width:470px!important;padding:36px!important}.auth-logo{font-weight:950!important;letter-spacing:2px!important}.auth-submit{background:linear-gradient(135deg,#15161a,#303238)!important;color:#fff!important;border:0!important;box-shadow:0 13px 32px rgba(17,19,24,.20)!important}.badge,.discount-badge,.ll-discount-badge{background:#17181c!important;color:#fff!important;border-radius:999px!important;padding:7px 11px!important;font-weight:900!important}.product-card img,.hero img{transition:transform .55s ease,filter .55s ease}.product-card:hover img{transform:scale(1.045)}@keyframes llReveal{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}.hero-grid>*{animation:llReveal .65s ease both}.hero-grid>*:last-child{animation-delay:.1s}@media(max-width:900px){.hero{min-height:auto!important;padding-top:45px!important}.hero-grid{grid-template-columns:1fr!important;gap:28px!important}.auth-box{width:calc(100% - 24px)!important;margin:12px!important;padding:26px!important}}</style></head>
 
 <body>
 
@@ -2353,22 +2332,6 @@ onclick="showDashboardSection('home',this)"
 📦 المنتجات
 </button>
 
-<button onclick="showDashboardSection('inventory',this)">
-📦 المخزون
-</button>
-
-<button onclick="showDashboardSection('marketing',this)">
-🎯 التسويق والعروض
-</button>
-
-<button onclick="showDashboardSection('shipping',this)">
-🚚 الشحن والتوصيل
-</button>
-
-<button onclick="showDashboardSection('returns',this)">
-🔄 المرتجعات
-</button>
-
 <button onclick="showDashboardSection('orders',this)">
 🛒 الطلبات
 </button>
@@ -2421,8 +2384,6 @@ class="dash-section"
 </p>
 
 </div>
-
-<div class="ll-v2-grid" style="margin-top:18px"><div class="ll-v2-card"><div class="ll-v2-icon">✨</div><h3>نسخة V2 الاحترافية</h3><p>واجهة تشغيل جديدة، أدوات تسويق، مخزون، شحن ومرتجعات.</p><div class="ll-v2-actions"><button class="gold" onclick="showDashboardSection('homeTools',this);document.getElementById('dashV2Tools').style.display='block'">استكشف الأدوات</button></div></div><div class="ll-v2-card"><div class="ll-v2-icon">🎨</div><h3>صور وحركة</h3><p>عناصر مرئية متحركة وMicro-interactions تعطي المتجر إحساس براند فاخر.</p><span class="ll-v2-chip">خفيفة على الموبايل</span></div><div class="ll-v2-card"><div class="ll-v2-icon">📈</div><h3>نمو المبيعات</h3><p>لوحة جاهزة لتوسيع التقارير وتحليلات العملاء وأفضل المنتجات.</p></div><div class="ll-v2-card"><div class="ll-v2-icon">🔐</div><h3>أمان</h3><p>عمليات الاشتراك والدفع الحساسة تظل على السيرفر وSupabase.</p></div></div>
 
 <div id="subscriptionBanner" class="subscription-banner">
   <div class="subscription-grid">
@@ -2827,11 +2788,7 @@ placeholder="اسم المنتج"
 id="productPrice"
 type="number"
 min="0"
-placeholder="سعر البيع بعد الخصم"
-
->
-
-<input id="productComparePrice" type="number" min="0" placeholder="السعر قبل الخصم (اختياري)">
+placeholder="السعر"
 >
 
 <input
@@ -2839,10 +2796,6 @@ id="productStock"
 type="number"
 min="0"
 placeholder="المخزون"
-
->
-
-<input id="productLowStock" type="number" min="0" value="5" placeholder="حد التنبيه للمخزون">
 >
 
 <input
@@ -3008,37 +2961,6 @@ class="empty"
 
 
 <!-- SUBSCRIPTION -->
-
-
-<!-- V2 COMMAND CENTER -->
-<section id="dashV2Tools" class="dash-section" style="display:none">
-<div class="ll-feature-panel">
-  <div class="ll-panel-head"><div><h2>مركز تشغيل المتجر <span class="ll-live-dot"></span></h2><p>كل أدوات البيع والتشغيل في مكان واحد</p></div><span class="ll-v2-chip">LUNA&LEO MARKET V2</span></div>
-  <div class="ll-v2-grid">
-    <div class="ll-v2-card"><div class="ll-v2-icon">📦</div><h3>المخزون الذكي</h3><p>الكميات، الحد الأدنى، والتنبيه قبل نفاد المنتج.</p><div class="ll-progress"><span></span></div><div class="ll-v2-actions"><button class="gold" onclick="showDashboardSection('inventory')">فتح المخزون</button></div></div>
-    <div class="ll-v2-card"><div class="ll-v2-icon">🎟️</div><h3>الكوبونات والعروض</h3><p>أنشئ كود خصم وحدد قيمته وحالته بسهولة.</p><span class="ll-v2-chip">خصم تلقائي عند الدفع</span><div class="ll-v2-actions"><button class="gold" onclick="llOpenModal('couponModal')">إنشاء كوبون</button></div></div>
-    <div class="ll-v2-card"><div class="ll-v2-icon">🚚</div><h3>الشحن</h3><p>طرق شحن متعددة وتكلفة حسب المحافظة والمدينة.</p><span class="ll-v2-chip">شحن مجاني فوق حد معين</span><div class="ll-v2-actions"><button class="gold" onclick="showDashboardSection('shipping')">إدارة الشحن</button></div></div>
-    <div class="ll-v2-card ll-marwan"><div class="ll-v2-icon">🤖</div><h3>مروان AI</h3><p>مساعد ذكي لتحليل المبيعات والعملاء والمنتجات.</p><span class="ll-v2-chip">متاح حسب الباقة</span><div class="ll-v2-actions"><button class="gold" onclick="showDashboardSection('marwan')">فتح مروان</button></div></div>
-  </div>
-</div>
-<div class="ll-feature-panel"><div class="ll-panel-head"><div><h2>طلبات اليوم</h2><p>تدفق الطلب من الجديد حتى التسليم</p></div></div>
-<table class="ll-table"><thead><tr><th>الطلب</th><th>العميل</th><th>القيمة</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody>
-<tr><td>#1024</td><td>عميل جديد</td><td>650 ج</td><td><span class="ll-status orange">جديد</span></td><td><button onclick="llDemoStatus(this)" class="ll-v2-actions">تأكيد</button></td></tr>
-<tr><td>#1023</td><td>محمد</td><td>1,250 ج</td><td><span class="ll-status blue">جاري الشحن</span></td><td><button onclick="llDemoStatus(this)" class="ll-v2-actions">تحديث</button></td></tr>
-<tr><td>#1022</td><td>سارة</td><td>450 ج</td><td><span class="ll-status green">تم التسليم</span></td><td><button onclick="llArchiveRow(this)" class="ll-v2-actions">أرشفة</button></td></tr>
-</tbody></table></div>
-<div class="ll-feature-panel"><div class="ll-panel-head"><div><h2>واجهة المتجر</h2><p>معاينة هوية المتجر قبل ظهورها للعملاء</p></div><button class="gold-btn" onclick="llOpenModal('storeVisualModal')">تعديل الهوية</button></div><div class="ll-store-cover"><div class="ll-store-brand"><div><strong id="llStorePreviewName">LUNA&LEO</strong><small>متجر إلكتروني احترافي</small></div></div></div></div>
-</section>
-
-<section id="dashInventoryV2" class="dash-section" style="display:none"><div class="ll-feature-panel"><div class="ll-panel-head"><div><h2>📦 المخزون الذكي</h2><p>متابعة الكميات والتنبيهات بسرعة</p></div><span class="ll-status orange">تنبيه المخزون مفعل</span></div><div class="ll-v2-grid"><div class="ll-v2-card"><div class="ll-v2-icon">📦</div><div class="ll-kpi">128</div><p>إجمالي الوحدات</p></div><div class="ll-v2-card"><div class="ll-v2-icon">⚠️</div><div class="ll-kpi">7</div><p>منتجات منخفضة</p></div><div class="ll-v2-card"><div class="ll-v2-icon">🚫</div><div class="ll-kpi">2</div><p>نفد من المخزون</p></div><div class="ll-v2-card"><div class="ll-v2-icon">📈</div><div class="ll-kpi">24</div><p>وحدة مباعة اليوم</p></div></div><table class="ll-table"><thead><tr><th>المنتج</th><th>المتاح</th><th>حد التنبيه</th><th>الحالة</th></tr></thead><tbody><tr><td>ساعة LUNA</td><td>3</td><td>5</td><td><span class="ll-status orange">منخفض</span></td></tr><tr><td>محفظة جلد</td><td>0</td><td>3</td><td><span class="ll-status red">نفد</span></td></tr><tr><td>سلسلة فضية</td><td>24</td><td>5</td><td><span class="ll-status green">متوفر</span></td></tr></tbody></table></div></section>
-
-<section id="dashMarketingV2" class="dash-section" style="display:none"><div class="ll-feature-panel"><div class="ll-panel-head"><div><h2>🎯 التسويق والعروض</h2><p>خصومات، كوبونات، عروض مؤقتة وبانرات</p></div><button class="gold-btn" onclick="llOpenModal('couponModal')">+ كوبون جديد</button></div><div class="ll-v2-grid"><div class="ll-v2-card"><div class="ll-v2-icon">🎟️</div><h3>كوبونات</h3><p>كود خصم مع تفعيل وإيقاف وتحديد القيمة.</p></div><div class="ll-v2-card"><div class="ll-v2-icon">⚡</div><h3>Flash Sale</h3><p>عروض مؤقتة مع عداد تنازلي للعملاء.</p></div><div class="ll-v2-card"><div class="ll-v2-icon">🏷️</div><h3>خصم تلقائي</h3><p>حساب نسبة الخصم وإظهار شارة «خصم %» على الصورة.</p></div><div class="ll-v2-card"><div class="ll-v2-icon">🖼️</div><h3>البانرات</h3><p>واجهة مرئية متحركة لعرض أقوى المنتجات.</p></div></div></div></section>
-
-<section id="dashShippingV2" class="dash-section" style="display:none"><div class="ll-feature-panel"><div class="ll-panel-head"><div><h2>🚚 الشحن والتوصيل</h2><p>إعداد طرق الشحن والتكلفة حسب المنطقة</p></div><button class="gold-btn" onclick="llToast('تم فتح إعدادات الشحن')">إضافة طريقة</button></div><table class="ll-table"><thead><tr><th>الطريقة</th><th>المناطق</th><th>التكلفة</th><th>مجاني فوق</th><th>الحالة</th></tr></thead><tbody><tr><td>توصيل عادي</td><td>القاهرة والجيزة</td><td>60 ج</td><td>800 ج</td><td><span class="ll-status green">مفعل</span></td></tr><tr><td>توصيل سريع</td><td>القاهرة</td><td>90 ج</td><td>1,200 ج</td><td><span class="ll-status green">مفعل</span></td></tr></tbody></table></div></section>
-
-<section id="dashReturnsV2" class="dash-section" style="display:none"><div class="ll-feature-panel"><div class="ll-panel-head"><div><h2>🔄 المرتجعات والاستبدال</h2><p>طلبات الإرجاع والاستبدال ومتابعة حالتها</p></div></div><table class="ll-table"><thead><tr><th>الطلب</th><th>العميل</th><th>النوع</th><th>السبب</th><th>الحالة</th></tr></thead><tbody><tr><td>#1017</td><td>أحمد</td><td>استبدال</td><td>مقاس</td><td><span class="ll-status orange">قيد المراجعة</span></td></tr><tr><td>#1009</td><td>نور</td><td>إرجاع</td><td>غير مناسب</td><td><span class="ll-status blue">تم الاستلام</span></td></tr></tbody></table></div></section>
-
-<section id="dashToolsLauncher" class="dash-section" style="display:none"></section>
 
 <section id="dashSubscription" class="dash-section" style="display:none">
 <div class="panel">
@@ -6236,10 +6158,6 @@ async function saveProduct(){
 
             stock:stock,
 
-            compare_price:Number(document.getElementById("productComparePrice")?.value || 0),
-
-            low_stock_threshold:Number(document.getElementById("productLowStock")?.value || 5),
-
             image_url:image_url,
 
             description:description
@@ -8041,34 +7959,6 @@ footer{
 }
 </style>
 
-
-<div id="couponModal" class="ll-modal-v2"><div class="ll-modal-box"><button class="ll-close" onclick="llCloseModal('couponModal')">✕</button><h2>إنشاء كوبون خصم</h2><p style="color:#6b7280;font-size:13px">الكوبون محفوظ محليًا في نسخة الواجهة ويمكن ربطه لاحقًا بجدول Supabase.</p><label class="ll-label">كود الخصم<input id="llCouponCode" placeholder="LUNA20"></label><label class="ll-label">قيمة الخصم %<input id="llCouponValue" type="number" min="1" max="100" placeholder="20"></label><div class="ll-v2-actions"><button class="gold-btn" onclick="llSaveCoupon()">حفظ الكوبون</button><button onclick="llCloseModal('couponModal')">إلغاء</button></div></div></div>
-<div id="storeVisualModal" class="ll-modal-v2"><div class="ll-modal-box"><button class="ll-close" onclick="llCloseModal('storeVisualModal')">✕</button><h2>هوية المتجر</h2><label class="ll-label">اسم المتجر<input id="llStoreNameInput" placeholder="اكتب اسم متجرك"></label><div class="ll-v2-actions"><button class="gold-btn" onclick="llSaveStoreVisual()">حفظ</button><button onclick="llCloseModal('storeVisualModal')">إلغاء</button></div></div></div>
-
-<div id="v2RealToast" style="position:fixed;bottom:22px;left:22px;z-index:99999;display:none;background:#17181c;color:#fff;padding:12px 16px;border-radius:14px;box-shadow:0 18px 50px #0002;font-weight:800"></div>
-<div id="v2CouponRealModal" class="ll-modal-v2"><div class="ll-modal-box"><button class="ll-close" onclick="v2Close('v2CouponRealModal')">✕</button><h2>🎟️ كوبون جديد</h2><input id="v2CouponCode" placeholder="LUNA20"><select id="v2CouponType"><option value="percent">نسبة %</option><option value="fixed">مبلغ ثابت</option></select><input id="v2CouponValue" type="number" min="1" placeholder="قيمة الخصم"><input id="v2CouponMin" type="number" min="0" placeholder="الحد الأدنى للطلب"><button class="gold-btn" onclick="v2SaveCoupon()">حفظ الكوبون</button></div></div>
-<script id="v2-real-js">
-(function(){
-const money=n=>Number(n||0).toLocaleString('ar-EG')+' ج';
-const toast=m=>{const e=document.getElementById('v2RealToast');e.textContent=m;e.style.display='block';clearTimeout(window.__v2t);window.__v2t=setTimeout(()=>e.style.display='none',2400)};
-window.v2Toast=toast; window.v2Close=id=>{const e=document.getElementById(id);if(e)e.classList.remove('open')};
-window.v2OpenCoupon=()=>document.getElementById('v2CouponRealModal')?.classList.add('open');
-window.v2SaveCoupon=async()=>{if(!window.currentStore)return toast('أنشئ المتجر أولًا');const code=document.getElementById('v2CouponCode').value.trim().toUpperCase();const type=document.getElementById('v2CouponType').value;const value=+document.getElementById('v2CouponValue').value;const min=+document.getElementById('v2CouponMin').value||0;if(!code||value<=0)return toast('أدخل بيانات الكوبون');const {error}=await window.supabaseClient.from('coupons').insert({store_id:window.currentStore.id,code,discount_type:type,discount_value:value,min_order:min,enabled:true});if(error)return toast('خطأ: '+error.message);v2Close('v2CouponRealModal');toast('تم حفظ الكوبون في Supabase');await v2LoadMarketing()};
-window.v2LoadMarketing=async()=>{if(!window.currentStore)return;const [{data:c},{data:f},{data:b}]=await Promise.all([supabaseClient.from('coupons').select('*').eq('store_id',currentStore.id).order('created_at',{ascending:false}),supabaseClient.from('flash_sales').select('*').eq('store_id',currentStore.id).order('ends_at',{ascending:true}),supabaseClient.from('store_banners').select('*').eq('store_id',currentStore.id).order('sort_order')]);const box=document.querySelector('#dashMarketingV2 .ll-feature-panel');if(!box)return;box.innerHTML='<div class="ll-panel-head"><div><h2>🎯 التسويق والعروض</h2><p>بيانات حقيقية من Supabase</p></div><button class="gold-btn" onclick="v2OpenCoupon()">+ كوبون</button></div>'+`<div class="ll-v2-grid"><div class="ll-v2-card"><div class="ll-v2-icon">🎟️</div><div class="ll-kpi">${c?.length||0}</div><p>كوبونات</p></div><div class="ll-v2-card"><div class="ll-v2-icon">⚡</div><div class="ll-kpi">${f?.length||0}</div><p>عروض مؤقتة</p></div><div class="ll-v2-card"><div class="ll-v2-icon">🖼️</div><div class="ll-kpi">${b?.length||0}</div><p>بانرات</p></div></div>`+(c||[]).map(x=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:12px;border-bottom:1px solid #eee"><b>${x.code}</b><span>${x.discount_type==='percent'?x.discount_value+'%':money(x.discount_value)}</span><span class="ll-status ${x.enabled?'green':'red'}">${x.enabled?'مفعل':'متوقف'}</span></div>`).join('')};
-window.v2LoadInventory=async()=>{if(!window.currentStore)return;const {data:p,error}=await supabaseClient.from('products').select('id,name,stock,low_stock_threshold,price,compare_price,image_url').eq('store_id',currentStore.id).order('stock');if(error)return toast(error.message);const sec=document.getElementById('dashInventoryV2');if(!sec)return;const total=(p||[]).reduce((a,x)=>a+Number(x.stock||0),0),low=(p||[]).filter(x=>Number(x.stock||0)>0&&Number(x.stock||0)<=Number(x.low_stock_threshold??5)).length,out=(p||[]).filter(x=>Number(x.stock||0)<=0).length;sec.innerHTML=`<div class="ll-feature-panel"><div class="ll-panel-head"><div><h2>📦 المخزون الحقيقي</h2><p>الكميات مقروءة مباشرة من المنتجات</p></div></div><div class="ll-v2-grid"><div class="ll-v2-card"><div class="ll-kpi">${total}</div><p>إجمالي الوحدات</p></div><div class="ll-v2-card"><div class="ll-kpi">${low}</div><p>منخفض</p></div><div class="ll-v2-card"><div class="ll-kpi">${out}</div><p>نفد</p></div></div><div style="overflow:auto"><table class="ll-table"><thead><tr><th>المنتج</th><th>السعر</th><th>المتاح</th><th>الحالة</th></tr></thead><tbody>${(p||[]).map(x=>{const s=Number(x.stock||0),st=s<=0?'نفد':s<=Number(x.low_stock_threshold??5)?'منخفض':'متوفر';return `<tr><td>${escapeHTML(x.name||'منتج')}</td><td>${money(x.price)}</td><td>${s}</td><td><span class="ll-status ${s<=0?'red':s<=Number(x.low_stock_threshold??5)?'orange':'green'}">${st}</span></td></tr>`}).join('')}</tbody></table></div></div>`};
-window.v2LoadShipping=async()=>{if(!window.currentStore)return;const {data,error}=await supabaseClient.from('shipping_methods').select('*').eq('store_id',currentStore.id).order('created_at');if(error)return toast(error.message);const sec=document.getElementById('dashShippingV2');if(!sec)return;sec.innerHTML=`<div class="ll-feature-panel"><div class="ll-panel-head"><div><h2>🚚 الشحن</h2><p>طرق الشحن المحفوظة في Supabase</p></div></div><div style="overflow:auto"><table class="ll-table"><thead><tr><th>الطريقة</th><th>المنطقة</th><th>التكلفة</th><th>مجاني فوق</th><th>الحالة</th></tr></thead><tbody>${(data||[]).map(x=>`<tr><td>${escapeHTML(x.name)}</td><td>${escapeHTML([x.governorate,x.city].filter(Boolean).join(' / ')||'كل المناطق')}</td><td>${money(x.cost)}</td><td>${x.free_over==null?'—':money(x.free_over)}</td><td><span class="ll-status ${x.enabled?'green':'red'}">${x.enabled?'مفعل':'متوقف'}</span></td></tr>`).join('')}</tbody></table></div></div>`};
-window.v2LoadReturns=async()=>{if(!window.currentStore)return;const {data,error}=await supabaseClient.from('returns_exchanges').select('*').eq('store_id',currentStore.id).order('created_at',{ascending:false});if(error)return toast(error.message);const sec=document.getElementById('dashReturnsV2');if(!sec)return;sec.innerHTML=`<div class="ll-feature-panel"><div class="ll-panel-head"><div><h2>🔄 المرتجعات والاستبدال</h2><p>طلبات حقيقية من قاعدة البيانات</p></div></div><div style="overflow:auto"><table class="ll-table"><thead><tr><th>الطلب</th><th>النوع</th><th>السبب</th><th>الحالة</th></tr></thead><tbody>${(data||[]).map(x=>`<tr><td>${String(x.order_id).slice(0,8)}</td><td>${x.type==='exchange'?'استبدال':'إرجاع'}</td><td>${escapeHTML(x.reason||'—')}</td><td><span class="ll-status orange">${escapeHTML(x.status)}</span></td></tr>`).join('')}</tbody></table></div></div>`};
-window.v2LoadNotifications=async()=>{if(!window.currentStore)return;const {data}=await supabaseClient.from('store_notifications').select('*').eq('store_id',currentStore.id).order('created_at',{ascending:false}).limit(20);if(data?.length)toast('لديك '+data.length+' إشعارًا في مركز الإشعارات');};
-window.v2LoadCustomersAnalytics=async()=>{if(!window.currentStore)return;const {data}=await supabaseClient.from('orders').select('customer_phone,customer_name,total,created_at,workflow_status,status').eq('store_id',currentStore.id);const orders=data||[], customers=new Set(orders.map(x=>x.customer_phone||x.customer_name).filter(Boolean));const el=document.getElementById('analyticsCustomers');if(el)el.textContent=customers.size;const ao=document.getElementById('analyticsOrders');if(ao)ao.textContent=orders.length;const as=document.getElementById('analyticsSales');if(as)as.textContent=orders.filter(x=>!['cancelled'].includes(x.workflow_status||x.status)).reduce((a,x)=>a+Number(x.total||0),0).toLocaleString('ar-EG');};
-const oldShow=window.showDashboardSection;window.showDashboardSection=function(name,btn){if(['inventory','marketing','shipping','returns'].includes(name)){document.querySelectorAll('.dash-section').forEach(x=>x.style.display='none');const id={inventory:'dashInventoryV2',marketing:'dashMarketingV2',shipping:'dashShippingV2',returns:'dashReturnsV2'}[name];document.getElementById(id).style.display='block';document.querySelectorAll('.sidebar button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');({inventory:v2LoadInventory,marketing:v2LoadMarketing,shipping:v2LoadShipping,returns:v2LoadReturns}[name])();return}return oldShow?.apply(this,arguments)};
-const oldSave=window.saveProduct;window.saveProduct=async function(){const compare=+document.getElementById('productComparePrice')?.value||0;const low=+document.getElementById('productLowStock')?.value||5;window.__v2ProductExtra={compare_price:compare,low_stock_threshold:low};return oldSave?.apply(this,arguments)};
-const oldLoadProducts=window.loadProducts;window.loadProducts=async function(){const r=await oldLoadProducts?.apply(this,arguments);document.querySelectorAll('.product-card').forEach((card,i)=>{const p=window.dashboardProducts?.[i];if(!p)return;const before=Number(p.compare_price||0),after=Number(p.price||0);if(before>after){const b=document.createElement('span');b.className='ll-discount-badge';b.textContent='خصم '+Math.round((1-after/before)*100)+'%';card.style.position='relative';card.appendChild(b)}});return r};
-window.addEventListener('load',()=>setTimeout(v2LoadNotifications,1800));
-})();
-</script>
-<style>
-.ll-discount-badge{position:absolute;top:12px;right:12px;background:#17181c;color:#fff;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:900;box-shadow:0 8px 22px #0002}.ll-kpi{font-size:30px;font-weight:900;color:#17181c;margin-bottom:4px}.ll-modal-v2.open{display:flex!important}
-</style>
 </body>
 
 </html>
@@ -10840,31 +10730,7 @@ document.addEventListener("DOMContentLoaded", async function(){
 
 });
 
-
-<script id="ll-v2-js">
-(function(){
- const map={inventory:'dashInventoryV2',marketing:'dashMarketingV2',shipping:'dashShippingV2',returns:'dashReturnsV2'};
- const oldShow=window.showDashboardSection;
- window.showDashboardSection=function(name,btn){
-   if(map[name]){
-     document.querySelectorAll('.dash-section').forEach(x=>x.style.display='none');
-     const el=document.getElementById(map[name]); if(el) el.style.display='block';
-     document.querySelectorAll('.sidebar button').forEach(x=>x.classList.remove('active')); if(btn) btn.classList.add('active');
-     return;
-   }
-   if(oldShow) return oldShow.apply(this,arguments);
- };
- window.llOpenModal=function(id){const e=document.getElementById(id);if(e)e.classList.add('open')};
- window.llCloseModal=function(id){const e=document.getElementById(id);if(e)e.classList.remove('open')};
- window.llToast=function(msg){let t=document.getElementById('llToast');if(!t){t=document.createElement('div');t.id='llToast';t.style='position:fixed;bottom:22px;left:22px;z-index:10001;background:#17181c;color:#fff;padding:12px 16px;border-radius:12px;box-shadow:0 14px 40px #0003;font-weight:700;font-size:13px';document.body.appendChild(t)}t.textContent=msg;t.style.display='block';clearTimeout(window.__llto);window.__llto=setTimeout(()=>t.style.display='none',2200)};
- window.llCalcDiscount=function(){const a=+document.getElementById('llBefore').value||0,b=+document.getElementById('llAfter').value||0;const out=document.getElementById('llDiscountOut');if(a>0&&b>=0&&b<a)out.textContent='خصم '+Math.round((1-b/a)*100)+'%';else out.textContent='بدون خصم'};
- window.llSaveCoupon=function(){const code=(document.getElementById('llCouponCode').value||'').trim().toUpperCase();const value=+document.getElementById('llCouponValue').value||0;if(!code||value<=0)return llToast('اكتب كود الخصم وقيمته');const arr=JSON.parse(localStorage.getItem('ll_coupons')||'[]');arr.push({code,value,enabled:true,createdAt:new Date().toISOString()});localStorage.setItem('ll_coupons',JSON.stringify(arr));llCloseModal('couponModal');llToast('تم إنشاء الكوبون '+code)};
- window.llDemoStatus=function(btn){const cell=btn.closest('tr').querySelector('.ll-status');cell.className='ll-status blue';cell.textContent='تم التأكيد';btn.textContent='تجهيز';llToast('تم تحديث حالة الطلب')};
- window.llArchiveRow=function(btn){btn.closest('tr').style.opacity='.45';btn.textContent='تمت الأرشفة';llToast('تمت أرشفة الطلب')};
- window.llSaveStoreVisual=function(){const n=(document.getElementById('llStoreNameInput').value||'').trim();if(n){document.getElementById('llStorePreviewName').textContent=n;localStorage.setItem('ll_store_name',n)}llCloseModal('storeVisualModal');llToast('تم حفظ هوية المتجر')};
- document.addEventListener('DOMContentLoaded',()=>{const n=localStorage.getItem('ll_store_name');if(n){const e=document.getElementById('llStorePreviewName');if(e)e.textContent=n}});
-})();
 </script>
-</script>
+<script id="luna-v2-auth-stable">(function(){const sb=window.supabaseClient;const q=id=>document.getElementById(id);const m=t=>{const e=q('authMessage');if(e)e.textContent=t};const b=(v,t)=>{const e=q('authSubmit');if(e){e.disabled=v;if(t)e.textContent=t}};window.loginUser=async function(){const email=(q('authEmail')?.value||'').trim().toLowerCase(),password=q('authPassword')?.value||'';if(!email||!password){m('⚠️ اكتب البريد الإلكتروني وكلمة المرور.');return}b(true,'⏳ جاري تسجيل الدخول...');m('');try{const r=await sb.auth.signInWithPassword({email,password});if(r.error)throw r.error;window.currentUser=r.data.user;m('✓ تم تسجيل الدخول بنجاح');setTimeout(async()=>{closeAuth();showDashboard();if(typeof updateUserInfo==='function')updateUserInfo();if(typeof loadUserStore==='function')await loadUserStore()},350)}catch(e){console.error(e);m('❌ '+(e.message||'تعذر تسجيل الدخول'))}finally{b(false,'تسجيل الدخول')}};window.registerUser=async function(){const name=(q('authName')?.value||'').trim(),email=(q('authEmail')?.value||'').trim().toLowerCase(),password=q('authPassword')?.value||'',password2=q('authPassword2')?.value||'';if(!name||!email||!password||!password2){m('⚠️ من فضلك املأ كل البيانات.');return}if(password.length<6){m('⚠️ كلمة المرور لازم تكون 6 أحرف على الأقل.');return}if(password!==password2){m('⚠️ كلمتا المرور غير متطابقتين.');return}b(true,'⏳ جاري إنشاء الحساب...');m('');try{const r=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});if(r.error)throw r.error;if(r.data.session){window.currentUser=r.data.user;m('✓ تم إنشاء الحساب وتسجيل الدخول');setTimeout(async()=>{closeAuth();showDashboard();if(typeof updateUserInfo==='function')updateUserInfo();if(typeof loadUserStore==='function')await loadUserStore()},350)}else m('✓ تم إنشاء الحساب. راجع بريدك الإلكتروني لتأكيد الحساب.')}catch(e){console.error(e);m('❌ '+(e.message||'حدث خطأ أثناء إنشاء الحساب'))}finally{b(false,'إنشاء الحساب')}};window.loginWithGoogle=async function(){try{const r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});if(r.error)throw r.error}catch(e){m('❌ '+(e.message||'تعذر تسجيل الدخول بجوجل'))}}})();</script>
 </body>
 </html>
