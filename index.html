@@ -4467,14 +4467,61 @@ document
 
 });
 
-
- /* =====================================================
-    DASHBOARD
- ===================================================== */
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
 function showDashboard(){
 
     openDashboardView();
+
+    const notice =
+        document.getElementById(
+            "subscriptionExpiredNotice"
+        );
+
+    if(!notice){
+        return;
+    }
+
+    const subscription =
+        currentUser?.subscription;
+
+    if(!subscription){
+        notice.style.display = "none";
+        return;
+    }
+
+    let expired = false;
+
+    if(
+        subscription.is_lifetime === true
+    ){
+        expired = false;
+    }
+    else if(
+        subscription.plan === "trial"
+    ){
+        expired =
+            !subscription.trial_ends_at ||
+            new Date(
+                subscription.trial_ends_at
+            ) <= new Date();
+    }
+    else if(
+        subscription.plan === "starter" ||
+        subscription.plan === "growth" ||
+        subscription.plan === "business"
+    ){
+        expired =
+            !subscription.subscription_ends_at ||
+            new Date(
+                subscription.subscription_ends_at
+            ) <= new Date();
+    }
+
+    notice.style.display =
+        expired ? "block" : "none";
 
     }
 
