@@ -4644,8 +4644,7 @@ async function checkSubscription(){
 
     if(!currentUser){
         return false;
-    }console.log("SUBSCRIPTION CHECK START");
-console.log("CURRENT USER:", currentUser);
+    }
 
     const {
         data,
@@ -4653,15 +4652,10 @@ console.log("CURRENT USER:", currentUser);
     } = await supabaseClient
         .from("subscriptions")
         .select("*")
-        .eq(
-            "user_id",
-            currentUser.id
-        )
+        .eq("user_id", currentUser.id)
         .single();
 
-
     if(error){
-
         console.error(
             "Subscription check error:",
             error
@@ -4670,38 +4664,27 @@ console.log("CURRENT USER:", currentUser);
         return false;
     }
 
-console.log("SUBSCRIPTION BLOCKED:", data);
     if(!data){
         return false;
     }
 
+    // Lifetime
+    if(data.is_lifetime === true){
 
-    // حساب Lifetime
-    if(
-        data.is_lifetime === true
-    ){
+        currentUser.subscription = data;
 
-        currentUser.subscription =
-            data;
-console.log("SUBSCRIPTION ACTIVE:", data);
         return true;
     }
 
-
     // Trial
-    if(
-        data.plan === "trial"
-    ){
+    if(data.plan === "trial"){
 
         if(
             data.trial_ends_at &&
-            new Date(
-                data.trial_ends_at
-            ) > new Date()
+            new Date(data.trial_ends_at) > new Date()
         ){
 
-            currentUser.subscription =
-                data;
+            currentUser.subscription = data;
 
             return true;
         }
@@ -4709,32 +4692,39 @@ console.log("SUBSCRIPTION ACTIVE:", data);
         return false;
     }
 
-
-    // Starter
+    // Paid Plans
     if(
-        data.plan === "starter"
+        data.plan === "starter" ||
+        data.plan === "growth" ||
+        data.plan === "business"
     ){
 
         if(
             data.subscription_ends_at &&
-            new Date(
-                data.subscription_ends_at
-            ) > new Date()
+            new Date(data.subscription_ends_at) > new Date()
         ){
 
-            currentUser.subscription =
-                data;
+            currentUser.subscription = data;
 
             return true;
         }
 
         return false;
+    }
+
+    return false;
+}
+
 
 /* =====================================================
    SESSION
 ===================================================== */
 
-async function checkSubscription(){
+/* =====================================================
+   SESSION
+===================================================== */
+
+
 
     if(!currentUser){
         return false;
