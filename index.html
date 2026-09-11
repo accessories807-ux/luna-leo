@@ -25,7 +25,7 @@ html{
 body{
     font-family:Arial,Tahoma,sans-serif;
     background:#061012;
-    color:#fff
+    color:#fff;
     line-height:1.7;
     overflow-x:hidden
 }
@@ -1767,7 +1767,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ll-gold)!important;bo
     background: #17181c !important;
 }
 </style>
-</head>
+<style id="luna-product-pro">.product-card{overflow:hidden}.product-card .product-info{padding:18px}.ll-discount-badge{display:inline-flex;align-items:center;justify-content:center;background:#17181c!important;color:#fff!important;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;letter-spacing:.2px;box-shadow:0 6px 18px rgba(0,0,0,.12)}.sf-product-image{overflow:hidden}.sf-product-image .ll-discount-badge{position:absolute}.sf-price strong{font-weight:950}@media(max-width:600px){#productForm{grid-template-columns:1fr!important}.product-card{min-width:0}}</style></head>
 
 <body>
 
@@ -2850,14 +2850,39 @@ placeholder="اسم المنتج"
 id="productPrice"
 type="number"
 min="0"
-placeholder="السعر"
+step="0.01"
+placeholder="السعر الحالي (بعد الخصم)"
+>
+
+<input
+id="productComparePrice"
+type="number"
+min="0"
+step="0.01"
+placeholder="السعر قبل الخصم — اختياري"
 >
 
 <input
 id="productStock"
 type="number"
 min="0"
+step="1"
 placeholder="المخزون"
+>
+
+<input
+id="productLowStock"
+type="number"
+min="0"
+step="1"
+placeholder="حد التنبيه للمخزون — اختياري"
+>
+
+<input
+id="productSku"
+type="text"
+maxlength="80"
+placeholder="SKU / كود المنتج — اختياري"
 >
 
 <input
@@ -5784,27 +5809,60 @@ async function loadProducts(){
                         </h3>
 
 
-                        <div class="product-price">
+                        <div class="product-price" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
 
-                            ${Number(
-                                product.price || 0
-                            ).toLocaleString("ar-EG")}
+                            <strong>
+                                ${Number(
+                                    product.price || 0
+                                ).toLocaleString("ar-EG")}
+                                جنيه
+                            </strong>
 
-                            جنيه
+                            ${
+                                product.compare_price &&
+                                Number(product.compare_price) > Number(product.price || 0)
+                                ?
+                                `<del style="color:#9a9da4;font-size:13px">
+                                    ${Number(product.compare_price).toLocaleString("ar-EG")} جنيه
+                                </del>`
+                                :
+                                ""
+                            }
 
                         </div>
 
+                        ${
+                            product.compare_price &&
+                            Number(product.compare_price) > Number(product.price || 0)
+                            ?
+                            `<div class="ll-discount-badge" style="display:inline-block;margin-top:7px">
+                                خصم ${Math.round((1 - (Number(product.price)||0)/Number(product.compare_price))*100)}%
+                            </div>`
+                            :
+                            ""
+                        }
 
                         <p
                             style="
                                 color:#888;
-                                margin-top:5px"
+                                margin-top:8px"
                         >
                             المخزون:
-                            ${Number(
-                                product.stock || 0
-                            )}
+                            ${Number(product.stock || 0)}
+                            ${
+                                Number(product.stock || 0) <= Number(product.low_stock_threshold ?? 5)
+                                ? `<span style="color:#a96f13;font-weight:800"> • ⚠️ مخزون منخفض</span>`
+                                : ""
+                            }
                         </p>
+
+                        ${
+                            product.sku
+                            ?
+                            `<p style="color:#888;margin-top:4px">SKU: ${escapeHTML(product.sku)}</p>`
+                            :
+                            ""
+                        }
 
 
                         ${
@@ -5970,11 +6028,25 @@ function editProduct(id){
     ).value =
         product.price ?? "";
 
+    const compareEl = document.getElementById("productComparePrice");
+    if(compareEl){
+        compareEl.value = product.compare_price ?? "";
+    }
 
     document.getElementById(
         "productStock"
     ).value =
         product.stock ?? 0;
+
+    const lowStockEl = document.getElementById("productLowStock");
+    if(lowStockEl){
+        lowStockEl.value = product.low_stock_threshold ?? 5;
+    }
+
+    const skuEl = document.getElementById("productSku");
+    if(skuEl){
+        skuEl.value = product.sku || "";
+    }
 
 
     /*
@@ -6140,7 +6212,10 @@ function clearProductForm(){
     [
         "productName",
         "productPrice",
+        "productComparePrice",
         "productStock",
+        "productLowStock",
+        "productSku",
         "productDescription"
     ].forEach(id=>{
 
@@ -6236,17 +6311,40 @@ async function saveProduct(){
     const price =
         Number(priceValue);
 
+    const comparePriceValue =
+        document.getElementById(
+            "productComparePrice"
+        )?.value ?? "";
+
+    const comparePrice =
+        comparePriceValue === ""
+            ? null
+            : Number(comparePriceValue);
 
     const stockValue =
         document.getElementById(
             "productStock"
         ).value;
 
-
     const stock =
         Number(
             stockValue || 0
         );
+
+    const lowStockValue =
+        document.getElementById(
+            "productLowStock"
+        )?.value ?? "";
+
+    const lowStockThreshold =
+        lowStockValue === ""
+            ? 5
+            : Number(lowStockValue);
+
+    const sku =
+        document.getElementById(
+            "productSku"
+        )?.value.trim() || "";
 
 
     const imageInput =
@@ -6295,11 +6393,50 @@ async function saveProduct(){
 
     if(
         !Number.isFinite(stock) ||
-        stock < 0
+        stock < 0 ||
+        !Number.isInteger(stock)
     ){
 
         message.textContent =
-            "⚠️ اكتب المخزون بشكل صحيح.";
+            "⚠️ اكتب المخزون كرقم صحيح أكبر من أو يساوي صفر.";
+
+        return;
+
+    }
+
+    if(
+        comparePrice !== null &&
+        (!Number.isFinite(comparePrice) || comparePrice < 0)
+    ){
+
+        message.textContent =
+            "⚠️ السعر قبل الخصم غير صحيح.";
+
+        return;
+
+    }
+
+    if(
+        comparePrice !== null &&
+        comparePrice > 0 &&
+        comparePrice < price
+    ){
+
+        message.textContent =
+            "⚠️ السعر قبل الخصم يجب أن يكون أكبر من أو يساوي السعر الحالي.";
+
+        return;
+
+    }
+
+    if(
+        !Number.isFinite(lowStockThreshold) ||
+        lowStockThreshold < 0 ||
+        !Number.isInteger(lowStockThreshold)
+    ){
+
+        message.textContent =
+            "⚠️ حد المخزون يجب أن يكون رقمًا صحيحًا.";
 
         return;
 
@@ -6380,7 +6517,18 @@ async function saveProduct(){
 
             price:price,
 
+            compare_price:
+                comparePrice !== null && comparePrice > 0
+                    ? comparePrice
+                    : null,
+
             stock:stock,
+
+            low_stock_threshold:
+                lowStockThreshold,
+
+            sku:
+                sku || null,
 
             image_url:image_url,
 
@@ -9282,6 +9430,7 @@ function renderStoreProducts(){
 
                     <div
                         class="sf-product-image"
+                        style="position:relative"
                     >
 
                         ${
@@ -9303,6 +9452,27 @@ function renderStoreProducts(){
                                 📦
                             </div>
                             `
+                        }
+
+                        ${
+                            product.compare_price &&
+                            Number(product.compare_price) > Number(product.price || 0)
+                            ?
+                            `<span class="ll-discount-badge" style="position:absolute;top:10px;right:10px;z-index:3">
+                                خصم ${Math.round((1 - (Number(product.price)||0)/Number(product.compare_price))*100)}%
+                            </span>`
+                            :
+                            ""
+                        }
+
+                        ${
+                            stock <= 0
+                            ?
+                            `<span style="position:absolute;left:10px;top:10px;z-index:3;background:#17181c;color:#fff;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:900">
+                                نفد المخزون
+                            </span>`
+                            :
+                            ""
                         }
 
                     </div>
@@ -9334,14 +9504,27 @@ function renderStoreProducts(){
                             class="sf-product-bottom"
                         >
 
-                            <div
-                                class="sf-price"
-                            >
-                                ${Number(
-                                    product.price ||
-                                    0
-                                ).toLocaleString("ar-EG")}
-                                جنيه
+                            <div class="sf-price" style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+
+                                <strong>
+                                    ${Number(
+                                        product.price ||
+                                        0
+                                    ).toLocaleString("ar-EG")}
+                                    جنيه
+                                </strong>
+
+                                ${
+                                    product.compare_price &&
+                                    Number(product.compare_price) > Number(product.price || 0)
+                                    ?
+                                    `<del style="font-size:12px;opacity:.58">
+                                        ${Number(product.compare_price).toLocaleString("ar-EG")} جنيه
+                                    </del>`
+                                    :
+                                    ""
+                                }
+
                             </div>
 
 
