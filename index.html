@@ -8919,6 +8919,7 @@ th{
 
 
 
+
 </body>
 
 </html>
@@ -12180,6 +12181,36 @@ footer{
     document.addEventListener("DOMContentLoaded",()=>{
         setTimeout(sync,600);
     });
+})();
+</script>
+<script id="ll-countdown-independent-fix">
+(function(){
+  let timer=null;
+  const q=id=>document.getElementById(id);
+  const set=(t)=>{const e=q('subscriptionCountdown');if(e)e.textContent=t;};
+  const fmt=(ms)=>{if(ms<=0)return 'انتهى الاشتراك';const n=Math.floor(ms/1000),d=Math.floor(n/86400),h=Math.floor(n%86400/3600),m=Math.floor(n%3600/60),s=n%60;return `متبقي ${d} يوم و ${h} ساعة و ${m} دقيقة و ${s} ثانية`;};
+  async function load(){
+    const box=q('subscriptionCountdown'); if(!box)return;
+    try{
+      const sb=window.supabaseClient; if(!sb){set('⚠️ تعذر تحميل الاشتراك');return;}
+      const sr=await sb.auth.getSession(); const user=sr?.data?.session?.user||window.currentUser;
+      if(!user?.id){set('⚠️ لم يتم تسجيل الدخول');return;}
+      const r=await sb.from('subscriptions').select('plan,is_lifetime,trial_started_at,trial_ends_at,subscription_started_at,subscription_ends_at,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+      if(r.error){console.error('Countdown subscription query:',r.error);set('⚠️ تعذر قراءة بيانات الاشتراك');return;}
+      if(!r.data){set('⚠️ لا يوجد اشتراك مرتبط بالحساب');return;}
+      const sub=r.data,plan=String(sub.plan||'trial').toLowerCase(),life=sub.is_lifetime===true||plan==='lifetime';
+      let end=Date.parse(String(plan==='trial'?sub.trial_ends_at:sub.subscription_ends_at));
+      if(!Number.isFinite(end)&&plan==='trial'&&sub.trial_started_at)end=Date.parse(String(sub.trial_started_at))+15*86400000;
+      if(!Number.isFinite(end)&&plan==='trial'&&sub.created_at)end=Date.parse(String(sub.created_at))+15*86400000;
+      if(timer)clearInterval(timer); timer=null;
+      const tick=()=>set(life?'♾️ مدى الحياة':Number.isFinite(end)?fmt(end-Date.now()):'⚠️ لم يتم تحديد موعد انتهاء الاشتراك');
+      tick(); if(!life&&Number.isFinite(end))timer=setInterval(tick,1000);
+      const badge=q('subscriptionStatusBadge');if(badge)badge.textContent=life?'مدى الحياة':(end>Date.now()?'نشط':'انتهى الاشتراك');
+    }catch(e){console.error('Countdown exception:',e);set('⚠️ تعذر حساب المدة');}
+  }
+  function boot(){set('⏳ تحميل الاشتراك...');setTimeout(load,200);}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+  setTimeout(load,1200);
 })();
 </script>
 </body></html>
