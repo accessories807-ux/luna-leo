@@ -3533,7 +3533,10 @@ placeholder="رقم العمارة، الدور، الشقة، علامة ممي
 طريقة الشحن
 </label><select id="orderShipping"><option value="standard">
 🚚 الشحن للعنوان
-</option></select></div><!-- 4 - الملاحظة --><div style="
+</option></select>
+<div id="llShippingOptions" style="margin-top:10px"></div>
+<div class="ll-shipping-note">يتم حساب الشحن حسب المحافظة والمدينة، ويطبق الشحن المجاني تلقائيًا عند استيفاء الحد المحدد.</div>
+</div><!-- 4 - الملاحظة --><div style="
     font-weight:bold;
     color:#a67c25;
     margin:22px 0 12px;
@@ -10296,6 +10299,134 @@ function backToCart(){
 }
 
 
+
+<div class="ll-shipping-panel" id="llShippingManager" style="display:none">
+  <h3>🚚 إعدادات الشحن</h3>
+  <div class="ll-shipping-grid">
+    <input id="llShipName" placeholder="اسم طريقة الشحن">
+    <input id="llShipGovernorate" placeholder="المحافظة (اختياري)">
+    <input id="llShipCity" placeholder="المدينة / المنطقة (اختياري)">
+    <input id="llShipCost" type="number" min="0" step="0.01" placeholder="سعر الشحن بالجنيه">
+    <input id="llShipFreeAbove" type="number" min="0" step="0.01" placeholder="مجاني فوق مبلغ (اختياري)">
+    <button type="button" class="sf-checkout-btn" onclick="llAddShippingMethod()">إضافة طريقة شحن</button>
+  </div>
+  <div id="llShippingMethodsList" style="margin-top:14px"></div>
+</div>
+
+
+/* =====================================================
+   SHIPPING SYSTEM
+===================================================== */
+let llShippingMethods = [];
+
+async function llLoadShippingMethods(storeId){
+    if(!storeId) return [];
+    const {data,error}=await supabaseClient.from("shipping_methods")
+      .select("*").eq("store_id",storeId).eq("is_active",true)
+      .order("created_at",{ascending:true});
+    if(error){ console.warn("Shipping methods:",error.message); return []; }
+    llShippingMethods=data||[];
+    return llShippingMethods;
+}
+
+function llBestShippingMethod(methods, governorate, city){
+    const gov=String(governorate||"").trim();
+    const c=String(city||"").trim();
+    const exact=methods.filter(m=>String(m.governorate||"").trim()===gov && String(m.city||"").trim()===c);
+    if(exact.length) return exact[0];
+    const govOnly=methods.filter(m=>String(m.governorate||"").trim()===gov && !String(m.city||"").trim());
+    if(govOnly.length) return govOnly[0];
+    const general=methods.filter(m=>!String(m.governorate||"").trim() && !String(m.city||"").trim());
+    return general[0]||methods[0]||null;
+}
+
+async function llGetShippingCost(storeId, governorate, city, subtotal){
+    const methods=await llLoadShippingMethods(storeId);
+    const method=llBestShippingMethod(methods,governorate,city);
+    if(!method) return 0;
+    const freeAbove=Number(method.free_shipping_above||0);
+    if(freeAbove>0 && Number(subtotal)>=freeAbove) return 0;
+    return Math.max(0,Number(method.cost||0));
+}
+
+async function llRenderShippingOptions(){
+    if(!publicStore) return;
+    const gov=document.getElementById("orderGovernorate")?.value||"";
+    const city=document.getElementById("orderCity")?.value.trim()||"";
+    const box=document.getElementById("llShippingOptions");
+    if(!box) return;
+    const methods=await llLoadShippingMethods(publicStore.id);
+    if(!methods.length){
+        box.innerHTML='<div class="ll-shipping-note">🚚 سيتم حساب الشحن بعد تجهيز إعدادات المتجر.</div>';
+        return;
+    }
+    const subtotal=publicCart.reduce((s,i)=>s+Number(i.price||0)*Number(i.qty||0),0);
+    const applicable=methods.filter(m=>{
+        const mg=String(m.governorate||"").trim(), mc=String(m.city||"").trim();
+        return (!mg || mg===gov) && (!mc || mc===city);
+    });
+    const list=applicable.length?applicable:methods.filter(m=>!m.governorate&&!m.city);
+    box.innerHTML=list.map((m,i)=>{
+        const free=Number(m.free_shipping_above||0)>0 && subtotal>=Number(m.free_shipping_above);
+        const cost=free?0:Number(m.cost||0);
+        return `<label class="ll-shipping-option ${i===0?'active':''}">
+          <span><input type="radio" name="llShippingChoice" value="${m.id}" ${i===0?'checked':''} onchange="llUpdateCheckoutShipping()">
+          <strong>${String(m.name||"الشحن").replace(/[<>]/g,"")}</strong></span>
+          <span>${free?'مجاني':cost.toFixed(2)+' جنيه'}</span>
+        </label>`;
+    }).join("");
+}
+
+async function llUpdateCheckoutShipping(){
+    document.querySelectorAll(".ll-shipping-option").forEach(x=>x.classList.remove("active"));
+    document.querySelector('input[name="llShippingChoice"]:checked')?.closest(".ll-shipping-option")?.classList.add("active");
+    // shipping is recalculated again server-side before order insertion.
+}
+
+async function llAddShippingMethod(){
+    if(!currentStore||!currentUser){alert("يجب تسجيل الدخول أولًا.");return;}
+    const name=document.getElementById("llShipName")?.value.trim();
+    const governorate=document.getElementById("llShipGovernorate")?.value.trim()||null;
+    const city=document.getElementById("llShipCity")?.value.trim()||null;
+    const cost=Math.max(0,Number(document.getElementById("llShipCost")?.value||0));
+    const free=Math.max(0,Number(document.getElementById("llShipFreeAbove")?.value||0));
+    if(!name){alert("اكتب اسم طريقة الشحن.");return;}
+    const {error}=await supabaseClient.from("shipping_methods").insert({
+      store_id:currentStore.id,name,governorate,city,cost,free_shipping_above:free,is_active:true
+    });
+    if(error){alert("تعذر إضافة طريقة الشحن: "+error.message);return;}
+    ["llShipName","llShipGovernorate","llShipCity","llShipCost","llShipFreeAbove"].forEach(id=>{const e=document.getElementById(id);if(e)e.value=""});
+    await llRenderShippingManager();
+    alert("تمت إضافة طريقة الشحن.");
+}
+
+async function llRenderShippingManager(){
+    if(!currentStore) return;
+    const panel=document.getElementById("llShippingManager");
+    if(panel) panel.style.display="block";
+    const {data,error}=await supabaseClient.from("shipping_methods").select("*")
+      .eq("store_id",currentStore.id).order("created_at",{ascending:true});
+    const box=document.getElementById("llShippingMethodsList");
+    if(!box) return;
+    if(error){box.innerHTML='<div class="ll-shipping-note">تعذر تحميل طرق الشحن.</div>';return;}
+    box.innerHTML=(data||[]).map(m=>`<div class="ll-shipping-option">
+      <span><strong>${String(m.name||"").replace(/[<>]/g,"")}</strong><br>
+      <small>${m.governorate||"كل المحافظات"}${m.city?" — "+m.city:""} | ${Number(m.cost||0)} جنيه</small></span>
+      <button type="button" onclick="llDeleteShippingMethod('${m.id}')" style="border:1px solid #ddd;border-radius:8px;background:#fff;padding:7px;cursor:pointer">حذف</button>
+    </div>`).join("")||'<div class="ll-shipping-note">لا توجد طرق شحن بعد.</div>';
+}
+
+async function llDeleteShippingMethod(id){
+    if(!currentStore||!confirm("حذف طريقة الشحن؟")) return;
+    const {error}=await supabaseClient.from("shipping_methods").delete().eq("id",id).eq("store_id",currentStore.id);
+    if(error){alert("تعذر الحذف: "+error.message);return;}
+    await llRenderShippingManager();
+}
+
+document.addEventListener("change",e=>{
+    if(e.target?.id==="orderGovernorate" || e.target?.id==="orderCity") llRenderShippingOptions();
+});
+
 /* =====================================================
    PLACE ORDER
 ===================================================== */
@@ -10451,7 +10582,7 @@ async function placeStoreOrder(){
        الكوبون + الشحن
     ========================= */
 
-    const shippingCost = 0;
+    const shippingCost = await llGetShippingCost(publicStore.id, governorate, city, subtotal);
     let couponCode = appliedCoupon?.code || null;
     let couponDiscount = 0;
 
