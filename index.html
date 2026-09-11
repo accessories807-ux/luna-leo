@@ -1710,6 +1710,17 @@ border-color:#29231d
         grid-template-columns:1fr
     }
 }
+
+/* Store profile editor */
+.store-upload-box{padding:15px;border:1px dashed #d9c9a8;border-radius:14px;background:#fffaf1;display:grid;gap:7px;text-align:right}
+.store-upload-label{font-weight:800;color:#765a22;cursor:pointer}
+.store-upload-box input[type=file]{padding:8px;background:#fff!important;border:0!important;box-shadow:none!important}
+.store-upload-box small{color:#8a8176;font-size:12px}
+.store-brand-preview{width:100px;height:100px;border-radius:24px;background:#f6efe2;border:1px solid #e3d4b9;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:0 auto 15px}
+.store-brand-preview img{width:100%;height:100%;object-fit:cover}
+.store-brand-preview div{font-size:42px}
+.store-edit-form{margin:18px 0}
+@media(max-width:550px){.store-brand-preview{width:86px;height:86px}}
 </style>
 
 <style id="luna-leo-modern-ui">
@@ -1729,7 +1740,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ll-gold)!important;bo
 @keyframes llEnter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .ll-discount-badge{position:absolute;top:12px;right:12px;z-index:4;background:var(--ll-gold);color:#fff;font-weight:700;font-size:12px;padding:6px 10px;border-radius:999px;box-shadow:0 6px 14px rgba(184,148,69,.24)}
 @media(max-width:768px){.card,.panel,.modal-content,.dashboard-card,.stat-card,.product-card,.order-card,.customer-card,.settings-card{border-radius:14px!important}.ll-discount-badge{top:8px;right:8px;font-size:11px}}
-</style>
+.sf-store-logo-wrap{width:96px;height:96px;margin:0 auto 18px;border-radius:24px;overflow:hidden;background:#fff;border:1px solid #e5d8c2;box-shadow:0 12px 28px rgba(70,50,25,.10);align-items:center;justify-content:center}.sf-store-logo-wrap img{width:100%;height:100%;object-fit:cover}</style>
 <style id="luna-v2-redesign">:root{--g:#b98a38;--gs:#f4ead7;--ink:#111318;--muted:#707681;--line:#e7e8eb;--bg:#f7f7f5;--card:#fff;--sh:0 20px 65px rgba(17,19,24,.08)}html{scroll-behavior:smooth}body{background:var(--bg)!important;color:var(--ink)!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif!important}body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(900px 500px at 85% -10%,rgba(185,138,56,.12),transparent 60%),radial-gradient(700px 450px at -10% 35%,rgba(17,19,24,.025),transparent 65%)}.navbar{background:rgba(255,255,255,.9)!important;border-bottom:1px solid var(--line)!important;box-shadow:0 8px 35px rgba(17,19,24,.04)!important;backdrop-filter:blur(18px)}.navbar a,.nav-link{color:#22252b!important;font-weight:800!important}.navbar a:hover,.nav-link:hover{color:var(--g)!important}.hero{background:linear-gradient(135deg,#fff 0%,#faf9f6 58%,#f3eee4 100%)!important;min-height:640px!important;overflow:hidden!important}.hero:after{content:"";position:absolute;width:620px;height:620px;border:1px solid rgba(185,138,56,.18);border-radius:50%;left:-260px;bottom:-380px;box-shadow:0 0 0 85px rgba(185,138,56,.025),0 0 0 170px rgba(185,138,56,.014);pointer-events:none}.hero-text h1{font-weight:950!important;letter-spacing:-2.5px!important;line-height:1.08!important}.hero-text p{color:var(--muted)!important;line-height:1.9!important}.btn,.btn-primary,.btn-login,.auth-submit,button{border-radius:14px!important;transition:transform .2s ease,box-shadow .2s ease,background .2s ease!important}.btn:hover,.btn-primary:hover,.btn-login:hover,.auth-submit:hover,button:hover{transform:translateY(-2px)!important}.card,.feature-card,.pricing-card,.product-card,.panel,.stat-card,.dashboard-card,.auth-box{background:rgba(255,255,255,.97)!important;border:1px solid var(--line)!important;border-radius:24px!important;box-shadow:var(--sh)!important}.card:hover,.feature-card:hover,.pricing-card:hover,.product-card:hover{transform:translateY(-5px);box-shadow:0 28px 75px rgba(17,19,24,.12)!important}.sidebar{background:rgba(255,255,255,.95)!important;border-left:1px solid var(--line)!important;box-shadow:10px 0 40px rgba(17,19,24,.045)!important;backdrop-filter:blur(18px)}.sidebar button,.sidebar a{border-radius:13px!important;color:#4a4e57!important;font-weight:800!important}.sidebar button.active,.sidebar button:hover,.sidebar a:hover{background:var(--gs)!important;color:#815e24!important}input,select,textarea{background:#fff!important;color:#17191e!important;border:1px solid #dfe1e5!important;border-radius:13px!important;box-shadow:none!important}input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--g)!important;box-shadow:0 0 0 4px rgba(185,138,56,.13)!important}.auth-modal{background:rgba(9,10,13,.55)!important;backdrop-filter:blur(11px)}.auth-box{max-width:470px!important;padding:36px!important}.auth-logo{font-weight:950!important;letter-spacing:2px!important}.auth-submit{background:linear-gradient(135deg,#15161a,#303238)!important;color:#fff!important;border:0!important;box-shadow:0 13px 32px rgba(17,19,24,.20)!important}.badge,.discount-badge,.ll-discount-badge{background:#17181c!important;color:#fff!important;border-radius:999px!important;padding:7px 11px!important;font-weight:900!important}.product-card img,.hero img{transition:transform .55s ease,filter .55s ease}.product-card:hover img{transform:scale(1.045)}@keyframes llReveal{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}.hero-grid>*{animation:llReveal .65s ease both}.hero-grid>*:last-child{animation-delay:.1s}@media(max-width:900px){.hero{min-height:auto!important;padding-top:45px!important}.hero-grid{grid-template-columns:1fr!important;gap:28px!important}.auth-box{width:calc(100% - 24px)!important;margin:12px!important;padding:26px!important}}</style>
 <style id="platform-owner-premium-ui">
 .platform-owner .subscription-owner-badge{
@@ -2586,6 +2597,12 @@ id="storeDescription"
 placeholder="وصف المتجر"
 ></textarea>
 
+<div class="store-upload-box">
+<label for="storeLogoFile" class="store-upload-label">🖼️ صورة / لوجو المتجر</label>
+<input id="storeLogoFile" type="file" accept="image/png,image/jpeg,image/webp">
+<small>يفضل صورة مربعة واضحة — يمكنك تغييرها لاحقًا.</small>
+</div>
+
 <input
 id="storePhone"
 type="tel"
@@ -2623,8 +2640,27 @@ class="store-created"
 
 <div class="store-card">
 
+<div class="store-brand-preview">
+  <img id="myStoreLogo" alt="لوجو المتجر" style="display:none">
+  <div id="myStoreLogoFallback">🏪</div>
+</div>
+
 <h3 id="myStoreName">
 </h3>
+
+<div class="store-form store-edit-form">
+  <input id="editStoreName" type="text" placeholder="اسم المتجر">
+  <input id="editStoreSlug" type="text" placeholder="رابط المتجر">
+  <textarea id="editStoreDescription" placeholder="وصف المتجر"></textarea>
+  <div class="store-upload-box">
+    <label for="editStoreLogoFile" class="store-upload-label">🖼️ تغيير صورة / لوجو المتجر</label>
+    <input id="editStoreLogoFile" type="file" accept="image/png,image/jpeg,image/webp">
+  </div>
+  <input id="editStorePhone" type="tel" placeholder="رقم الهاتف">
+  <input id="editStoreWhatsapp" type="tel" placeholder="رقم WhatsApp">
+  <button class="gold-btn" type="button" onclick="updateMyStore()">💾 حفظ بيانات المتجر</button>
+  <div id="editStoreMessage" class="form-message"></div>
+</div>
 
 <p id="myStoreDescription">
 </p>
@@ -3121,6 +3157,10 @@ onclick="openCart()"
 <section class="sf-hero">
 
 <div class="sf-hero-inner">
+
+<div id="sfStoreLogoWrap" class="sf-store-logo-wrap" style="display:none">
+  <img id="sfStoreLogo" alt="لوجو المتجر">
+</div>
 
 <h1
 id="sfStoreName"
@@ -5029,6 +5069,9 @@ async function createMyStore(){
             "storeWhatsapp"
         ).value.trim();
 
+    const logoFile =
+        document.getElementById("storeLogoFile")?.files?.[0] || null;
+
 
     const message =
         document.getElementById(
@@ -5099,6 +5142,24 @@ async function createMyStore(){
 
         currentStore =
             data;
+
+        if(logoFile){
+            try{
+                const logo_url=await uploadStoreLogo(logoFile);
+                const {data:updatedLogo,error:logoError}=await supabaseClient
+                  .from("stores")
+                  .update({logo_url})
+                  .eq("id",currentStore.id)
+                  .eq("owner_id",currentUser.id)
+                  .select()
+                  .single();
+                if(logoError) throw logoError;
+                currentStore=updatedLogo;
+            }catch(logoError){
+                console.error("STORE LOGO ERROR:",logoError);
+                if(message) message.textContent="⚠️ تم إنشاء المتجر، لكن تعذر رفع اللوجو: "+(logoError.message||"خطأ");
+            }
+        }
 
         await loadSubscription();
 
@@ -5199,6 +5260,31 @@ function displayStore(){
         currentStore.whatsapp ||
         "غير مضاف";
 
+    const editMap = {
+        editStoreName: currentStore.name || "",
+        editStoreSlug: currentStore.slug || "",
+        editStoreDescription: currentStore.description || "",
+        editStorePhone: currentStore.phone || "",
+        editStoreWhatsapp: currentStore.whatsapp || ""
+    };
+    Object.entries(editMap).forEach(([id,value])=>{
+        const el=document.getElementById(id);
+        if(el) el.value=value;
+    });
+
+    const logo=document.getElementById("myStoreLogo");
+    const fallback=document.getElementById("myStoreLogoFallback");
+    if(logo){
+        if(currentStore.logo_url){
+            logo.src=currentStore.logo_url;
+            logo.style.display="block";
+            if(fallback) fallback.style.display="none";
+        }else{
+            logo.removeAttribute("src");
+            logo.style.display="none";
+            if(fallback) fallback.style.display="block";
+        }
+    }
 
     const shareLink =
         document.getElementById(
@@ -5215,6 +5301,93 @@ function displayStore(){
 
 }
 
+
+
+/* =====================================================
+   STORE PROFILE EDIT / LOGO
+===================================================== */
+
+function storeSlugify(value){
+    return String(value||"")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9\u0600-\u06FF]+/g,"-")
+      .replace(/^-+|-+$/g,"");
+}
+
+async function uploadStoreLogo(file){
+    if(!file) return currentStore?.logo_url || null;
+    if(!currentUser) throw new Error("يجب تسجيل الدخول أولاً.");
+    if(!/^image\/(png|jpe?g|webp)$/i.test(file.type)){
+        throw new Error("صيغة الصورة غير مدعومة. استخدم PNG أو JPG أو WEBP.");
+    }
+    if(file.size > 5 * 1024 * 1024){
+        throw new Error("حجم الصورة يجب ألا يتجاوز 5 ميجابايت.");
+    }
+
+    const ext = (file.name.split(".").pop()||"jpg").toLowerCase();
+    const path = `${currentUser.id}/${crypto.randomUUID()}.${ext}`;
+
+    const {error:uploadError}=await supabaseClient
+      .storage.from("store-assets")
+      .upload(path,file,{contentType:file.type,upsert:false});
+
+    if(uploadError) throw uploadError;
+
+    const {data}=supabaseClient.storage.from("store-assets").getPublicUrl(path);
+    return data.publicUrl;
+}
+
+async function updateMyStore(){
+    if(!currentUser || !currentStore){
+        alert("❌ أنشئ المتجر أولاً.");
+        return;
+    }
+    const msg=document.getElementById("editStoreMessage");
+    const button=document.querySelector(".store-edit-form .gold-btn");
+    const name=(document.getElementById("editStoreName")?.value||"").trim();
+    const slug=storeSlugify(document.getElementById("editStoreSlug")?.value||"");
+    const description=(document.getElementById("editStoreDescription")?.value||"").trim();
+    const phone=(document.getElementById("editStorePhone")?.value||"").trim();
+    const whatsapp=(document.getElementById("editStoreWhatsapp")?.value||"").trim();
+    const file=document.getElementById("editStoreLogoFile")?.files?.[0];
+
+    if(!name || !slug){
+        if(msg) msg.textContent="⚠️ اكتب اسم المتجر والرابط.";
+        return;
+    }
+
+    if(button){button.disabled=true;button.textContent="⏳ جاري الحفظ...";}
+    if(msg) msg.textContent="";
+
+    try{
+        let logo_url=currentStore.logo_url || null;
+        if(file) logo_url=await uploadStoreLogo(file);
+
+        const {data,error}=await supabaseClient
+          .from("stores")
+          .update({name,slug,description,phone,whatsapp,logo_url})
+          .eq("id",currentStore.id)
+          .eq("owner_id",currentUser.id)
+          .select()
+          .single();
+
+        if(error) throw error;
+
+        currentStore=data;
+        displayStore();
+        if(msg) msg.textContent="✅ تم تحديث بيانات المتجر بنجاح.";
+    }catch(error){
+        console.error("UPDATE STORE ERROR:",error);
+        if(msg){
+            msg.textContent = error.code==="23505"
+              ? "❌ رابط المتجر مستخدم بالفعل."
+              : "❌ "+(error.message||"حدث خطأ أثناء الحفظ.");
+        }
+    }finally{
+        if(button){button.disabled=false;button.textContent="💾 حفظ بيانات المتجر";}
+    }
+}
 
 /* =====================================================
    DASHBOARD DATA
@@ -8666,6 +8839,17 @@ async function loadPublicStore(){
 
     publicStore =
         store;
+
+    const sfLogoWrap=document.getElementById("sfStoreLogoWrap");
+    const sfLogo=document.getElementById("sfStoreLogo");
+    if(sfLogoWrap && sfLogo){
+        if(store.logo_url){
+            sfLogo.src=store.logo_url;
+            sfLogoWrap.style.display="flex";
+        }else{
+            sfLogoWrap.style.display="none";
+        }
+    }
 
 
     document.getElementById(
