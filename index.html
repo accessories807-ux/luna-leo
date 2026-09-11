@@ -4085,23 +4085,25 @@ function renderSubscriptionUI(){
 async function loadSubscription(){
     if(!currentUser) return;
 
-    const {data,error}=await supabaseClient
-        .from("subscriptions")
-        .select("*")
-        .eq("user_id",currentUser.id)
-        .order("created_at",{ascending:false})
-        .limit(1)
-        .maybeSingle();
+    // Read the subscription through a SECURITY DEFINER RPC so frontend RLS
+    // policy differences cannot make a valid owner subscription appear missing.
+    const {data:rpcData,error:rpcError}=await supabaseClient.rpc("get_my_subscription");
+    const data = rpcData && rpcData.subscription ? rpcData.subscription : null;
+    const error = rpcError || (rpcData && rpcData.error ? new Error(rpcData.error) : null);
 
     if(error){
-        console.warn("Subscription load error:",error.message);
+        console.warn("Subscription RPC load error:",error.message);
         currentSubscription=null;
+        const planName=document.getElementById("subscriptionPlanName");
+        if(planName) planName.textContent="غير متاح";
         renderSubscriptionSetupWarning(error.message);
         return;
     }
 
     if(!data){
         currentSubscription=null;
+        const planName=document.getElementById("subscriptionPlanName");
+        if(planName) planName.textContent="غير متاح";
         renderSubscriptionSetupWarning("لا يوجد اشتراك مرتبط بهذا الحساب بعد.");
         return;
     }
