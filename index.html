@@ -1738,6 +1738,24 @@ input:focus,select:focus,textarea:focus{border-color:var(--ll-gold)!important;bo
     color:#8a6b12;font-weight:800;font-size:12px;
 }
 </style>
+
+<style id="luna-login-visibility-fix">
+/* Fix: login button text was white on the new white navbar. */
+.nav-buttons .btn-login,
+.nav-buttons button.btn-login {
+    color: #17191e !important;
+    background: #ffffff !important;
+    border: 1px solid #b98a38 !important;
+    font-weight: 800 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+.nav-buttons .btn-login:hover,
+.nav-buttons button.btn-login:hover {
+    color: #ffffff !important;
+    background: #17181c !important;
+}
+</style>
 </head>
 
 <body>
