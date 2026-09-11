@@ -10615,10 +10615,23 @@ async function placeStoreOrder(){
             result.error
         );
 
+        const orderErrorText = String(
+            result.error?.message ||
+            result.error?.details ||
+            result.error?.hint ||
+            ""
+        );
 
-        message.textContent =
-            "❌ لم يتم إرسال الطلب. حاول مرة أخرى.";
-
+        if(orderErrorText.includes("INSUFFICIENT_STOCK")){
+            message.textContent =
+                "❌ الكمية المطلوبة غير متاحة حاليًا. تم تحديث المخزون، اختر كمية أقل وحاول مرة أخرى.";
+        }else if(orderErrorText.includes("PRODUCT_NOT_FOUND")){
+            message.textContent =
+                "❌ أحد المنتجات لم يعد متاحًا في هذا المتجر. حدّث السلة وحاول مرة أخرى.";
+        }else{
+            message.textContent =
+                "❌ لم يتم إرسال الطلب. حاول مرة أخرى.";
+        }
 
         return;
     }
