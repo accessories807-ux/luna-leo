@@ -3949,7 +3949,20 @@ function getSubscriptionEnd(sub=currentSubscription){
         ? sub.trial_ends_at
         : sub.subscription_ends_at;
 
-    return raw ? new Date(raw).getTime() : null;
+    if(raw){
+        const parsed=new Date(raw).getTime();
+        if(Number.isFinite(parsed)) return parsed;
+    }
+
+    // Safe fallback for older Trial rows that have a start date but no
+    // populated trial_ends_at. The database value remains the source of truth
+    // whenever trial_ends_at is present.
+    if(plan==="trial" && sub.trial_started_at){
+        const started=new Date(sub.trial_started_at).getTime();
+        if(Number.isFinite(started)) return started + (15*24*60*60*1000);
+    }
+
+    return null;
 }
 
 function subscriptionIsActive(sub=currentSubscription){
@@ -3987,6 +4000,40 @@ function formatRemaining(ms){
     return `متبقي ${days} يوم و ${hours} ساعة و ${mins} دقيقة و ${secs} ثانية`;
 }
 
+function updateSubscriptionCountdown(){
+    const countdown=document.getElementById("subscriptionCountdown");
+    if(!countdown) return;
+
+    const plan=normalizePlan(currentSubscription?.plan);
+    if(currentSubscription?.is_lifetime === true || plan==="lifetime"){
+        countdown.textContent="♾️ مدى الحياة";
+        countdown.classList.remove("expired");
+        return;
+    }
+
+    const end=getSubscriptionEnd(currentSubscription);
+    if(!end){
+        countdown.textContent="جاري الحساب...";
+        countdown.classList.remove("expired");
+        return;
+    }
+
+    const remaining=end-Date.now();
+    countdown.textContent=formatRemaining(remaining);
+    countdown.classList.toggle("expired",remaining<=0 || !subscriptionIsActive());
+}
+
+function startSubscriptionCountdown(){
+    if(subscriptionTimer) clearInterval(subscriptionTimer);
+    subscriptionTimer=null;
+
+    updateSubscriptionCountdown();
+
+    if(getSubscriptionEnd(currentSubscription)){
+        subscriptionTimer=setInterval(updateSubscriptionCountdown,1000);
+    }
+}
+
 function renderSubscriptionUI(){
     const plan=normalizePlan(currentSubscription?.plan);
     const cfg=PLAN_CONFIG[plan];
@@ -3995,10 +4042,9 @@ function renderSubscriptionUI(){
     const banner=document.getElementById("subscriptionBanner");
     const planEl=document.getElementById("subscriptionPlanName");
     const badge=document.getElementById("subscriptionStatusBadge");
-    const countdown=document.getElementById("subscriptionCountdown");
     const notice=document.getElementById("subscriptionNotice");
 
-    if(!planEl || !badge || !countdown || !notice) return;
+    if(!planEl || !badge || !notice) return;
 
     planEl.textContent=cfg.name;
     badge.textContent=subscriptionStatusText();
@@ -4011,16 +4057,7 @@ function renderSubscriptionUI(){
 
     if(banner) banner.classList.toggle("expired",!active);
 
-    const end=getSubscriptionEnd(currentSubscription);
-
-    if(currentSubscription?.is_lifetime === true || plan==="lifetime"){
-        countdown.textContent="♾️ مدى الحياة";
-        countdown.classList.remove("expired");
-    }else{
-        const remaining=(end || 0)-Date.now();
-        countdown.textContent=formatRemaining(remaining);
-        countdown.classList.toggle("expired",remaining<=0 || !active);
-    }
+    updateSubscriptionCountdown();
 
     notice.textContent=active
         ? (plan==="trial"
@@ -4031,15 +4068,7 @@ function renderSubscriptionUI(){
     const badge2=document.getElementById("marwanPlanBadge");
     if(badge2) badge2.textContent=cfg.name;
 
-    if(subscriptionTimer) clearInterval(subscriptionTimer);
-
-    if(end){
-        subscriptionTimer=setInterval(()=>{
-            if(!currentSubscription) return;
-            renderSubscriptionUI();
-        },1000);
-    }
-
+    startSubscriptionCountdown();
     renderPlanCards();
     updateFeatureAccessUI();
 }
