@@ -1778,7 +1778,17 @@ input:focus,select:focus,textarea:focus{border-color:var(--ll-gold)!important;bo
     background: #17181c !important;
 }
 </style>
-<style id="luna-product-pro">.product-card{overflow:hidden}.product-card .product-info{padding:18px}.ll-discount-badge{display:inline-flex;align-items:center;justify-content:center;background:#17181c!important;color:#fff!important;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;letter-spacing:.2px;box-shadow:0 6px 18px rgba(0,0,0,.12)}.sf-product-image{overflow:hidden}.sf-product-image .ll-discount-badge{position:absolute}.sf-price strong{font-weight:950}@media(max-width:600px){#productForm{grid-template-columns:1fr!important}.product-card{min-width:0}}</style></head>
+<style id="luna-product-pro">.product-card{overflow:hidden}.product-card .product-info{padding:18px}.ll-discount-badge{display:inline-flex;align-items:center;justify-content:center;background:#17181c!important;color:#fff!important;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;letter-spacing:.2px;box-shadow:0 6px 18px rgba(0,0,0,.12)}.sf-product-image{overflow:hidden}.sf-product-image .ll-discount-badge{position:absolute}.sf-price strong{font-weight:950}@media(max-width:600px){#productForm{grid-template-columns:1fr!important}.product-card{min-width:0}}</style>
+<style id="ll-returns-css">
+.ll-returns-panel{background:#fff;border:1px solid #e8dfd3;border-radius:18px;padding:18px;margin:16px 0;box-shadow:0 8px 25px rgba(40,30,20,.05)}
+.ll-returns-panel h3{margin:0 0 14px}
+.ll-return-card{border:1px solid #e5ddd2;border-radius:14px;padding:14px;margin:10px 0;background:#fff}
+.ll-return-status{display:inline-block;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:800;background:#f4eee4}
+.ll-return-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ll-return-actions button{border:1px solid #ddd4c8;border-radius:9px;padding:8px 11px;background:#fff;cursor:pointer}
+@media(max-width:700px){.ll-return-actions button{flex:1}}
+</style>
+</head>
 
 <body>
 
@@ -10300,6 +10310,11 @@ function backToCart(){
 
 
 
+
+<div class="ll-returns-panel" id="llReturnsPanel" style="display:none">
+  <h3>🔄 المرتجعات والاستبدال</h3>
+  <div id="llReturnsList"><div class="ll-shipping-note">لا توجد طلبات مرتجعات أو استبدال.</div></div>
+</div>
 <div class="ll-shipping-panel" id="llShippingManager" style="display:none">
   <h3>🚚 إعدادات الشحن</h3>
   <div class="ll-shipping-grid">
@@ -10313,6 +10328,55 @@ function backToCart(){
   <div id="llShippingMethodsList" style="margin-top:14px"></div>
 </div>
 
+
+
+/* =====================================================
+   RETURNS & EXCHANGES
+===================================================== */
+async function llLoadReturns(){
+  if(!currentStore) return;
+  const panel=document.getElementById("llReturnsPanel");
+  const box=document.getElementById("llReturnsList");
+  if(!panel||!box) return;
+  panel.style.display="block";
+  const {data,error}=await supabaseClient.from("returns_exchanges").select("*")
+    .eq("store_id",currentStore.id).order("created_at",{ascending:false});
+  if(error){box.innerHTML='<div class="ll-shipping-note">تعذر تحميل طلبات المرتجعات: '+String(error.message).replace(/[<>]/g,"")+'</div>';return;}
+  if(!(data||[]).length){box.innerHTML='<div class="ll-shipping-note">لا توجد طلبات حاليًا.</div>';return;}
+  const labels={requested:"طلب جديد",reviewing:"قيد المراجعة",approved:"مقبول",rejected:"مرفوض",completed:"مكتمل",cancelled:"ملغي"};
+  box.innerHTML=data.map(r=>`<div class="ll-return-card">
+    <div><strong>${r.type==="exchange"?"🔁 استبدال":"↩️ إرجاع"}</strong>
+    <span class="ll-return-status">${labels[r.status]||r.status}</span></div>
+    <div style="margin-top:8px">الأوردر: ${String(r.order_id).slice(0,8)}…</div>
+    <div>السبب: ${String(r.reason||"غير محدد").replace(/[<>]/g,"")}</div>
+    ${r.details?`<div>التفاصيل: ${String(r.details).replace(/[<>]/g,"")}</div>`:""}
+    <div class="ll-return-actions">
+      ${r.status==="requested"?`<button onclick="llUpdateReturn('${r.id}','reviewing')">مراجعة</button>`:""}
+      ${r.status==="reviewing"?`<button onclick="llUpdateReturn('${r.id}','approved')">قبول</button><button onclick="llUpdateReturn('${r.id}','rejected')">رفض</button>`:""}
+      ${r.status==="approved"?`<button onclick="llUpdateReturn('${r.id}','completed')">تم التنفيذ</button>`:""}
+    </div>
+  </div>`).join("");
+}
+async function llUpdateReturn(id,status){
+  if(!currentStore||!confirm("تحديث حالة طلب المرتجع/الاستبدال؟")) return;
+  const patch={status};
+  if(status==="completed") patch.completed_at=new Date().toISOString();
+  const {error}=await supabaseClient.from("returns_exchanges").update(patch)
+    .eq("id",id).eq("store_id",currentStore.id);
+  if(error){alert("تعذر تحديث الطلب: "+error.message);return;}
+  await llLoadReturns();
+}
+async function llCreateReturnRequest(orderId,type,reason,details,items=[]){
+  const storeId=publicStore?.id;
+  if(!storeId||!orderId) return false;
+  const {error}=await supabaseClient.from("returns_exchanges").insert({
+    store_id:storeId,order_id:orderId,user_id:(currentUser?.id||null),
+    type:type==="exchange"?"exchange":"return",reason,details,items
+  });
+  if(error){alert("تعذر إرسال الطلب: "+error.message);return false;}
+  alert(type==="exchange"?"تم إرسال طلب الاستبدال.":"تم إرسال طلب الإرجاع.");
+  return true;
+}
 
 /* =====================================================
    SHIPPING SYSTEM
