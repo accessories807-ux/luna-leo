@@ -3983,8 +3983,13 @@ function subscriptionIsActive(sub=currentSubscription){
 
 function hasFeature(feature){
     // Platform owner is always treated as fully privileged in the UI.
-    // The database subscription remains the source of truth for normal users.
     if(isPlatformOwner()) return true;
+
+    // The 15-day Trial is a full-access evaluation period.
+    // During the active trial, every feature is available so the merchant can
+    // evaluate the complete product before choosing a paid plan.
+    const activePlan = normalizePlan(currentSubscription?.plan);
+    if(activePlan === "trial" && currentSubscription && subscriptionIsActive(currentSubscription)) return true;
 
     const teamDecision = featureAllowedForCurrentUser(feature);
     if(teamDecision !== null) return teamDecision;
@@ -4228,7 +4233,7 @@ function updateFeatureAccessUI(){
     const analyticsLock=document.getElementById("analyticsLock");
     if(analyticsLock){
         analyticsLock.textContent=hasFeature("analytics")
-            ? "التحليلات متاحة في باقة Growth وBusiness."
+            ? (normalizePlan(currentSubscription?.plan)==="trial" ? "التحليلات متاحة بالكامل خلال الفترة التجريبية." : "التحليلات متاحة في باقة Growth وBusiness.")
             : "🔒 التحليلات متاحة بدايةً من Growth. قم بالترقية لفتحها.";
     }
 
@@ -4236,8 +4241,8 @@ function updateFeatureAccessUI(){
     if(marwanStatus){
         const plan=normalizePlan(currentSubscription?.plan);
         marwanStatus.textContent=hasFeature("marwan")
-            ? (plan==="business"||plan==="lifetime"
-                ?"مروان AI غير محدود ومجهز للتوسع في الوظائف الذكية."
+            ? (plan==="trial" || plan==="business"||plan==="lifetime"
+                ?"مروان AI متاح بالكامل خلال الفترة التجريبية ومجهز للتوسع في الوظائف الذكية."
                 :"مروان AI متاح في هذه الباقة.")
             :"🔒 مروان AI غير متاح في Starter أو بعد انتهاء الاشتراك. الترقية إلى Growth تفتحه.";
     }
@@ -4246,7 +4251,7 @@ function updateFeatureAccessUI(){
     if(team){
         const plan=normalizePlan(currentSubscription?.plan);
         const ownerLifetime = isPlatformOwner();
-        const admins=ownerLifetime ? Infinity : (PLAN_CONFIG[plan]?.admins ?? 0);
+        const admins=ownerLifetime ? Infinity : (plan==="trial" ? Infinity : (PLAN_CONFIG[plan]?.admins ?? 0));
         team.textContent=hasFeature("team")
             ? `حد إدارة الفريق: ${admins===Infinity?"غير محدود":admins+" Admin"}`
             :"🔒 إدارة الفريق متاحة بدايةً من Starter.";
@@ -5189,6 +5194,10 @@ function showDashboardSection(
     const target=document.getElementById(id);
 
     if(target) target.style.display="block";
+
+    if(section==="team" && typeof window.llOpenTeam==="function"){
+        window.llOpenTeam();
+    }
 
     document
     .querySelectorAll(".sidebar button")
@@ -12021,13 +12030,13 @@ document.addEventListener("DOMContentLoaded", async function(){
 <script id="luna-v2-auth-stable">(function(){const sb=window.supabaseClient;const q=id=>document.getElementById(id);const m=t=>{const e=q('authMessage');if(e)e.textContent=t};const b=(v,t)=>{const e=q('authSubmit');if(e){e.disabled=v;if(t)e.textContent=t}};window.loginUser=async function(){const email=(q('authEmail')?.value||'').trim().toLowerCase(),password=q('authPassword')?.value||'';if(!email||!password){m('⚠️ اكتب البريد الإلكتروني وكلمة المرور.');return}b(true,'⏳ جاري تسجيل الدخول...');m('');try{const r=await sb.auth.signInWithPassword({email,password});if(r.error)throw r.error;window.currentUser=r.data.user;m('✓ تم تسجيل الدخول بنجاح');setTimeout(async()=>{closeAuth();showDashboard();if(typeof updateUserInfo==='function')updateUserInfo();if(typeof loadUserStore==='function')await loadUserStore()},350)}catch(e){console.error(e);m('❌ '+(e.message||'تعذر تسجيل الدخول'))}finally{b(false,'تسجيل الدخول')}};window.registerUser=async function(){const name=(q('authName')?.value||'').trim(),email=(q('authEmail')?.value||'').trim().toLowerCase(),password=q('authPassword')?.value||'',password2=q('authPassword2')?.value||'';if(!name||!email||!password||!password2){m('⚠️ من فضلك املأ كل البيانات.');return}if(password.length<6){m('⚠️ كلمة المرور لازم تكون 6 أحرف على الأقل.');return}if(password!==password2){m('⚠️ كلمتا المرور غير متطابقتين.');return}b(true,'⏳ جاري إنشاء الحساب...');m('');try{const r=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});if(r.error)throw r.error;if(r.data.session){window.currentUser=r.data.user;m('✓ تم إنشاء الحساب وتسجيل الدخول');setTimeout(async()=>{closeAuth();showDashboard();if(typeof updateUserInfo==='function')updateUserInfo();if(typeof loadUserStore==='function')await loadUserStore()},350)}else m('✓ تم إنشاء الحساب. راجع بريدك الإلكتروني لتأكيد الحساب.')}catch(e){console.error(e);m('❌ '+(e.message||'حدث خطأ أثناء إنشاء الحساب'))}finally{b(false,'إنشاء الحساب')}};window.loginWithGoogle=async function(){try{const r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});if(r.error)throw r.error}catch(e){m('❌ '+(e.message||'تعذر تسجيل الدخول بجوجل'))}}})();</script>
 
 <style id="ll-team-style">
-#llTeamPanel{margin-top:18px}.ll-team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.ll-team-card{background:#fff;border:1px solid #e6e1d8;border-radius:18px;padding:15px;box-shadow:0 8px 24px rgba(20,20,20,.05)}.ll-team-card h4{margin:0 0 5px}.ll-team-muted{color:#777;font-size:13px}.ll-team-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.ll-team-btn{border:1px solid #c8a15a;background:#fff;border-radius:10px;padding:8px 11px;font-weight:700;cursor:pointer}.ll-team-btn.primary{background:#17191e;color:#fff}.ll-team-form{display:grid;grid-template-columns:1.5fr 1fr auto;gap:9px;margin-bottom:14px}.ll-team-form input,.ll-team-form select{padding:11px;border:1px solid #ddd;border-radius:10px;background:#fff}@media(max-width:700px){.ll-team-form{grid-template-columns:1fr}}
+#llTeamPanel{margin-top:18px;display:block}.ll-team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.ll-team-card{background:#fff;border:1px solid #e6e1d8;border-radius:18px;padding:15px;box-shadow:0 8px 24px rgba(20,20,20,.05)}.ll-team-card h4{margin:0 0 5px}.ll-team-muted{color:#777;font-size:13px}.ll-team-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.ll-team-btn{border:1px solid #c8a15a;background:#fff;border-radius:10px;padding:8px 11px;font-weight:700;cursor:pointer}.ll-team-btn.primary{background:#17191e;color:#fff}.ll-team-form{display:grid;grid-template-columns:1.5fr 1fr auto;gap:9px;margin-bottom:14px}.ll-team-form input,.ll-team-form select{padding:11px;border:1px solid #ddd;border-radius:10px;background:#fff}@media(max-width:700px){.ll-team-form{grid-template-columns:1fr}}
 </style>
 <script id="ll-team-system">
 (function(){
  const q=id=>document.getElementById(id);
  async function getStore(){ if(window.currentStore)return window.currentStore; if(typeof loadUserStore==='function') await loadUserStore(); return window.currentStore||currentStore||null; }
- function roleLabel(r){return r==='manager'?'مدير':'r'===r?'مشاهد':r==='viewer'?'مشاهد':'موظف'}
+ function roleLabel(r){return r==='manager'?'مدير':r==='viewer'?'مشاهد':'موظف'}
  function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
  async function loadTeam(){
    const box=q('llTeamList'); if(!box)return; const st=await getStore(); if(!st){box.innerHTML='<div class="ll-team-muted">أنشئ متجرك أولًا.</div>';return;}
@@ -12037,7 +12046,18 @@ document.addEventListener("DOMContentLoaded", async function(){
    box.innerHTML=data.map(m=>`<div class="ll-team-card"><h4>${esc(m.role==='manager'?'مدير':m.role==='viewer'?'مشاهد':'موظف')}</h4><div class="ll-team-muted">User ID: ${esc(m.user_id)}</div><div class="ll-team-muted">الحالة: ${m.status==='active'?'نشط':'موقوف'}</div><div class="ll-team-actions"><button class="ll-team-btn" onclick="window.llToggleTeam('${m.id}','${m.status==='active'?'suspended':'active'}')">${m.status==='active'?'إيقاف':'تفعيل'}</button><button class="ll-team-btn primary" onclick="window.llEditTeam('${m.id}')">تعديل الصلاحيات</button><button class="ll-team-btn" onclick="window.llRemoveTeam('${m.id}')">حذف</button></div></div>`).join('');
  }
  window.llOpenTeam=async function(){
-   const dash=q('dashboardApp'); if(!dash)return; let panel=q('llTeamPanel'); if(!panel){panel=document.createElement('section');panel.id='llTeamPanel';panel.className='panel';panel.innerHTML=`<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><div><h2 style="margin:0">👥 إدارة الفريق والصلاحيات</h2><div class="ll-team-muted">أضف أعضاء موجودين في حسابات Supabase وحدد صلاحياتهم.</div></div></div><div class="ll-team-form"><input id="llTeamEmail" type="email" placeholder="بريد عضو الفريق"><select id="llTeamRole"><option value="staff">موظف</option><option value="manager">مدير</option><option value="viewer">مشاهد</option></select><button class="ll-team-btn primary" onclick="llAddTeam()">+ إضافة عضو</button></div><div id="llTeamList" class="ll-team-grid"></div>`;dash.appendChild(panel)} panel.scrollIntoView({behavior:'smooth',block:'start'}); await loadTeam(); };
+   const target=q('dashTeam'); if(!target)return;
+   let panel=q('llTeamPanel');
+   if(!panel){
+     panel=document.createElement('div');
+     panel.id='llTeamPanel';
+     panel.className='panel';
+     panel.innerHTML=`<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><div><h2 style="margin:0">👥 إدارة الفريق والصلاحيات</h2><div class="ll-team-muted">أضف أعضاء موجودين في حسابات Supabase وحدد صلاحياتهم.</div></div></div><div class="ll-team-form"><input id="llTeamEmail" type="email" placeholder="بريد عضو الفريق"><select id="llTeamRole"><option value="staff">موظف</option><option value="manager">مدير</option><option value="viewer">مشاهد</option></select><button type="button" class="ll-team-btn primary" onclick="window.llAddTeam()">+ إضافة عضو</button></div><div id="llTeamList" class="ll-team-grid"></div>`;
+     target.appendChild(panel);
+   }
+   panel.style.display='block';
+   await loadTeam();
+ };
  window.llAddTeam=async function(){const st=await getStore(),email=(q('llTeamEmail')?.value||'').trim(),role=q('llTeamRole')?.value||'staff';if(!st||!email)return alert('اكتب بريد عضو الفريق.');try{const {error}=await supabaseClient.rpc('add_store_team_member_by_email',{p_store_id:st.id,p_email:email,p_role:role});if(error)throw error;alert('تمت إضافة عضو الفريق.');q('llTeamEmail').value='';await loadTeam()}catch(e){alert('تعذر إضافة العضو: '+(e.message||'تأكد أن الحساب موجود بالفعل.'))}};
  window.llToggleTeam=async function(id,status){const {error}=await supabaseClient.rpc('set_store_team_member_status',{p_member_id:id,p_status:status});if(error)return alert(error.message);await loadTeam()};
  window.llRemoveTeam=async function(id){if(!confirm('حذف عضو الفريق؟'))return;const {error}=await supabaseClient.from('store_team_members').delete().eq('id',id);if(error)return alert(error.message);await loadTeam()};
@@ -12181,16 +12201,10 @@ footer{
 
     // Prevent team-management UI from being usable by a team member.
     window.llOpenTeam = async function(){
-        if(typeof isPlatformOwner === "function" && isPlatformOwner()){
-            if(typeof window.__llOriginalOpenTeam === "function") return window.__llOriginalOpenTeam();
-            return;
-        }
         if(typeof isTeamMemberContext === "function" && isTeamMemberContext()){
             alert("🔒 إدارة الفريق متاحة لمالك المتجر فقط.");
             return;
         }
-        const panel=document.getElementById("llTeamPanel");
-        if(panel) panel.style.display="";
         if(typeof window.__llOriginalOpenTeam === "function"){
             return window.__llOriginalOpenTeam();
         }
