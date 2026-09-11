@@ -3958,8 +3958,15 @@ function getSubscriptionEnd(sub=currentSubscription){
     // populated trial_ends_at. The database value remains the source of truth
     // whenever trial_ends_at is present.
     if(plan==="trial" && sub.trial_started_at){
-        const started=new Date(sub.trial_started_at).getTime();
+        const started=Date.parse(String(sub.trial_started_at));
         if(Number.isFinite(started)) return started + (15*24*60*60*1000);
+    }
+
+    // Extra compatibility fallback: some older Trial rows may only have
+    // created_at populated. Use the row creation time as the Trial start.
+    if(plan==="trial" && sub.created_at){
+        const created=Date.parse(String(sub.created_at));
+        if(Number.isFinite(created)) return created + (15*24*60*60*1000);
     }
 
     return null;
@@ -4013,8 +4020,10 @@ function updateSubscriptionCountdown(){
 
     const end=getSubscriptionEnd(currentSubscription);
     if(!end){
-        countdown.textContent="جاري الحساب...";
-        countdown.classList.remove("expired");
+        countdown.textContent=plan==="trial"
+            ? "⚠️ لم يتم تحديد موعد انتهاء التجربة"
+            : "⚠️ لم يتم تحديد موعد انتهاء الاشتراك";
+        countdown.classList.add("expired");
         return;
     }
 
