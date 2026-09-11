@@ -3006,6 +3006,12 @@ class="empty"
 
 </div>
 
+<div
+ id="ordersArchive"
+ style="margin-top:22px;"
+>
+</div>
+
 </div>
 
 </section>
@@ -6785,11 +6791,28 @@ async function loadOrders(){
         return;
     }
 
-    const orders =
-        data || [];
+    const allOrders = data || [];
 
-    dashboardOrdersCount = orders.length;
-    window.__dashboardSales = orders.reduce((sum,order)=>sum+Number(order.total||0),0);
+    // الطلبات الحالية: أي طلب لم يتم تسليمه أو إلغاؤه.
+    // الطلبات التي أصبحت delivered تنتقل تلقائيًا إلى الأرشيف.
+    const deliveredOrders = allOrders.filter(order =>
+        String(order.status || order.workflow_status || '').toLowerCase() === 'delivered'
+    );
+
+    const activeOrders = allOrders.filter(order => {
+        const st = String(order.status || order.workflow_status || 'new').toLowerCase();
+        return st !== 'delivered' && st !== 'cancelled' && st !== 'completed';
+    });
+
+    // نحافظ على المبيعات التاريخية حتى بعد نقل الطلب إلى الأرشيف.
+    const salesOrders = allOrders.filter(order =>
+        String(order.status || order.workflow_status || '').toLowerCase() !== 'cancelled'
+    );
+
+    const orders = activeOrders;
+
+    dashboardOrdersCount = activeOrders.length;
+    window.__dashboardSales = salesOrders.reduce((sum,order)=>sum+Number(order.total||0),0);
 
     /* =========================
        STATISTICS
@@ -6809,7 +6832,7 @@ async function loadOrders(){
 
     let sales = 0;
 
-    orders.forEach(order=>{
+    salesOrders.forEach(order=>{
 
         sales +=
             Number(
@@ -6839,8 +6862,11 @@ async function loadOrders(){
     const statusArabic = {
 
         new:"جديد",
+        confirmed:"تم التأكيد",
         processing:"قيد التجهيز",
+        preparing:"قيد التجهيز",
         shipped:"تم الشحن",
+        delivered:"تم التسليم",
         completed:"مكتمل",
         cancelled:"ملغي"
 
@@ -6849,8 +6875,11 @@ async function loadOrders(){
     const statusEmoji = {
 
         new:"🆕",
+        confirmed:"✅",
         processing:"⚙️",
+        preparing:"⚙️",
         shipped:"🚚",
+        delivered:"🎉",
         completed:"✅",
         cancelled:"❌"
 
@@ -7484,9 +7513,20 @@ async function loadOrders(){
                             </option>
 
                             <option
-                                value="processing"
+                                value="confirmed"
                                 ${
-                                    orderStatus === "processing"
+                                    orderStatus === "confirmed"
+                                    ? "selected"
+                                    : ""
+                                }
+                            >
+                                ✅ تم التأكيد
+                            </option>
+
+                            <option
+                                value="preparing"
+                                ${
+                                    orderStatus === "preparing" || orderStatus === "processing"
                                     ? "selected"
                                     : ""
                                 }
@@ -7506,14 +7546,14 @@ async function loadOrders(){
                             </option>
 
                             <option
-                                value="completed"
+                                value="delivered"
                                 ${
-                                    orderStatus === "completed"
+                                    orderStatus === "delivered" || orderStatus === "completed"
                                     ? "selected"
                                     : ""
                                 }
                             >
-                                ✅ مكتمل
+                                🎉 تم التسليم — نقل للأرشيف
                             </option>
 
                             <option
@@ -7529,6 +7569,26 @@ async function loadOrders(){
 
                         </select>
 
+                        <button
+                            type="button"
+                            onclick="markOrderDelivered('${orderId}')"
+                            style="
+                                width:100%;
+                                margin-top:10px;
+                                padding:13px;
+                                border:none;
+                                border-radius:12px;
+                                background:#168c4b;
+                                color:#fff;
+                                font-weight:800;
+                                font-size:15px;
+                                cursor:pointer;
+                                box-shadow:0 6px 18px rgba(22,140,75,.18);
+                            "
+                        >
+                            🎉 تم التسليم — نقل للأرشيف
+                        </button>
+
                     </div>
 
                 </div>
@@ -7538,6 +7598,45 @@ async function loadOrders(){
             })
             .join("");
 
+    }
+
+    /* =========================
+       ARCHIVE
+    ========================= */
+
+    const archive = document.getElementById("ordersArchive");
+
+    if(archive){
+        archive.innerHTML = `
+            <div style="
+                margin-top:18px;
+                padding-top:18px;
+                border-top:1px solid rgba(214,179,90,.18);
+            ">
+                <h3 style="margin:0 0 12px; color:#d6b35a; font-size:18px;">
+                    🗄️ أرشيف الطلبات المسلّمة (${deliveredOrders.length})
+                </h3>
+                ${deliveredOrders.length ? deliveredOrders.map(order => {
+                    const st = String(order.status || order.workflow_status || 'delivered').toLowerCase();
+                    const d = order.created_at ? new Date(order.created_at).toLocaleString('ar-EG') : 'غير معروف';
+                    return `
+                        <details style="background:#fff; border:1px solid #e8e2d5; border-radius:14px; padding:12px; margin-bottom:10px; color:#222;">
+                            <summary style="cursor:pointer; font-weight:800; color:#6d5420;">
+                                🎉 ${escapeHTML(order.customer_name || 'عميل')} — ${Number(order.total||0).toLocaleString('ar-EG')} جنيه
+                            </summary>
+                            <div style="margin-top:10px; color:#666; font-size:13px;">
+                                تم التسليم • تاريخ الطلب: ${escapeHTML(d)}<br>
+                                رقم الطلب: ${escapeHTML(String(order.id || '').slice(0,8))}
+                            </div>
+                        </details>
+                    `;
+                }).join('') : `
+                    <div style="padding:18px; text-align:center; background:#fff; border:1px dashed #ddd; border-radius:14px; color:#777;">
+                        لا توجد طلبات مسلّمة في الأرشيف حتى الآن
+                    </div>
+                `}
+            </div>
+        `;
     }
 
     /* =========================
@@ -7645,11 +7744,13 @@ async function updateOrderStatus(orderId,newStatus){
 
     if(!currentStore) return;
 
+    const status = newStatus === "processing" ? "preparing" : newStatus;
+
     const {error} =
         await supabaseClient
             .from("orders")
             .update({
-                status:newStatus
+                status:status
             })
             .eq("id",orderId)
             .eq("store_id",currentStore.id);
@@ -7666,8 +7767,41 @@ async function updateOrderStatus(orderId,newStatus){
         return;
     }
 
+    if(status === "delivered"){
+        alert("🎉 تم التسليم بنجاح! تم نقل الطلب إلى الأرشيف.");
+    }
+
     await loadOrders();
 
+}
+
+async function markOrderDelivered(orderId){
+
+    if(!enforceSubscriptionFor("orders")) return;
+
+    if(!currentStore) return;
+
+    const confirmed = confirm("تأكيد استلام العميل للطلب؟\nبعد التأكيد سيختفي من الطلبات الحالية وينتقل إلى الأرشيف.");
+
+    if(!confirmed) return;
+
+    const {error} = await supabaseClient
+        .from("orders")
+        .update({
+            status:"delivered"
+        })
+        .eq("id",orderId)
+        .eq("store_id",currentStore.id);
+
+    if(error){
+        console.error("Mark delivered error:", error);
+        alert("❌ لم يتم نقل الطلب للأرشيف.\n" + (error.message || ""));
+        return;
+    }
+
+    await loadOrders();
+
+    alert("🎉 تم التسليم! الطلب اختفى من الطلبات الحالية وانتقل للأرشيف.");
 }
 
 
