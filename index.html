@@ -3698,8 +3698,158 @@ onclick="closeCart()"
    GLOBAL VARIABLES
 ===================================================== */
 
+
 let currentUser = null;
 let currentStore = null;
+
+/* =====================================================
+   TEAM ACCESS CONTEXT
+===================================================== */
+let currentTeamMembership = null;
+let currentTeamPermissions = null;
+
+const TEAM_PERMISSION_BY_FEATURE = {
+    products:"products",
+    orders:"orders",
+    customers:"customers",
+    analytics:"reports",
+    reports:"reports",
+    inventory:"inventory",
+    coupons:"coupons",
+    shipping:"shipping",
+    returns:"returns",
+    notifications:"notifications",
+    settings:"settings"
+};
+
+function isTeamMemberContext(){
+    return !!(
+        currentTeamMembership &&
+        currentTeamPermissions &&
+        currentStore &&
+        String(currentStore.owner_id || "") !== String(currentUser?.id || "")
+    );
+}
+
+function teamCan(permission){
+    if(!currentUser || !currentStore) return false;
+    if(String(currentStore.owner_id || "") === String(currentUser.id || "")) return true;
+    return !!(currentTeamPermissions && currentTeamPermissions[permission]);
+}
+
+function featureAllowedForCurrentUser(feature){
+    if(!isTeamMemberContext()) return null;
+    const permission = TEAM_PERMISSION_BY_FEATURE[feature];
+    if(!permission) return false;
+    return teamCan(permission);
+}
+
+async function loadTeamContext(store){
+    currentTeamMembership = null;
+    currentTeamPermissions = null;
+    window.currentTeamMembership = null;
+    window.currentTeamPermissions = null;
+
+    if(!currentUser || !store) return false;
+
+    if(String(store.owner_id || "") === String(currentUser.id || "")){
+        currentTeamPermissions = {
+            products:true, orders:true, customers:true, inventory:true,
+            reports:true, coupons:true, shipping:true, returns:true,
+            notifications:true, settings:true
+        };
+        window.currentTeamPermissions = currentTeamPermissions;
+        return false;
+    }
+
+    const {data,error} = await supabaseClient
+        .from("store_team_members")
+        .select("*")
+        .eq("store_id", store.id)
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
+
+    if(error){
+        console.error("Team context error:", error);
+        return false;
+    }
+
+    if(!data || data.status !== "active") return false;
+
+    currentTeamMembership = data;
+    currentTeamPermissions = {
+        products:!!data.can_products,
+        orders:!!data.can_orders,
+        customers:!!data.can_customers,
+        inventory:!!data.can_inventory,
+        reports:!!data.can_reports,
+        coupons:!!data.can_coupons,
+        shipping:!!data.can_shipping,
+        returns:!!data.can_returns,
+        notifications:!!data.can_notifications,
+        settings:!!data.can_settings
+    };
+
+    window.currentTeamMembership = currentTeamMembership;
+    window.currentTeamPermissions = currentTeamPermissions;
+    return true;
+}
+
+function applyTeamPermissionsUI(){
+    if(!currentStore || !currentUser) return;
+
+    const member = isTeamMemberContext();
+    const permissionButtons = {
+        products:"products",
+        orders:"orders",
+        customers:"customers",
+        analytics:"reports",
+        reports:"reports",
+        team:null,
+        settings:"settings"
+    };
+
+    document.querySelectorAll(".sidebar button").forEach(btn=>{
+        const onclick = btn.getAttribute("onclick") || "";
+        const m = onclick.match(/showDashboardSection\(['"]([^'"]+)['"]/);
+        if(!m) return;
+        const section = m[1];
+
+        if(!member){
+            btn.style.display = "";
+            return;
+        }
+
+        if(section === "team"){
+            btn.style.display = "none";
+            return;
+        }
+
+        const permission = permissionButtons[section];
+        if(permission){
+            btn.style.display = teamCan(permission) ? "" : "none";
+        }else if(section === "subscription"){
+            btn.style.display = "none";
+        }else{
+            btn.style.display = "";
+        }
+    });
+
+    const editForm = document.querySelector(".store-edit-form");
+    if(editForm) editForm.style.display = member && !teamCan("settings") ? "none" : "";
+
+    const storeCard = document.getElementById("storeCreated");
+    if(storeCard && member){
+        const createArea = document.getElementById("storeCreateArea");
+        if(createArea) createArea.style.display = "none";
+    }
+
+    const teamPanel = document.getElementById("llTeamPanel");
+    if(teamPanel) teamPanel.style.display = "none";
+
+    window.__isTeamMember = member;
+}
+
 
 /* =====================================================
    SUPABASE CONFIGURATION
@@ -3811,6 +3961,9 @@ function subscriptionIsActive(sub=currentSubscription){
 }
 
 function hasFeature(feature){
+    const teamDecision = featureAllowedForCurrentUser(feature);
+    if(teamDecision !== null) return teamDecision;
+
     const required=FEATURE_PLAN[feature] || "trial";
     const order={trial:0,starter:1,growth:2,business:3,lifetime:4};
     const current=normalizePlan(currentSubscription?.plan);
@@ -4052,6 +4205,13 @@ function updateFeatureAccessUI(){
 }
 
 function enforceSubscriptionFor(feature){
+    const teamDecision = featureAllowedForCurrentUser(feature);
+    if(teamDecision !== null){
+        if(teamDecision) return true;
+        alert("🔒 ليس لديك صلاحية لاستخدام هذه الميزة.");
+        return false;
+    }
+
     if(hasFeature(feature)) return true;
 
     const message=feature==="marwan"
@@ -4621,6 +4781,8 @@ async function loginUser(){
         currentUser =
             data.user;
 
+        window.currentUser = currentUser;
+
 
         message.textContent =
             "🎉 تم تسجيل الدخول بنجاح!";
@@ -4929,6 +5091,28 @@ function showDashboardSection(
     section,
     button
 ){
+    const requiredPermission = {
+        products:"products",
+        orders:"orders",
+        customers:"customers",
+        analytics:"reports",
+        reports:"reports",
+        team:null,
+        settings:"settings"
+    }[section];
+
+    if(isTeamMemberContext()){
+        if(section === "team" || section === "subscription"){
+            alert("🔒 هذا القسم متاح لمالك المتجر فقط.");
+            return;
+        }
+
+        if(requiredPermission && !teamCan(requiredPermission)){
+            alert("🔒 ليس لديك صلاحية لهذا القسم.");
+            return;
+        }
+    }
+
     const requiredFeature={
         products:"products",
         orders:"orders",
@@ -5203,71 +5387,81 @@ async function loadUserStore(){
 
     if(!currentUser)return;
 
+    currentTeamMembership = null;
+    currentTeamPermissions = null;
+    window.currentTeamMembership = null;
+    window.currentTeamPermissions = null;
 
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
+    let {data,error} = await supabaseClient
         .from("stores")
         .select("*")
-        .eq(
-            "owner_id",
-            currentUser.id
-        )
+        .eq("owner_id",currentUser.id)
         .limit(1);
 
-
     if(error){
-
-        console.error(error);
-
-        showDashboardSection(
-            "store"
-        );
-
-        return;
-
+        console.error("Owner store lookup error:",error);
+        data = [];
     }
 
+    let store = data && data.length ? data[0] : null;
 
-    if(
-        data &&
-        data.length
-    ){
+    // If this account is a team member, locate the store through its
+    // membership row. The membership SELECT policy allows self-read.
+    if(!store){
+        const membershipResult = await supabaseClient
+            .from("store_team_members")
+            .select("*")
+            .eq("user_id",currentUser.id)
+            .eq("status","active")
+            .order("created_at",{ascending:false})
+            .limit(1)
+            .maybeSingle();
 
-        currentStore =
-            data[0];
+        if(membershipResult.error){
+            console.error("Team membership lookup error:",membershipResult.error);
+        }else if(membershipResult.data){
+            currentTeamMembership = membershipResult.data;
 
-        displayStore();
+            const storeResult = await supabaseClient
+                .from("stores")
+                .select("*")
+                .eq("id",membershipResult.data.store_id)
+                .maybeSingle();
 
-        await loadDashboardData();
+            if(storeResult.error){
+                console.error("Team store lookup error:",storeResult.error);
+            }else{
+                store = storeResult.data || null;
+            }
+        }
+    }
 
-        showDashboardSection(
-            "home",
-            document.querySelector(
-                ".sidebar button"
-            )
-        );
-
-    }else{
-
-        currentStore =
-            null;
-
+    if(!store){
+        currentStore = null;
+        window.currentStore = null;
         resetStoreForm();
-
         showDashboardSection(
             "store",
-            document.querySelectorAll(
-                ".sidebar button"
-            )[1]
+            document.querySelectorAll(".sidebar button")[1]
         );
-
+        return;
     }
 
-}
+    currentStore = store;
+    window.currentStore = currentStore;
 
+    await loadTeamContextForStore(currentStore);
+    displayStore();
+    applyTeamPermissionsUI();
+    await loadDashboardData();
+
+    // Team members start on Home; if Home has no restricted data,
+    // they can navigate only to permitted sections.
+    showDashboardSection(
+        "home",
+        document.querySelector(".sidebar button")
+    );
+}
 
 function resetStoreForm(){
 
@@ -5658,12 +5852,30 @@ async function loadDashboardData(){
 
     if(!currentStore)return;
 
-    await loadSubscription();
+    const teamMember = isTeamMemberContext();
+
+    // Owners use subscription gating. Team members use their explicit
+    // team permissions; Supabase RLS remains the final enforcement layer.
+    if(!teamMember){
+        await loadSubscription();
+    }
+
+    const canProducts = !teamMember || teamCan("products");
+    const canOrders = !teamMember || teamCan("orders");
+    const canCustomers = !teamMember || teamCan("customers");
+
+    if(canProducts) await loadProducts();
+    if(canOrders) await loadOrders();
+    if(canCustomers) await loadCustomers();
+
+    if(teamMember){
+        renderAnalyticsFromDashboard();
+        renderSubscriptionUI();
+        return;
+    }
 
     if(subscriptionIsActive()){
-        await loadProducts();
-        await loadOrders();
-        await loadCustomers();
+        // already loaded above
     }else{
         dashboardProducts=[];
         dashboardOrdersCount=0;
@@ -5683,8 +5895,6 @@ async function loadDashboardData(){
     renderAnalyticsFromDashboard();
     renderSubscriptionUI();
 }
-
-
 
 function renderAnalyticsFromDashboard(){
     const sales=document.getElementById("analyticsSales");
@@ -5909,6 +6119,9 @@ document.addEventListener(
 ===================================================== */
 
 async function loadProducts(){
+
+    if(!enforceSubscriptionFor("products")) return;
+
 
     if(!currentStore)return;
 
@@ -8663,6 +8876,8 @@ th{
         🖨️ طباعة الفاتورة
 
     </button>
+
+
 
 
 
@@ -11758,7 +11973,7 @@ document.addEventListener("DOMContentLoaded", async function(){
 <script id="ll-team-system">
 (function(){
  const q=id=>document.getElementById(id);
- async function getStore(){ if(window.currentStore)return window.currentStore; if(typeof loadUserStore==='function') await loadUserStore(); return window.currentStore||null; }
+ async function getStore(){ if(window.currentStore)return window.currentStore; if(typeof loadUserStore==='function') await loadUserStore(); return window.currentStore||currentStore||null; }
  function roleLabel(r){return r==='manager'?'مدير':'r'===r?'مشاهد':r==='viewer'?'مشاهد':'موظف'}
  function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
  async function loadTeam(){
@@ -11883,6 +12098,50 @@ footer{
   if(typeof original==='function'){
     window.renderStoreProducts=function(){const r=original.apply(this,arguments);try{const st=window.currentPublicStore||window.currentStore||{};window.llLoadRecommendations(st.id,null)}catch(e){}return r;};
   }
+})();
+</script>
+<script id="ll-team-open-alias">
+(function(){
+    if(typeof window.llOpenTeam === "function"){
+        window.__llOriginalOpenTeam = window.llOpenTeam;
+    }
+})();
+</script>
+
+<script id="ll-team-access-bridge">
+(function(){
+    const sync = async ()=>{
+        try{
+            if(typeof loadTeamContextForStore === "function" && window.currentStore && window.currentUser){
+                await loadTeamContextForStore(window.currentStore);
+                if(typeof applyTeamPermissionsUI === "function") applyTeamPermissionsUI();
+            }
+        }catch(e){
+            console.error("Team access bridge:",e);
+        }
+    };
+
+    // Keep legacy appended team UI compatible with lexical globals.
+    window.getCurrentStoreForTeam = function(){
+        return window.currentStore || null;
+    };
+
+    // Prevent team-management UI from being usable by a team member.
+    window.llOpenTeam = async function(){
+        if(typeof isTeamMemberContext === "function" && isTeamMemberContext()){
+            alert("🔒 إدارة الفريق متاحة لمالك المتجر فقط.");
+            return;
+        }
+        const panel=document.getElementById("llTeamPanel");
+        if(panel) panel.style.display="";
+        if(typeof window.__llOriginalOpenTeam === "function"){
+            return window.__llOriginalOpenTeam();
+        }
+    };
+
+    document.addEventListener("DOMContentLoaded",()=>{
+        setTimeout(sync,600);
+    });
 })();
 </script>
 </body></html>
