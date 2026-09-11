@@ -3880,8 +3880,9 @@ let subscriptionTimer = null;
 const PLATFORM_OWNER_EMAIL = "www.ab011134@gmail.com";
 
 function isPlatformOwner(){
-    return !!currentUser &&
-        String(currentUser.email || "").trim().toLowerCase() === PLATFORM_OWNER_EMAIL.toLowerCase();
+    const u = currentUser || window.currentUser || null;
+    return !!u &&
+        String(u.email || "").trim().toLowerCase() === PLATFORM_OWNER_EMAIL.toLowerCase();
 }
 
 const PLAN_CONFIG = {
@@ -3981,6 +3982,10 @@ function subscriptionIsActive(sub=currentSubscription){
 }
 
 function hasFeature(feature){
+    // Platform owner is always treated as fully privileged in the UI.
+    // The database subscription remains the source of truth for normal users.
+    if(isPlatformOwner()) return true;
+
     const teamDecision = featureAllowedForCurrentUser(feature);
     if(teamDecision !== null) return teamDecision;
 
@@ -4045,8 +4050,11 @@ function startSubscriptionCountdown(){
 
 function renderSubscriptionUI(){
     const plan=normalizePlan(currentSubscription?.plan);
-    const cfg=PLAN_CONFIG[plan];
-    const active=subscriptionIsActive();
+    const ownerLifetime = isPlatformOwner();
+    const effectivePlan = ownerLifetime ? "lifetime" : plan;
+    const cfg=PLAN_CONFIG[effectivePlan] || PLAN_CONFIG.trial;
+    const active=ownerLifetime || subscriptionIsActive();
+    const displayPlan = effectivePlan;
 
     const banner=document.getElementById("subscriptionBanner");
     const planEl=document.getElementById("subscriptionPlanName");
@@ -4056,7 +4064,7 @@ function renderSubscriptionUI(){
     if(!planEl || !badge || !notice) return;
 
     planEl.textContent=cfg.name;
-    badge.textContent=subscriptionStatusText();
+    badge.textContent=ownerLifetime ? "مدى الحياة" : subscriptionStatusText();
 
     const ownerBadge=document.getElementById("subscriptionOwnerBadge");
     if(ownerBadge){
@@ -4237,7 +4245,8 @@ function updateFeatureAccessUI(){
     const team=document.getElementById("teamPlanInfo");
     if(team){
         const plan=normalizePlan(currentSubscription?.plan);
-        const admins=PLAN_CONFIG[plan]?.admins ?? 0;
+        const ownerLifetime = isPlatformOwner();
+        const admins=ownerLifetime ? Infinity : (PLAN_CONFIG[plan]?.admins ?? 0);
         team.textContent=hasFeature("team")
             ? `حد إدارة الفريق: ${admins===Infinity?"غير محدود":admins+" Admin"}`
             :"🔒 إدارة الفريق متاحة بدايةً من Starter.";
@@ -4245,6 +4254,9 @@ function updateFeatureAccessUI(){
 }
 
 function enforceSubscriptionFor(feature){
+    // Never block the platform owner with plan-gating UI.
+    if(isPlatformOwner()) return true;
+
     const teamDecision = featureAllowedForCurrentUser(feature);
     if(teamDecision !== null){
         if(teamDecision) return true;
@@ -12169,6 +12181,10 @@ footer{
 
     // Prevent team-management UI from being usable by a team member.
     window.llOpenTeam = async function(){
+        if(typeof isPlatformOwner === "function" && isPlatformOwner()){
+            if(typeof window.__llOriginalOpenTeam === "function") return window.__llOriginalOpenTeam();
+            return;
+        }
         if(typeof isTeamMemberContext === "function" && isTeamMemberContext()){
             alert("🔒 إدارة الفريق متاحة لمالك المتجر فقط.");
             return;
