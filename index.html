@@ -1790,6 +1790,18 @@ input:focus,select:focus,textarea:focus{border-color:var(--ll-gold)!important;bo
 </style>
 <style id="ll-notifications-css">
 .ll-notifications-wrap{position:relative;display:inline-block}.ll-notification-btn{position:relative;border:1px solid #ddd4c8;background:#fff;border-radius:12px;padding:9px 12px;cursor:pointer}.ll-notification-badge{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#b98a38;color:#fff;font-size:11px;font-weight:800;display:none;align-items:center;justify-content:center}.ll-notification-panel{position:absolute;right:0;top:48px;width:min(380px,92vw);max-height:430px;overflow:auto;background:#fff;border:1px solid #e3dbd0;border-radius:16px;box-shadow:0 18px 45px rgba(30,25,20,.14);z-index:9999;padding:10px}.ll-notification-item{padding:12px;border-bottom:1px solid #eee7df;cursor:pointer}.ll-notification-item:last-child{border-bottom:0}.ll-notification-item.unread{background:#fffaf0}.ll-notification-time{font-size:11px;color:#857b70;margin-top:5px}.ll-notification-empty{padding:22px;text-align:center;color:#82786d}</style><style id="ll-reports-style">@media(max-width:700px){.reports-toolbar{align-items:stretch!important}.reports-toolbar select,.reports-toolbar button{width:100%}.dashReports .stats{grid-template-columns:1fr!important}}</style>
+
+<style id="ll-recommendations-style">
+.ll-reco-section{margin:28px 0 10px;padding:22px;border:1px solid #e8e1d5;border-radius:20px;background:#fff;box-shadow:0 10px 30px rgba(23,25,30,.06)}
+.ll-reco-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.ll-reco-head h3{margin:0;font-size:20px;color:#17191e}.ll-reco-head span{font-size:13px;color:#777}
+.ll-reco-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.ll-reco-card{border:1px solid #eee7dc;border-radius:16px;overflow:hidden;background:#fff;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.ll-reco-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(23,25,30,.1)}
+.ll-reco-img{height:150px;background:#f7f7f7;display:flex;align-items:center;justify-content:center;overflow:hidden}.ll-reco-img img{width:100%;height:100%;object-fit:cover}
+.ll-reco-body{padding:12px}.ll-reco-name{font-weight:800;color:#17191e;margin-bottom:7px}.ll-reco-price{font-weight:900}.ll-reco-old{text-decoration:line-through;color:#999;font-size:12px;margin-right:6px}.ll-reco-badge{display:inline-block;margin-top:7px;padding:4px 8px;border-radius:999px;background:#17191e;color:#fff;font-size:11px;font-weight:800}
+@media(max-width:760px){.ll-reco-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ll-reco-img{height:125px}}
+</style>
 </head>
 
 <body>
@@ -8732,6 +8744,35 @@ footer{
 }
 </style>
 
+
+<script id="ll-recommendations-system">
+(function(){
+  const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  function price(v){return Number(v||0).toLocaleString('ar-EG')+' ج.م';}
+  window.llLoadRecommendations=async function(storeId,currentProductId){
+    const host=document.getElementById('sfProducts'); if(!host||!storeId)return;
+    let old=document.getElementById('llRecommendations'); if(old)old.remove();
+    const {data,error}=await supabaseClient.rpc('get_store_recommended_products',{p_store_id:storeId,p_product_id:currentProductId||null,p_limit:6});
+    if(error||!data||!data.length)return;
+    const box=document.createElement('section'); box.id='llRecommendations'; box.className='ll-reco-section';
+    box.innerHTML='<div class="ll-reco-head"><h3>🏆 الأكثر مبيعًا والمقترح لك</h3><span>اختيارات من هذا المتجر</span></div><div class="ll-reco-grid">'+data.map(p=>{
+      const img=p.image_url?'<img src="'+esc(p.image_url)+'" alt="'+esc(p.name)+'" loading="lazy">':'<span style="font-size:42px">🛍️</span>';
+      const disc=Number(p.compare_price)>Number(p.price)&&Number(p.compare_price)>0?Math.round((1-Number(p.price)/Number(p.compare_price))*100):0;
+      return '<article class="ll-reco-card" data-reco-product="'+esc(p.id)+'"><div class="ll-reco-img">'+img+'</div><div class="ll-reco-body"><div class="ll-reco-name">'+esc(p.name)+'</div><div class="ll-reco-price">'+price(p.price)+(disc?' <span class="ll-reco-old">'+price(p.compare_price)+'</span>':'')+'</div>'+(disc?'<span class="ll-reco-badge">خصم '+disc+'%</span>':'')+'</div></article>';
+    }).join('')+'</div>';
+    host.parentNode.insertBefore(box,host.nextSibling);
+    box.querySelectorAll('[data-reco-product]').forEach(card=>card.addEventListener('click',()=>{
+      const id=card.getAttribute('data-reco-product');
+      if(typeof window.openStoreProduct==='function')window.openStoreProduct(id);
+      else if(typeof window.selectStoreProduct==='function')window.selectStoreProduct(id);
+    }));
+  };
+  const original=window.renderStoreProducts;
+  if(typeof original==='function'){
+    window.renderStoreProducts=function(){const r=original.apply(this,arguments);try{const st=window.currentPublicStore||window.currentStore||{};window.llLoadRecommendations(st.id,null)}catch(e){}return r;};
+  }
+})();
+</script>
 </body>
 
 </html>
