@@ -742,6 +742,30 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     .sf-hero{padding:40px 0}
     .form-grid.cols-2,.form-grid.cols-3{grid-template-columns:1fr}
 }
+/* Customer storefront cart — clean full-screen mobile experience */
+@media(max-width:700px){
+  #cartOverlay{background:#fff;backdrop-filter:none}
+  #cartOverlay .cart-drawer{
+    position:absolute;inset:0;width:100vw;height:100dvh;max-height:none;
+    border-radius:0;box-shadow:none;background:var(--card);
+    animation:cartMobileIn .28s ease-out;
+  }
+  @keyframes cartMobileIn{from{transform:translateY(14px);opacity:.7}to{transform:none;opacity:1}}
+  #cartOverlay .cart-head{padding:18px 18px 14px;min-height:64px;position:sticky;top:0;z-index:5}
+  #cartOverlay .cart-head h2{font-size:22px;gap:8px}
+  #cartOverlay .cart-body{padding:14px}
+  #cartOverlay .cart-item{grid-template-columns:76px 1fr;gap:12px;padding:14px 12px;border-radius:20px;margin-bottom:12px}
+  #cartOverlay .cart-item-img-wrap{width:76px;height:76px;border-radius:16px}
+  #cartOverlay .cart-item-name{font-size:15px}
+  #cartOverlay .cart-item-price{font-size:17px}
+  #cartOverlay .qty{height:38px;border-radius:999px}
+  #cartOverlay .qty button{width:36px;height:36px}
+  #cartOverlay .qty .qty-value{height:36px;line-height:36px;min-width:38px}
+  #cartOverlay .cart-footer{padding:14px 16px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -8px 24px rgba(20,15,8,.06)}
+  #cartOverlay .coupon-box{margin-top:4px;padding:13px;border-radius:16px}
+  #cartOverlay .checkout-btn,#cartOverlay .whatsapp-checkout-btn{border-radius:18px;min-height:54px;font-size:16px}
+}
+
 @media(max-width:700px){
     .cart-drawer{width:100vw}
     .cart-item{grid-template-columns:70px 1fr;gap:10px;padding:12px}
@@ -772,6 +796,7 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     body{background:#fff}
     .site-header,.site-footer,.cart-overlay,.wishlist-overlay{display:none!important}
 }
+.storefront-no-platform{display:none!important}
 </style>
 </head>
 
@@ -1296,8 +1321,7 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     <div class="sf-topbar-inner">
         <div class="sf-brand">LUNA<span>&</span>LEO</div>
         <div class="sf-top-actions">
-            <button class="sf-small-btn" onclick="backToPlatform()">منصة LUNA&LEO</button>
-            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleStore" title="تبديل الوضع">🌙</button>
+                        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleStore" title="تبديل الوضع">🌙</button>
             <button class="sf-small-btn" onclick="openTracking()" style="padding:10px 14px" title="تتبع طلب">📦</button>
             <button class="sf-small-btn" onclick="openWishlist()" style="position:relative;padding:10px 14px" title="المفضلة">
                 ❤️
@@ -1332,9 +1356,7 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     </div>
 </main>
 
-<footer class="sf-topbar" style="text-align:center;padding:26px">
-    <div style="color:var(--muted);font-size:13px">© 2026 LUNA&LEO MARKET — متجر إلكتروني</div>
-</footer>
+<footer class="sf-topbar" style="text-align:center;padding:18px"><div id="sfStoreFooter" style="color:var(--muted);font-size:13px"></div></footer>
 
 <!-- CART DRAWER -->
 <div id="cartOverlay" class="cart-overlay" onclick="closeCartIfOverlay(event)">
@@ -1342,7 +1364,7 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
         <div class="cart-head">
             <h2>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                سلة المشتريات
+                السلة
                 <span class="item-count-pill" id="cartItemCount">0</span>
             </h2>
             <div class="cart-head-actions">
@@ -3196,7 +3218,7 @@ function closeCart(){
     resetCartHeader();
 }
 function resetCartHeader(){
-    document.querySelector(".cart-head h2").innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>سلة المشتريات <span class="item-count-pill">${publicCart.reduce((s,i)=>s+Number(i.qty||0),0)}</span>`;
+    document.querySelector(".cart-head h2").innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>السلة <span class="item-count-pill">${publicCart.reduce((s,i)=>s+Number(i.qty||0),0)}</span>`;
     document.getElementById("cartClearBtn").style.display = publicCart.length ? "inline-block" : "none";
 }
 function closeCartIfOverlay(e){ if(e.target === e.currentTarget) closeCart(); }
