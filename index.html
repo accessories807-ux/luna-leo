@@ -8745,7 +8745,6 @@ footer{
 </style>
 
 
-<script id="ll-recommendations-system">
 (function(){
   const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   function price(v){return Number(v||0).toLocaleString('ar-EG')+' ج.م';}
@@ -8772,7 +8771,6 @@ footer{
     window.renderStoreProducts=function(){const r=original.apply(this,arguments);try{const st=window.currentPublicStore||window.currentStore||{};window.llLoadRecommendations(st.id,null)}catch(e){}return r;};
   }
 })();
-</script>
 </body>
 
 </html>
