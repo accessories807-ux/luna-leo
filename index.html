@@ -3989,7 +3989,11 @@ function hasFeature(feature){
     // During the active trial, every feature is available so the merchant can
     // evaluate the complete product before choosing a paid plan.
     const activePlan = normalizePlan(currentSubscription?.plan);
-    if(activePlan === "trial" && currentSubscription && subscriptionIsActive(currentSubscription)) return true;
+    if(
+        activePlan === "trial" &&
+        currentSubscription &&
+        subscriptionIsActive(currentSubscription)
+    ) return true;
 
     const teamDecision = featureAllowedForCurrentUser(feature);
     if(teamDecision !== null) return teamDecision;
@@ -5511,7 +5515,7 @@ async function loadUserStore(){
     currentStore = store;
     window.currentStore = currentStore;
 
-    await loadTeamContextForStore(currentStore);
+    await loadTeamContext(currentStore);
     displayStore();
     applyTeamPermissionsUI();
     await loadDashboardData();
@@ -12185,8 +12189,8 @@ footer{
 (function(){
     const sync = async ()=>{
         try{
-            if(typeof loadTeamContextForStore === "function" && window.currentStore && window.currentUser){
-                await loadTeamContextForStore(window.currentStore);
+            if(typeof loadTeamContext === "function" && window.currentStore && window.currentUser){
+                await loadTeamContext(window.currentStore);
                 if(typeof applyTeamPermissionsUI === "function") applyTeamPermissionsUI();
             }
         }catch(e){
