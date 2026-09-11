@@ -1788,7 +1788,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--ll-gold)!important;bo
 .ll-return-actions button{border:1px solid #ddd4c8;border-radius:9px;padding:8px 11px;background:#fff;cursor:pointer}
 @media(max-width:700px){.ll-return-actions button{flex:1}}
 </style>
-</head>
+<style id="ll-notifications-css">
+.ll-notifications-wrap{position:relative;display:inline-block}.ll-notification-btn{position:relative;border:1px solid #ddd4c8;background:#fff;border-radius:12px;padding:9px 12px;cursor:pointer}.ll-notification-badge{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#b98a38;color:#fff;font-size:11px;font-weight:800;display:none;align-items:center;justify-content:center}.ll-notification-panel{position:absolute;right:0;top:48px;width:min(380px,92vw);max-height:430px;overflow:auto;background:#fff;border:1px solid #e3dbd0;border-radius:16px;box-shadow:0 18px 45px rgba(30,25,20,.14);z-index:9999;padding:10px}.ll-notification-item{padding:12px;border-bottom:1px solid #eee7df;cursor:pointer}.ll-notification-item:last-child{border-bottom:0}.ll-notification-item.unread{background:#fffaf0}.ll-notification-time{font-size:11px;color:#857b70;margin-top:5px}.ll-notification-empty{padding:22px;text-align:center;color:#82786d}</style></head>
 
 <body>
 
@@ -10311,7 +10312,9 @@ function backToCart(){
 
 
 
-<div class="ll-returns-panel" id="llReturnsPanel" style="display:none">
+<div class="ll-notifications-wrap" id="llNotificationsUI" style="display:none">
+<button type="button" class="ll-notification-btn" onclick="llToggleNotifications()">🔔 الإشعارات <span id="llNotificationBadge" class="ll-notification-badge">0</span></button>
+<div id="llNotificationPanel" class="ll-notification-panel" style="display:none"><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 4px 10px"><strong>الإشعارات</strong><button type="button" onclick="llMarkAllNotificationsRead()" style="border:0;background:none;cursor:pointer;font-size:12px">تحديد الكل كمقروء</button></div><div id="llNotificationList"></div></div></div><div class="ll-returns-panel" id="llReturnsPanel" style="display:none">
   <h3>🔄 المرتجعات والاستبدال</h3>
   <div id="llReturnsList"><div class="ll-shipping-note">لا توجد طلبات مرتجعات أو استبدال.</div></div>
 </div>
@@ -10330,6 +10333,26 @@ function backToCart(){
 
 
 
+/* NOTIFICATIONS */
+let llNotificationsChannel=null;
+function llToggleNotifications(){const p=document.getElementById("llNotificationPanel");if(p)p.style.display=p.style.display==="none"?"block":"none";}
+async function llLoadNotifications(){
+ if(!currentStore)return;
+ const {data,error}=await supabaseClient.from("store_notifications").select("*").eq("store_id",currentStore.id).order("created_at",{ascending:false}).limit(50);
+ const list=document.getElementById("llNotificationList"),badge=document.getElementById("llNotificationBadge");
+ if(error||!list)return;
+ const rows=data||[],unread=rows.filter(n=>!n.is_read).length;
+ if(badge){badge.textContent=String(unread);badge.style.display=unread?"inline-flex":"none";}
+ const labels={new_order:"🛒 طلب جديد",order_status:"🔄 تحديث حالة طلب",low_stock:"📦 تنبيه مخزون",subscription_expiry:"⏰ الاشتراك",coupon_used:"🎟️ كوبون",general:"🔔 إشعار"};
+ list.innerHTML=rows.length?rows.map(n=>`<div class="ll-notification-item ${n.is_read?"":"unread"}" onclick="llReadNotification('${n.id}')"><strong>${labels[n.type]||labels.general}</strong><div style="margin-top:4px">${String(n.title||"").replace(/[<>]/g,"")}</div><div>${String(n.message||"").replace(/[<>]/g,"")}</div><div class="ll-notification-time">${new Date(n.created_at).toLocaleString("ar-EG")}</div></div>`).join(""):'<div class="ll-notification-empty">لا توجد إشعارات.</div>';
+}
+async function llReadNotification(id){if(!currentStore)return;await supabaseClient.from("store_notifications").update({is_read:true}).eq("id",id).eq("store_id",currentStore.id);await llLoadNotifications();}
+async function llMarkAllNotificationsRead(){if(!currentStore)return;await supabaseClient.from("store_notifications").update({is_read:true}).eq("store_id",currentStore.id).eq("is_read",false);await llLoadNotifications();}
+function llStartNotifications(){
+ const ui=document.getElementById("llNotificationsUI");if(ui)ui.style.display=currentStore?"inline-block":"none";
+ llLoadNotifications();if(llNotificationsChannel)supabaseClient.removeChannel(llNotificationsChannel);if(!currentStore)return;
+ llNotificationsChannel=supabaseClient.channel("store-notifications-"+currentStore.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"store_notifications",filter:"store_id=eq."+currentStore.id},()=>llLoadNotifications()).subscribe();
+}
 /* =====================================================
    RETURNS & EXCHANGES
 ===================================================== */
