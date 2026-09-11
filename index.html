@@ -1789,7 +1789,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--ll-gold)!important;bo
 @media(max-width:700px){.ll-return-actions button{flex:1}}
 </style>
 <style id="ll-notifications-css">
-.ll-notifications-wrap{position:relative;display:inline-block}.ll-notification-btn{position:relative;border:1px solid #ddd4c8;background:#fff;border-radius:12px;padding:9px 12px;cursor:pointer}.ll-notification-badge{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#b98a38;color:#fff;font-size:11px;font-weight:800;display:none;align-items:center;justify-content:center}.ll-notification-panel{position:absolute;right:0;top:48px;width:min(380px,92vw);max-height:430px;overflow:auto;background:#fff;border:1px solid #e3dbd0;border-radius:16px;box-shadow:0 18px 45px rgba(30,25,20,.14);z-index:9999;padding:10px}.ll-notification-item{padding:12px;border-bottom:1px solid #eee7df;cursor:pointer}.ll-notification-item:last-child{border-bottom:0}.ll-notification-item.unread{background:#fffaf0}.ll-notification-time{font-size:11px;color:#857b70;margin-top:5px}.ll-notification-empty{padding:22px;text-align:center;color:#82786d}</style></head>
+.ll-notifications-wrap{position:relative;display:inline-block}.ll-notification-btn{position:relative;border:1px solid #ddd4c8;background:#fff;border-radius:12px;padding:9px 12px;cursor:pointer}.ll-notification-badge{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#b98a38;color:#fff;font-size:11px;font-weight:800;display:none;align-items:center;justify-content:center}.ll-notification-panel{position:absolute;right:0;top:48px;width:min(380px,92vw);max-height:430px;overflow:auto;background:#fff;border:1px solid #e3dbd0;border-radius:16px;box-shadow:0 18px 45px rgba(30,25,20,.14);z-index:9999;padding:10px}.ll-notification-item{padding:12px;border-bottom:1px solid #eee7df;cursor:pointer}.ll-notification-item:last-child{border-bottom:0}.ll-notification-item.unread{background:#fffaf0}.ll-notification-time{font-size:11px;color:#857b70;margin-top:5px}.ll-notification-empty{padding:22px;text-align:center;color:#82786d}</style><style id="ll-reports-style">@media(max-width:700px){.reports-toolbar{align-items:stretch!important}.reports-toolbar select,.reports-toolbar button{width:100%}.dashReports .stats{grid-template-columns:1fr!important}}</style>
+</head>
 
 <body>
 
@@ -2407,6 +2408,10 @@ onclick="showDashboardSection('home',this)"
 📊 التحليلات
 </button>
 
+<button onclick="showDashboardSection('reports',this)">
+📈 التقارير
+</button>
+
 <button onclick="showDashboardSection('marwan',this)">
 🤖 مروان AI
 </button>
@@ -2877,6 +2882,14 @@ placeholder="السعر الحالي (بعد الخصم)"
 >
 
 <input
+id="productCostPrice"
+type="number"
+min="0"
+step="0.01"
+placeholder="سعر التكلفة — اختياري لحساب الربح"
+>
+
+<input
 id="productComparePrice"
 type="number"
 min="0"
@@ -3097,6 +3110,31 @@ class="empty"
 <div class="stat-card"><div class="stat-icon">👥</div><h3 id="analyticsCustomers">0</h3><p>العملاء</p></div>
 </div>
 <div id="analyticsLock" class="pricing-note"></div>
+</div>
+</section>
+
+<!-- REPORTS -->
+
+<section id="dashReports" class="dash-section" style="display:none">
+<div class="panel">
+<div class="panel-title"><h2>📈 التقارير</h2><span class="plan-badge">Growth+</span></div>
+<div class="reports-toolbar" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px">
+<select id="reportRange" style="min-width:170px">
+<option value="30">آخر 30 يوم</option>
+<option value="90">آخر 90 يوم</option>
+<option value="365">آخر سنة</option>
+<option value="0">كل الفترة</option>
+</select>
+<button class="gold-btn" onclick="renderBusinessReports()">🔄 تحديث التقرير</button>
+</div>
+<div id="reportsLock" class="pricing-note"></div>
+<div id="reportsSummary" class="stats"></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:18px">
+<div class="dashboard-card"><h3>🏆 الأكثر مبيعًا</h3><div id="bestSellersReport" class="empty">جاري التحميل...</div></div>
+<div class="dashboard-card"><h3>👑 أفضل العملاء</h3><div id="topCustomersReport" class="empty">جاري التحميل...</div></div>
+<div class="dashboard-card"><h3>📊 ملخص الحالات</h3><div id="orderStatusReport" class="empty">جاري التحميل...</div></div>
+</div>
+<div class="dashboard-card" style="margin-top:18px"><h3>💡 ملاحظات ذكية</h3><div id="reportInsights" class="pricing-note">سيظهر هنا ملخص يساعدك في اتخاذ القرار.</div></div>
 </div>
 </section>
 
@@ -3624,6 +3662,25 @@ onclick="closeCart()"
 </div>
 
 </div>
+<div class="ll-notifications-wrap" id="llNotificationsUI" style="display:none">
+<button type="button" class="ll-notification-btn" onclick="llToggleNotifications()">🔔 الإشعارات <span id="llNotificationBadge" class="ll-notification-badge">0</span></button>
+<div id="llNotificationPanel" class="ll-notification-panel" style="display:none"><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 4px 10px"><strong>الإشعارات</strong><button type="button" onclick="llMarkAllNotificationsRead()" style="border:0;background:none;cursor:pointer;font-size:12px">تحديد الكل كمقروء</button></div><div id="llNotificationList"></div></div></div><div class="ll-returns-panel" id="llReturnsPanel" style="display:none">
+  <h3>🔄 المرتجعات والاستبدال</h3>
+  <div id="llReturnsList"><div class="ll-shipping-note">لا توجد طلبات مرتجعات أو استبدال.</div></div>
+</div>
+<div class="ll-shipping-panel" id="llShippingManager" style="display:none">
+  <h3>🚚 إعدادات الشحن</h3>
+  <div class="ll-shipping-grid">
+    <input id="llShipName" placeholder="اسم طريقة الشحن">
+    <input id="llShipGovernorate" placeholder="المحافظة (اختياري)">
+    <input id="llShipCity" placeholder="المدينة / المنطقة (اختياري)">
+    <input id="llShipCost" type="number" min="0" step="0.01" placeholder="سعر الشحن بالجنيه">
+    <input id="llShipFreeAbove" type="number" min="0" step="0.01" placeholder="مجاني فوق مبلغ (اختياري)">
+    <button type="button" class="sf-checkout-btn" onclick="llAddShippingMethod()">إضافة طريقة شحن</button>
+  </div>
+  <div id="llShippingMethodsList" style="margin-top:14px"></div>
+</div>
+
 <script>
 /* ==============
    GLOBAL VARIABLES
@@ -4865,6 +4922,7 @@ function showDashboardSection(
         orders:"orders",
         customers:"customers",
         analytics:"analytics",
+        reports:"analytics",
         marwan:"marwan",
         team:"team"
     }[section];
@@ -4893,6 +4951,139 @@ function showDashboardSection(
     if(section==="analytics" && hasFeature("analytics")){
         renderAnalyticsFromDashboard();
     }
+
+    if(section==="reports" && hasFeature("analytics")){
+        renderBusinessReports();
+    }
+}
+
+/* =====================================================
+   BUSINESS REPORTS
+===================================================== */
+
+async function renderBusinessReports(){
+
+    if(!hasFeature("analytics")) return;
+
+    const lock=document.getElementById("reportsLock");
+    if(lock) lock.textContent="";
+
+    if(!currentUser || !currentStore){
+        return;
+    }
+
+    const range=Number(document.getElementById("reportRange")?.value || 30);
+    const since=range>0 ? new Date(Date.now()-range*86400000).toISOString() : null;
+
+    let query=supabaseClient
+        .from("orders")
+        .select("id,total,status,created_at,customers_name,customer_phone,items");
+
+    query=query.eq("store_id",currentStore.id);
+    if(since) query=query.gte("created_at",since);
+
+    const {data:orders,error}=await query.order("created_at",{ascending:false});
+    if(error){
+        console.error("Reports orders error",error);
+        return;
+    }
+
+    const {data:products,error:productsError}=await supabaseClient
+        .from("products")
+        .select("id,name,price,cost_price,stock")
+        .eq("store_id",currentStore.id);
+
+    if(productsError){
+        console.error("Reports products error",productsError);
+        return;
+    }
+
+    const productMap=new Map((products||[]).map(p=>[String(p.id),p]));
+    const validOrders=(orders||[]).filter(o=>String(o.status||"").toLowerCase()!=="cancelled");
+    const delivered=validOrders.filter(o=>["delivered","completed"].includes(String(o.status||"").toLowerCase()));
+    const sales=validOrders.reduce((sum,o)=>sum+Number(o.total||0),0);
+
+    let profit=0;
+    const soldMap=new Map();
+    const customerMap=new Map();
+
+    for(const order of validOrders){
+        let items=order.items;
+        if(typeof items==="string"){
+            try{ items=JSON.parse(items); }catch{ items=[]; }
+        }
+        if(!Array.isArray(items)) items=[];
+
+        for(const item of items){
+            const pid=item.product_id ?? item.id ?? item.productId;
+            const qty=Math.max(0,Number(item.quantity ?? item.qty ?? 1));
+            const p=productMap.get(String(pid));
+            const saleUnit=Number(item.price ?? item.unit_price ?? p?.price ?? 0);
+            const costUnit=Number(item.cost_price ?? p?.cost_price ?? 0);
+            profit += (saleUnit-costUnit)*qty;
+            const key=String(pid ?? item.name ?? "unknown");
+            const current=soldMap.get(key)||{name:item.name||p?.name||"منتج",qty:0,revenue:0};
+            current.qty += qty;
+            current.revenue += saleUnit*qty;
+            soldMap.set(key,current);
+        }
+
+        const cname=(order.customers_name||"عميل بدون اسم").trim()||"عميل بدون اسم";
+        const ckey=(order.customer_phone||cname).trim();
+        const c=customerMap.get(ckey)||{name:cname,phone:order.customer_phone||"",orders:0,total:0};
+        c.orders += 1;
+        c.total += Number(order.total||0);
+        customerMap.set(ckey,c);
+    }
+
+    const aov=validOrders.length ? sales/validOrders.length : 0;
+    const margin=sales>0 ? (profit/sales)*100 : 0;
+
+    const summary=document.getElementById("reportsSummary");
+    if(summary){
+        summary.innerHTML=`
+        <div class="stat-card"><div class="stat-icon">💰</div><h3>${sales.toFixed(2)} ج</h3><p>إجمالي المبيعات</p></div>
+        <div class="stat-card"><div class="stat-icon">📦</div><h3>${validOrders.length}</h3><p>الطلبات غير الملغاة</p></div>
+        <div class="stat-card"><div class="stat-icon">🎯</div><h3>${aov.toFixed(2)} ج</h3><p>متوسط قيمة الطلب</p></div>
+        <div class="stat-card"><div class="stat-icon">📈</div><h3>${profit.toFixed(2)} ج</h3><p>الربح التقريبي</p></div>
+        <div class="stat-card"><div class="stat-icon">🚚</div><h3>${delivered.length}</h3><p>طلبات تم تسليمها</p></div>
+        <div class="stat-card"><div class="stat-icon">📊</div><h3>${margin.toFixed(1)}%</h3><p>هامش الربح التقريبي</p></div>`;
+    }
+
+    const best=[...soldMap.values()].sort((a,b)=>b.qty-a.qty).slice(0,8);
+    const bestEl=document.getElementById("bestSellersReport");
+    if(bestEl){
+        bestEl.className=best.length?"":"empty";
+        bestEl.innerHTML=best.length?best.map((x,i)=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee"><span>${i+1}. ${escapeHtml(x.name)}</span><strong>${x.qty}</strong></div>`).join(""):"لا توجد مبيعات في الفترة المحددة.";
+    }
+
+    const top=[...customerMap.values()].sort((a,b)=>b.total-a.total).slice(0,8);
+    const topEl=document.getElementById("topCustomersReport");
+    if(topEl){
+        topEl.innerHTML=top.length?top.map((x,i)=>`<div style="padding:10px 0;border-bottom:1px solid #eee"><div style="display:flex;justify-content:space-between"><span>${i+1}. ${escapeHtml(x.name)}</span><strong>${x.total.toFixed(2)} ج</strong></div><small>${x.orders} طلب${x.phone?` • ${escapeHtml(x.phone)}`:""}</small></div>`).join(""):"لا توجد بيانات عملاء.";
+    }
+
+    const statuses={new:0,confirmed:0,preparing:0,shipped:0,delivered:0,completed:0,cancelled:0};
+    for(const o of (orders||[])){const st=String(o.status||"new").toLowerCase();statuses[st]=(statuses[st]||0)+1;}
+    const labels={new:"جديد",confirmed:"مؤكد",preparing:"قيد التجهيز",shipped:"تم الشحن",delivered:"تم التسليم",completed:"مكتمل",cancelled:"ملغي"};
+    const statusEl=document.getElementById("orderStatusReport");
+    if(statusEl){
+        statusEl.innerHTML=Object.entries(statuses).filter(([,n])=>n>0).map(([k,n])=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee"><span>${labels[k]||k}</span><strong>${n}</strong></div>`).join("")||"لا توجد طلبات.";
+    }
+
+    const insights=[];
+    if(validOrders.length===0) insights.push("ابدأ بتسجيل الطلبات ومتابعتها لتظهر مؤشرات الأداء هنا.");
+    else{
+        if(margin<15) insights.push("هامش الربح منخفض نسبيًا؛ راجع أسعار التكلفة والخصومات قبل زيادة الإنفاق الإعلاني.");
+        if(margin>=30) insights.push("هامش الربح جيد؛ يمكنك اختبار عروض تسويقية مع الحفاظ على هامش مناسب.");
+        if(best.length) insights.push(`المنتج الأكثر مبيعًا حاليًا: ${best[0].name} (${best[0].qty} وحدة).`);
+        if(delivered.length<validOrders.length) insights.push("لديك طلبات لم تصل لمرحلة التسليم بعد؛ تابع حالات الشحن لتحسين التدفق النقدي.");
+    }
+    document.getElementById("reportInsights").textContent=insights.join(" ")||"لا توجد ملاحظات إضافية.";
+}
+
+function escapeHtml(value){
+    return String(value??"").replace(/[&<>'"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[ch]));
 }
 
 /* =====================================================
@@ -6061,6 +6252,16 @@ function editProduct(id){
     ).value =
         product.price ?? "";
 
+    const costInput =
+        document.getElementById(
+            "productCostPrice"
+        );
+
+    if(costInput){
+        costInput.value =
+            product.cost_price ?? "";
+    }
+
     const compareEl = document.getElementById("productComparePrice");
     if(compareEl){
         compareEl.value = product.compare_price ?? "";
@@ -6344,6 +6545,16 @@ async function saveProduct(){
     const price =
         Number(priceValue);
 
+    const costPriceValue =
+        document.getElementById(
+            "productCostPrice"
+        )?.value ?? "";
+
+    const costPrice =
+        costPriceValue === ""
+            ? null
+            : Number(costPriceValue);
+
     const comparePriceValue =
         document.getElementById(
             "productComparePrice"
@@ -6423,6 +6634,30 @@ async function saveProduct(){
 
     }
 
+
+    if(
+        costPrice !== null &&
+        (!Number.isFinite(costPrice) || costPrice < 0)
+    ){
+
+        message.textContent =
+            "⚠️ سعر التكلفة غير صحيح.";
+
+        return;
+
+    }
+
+    if(
+        costPrice !== null &&
+        costPrice > price
+    ){
+
+        message.textContent =
+            "⚠️ سعر التكلفة لا يمكن أن يكون أكبر من سعر البيع الحالي.";
+
+        return;
+
+    }
 
     if(
         !Number.isFinite(stock) ||
@@ -6549,6 +6784,11 @@ async function saveProduct(){
             name:name,
 
             price:price,
+
+            cost_price:
+                costPrice !== null
+                    ? costPrice
+                    : null,
 
             compare_price:
                 comparePrice !== null && comparePrice > 0
@@ -10309,27 +10549,6 @@ function backToCart(){
 
 }
 
-
-
-
-<div class="ll-notifications-wrap" id="llNotificationsUI" style="display:none">
-<button type="button" class="ll-notification-btn" onclick="llToggleNotifications()">🔔 الإشعارات <span id="llNotificationBadge" class="ll-notification-badge">0</span></button>
-<div id="llNotificationPanel" class="ll-notification-panel" style="display:none"><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 4px 10px"><strong>الإشعارات</strong><button type="button" onclick="llMarkAllNotificationsRead()" style="border:0;background:none;cursor:pointer;font-size:12px">تحديد الكل كمقروء</button></div><div id="llNotificationList"></div></div></div><div class="ll-returns-panel" id="llReturnsPanel" style="display:none">
-  <h3>🔄 المرتجعات والاستبدال</h3>
-  <div id="llReturnsList"><div class="ll-shipping-note">لا توجد طلبات مرتجعات أو استبدال.</div></div>
-</div>
-<div class="ll-shipping-panel" id="llShippingManager" style="display:none">
-  <h3>🚚 إعدادات الشحن</h3>
-  <div class="ll-shipping-grid">
-    <input id="llShipName" placeholder="اسم طريقة الشحن">
-    <input id="llShipGovernorate" placeholder="المحافظة (اختياري)">
-    <input id="llShipCity" placeholder="المدينة / المنطقة (اختياري)">
-    <input id="llShipCost" type="number" min="0" step="0.01" placeholder="سعر الشحن بالجنيه">
-    <input id="llShipFreeAbove" type="number" min="0" step="0.01" placeholder="مجاني فوق مبلغ (اختياري)">
-    <button type="button" class="sf-checkout-btn" onclick="llAddShippingMethod()">إضافة طريقة شحن</button>
-  </div>
-  <div id="llShippingMethodsList" style="margin-top:14px"></div>
-</div>
 
 
 
