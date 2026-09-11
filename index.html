@@ -1721,6 +1721,17 @@ border-color:#29231d
 .store-brand-preview div{font-size:42px}
 .store-edit-form{margin:18px 0}
 @media(max-width:550px){.store-brand-preview{width:86px;height:86px}}
+
+/* LUNA&LEO coupon */
+.sf-coupon-box{margin:12px 0;padding:14px;border:1px solid #eadfca;border-radius:14px;background:#fffdf8}
+.sf-coupon-row{display:flex;gap:8px}
+.sf-coupon-row input{flex:1;border:1px solid #ddd3c0;border-radius:10px;padding:12px;outline:none}
+.sf-coupon-row button{border:1px solid #b98a38;background:#17181c;color:#fff;border-radius:10px;padding:0 16px;font-weight:800;cursor:pointer}
+.sf-coupon-row button:disabled{opacity:.6;cursor:not-allowed}
+.sf-coupon-msg{font-size:12px;margin-top:8px;min-height:18px}
+.sf-coupon-msg.ok{color:#18794e}.sf-coupon-msg.err{color:#b42318}
+.sf-summary-row{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:14px}
+.sf-summary-row.discount{color:#18794e;font-weight:800}
 </style>
 
 <style id="luna-leo-modern-ui">
@@ -3353,19 +3364,19 @@ class="sf-cart-items">
         max-height:350px;
     "
 ></div>
+<div class="sf-coupon-box">
+  <div style="font-weight:800;color:#8a681c;margin-bottom:8px">🎟️ كوبون خصم</div>
+  <div class="sf-coupon-row">
+    <input id="sfCouponCode" type="text" maxlength="40" placeholder="اكتب كود الخصم">
+    <button type="button" id="sfApplyCouponBtn" onclick="applyCartCoupon()">تطبيق</button>
+  </div>
+  <div id="sfCouponMsg" class="sf-coupon-msg"></div>
+</div>
 <div class="sf-cart-bottom">
 
-<div class="sf-total">
-
-<span>
-الإجمالي
-</span>
-
-<span id="sfCartTotal">
-0 جنيه
-</span>
-
-</div>
+<div class="sf-summary-row"><span>الإجمالي قبل الخصم</span><strong id="sfCartSubtotal">0 جنيه</strong></div>
+<div class="sf-summary-row discount" id="sfCartDiscountRow" style="display:none"><span>الخصم</span><strong id="sfCartDiscount">-0 جنيه</strong></div>
+<div class="sf-total"><span>الإجمالي النهائي</span><span id="sfCartTotal">0 جنيه</span></div>
 
 <button
 class="sf-checkout-btn"
@@ -3621,6 +3632,8 @@ const supabaseClient = window.supabaseClient = window.supabase.createClient(
 let publicStore = null;
 let publicProducts = [];
 let publicCart = [];
+let appliedCoupon = null;
+let appliedCouponDiscount = 0;
 let publicCategory = "all";
 
 let dashboardProducts = [];
@@ -10092,6 +10105,18 @@ function renderCart(){
         })
         .join("");
 
+    const subtotal=publicCart.reduce((sum,item)=>sum+Number(item.price||0)*Number(item.qty||0),0);
+    const safeDiscount=Math.min(Math.max(0,Number(appliedCouponDiscount||0)),subtotal);
+    const finalTotal=Math.max(0,subtotal-safeDiscount);
+    const subEl=document.getElementById("sfCartSubtotal");
+    const discEl=document.getElementById("sfCartDiscount");
+    const discRow=document.getElementById("sfCartDiscountRow");
+    const totalEl=document.getElementById("sfCartTotal");
+    if(subEl) subEl.textContent=subtotal.toLocaleString("ar-EG")+" جنيه";
+    if(discEl) discEl.textContent="-"+safeDiscount.toLocaleString("ar-EG")+" جنيه";
+    if(discRow) discRow.style.display=safeDiscount>0?"flex":"none";
+    if(totalEl) totalEl.textContent=finalTotal.toLocaleString("ar-EG")+" جنيه";
+
 }
 
 
@@ -10177,6 +10202,41 @@ function removeFromCart(id){
 /* =====================================================
    CHECKOUT
 ===================================================== */
+
+async function applyCartCoupon(){
+  const input=document.getElementById("sfCouponCode");
+  const msg=document.getElementById("sfCouponMsg");
+  const btn=document.getElementById("sfApplyCouponBtn");
+  if(!input||!msg||!btn||!publicStore)return;
+  const code=input.value.trim();
+  if(!code){ msg.className="sf-coupon-msg err"; msg.textContent="اكتب كود الكوبون أولًا."; return; }
+  const subtotal=publicCart.reduce((sum,item)=>sum+Number(item.price||0)*Number(item.qty||0),0);
+  btn.disabled=true; msg.className="sf-coupon-msg"; msg.textContent="جارٍ التحقق...";
+  try{
+    const {data,error}=await supabaseClient.rpc("validate_coupon",{p_store_id:publicStore.id,p_code:code,p_subtotal:subtotal});
+    if(error) throw error;
+    if(!data?.valid){
+      appliedCoupon=null; appliedCouponDiscount=0;
+      msg.className="sf-coupon-msg err"; msg.textContent="❌ "+(data?.message||"الكوبون غير صالح");
+    }else{
+      appliedCoupon={code:data.code,discount:Number(data.discount||0),discount_type:data.discount_type,discount_value:Number(data.discount_value||0)};
+      appliedCouponDiscount=Number(data.discount||0);
+      msg.className="sf-coupon-msg ok"; msg.textContent=`✅ تم تطبيق الكوبون ${data.code} — خصم ${appliedCouponDiscount.toLocaleString("ar-EG")} جنيه`;
+    }
+    renderCart();
+  }catch(e){
+    console.error("COUPON ERROR",e); appliedCoupon=null; appliedCouponDiscount=0;
+    msg.className="sf-coupon-msg err"; msg.textContent="❌ تعذر التحقق من الكوبون. حاول مرة أخرى.";
+    renderCart();
+  }finally{ btn.disabled=false; }
+}
+
+function clearCartCoupon(){
+  appliedCoupon=null; appliedCouponDiscount=0;
+  const input=document.getElementById("sfCouponCode"); const msg=document.getElementById("sfCouponMsg");
+  if(input) input.value=""; if(msg){msg.className="sf-coupon-msg";msg.textContent="";}
+  renderCart();
+}
 
 function showCheckout(){
 
@@ -10388,18 +10448,32 @@ async function placeStoreOrder(){
 
 
     /* =========================
-       تكلفة الشحن
-       حاليًا 0
-       ويمكن تحديدها لاحقًا
-       حسب المحافظة
+       الكوبون + الشحن
     ========================= */
 
     const shippingCost = 0;
+    let couponCode = appliedCoupon?.code || null;
+    let couponDiscount = 0;
 
+    if(couponCode){
+        const couponCheck = await supabaseClient.rpc("validate_coupon",{
+            p_store_id:publicStore.id,
+            p_code:couponCode,
+            p_subtotal:subtotal
+        });
+        if(couponCheck.error || !couponCheck.data?.valid){
+            appliedCoupon=null; appliedCouponDiscount=0;
+            message.textContent = "❌ الكوبون لم يعد صالحًا. راجع الكوبون وحاول مرة أخرى.";
+            button.disabled=false;
+            button.textContent="تأكيد الطلب 🚀";
+            renderCart();
+            return;
+        }
+        couponDiscount=Math.min(Number(couponCheck.data.discount||0),subtotal);
+        couponCode=String(couponCheck.data.code||couponCode);
+    }
 
-    const total =
-        subtotal +
-        shippingCost;
+    const total = Math.max(0, subtotal + shippingCost - couponDiscount);
 
 
     /* =========================
@@ -10557,6 +10631,12 @@ async function placeStoreOrder(){
         total:
             total,
 
+        coupon_code:
+            couponCode,
+
+        coupon_discount:
+            couponDiscount,
+
 
         /* الدفع */
 
@@ -10689,6 +10769,9 @@ async function placeStoreOrder(){
     ========================= */
 
     publicCart = [];
+    appliedCoupon=null;
+    appliedCouponDiscount=0;
+
 
 
     savePublicCart();
