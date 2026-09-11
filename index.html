@@ -3989,11 +3989,10 @@ function hasFeature(feature){
     // During the active trial, every feature is available so the merchant can
     // evaluate the complete product before choosing a paid plan.
     const activePlan = normalizePlan(currentSubscription?.plan);
-    if(
-        activePlan === "trial" &&
-        currentSubscription &&
-        subscriptionIsActive(currentSubscription)
-    ) return true;
+    if(activePlan === "trial" && currentSubscription){
+        const trialEnd=getSubscriptionEnd(currentSubscription);
+        if(trialEnd && trialEnd > Date.now()) return true;
+    }
 
     const teamDecision = featureAllowedForCurrentUser(feature);
     if(teamDecision !== null) return teamDecision;
@@ -4102,26 +4101,50 @@ function renderSubscriptionUI(){
 async function loadSubscription(){
     if(!currentUser) return;
 
-    // Read the subscription through a SECURITY DEFINER RPC so frontend RLS
-    // policy differences cannot make a valid owner subscription appear missing.
-    const {data:rpcData,error:rpcError}=await supabaseClient.rpc("get_my_subscription");
-    const data = rpcData && rpcData.subscription ? rpcData.subscription : null;
-    const error = rpcError || (rpcData && rpcData.error ? new Error(rpcData.error) : null);
+    let data=null;
+    let error=null;
 
-    if(error){
-        console.warn("Subscription RPC load error:",error.message);
-        currentSubscription=null;
-        const planName=document.getElementById("subscriptionPlanName");
-        if(planName) planName.textContent="غير متاح";
-        renderSubscriptionSetupWarning(error.message);
-        return;
+    // Primary: secure RPC.
+    try{
+        const {data:rpcData,error:rpcError}=await supabaseClient.rpc("get_my_subscription");
+        if(rpcError) throw rpcError;
+        data = rpcData && rpcData.subscription ? rpcData.subscription : null;
+        if(rpcData && rpcData.error) error=new Error(rpcData.error);
+    }catch(e){
+        error=e;
+        console.warn("Subscription RPC load error:",e?.message||e);
+    }
+
+    // Fallback: the owner already has SELECT access to their own subscription.
+    // This keeps Trial access working even if the helper RPC is stale/missing.
+    if(!data){
+        try{
+            const {data:rows,error:directError}=await supabaseClient
+                .from("subscriptions")
+                .select("*")
+                .eq("user_id",currentUser.id)
+                .order("created_at",{ascending:false})
+                .limit(20);
+            if(directError) throw directError;
+            const list=Array.isArray(rows)?rows:[];
+            const now=Date.now();
+            data=list.find(x=>x.is_lifetime===true || normalizePlan(x.plan)==="lifetime")
+                || list.find(x=>{
+                    const end=getSubscriptionEnd(x);
+                    return !!end && end>now;
+                })
+                || list[0]
+                || null;
+        }catch(e){
+            console.warn("Direct subscription fallback error:",e?.message||e);
+        }
     }
 
     if(!data){
         currentSubscription=null;
         const planName=document.getElementById("subscriptionPlanName");
         if(planName) planName.textContent="غير متاح";
-        renderSubscriptionSetupWarning("لا يوجد اشتراك مرتبط بهذا الحساب بعد.");
+        renderSubscriptionSetupWarning(error?.message || "لا يوجد اشتراك مرتبط بهذا الحساب بعد.");
         return;
     }
 
