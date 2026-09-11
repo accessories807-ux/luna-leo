@@ -3516,7 +3516,7 @@ let currentStore = null;
 const SUPABASE_URL = "https://zuljqdzinbndmesbarjn.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_thb5jIXk2pFDqs79kJMQRQ_N-HrFAt6";
 
-const supabaseClient = window.supabase.createClient(
+const supabaseClient = window.supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
 );
