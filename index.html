@@ -3903,13 +3903,14 @@ async function placeStoreOrder(){
     btn.disabled = true; btn.textContent = "⏳ جاري الإرسال..."; msg.textContent = "";
     const orderId = makeUUID();
     const cancelToken = makeUUID();
+    const paymentToken = makeUUID();
 
     const baseOrder = {
         id: orderId,
         store_id: publicStore.id,
         customers_name: customerName,
         customer_phone: phone,
-        customers_address: fullAddress,
+        customer_address: fullAddress,
         customer_first_name: firstName,
         customer_last_name: lastName,
         customer_email: email || null,
@@ -3929,7 +3930,8 @@ async function placeStoreOrder(){
         payment_method: payment,
         payment_status: "pending",
         status: "new",
-        cancel_token: cancelToken
+        cancel_token: cancelToken,
+        payment_token: paymentToken
     };
 
     const result = await supabaseClient.from("orders").insert(baseOrder);
