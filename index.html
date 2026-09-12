@@ -742,30 +742,6 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     .sf-hero{padding:40px 0}
     .form-grid.cols-2,.form-grid.cols-3{grid-template-columns:1fr}
 }
-/* Customer storefront cart — clean full-screen mobile experience */
-@media(max-width:700px){
-  #cartOverlay{background:#fff;backdrop-filter:none}
-  #cartOverlay .cart-drawer{
-    position:absolute;inset:0;width:100vw;height:100dvh;max-height:none;
-    border-radius:0;box-shadow:none;background:var(--card);
-    animation:cartMobileIn .28s ease-out;
-  }
-  @keyframes cartMobileIn{from{transform:translateY(14px);opacity:.7}to{transform:none;opacity:1}}
-  #cartOverlay .cart-head{padding:18px 18px 14px;min-height:64px;position:sticky;top:0;z-index:5}
-  #cartOverlay .cart-head h2{font-size:22px;gap:8px}
-  #cartOverlay .cart-body{padding:14px}
-  #cartOverlay .cart-item{grid-template-columns:76px 1fr;gap:12px;padding:14px 12px;border-radius:20px;margin-bottom:12px}
-  #cartOverlay .cart-item-img-wrap{width:76px;height:76px;border-radius:16px}
-  #cartOverlay .cart-item-name{font-size:15px}
-  #cartOverlay .cart-item-price{font-size:17px}
-  #cartOverlay .qty{height:38px;border-radius:999px}
-  #cartOverlay .qty button{width:36px;height:36px}
-  #cartOverlay .qty .qty-value{height:36px;line-height:36px;min-width:38px}
-  #cartOverlay .cart-footer{padding:14px 16px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -8px 24px rgba(20,15,8,.06)}
-  #cartOverlay .coupon-box{margin-top:4px;padding:13px;border-radius:16px}
-  #cartOverlay .checkout-btn,#cartOverlay .whatsapp-checkout-btn{border-radius:18px;min-height:54px;font-size:16px}
-}
-
 @media(max-width:700px){
     .cart-drawer{width:100vw}
     .cart-item{grid-template-columns:70px 1fr;gap:10px;padding:12px}
@@ -796,7 +772,6 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     body{background:#fff}
     .site-header,.site-footer,.cart-overlay,.wishlist-overlay{display:none!important}
 }
-.storefront-no-platform{display:none!important}
 </style>
 </head>
 
@@ -1321,7 +1296,8 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     <div class="sf-topbar-inner">
         <div class="sf-brand">LUNA<span>&</span>LEO</div>
         <div class="sf-top-actions">
-                        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleStore" title="تبديل الوضع">🌙</button>
+            <button class="sf-small-btn" onclick="backToPlatform()">منصة LUNA&LEO</button>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleStore" title="تبديل الوضع">🌙</button>
             <button class="sf-small-btn" onclick="openTracking()" style="padding:10px 14px" title="تتبع طلب">📦</button>
             <button class="sf-small-btn" onclick="openWishlist()" style="position:relative;padding:10px 14px" title="المفضلة">
                 ❤️
@@ -1356,7 +1332,9 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     </div>
 </main>
 
-<footer class="sf-topbar" style="text-align:center;padding:18px"><div id="sfStoreFooter" style="color:var(--muted);font-size:13px"></div></footer>
+<footer class="sf-topbar" style="text-align:center;padding:26px">
+    <div style="color:var(--muted);font-size:13px">© 2026 LUNA&LEO MARKET — متجر إلكتروني</div>
+</footer>
 
 <!-- CART DRAWER -->
 <div id="cartOverlay" class="cart-overlay" onclick="closeCartIfOverlay(event)">
@@ -1364,7 +1342,7 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
         <div class="cart-head">
             <h2>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                السلة
+                سلة المشتريات
                 <span class="item-count-pill" id="cartItemCount">0</span>
             </h2>
             <div class="cart-head-actions">
@@ -1458,7 +1436,8 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
             <div class="field"><textarea id="orderNote" maxlength="500" placeholder="اتصل بي قبل التوصيل (اختياري)"></textarea></div>
 
             <div class="step-title"><span class="step-num">5</span> طريقة الدفع</div>
-            <div class="field"><label>طريقة الدفع</label><select id="orderPayment"><option value="cash">💵 الدفع عند الاستلام</option></select></div>
+            <div class="field"><label>طريقة الدفع</label><select id="orderPayment"><option value="cash">💵 الدفع عند الاستلام</option><option value="paymob">💳 الدفع أونلاين</option></select></div>
+<div id="onlinePaymentNote" style="display:none;margin-top:8px;padding:10px 12px;border-radius:10px;background:var(--g-soft);color:var(--g-dark);font-size:13px;font-weight:700">🔒 سيتم تحويلك إلى صفحة الدفع الآمنة لإتمام العملية.</div>
 
             <div class="order-msg" id="sfOrderMessage"></div>
             <button class="checkout-btn" id="placeOrderBtn" onclick="placeStoreOrder()">✓ تأكيد الطلب</button>
@@ -3218,7 +3197,7 @@ function closeCart(){
     resetCartHeader();
 }
 function resetCartHeader(){
-    document.querySelector(".cart-head h2").innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>السلة <span class="item-count-pill">${publicCart.reduce((s,i)=>s+Number(i.qty||0),0)}</span>`;
+    document.querySelector(".cart-head h2").innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>سلة المشتريات <span class="item-count-pill">${publicCart.reduce((s,i)=>s+Number(i.qty||0),0)}</span>`;
     document.getElementById("cartClearBtn").style.display = publicCart.length ? "inline-block" : "none";
 }
 function closeCartIfOverlay(e){ if(e.target === e.currentTarget) closeCart(); }
@@ -3595,6 +3574,10 @@ async function loadShippingOptions(){
 }
 document.addEventListener("change", e => {
     if(e.target?.id === "orderGovernorate" || e.target?.id === "orderCity") loadShippingOptions();
+    if(e.target?.id === "orderPayment"){
+        const note=document.getElementById("onlinePaymentNote");
+        if(note) note.style.display=e.target.value==="paymob"?"block":"none";
+    }
 });
 
 /* =========================================================
@@ -3659,7 +3642,8 @@ async function placeStoreOrder(){
     btn.disabled = true; btn.textContent = "⏳ جاري الإرسال..."; msg.textContent = "";
     const orderId = makeUUID();
     const cancelToken = makeUUID();
-    const baseOrder = {id: orderId, store_id: publicStore.id, customer_name: customerName, customer_phone: phone, customer_address: fullAddress, customer_first_name: firstName, customer_last_name: lastName, customer_email: email || null, country: country || "مصر", governorate, city, district: district || null, street, address_details: addressDetails, shipping_method: shippingMethod, shipping_cost: shippingCost, order_note: orderNote || null, items, total, coupon_code: couponCode, coupon_discount: couponDiscount, payment_method: payment, payment_status: "pending", status: "new", cancel_token: cancelToken};
+    const paymentToken = makeUUID();
+    const baseOrder = {id: orderId, store_id: publicStore.id, customer_name: customerName, customer_phone: phone, customer_address: fullAddress, customer_first_name: firstName, customer_last_name: lastName, customer_email: email || null, country: country || "مصر", governorate, city, district: district || null, street, address_details: addressDetails, shipping_method: shippingMethod, shipping_cost: shippingCost, order_note: orderNote || null, items, total, coupon_code: couponCode, coupon_discount: couponDiscount, payment_method: payment, payment_status: "pending", status: "new", cancel_token: cancelToken, payment_token: paymentToken};
     const result = await supabaseClient.from("orders").insert(baseOrder);
     btn.disabled = false; btn.textContent = "✓ تأكيد الطلب";
     if(result.error){
@@ -3669,6 +3653,30 @@ async function placeStoreOrder(){
         else if(errText.includes("PRODUCT_NOT_FOUND")) msg.textContent = "❌ أحد المنتجات غير متاح.";
         else msg.textContent = "❌ لم يتم إرسال الطلب.";
         return;
+    }
+    if(payment === "paymob"){
+        try{
+            btn.disabled = true; btn.textContent = "⏳ جاري فتح الدفع الآمن...";
+            const {data:sessionData,error:sessionError}=await supabaseClient.auth.getSession();
+            if(sessionError) throw sessionError;
+            const token=sessionData?.session?.access_token;
+            if(!token) throw new Error("جلسة الدفع غير متاحة.");
+            const origin=window.location.origin;
+            const {data:pay,error:payError}=await supabaseClient.functions.invoke("create-store-order-payment",{
+                body:{order_id:orderId,payment_token:paymentToken,store_id:publicStore.id,amount:total,currency:"EGP",customer:{first_name:firstName,last_name:lastName,email:email||"",phone:phone,city:city,state:governorate,street:street,country:"EG"},origin}
+            });
+            if(payError) throw payError;
+            if(!pay?.client_secret) throw new Error(pay?.error || "تعذر إنشاء عملية الدفع.");
+            const publicKey=pay.public_key;
+            if(!publicKey) throw new Error("مفتاح الدفع العام غير مُعد بعد.");
+            window.location.href=`https://accept.paymob.com/unifiedcheckout/?publicKey=${encodeURIComponent(publicKey)}&clientSecret=${encodeURIComponent(pay.client_secret)}`;
+            return;
+        }catch(e){
+            console.error("PAYMENT ERROR:",e);
+            msg.textContent="❌ تعذر فتح الدفع الإلكتروني. يمكنك اختيار الدفع عند الاستلام.";
+            btn.disabled=false; btn.textContent="✓ تأكيد الطلب";
+            return;
+        }
     }
     try{
         const key = "lunaLeoOrderTokens_" + publicStore.id;
@@ -3715,6 +3723,18 @@ function backToCart(){
     document.getElementById("cartView").style.display = "flex";
     resetCartHeader();
 }
+
+/* =========================================================
+   PAYMOB PAYMENT RESULT
+========================================================= */
+(function(){
+  const p=new URLSearchParams(window.location.search);
+  if(!p.has("payment_result") && !p.has("success") && !p.has("id")) return;
+  const success=p.get("success")==="true";
+  if(success){
+    try{ localStorage.setItem("lunaLeoLastPaymentResult", "paid"); }catch(e){}
+  }
+})();
 
 /* =========================================================
    MY ORDERS
