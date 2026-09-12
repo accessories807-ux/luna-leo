@@ -3685,7 +3685,7 @@ async function placeStoreOrder(){
         localStorage.setItem(key, JSON.stringify(old));
     } catch(e){}
     // Send confirmation email
-    try{ await supabaseClient.functions.invoke("send-order-email", {body:{order_id: orderId, type: "order_confirmation"}}); } catch(e){}
+    console.log("✅ Order created successfully:", orderId);
     publicCart = []; appliedCoupon = null; appliedCouponDiscount = 0;
     savePublicCart();
     document.getElementById("cartView").style.display = "none";
