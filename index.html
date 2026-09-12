@@ -1544,7 +1544,7 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
             <div class="panel">
                 <div class="panel-title"><h2>💳 الاشتراكات</h2></div>
                 <div id="plansContainer" class="pricing"></div>
-                <div class="sub-label" style="margin-top:14px">الدفع الإلكتروني سيتم ربطه لاحقًا.</div>
+                <div class="sub-label" style="margin-top:14px">🔒 الدفع الإلكتروني الآمن متاح عبر Paymob.</div>
             </div>
         </section>
 
@@ -2383,14 +2383,64 @@ async function requestPlanChange(plan){
     if(plan === "trial"){ toast("الفترة التجريبية تُمنح مرة واحدة.", "info"); return; }
     const cfg = PLAN_CONFIG[plan];
     if(!cfg || !["starter", "growth", "business"].includes(plan)){ toast("الباقة غير صالحة.", "error"); return; }
-    const ok = await confirmDialog(`طلب ${cfg.name}`, `السعر: ${cfg.price.toLocaleString("ar-EG")} جنيه/شهر`, "تأكيد");
+    const ok = await confirmDialog(`اشتراك ${cfg.name}`, `السعر: ${cfg.price.toLocaleString("ar-EG")} جنيه/شهر`, "الانتقال للدفع");
     if(!ok) return;
+
+    const buttons = document.querySelectorAll('#plansContainer button');
+    buttons.forEach(b => { b.disabled = true; b.dataset.originalText = b.textContent; b.textContent = 'جاري تجهيز الدفع…'; });
+
     try{
-        const {error} = await supabaseClient.rpc("create_subscription_request", {p_plan:plan});
-        if(error) throw error;
-        toast(`✅ تم تسجيل طلب ${cfg.name}.`, "success", 4000);
-    } catch(err){ toast("تعذر تسجيل الطلب.", "error"); }
+        const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+        if(sessionError) throw sessionError;
+        const token = sessionData?.session?.access_token;
+        if(!token) throw new Error('جلسة الدخول غير متاحة. سجّل الدخول مرة أخرى.');
+
+        const { data: requestId, error: requestError } = await supabaseClient.rpc('create_subscription_request', { p_plan: plan });
+        if(requestError) throw requestError;
+        if(!requestId) throw new Error('لم يتم إنشاء طلب الاشتراك.');
+
+        const endpoint = `${SUPABASE_URL}/functions/v1/create-paymob-payment`;
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ plan, request_id: requestId })
+        });
+
+        const result = await response.json().catch(() => ({}));
+        if(!response.ok) throw new Error(result?.error || result?.message || 'تعذر إنشاء عملية الدفع.');
+        if(!result?.client_secret || !result?.public_key) throw new Error('Paymob لم يرجع بيانات الدفع المطلوبة.');
+
+        const checkoutUrl = 'https://accept.paymob.com/unifiedcheckout/?publicKey='
+            + encodeURIComponent(result.public_key)
+            + '&clientSecret='
+            + encodeURIComponent(result.client_secret);
+
+        window.location.href = checkoutUrl;
+    }catch(err){
+        console.error('subscription payment', err);
+        buttons.forEach(b => { b.disabled = false; if(b.dataset.originalText) b.textContent = b.dataset.originalText; });
+        toast('❌ ' + (err?.message || 'تعذر بدء الدفع عبر Paymob.'), 'error', 6000);
+    }
 }
+function handleSubscriptionPaymentResult(){
+    const params = new URLSearchParams(window.location.search);
+    if(params.get('subscription_payment') !== '1') return;
+    const requestId = params.get('request_id');
+    const success = params.get('success');
+    if(success === 'false' || success === '0'){
+        toast('❌ لم تكتمل عملية الدفع.', 'error', 6000);
+        return;
+    }
+    toast('⏳ تم الرجوع من Paymob. جاري تأكيد الدفع وتفعيل الاشتراك…', 'info', 7000);
+    setTimeout(async () => {
+        try{ await loadSubscription(); }catch(e){}
+        if(requestId) console.log('subscription request:', requestId);
+    }, 1200);
+}
+
 function openPlans(){
     if(!currentUser){ openAuth("register"); return; }
     showDashboard(); showSection("subscription");
@@ -4051,5 +4101,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     await checkUserSession();
 });
 </script>
+<script>window.addEventListener("load", handleSubscriptionPaymentResult);</script>
 </body>
    </html>
