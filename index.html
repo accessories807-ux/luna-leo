@@ -3643,7 +3643,7 @@ async function placeStoreOrder(){
     const orderId = makeUUID();
     const cancelToken = makeUUID();
     const paymentToken = makeUUID();
-    const baseOrder = {id: orderId, store_id: publicStore.id, customers_name: customerName, customer_phone: phone, customers_address: fullAddress, customer_first_name: firstName, customer_last_name: lastName, customer_email: email || null, country: country || "مصر", governorate, city, district: district || null, street, address_details: addressDetails, shipping_method: shippingMethod, shipping_cost: shippingCost, order_note: orderNote || null, items, total, coupon_code: couponCode, coupon_discount: couponDiscount, payment_method: payment, payment_status: "pending", status: "new", cancel_token: cancelToken, payment_token: paymentToken};
+    const baseOrder = {id: orderId, store_id: publicStore.id, customers_name: customerName, customer_phone: phone, customer_address: fullAddress, customer_first_name: firstName, customer_last_name: lastName, customer_email: email || null, country: country || "مصر", governorate, city, district: district || null, street, address_details: addressDetails, shipping_method: shippingMethod, shipping_cost: shippingCost, order_note: orderNote || null, items, total, coupon_code: couponCode, coupon_discount: couponDiscount, payment_method: payment, payment_status: "pending", status: "new", cancel_token: cancelToken, payment_token: paymentToken};
     const result = await supabaseClient.from("orders").insert(baseOrder);
     btn.disabled = false; btn.textContent = "✓ تأكيد الطلب";
     if(result.error){
