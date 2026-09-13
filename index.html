@@ -3894,146 +3894,165 @@ document.addEventListener("change", e => {
 });
 
 /* ============ PLACE ORDER — Fixed ============ */
+
 async function placeStoreOrder(){
     if(!publicStore || !publicCart.length) return;
+
+    const msg = document.getElementById("sfOrderMessage");
+    const btn = document.getElementById("placeOrderBtn");
+
+    // جمع البيانات
     const firstName = document.getElementById("orderFirstName").value.trim();
-    const lastName = document.getElementById("orderLastName").value.trim();
-    const email = document.getElementById("orderEmail").value.trim();
-    const phone = document.getElementById("orderPhone").value.trim();
-    const country = document.getElementById("orderCountry").value;
+    const lastName  = document.getElementById("orderLastName").value.trim();
+    const email     = document.getElementById("orderEmail").value.trim();
+    const phone     = document.getElementById("orderPhone").value.trim();
+    const country   = document.getElementById("orderCountry").value;
     const governorate = document.getElementById("orderGovernorate").value;
-    const city = document.getElementById("orderCity").value.trim();
-    const district = document.getElementById("orderDistrict").value.trim();
-    const street = document.getElementById("orderStreet").value.trim();
+    const city      = document.getElementById("orderCity").value.trim();
+    const district  = document.getElementById("orderDistrict").value.trim();
+    const street    = document.getElementById("orderStreet").value.trim();
     const addressDetails = document.getElementById("orderAddressDetails").value.trim();
     const shippingMethod = document.getElementById("orderShipping").value;
     const orderNote = document.getElementById("orderNote").value.trim();
-    const payment = document.getElementById("orderPayment").value;
-    const msg = document.getElementById("sfOrderMessage");
-    const btn = document.getElementById("placeOrderBtn");
-    if(!firstName || !lastName || !phone || !governorate || !city || !street || !addressDetails){ msg.textContent = "⚠️ أكمل البيانات المطلوبة."; return; }
-    try{
-        const productIds = publicCart.map(i => i.id);
-        const {data: freshProducts} = await supabaseClient.from("products").select("id, price, stock, name").in("id", productIds);
-        const freshMap = new Map((freshProducts || []).map(p => [String(p.id), p]));
-        let priceChanged = false;
-        let stockIssue = null;
-        for(const item of publicCart){
-            const fresh = freshMap.get(String(item.id));
-            if(!fresh){ stockIssue = `المنتج "${item.name}" غير متاح`; break; }
-            if(Number(fresh.price) !== Number(item.price)){ item.price = Number(fresh.price); priceChanged = true; }
-            if(fresh.stock != null && Number(fresh.stock) < Number(item.qty)){ stockIssue = `"${item.name}" - المتاح ${fresh.stock}`; break; }
-        }
-        if(stockIssue){ msg.textContent = "❌ " + stockIssue; renderCart(); return; }
-        if(priceChanged){
-            const ok = await confirmDialog("تحديث الأسعار", "تم تحديث بعض الأسعار. المتابعة؟", "متابعة");
-            if(!ok) return;
-            savePublicCart(); renderCart();
-        }
-    } catch(e){ console.warn(e); }
-    const subtotal = publicCart.reduce((s, i) => s + Number(i.price || 0) * Number(i.qty || 0), 0);
-    const shippingCost = await getShippingCost(publicStore.id, governorate, city, subtotal);
-    let couponCode = appliedCoupon?.code || null;
-    let couponDiscount = 0;
-    if(couponCode){
-        const couponCheck = await supabaseClient.rpc("validate_coupon", {p_store_id: publicStore.id, p_code: couponCode, p_subtotal: subtotal});
-        if(couponCheck.error || !couponCheck.data?.valid){
-            appliedCoupon = null; appliedCouponDiscount = 0;
-            msg.textContent = "❌ الكوبون لم يعد صالحًا.";
-            renderCart();
-            return;
-        }
-        couponDiscount = Math.min(Number(couponCheck.data.discount || 0), subtotal);
-        couponCode = String(couponCheck.data.code || couponCode);
-    }
-    const total = Math.max(0, subtotal + shippingCost - couponDiscount);
-    const items = publicCart.map(item => ({product_id: item.id, name: item.name, price: Number(item.price || 0), quantity: Number(item.qty || 0), image_url: item.image_url || ""}));
-    const customerName = firstName + " " + lastName;
-    const fullAddress = [governorate, city, district, street, addressDetails].filter(Boolean).join("، ");
-    btn.disabled = true; btn.textContent = "⏳ جاري الإرسال..."; msg.textContent = "";
-    const orderId = makeUUID();
-    const cancelToken = makeUUID();
-    const paymentToken = makeUUID();
+    const payment   = document.getElementById("orderPayment").value;
 
-    const baseOrder = {
-        id: orderId,
-        store_id: publicStore.id,
-        customers_name: customerName,
-        customer_phone: phone,
-        customer_address: fullAddress,
-        customer_first_name: firstName,
-        customer_last_name: lastName,
-        customer_email: email || null,
-        country: country || "مصر",
-        governorate: governorate,
-        city: city,
-        district: district || null,
-        street: street,
-        address_details: addressDetails,
-        shipping_method: shippingMethod,
-        shipping_cost: shippingCost,
-        order_note: orderNote || null,
-        items: items,
-        total: total,
-        coupon_code: couponCode,
-        coupon_discount: couponDiscount,
-        payment_method: payment,
-        payment_status: "pending",
-        status: "new",
-        cancel_token: cancelToken,
-        payment_token: paymentToken
-    };
-
-    const result = await supabaseClient.from("orders").insert(baseOrder);
-    btn.disabled = false; btn.textContent = "✓ تأكيد الطلب";
-    if(result.error){
-        console.error("❌ ORDER ERROR:", result.error);
-        const errText = String(result.error?.message || result.error?.details || "");
-        msg.textContent = "❌ لم يتم إرسال الطلب: " + errText.slice(0, 150);
+    // التحقق من البيانات
+    if(!firstName || !lastName || !phone || !governorate || !city || !street || !addressDetails){
+        msg.textContent = "⚠️ أكمل البيانات المطلوبة.";
         return;
     }
-    console.log("✅ Order created successfully:", orderId);
-    try{
-        const key = "lunaLeoOrderTokens_" + publicStore.id;
-        const old = JSON.parse(localStorage.getItem(key) || "[]");
-        old.push({orderId, cancelToken});
-        localStorage.setItem(key, JSON.stringify(old));
-    } catch(e){}
-    publicCart = []; appliedCoupon = null; appliedCouponDiscount = 0;
-    savePublicCart();
-    document.getElementById("cartView").style.display = "none";
-    document.getElementById("checkoutView").classList.remove("open");
-    document.getElementById("successView").classList.add("open");
-    document.getElementById("successOrderId").textContent = orderId;
-    if(publicStore.loyalty_enabled && phone){
-        try{
-            const {data: loyalty} = await supabaseClient.rpc("get_customer_loyalty", {p_store_id: publicStore.id, p_phone: phone});
-            if(loyalty && loyalty.points > 0){
-                const loyaltyBox = document.getElementById("successLoyalty");
-                const loyaltyPts = document.getElementById("successLoyaltyPoints");
-                if(loyaltyBox) loyaltyBox.style.display = "block";
-                if(loyaltyPts) loyaltyPts.textContent = Number(loyalty.points).toLocaleString("ar-EG");
-            }
-        } catch(e){}
-    }
-    ["orderFirstName","orderLastName","orderEmail","orderPhone","orderGovernorate","orderCity","orderDistrict","orderStreet","orderAddressDetails","orderNote"].forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.value = "";
-    });
-}
-function showCheckout(){
-    if(!publicCart.length){ toast("السلة فارغة", "error"); return; }
-    document.getElementById("cartView").style.display = "none";
-    document.getElementById("checkoutView").classList.add("open");
-    document.getElementById("successView").classList.remove("open");
-    document.getElementById("sfOrderMessage").textContent = "";
-    loadShippingOptions();
-}
-function backToCart(){
-    document.getElementById("checkoutView").classList.remove("open");
-    document.getElementById("cartView").style.display = "flex";
-}
 
+    // التحقق من رقم الهاتف
+    const phoneRegex = /^(\+?20|0)?1[0125]\d{8}$/;
+    if(!phoneRegex.test(phone.replace(/\s/g, ""))){
+        msg.textContent = "⚠️ رقم الهاتف غير صحيح.";
+        return;
+    }
+
+    // التحقق من البريد
+    if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        msg.textContent = "⚠️ البريد الإلكتروني غير صحيح.";
+        return;
+    }
+
+    // منع السبام (30 ثانية بين كل طلب)
+    const rlKey = "luna_order_rl_" + publicStore.id;
+    const lastOrder = Number(localStorage.getItem(rlKey) || 0);
+    if(Date.now() - lastOrder < 30000){
+        msg.textContent = "⏳ انتظر قليلاً قبل محاولة أخرى.";
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "⏳ جاري الإرسال...";
+    msg.textContent = "";
+
+    try {
+        // حساب الشحن
+        const subtotal = publicCart.reduce((s, i) => s + Number(i.price || 0) * Number(i.qty || 0), 0);
+        const shippingCost = await getShippingCost(publicStore.id, governorate, city, subtotal);
+
+        // تجهيز البيانات
+        const customerData = {
+            full_name: firstName + " " + lastName,
+            first_name: firstName,
+            last_name: lastName,
+            phone: phone,
+            email: email || null,
+            country: country || "مصر",
+            governorate: governorate,
+            city: city,
+            district: district || null,
+            street: street,
+            address_details: addressDetails,
+            address: [governorate, city, district, street, addressDetails].filter(Boolean).join("، "),
+            shipping_method: shippingMethod,
+            order_note: orderNote || null
+        };
+
+        const items = publicCart.map(item => ({
+            product_id: item.id,
+            quantity: Number(item.qty || 0)
+        }));
+
+        const cancelToken = crypto.randomUUID();
+
+        // استدعاء الدالة الآمنة
+        const { data, error } = await supabaseClient.rpc("create_order_secure", {
+            p_store_id: publicStore.id,
+            p_customer_data: customerData,
+            p_items: items,
+            p_coupon_code: appliedCoupon?.code || null,
+            p_shipping_cost: shippingCost,
+            p_cancel_token: cancelToken
+        });
+
+        if(error) throw error;
+        if(!data || !data.order_id) throw new Error("لم يتم إنشاء الطلب");
+
+        // حفظ رقم الطلب
+        try {
+            const key = "lunaLeoOrderTokens_" + publicStore.id;
+            const old = JSON.parse(localStorage.getItem(key) || "[]");
+            old.push({ orderId: data.order_id, cancelToken });
+            localStorage.setItem(key, JSON.stringify(old.slice(-20)));
+        } catch(e){}
+
+        // حفظ وقت آخر طلب
+        localStorage.setItem(rlKey, String(Date.now()));
+
+        // مسح السلة
+        publicCart = [];
+        appliedCoupon = null;
+        appliedCouponDiscount = 0;
+        savePublicCart();
+
+        // شاشة النجاح
+        document.getElementById("cartView").style.display = "none";
+        document.getElementById("checkoutView").classList.remove("open");
+        document.getElementById("successView").classList.add("open");
+        document.getElementById("successOrderId").textContent = data.order_id;
+
+        // نقاط الولاء
+        if(publicStore.loyalty_enabled && phone){
+            try {
+                const { data: loyalty } = await supabaseClient.rpc("get_customer_loyalty", {
+                    p_store_id: publicStore.id, p_phone: phone
+                });
+                if(loyalty?.points > 0){
+                    document.getElementById("successLoyalty").style.display = "block";
+                    document.getElementById("successLoyaltyPoints").textContent =
+                        Number(loyalty.points).toLocaleString("ar-EG");
+                }
+            } catch(e){}
+        }
+
+        // مسح الحقول
+        ["orderFirstName","orderLastName","orderEmail","orderPhone",
+         "orderGovernorate","orderCity","orderDistrict","orderStreet",
+         "orderAddressDetails","orderNote"].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.value = "";
+        });
+
+        toast("🎉 تم استلام طلبك!", "success", 4000);
+
+    } catch(err) {
+        console.error("Order error:", err);
+        const m = String(err?.message || err);
+        if(m.includes("INSUFFICIENT_STOCK")){
+            msg.textContent = "❌ " + m.replace("INSUFFICIENT_STOCK:", "الكمية غير كافية:");
+        } else if(m.includes("PRODUCT_NOT_FOUND")){
+            msg.textContent = "❌ أحد المنتجات لم يعد متاحاً. حدّث السلة.";
+        } else {
+            msg.textContent = "❌ " + m.slice(0, 150);
+        }
+        try { await loadMoreProducts(true); renderCart(); } catch(e){}
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "✓ تأكيد الطلب";
+    }
+                                                                                                               }
 /* ============ MY ORDERS ============ */
 async function showMyOrders(){
     const box = document.getElementById("myOrdersBox");
