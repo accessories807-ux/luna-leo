@@ -3639,6 +3639,74 @@ window.__lastOrderData = {
     total: data.total || 0
 };
 
+/* ============ WHATSAPP ORDER CONFIRM (NEW) ============ */
+function showWhatsappConfirmButton(){
+    const data = window.__lastOrderData;
+    if(!data) return;
+    
+    let btn = document.getElementById("whatsappConfirmBtn");
+    if(btn) btn.remove();
+    
+    btn = document.createElement("button");
+    btn.id = "whatsappConfirmBtn";
+    btn.className = "whatsapp-checkout-btn";
+    btn.style.cssText = "margin-top:16px;max-width:340px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border:none;";
+    btn.innerHTML = `📲 احفظ رقم الطلب على واتساب`;
+    btn.onclick = sendWhatsappConfirmation;
+    
+    const successView = document.getElementById("successView");
+    const continueBtn = successView.querySelector(".checkout-btn");
+    if(continueBtn) continueBtn.parentNode.insertBefore(btn, continueBtn);
+    else successView.appendChild(btn);
+}
+
+function sendWhatsappConfirmation(){
+    const data = window.__lastOrderData;
+    if(!data || !data.customerPhone) {
+        toast("❌ رقم العميل غير متاح", "error");
+        return;
+    }
+    
+    let phone = String(data.customerPhone).replace(/\D/g, "");
+    if(!phone.startsWith("20") && phone.startsWith("0")){
+        phone = "20" + phone.substring(1);
+    } else if(phone.startsWith("1")){
+        phone = "20" + phone;
+    }
+    
+    let storePhone = String(data.storeWhatsapp || "").replace(/\D/g, "");
+    if(!storePhone) storePhone = "غير محدد";
+    
+    const itemsText = data.items.map((item, i) => {
+        const lineTotal = Number(item.price || 0) * Number(item.qty || 0);
+        return `${i+1}. ${item.name} × ${item.qty} = ${lineTotal.toLocaleString("ar-EG")} جنيه`;
+    }).join("\n");
+    
+    const message = `🎉 شكراً لك على طلبك من ${data.storeName}
+
+━━━━━━━━━━━━━━━━━━━
+🆔 رقم الطلب: ${String(data.orderId).slice(0, 8)}
+👤 الاسم: ${data.customerName}
+📞 الهاتف: ${data.customerPhone}
+📍 العنوان: ${data.customerAddress}
+━━━━━━━━━━━━━━━━━━━
+📦 المنتجات:
+${itemsText}
+━━━━━━━━━━━━━━━━━━━
+💰 المجموع: ${Number(data.subtotal).toLocaleString("ar-EG")} جنيه
+${data.shipping > 0 ? `🚚 الشحن: ${Number(data.shipping).toLocaleString("ar-EG")} جنيه\n` : ""}✅ الإجمالي: ${Number(data.total).toLocaleString("ar-EG")} جنيه
+━━━━━━━━━━━━━━━━━━━
+
+📞 للتواصل مع المتجر: ${storePhone}
+
+شكراً لثقتك بنا ❤️`;
+
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+    
+    toast("📱 جاري فتح واتساب...", "info");
+}
+/* ============ END WHATSAPP CONFIRM ============ */       
 // ✅ عرض زر الواتساب
 setTimeout(() => showWhatsappConfirmButton(), 100);
        
