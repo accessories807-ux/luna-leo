@@ -3910,5 +3910,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 </script>
 <script>window.addEventListener("load", handleSubscriptionPaymentResult);</script>
+ <!-- ============ MARWAN AI FLOATING CHAT ============ -->
+<div id="marwanFab" class="marwan-fab" onclick="toggleMarwanChat()" title="اسأل مروان AI">🤖</div>
+
+<div id="marwanChat" class="marwan-chat">
+    <div class="marwan-header">
+        <div class="marwan-header-title">
+            <div class="marwan-header-avatar">🤖</div>
+            <div>
+                <div>مروان AI</div>
+                <div class="marwan-header-status">● متصل — مساعدك الذكي</div>
+            </div>
+        </div>
+        <div class="marwan-header-actions">
+            <button class="marwan-header-btn" onclick="clearMarwanChat()" title="محادثة جديدة">🗑️</button>
+            <button class="marwan-header-btn" onclick="toggleMarwanChat()" title="إغلاق">✕</button>
+        </div>
+    </div>
+    <div class="marwan-body" id="marwanBody"></div>
+    <div class="marwan-footer">
+        <textarea id="marwanInput" class="marwan-input" rows="1" placeholder="اكتب سؤالك لمروان..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMarwanMessage()}"></textarea>
+        <button id="marwanSendBtn" class="marwan-send" onclick="sendMarwanMessage()" title="إرسال">➤</button>
+    </div>
+</div>
 </body>
    </html>
