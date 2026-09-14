@@ -404,7 +404,8 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
 .field label .required{color:var(--danger);margin-right:4px}
 .order-msg{text-align:center;margin-top:16px;min-height:24px;font-size:13px;font-weight:800;padding:12px;border-radius:12px}
 .order-msg:not(:empty){background:#fef2f2;color:var(--danger);border:1px solid #f5c6c6}
-.success{display:none;text-align:center;padding:60px 24px;flex:1}
+.success{display:none !important;text-align:center;padding:60px 24px;flex:1}
+.success.open{display:flex !important;flex-direction:column;align-items:center;justify-content:center;animation:cartItemIn .6s ease} 
 .success.open{display:flex;flex-direction:column;align-items:center;justify-content:center;animation:cartItemIn .6s ease}
 .success-icon{width:110px;height:110px;display:flex;align-items:center;justify-content:center;font-size:60px;background:linear-gradient(135deg,#e8f5ee,#d1ecdb);border-radius:50%;margin-bottom:24px;animation:successPop .7s cubic-bezier(.22,1.5,.36,1)}
 @keyframes successPop{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
