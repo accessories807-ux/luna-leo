@@ -3392,7 +3392,7 @@ function buildCategories(){
     if(!box) return;
     const categories = [...new Set(publicProducts.map(p => p.category).filter(Boolean))];
     if(!categories.length){ box.innerHTML = ""; return; }
-    box.innerHTML = `<button class="sf-cat active" onclick="selectCategory('all', this)">الكل</button>` + categories.map(c => `<button class="sf-cat" onclick="selectCategory('${escapeHTML(c)}', this)">${escapeHTML(c)}</button>`).join("");
+    box.innerHTML = `<button class="sf-cat ${publicCategory === 'all' ? 'active' : ''}" onclick="selectCategory('all', this)">الكل</button>` + categories.map(c => `<button class="sf-cat ${publicCategory === c ? 'active' : ''}" onclick="selectCategory('${escapeHTML(c)}', this)">${escapeHTML(c)}</button>`).join("");
 }
 function selectCategory(category, btn){
     publicCategory = category;
