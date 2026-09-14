@@ -3608,16 +3608,60 @@ async function placeStoreOrder(){
 
         localStorage.setItem(rlKey, String(Date.now()));
 
-        publicCart = [];
-        appliedCoupon = null;
-        appliedCouponDiscount = 0;
-        savePublicCart();
+// ✅ احفظ نسخة من السلة قبل ما تفضيها
+const cartSnapshot = [...publicCart];
 
-        document.getElementById("cartView").style.display = "none";
-        document.getElementById("checkoutView").classList.remove("open");
-        document.getElementById("successView").classList.add("open");
-        document.getElementById("successOrderId").textContent = data.order_id;
+publicCart = [];
+appliedCoupon = null;
+appliedCouponDiscount = 0;
+savePublicCart();
 
+document.getElementById("cartView").style.display = "none";
+document.getElementById("checkoutView").classList.remove("open");
+document.getElementById("successView").classList.add("open");
+document.getElementById("successOrderId").textContent = data.order_id;
+
+// ✅ حفظ بيانات الطلب
+window.__lastOrderData = {
+    orderId: data.order_id,
+    storeName: publicStore.name || "المتجر",
+    storeWhatsapp: publicStore.whatsapp || publicStore.phone || "",
+    customerName: firstName + " " + lastName,
+    customerPhone: phone,
+    customerAddress: [governorate, city, district, street, addressDetails].filter(Boolean).join(" - "),
+    items: cartSnapshot.map(item => ({
+        name: item.name,
+        qty: item.qty,
+        price: item.price
+    })),
+    subtotal: subtotal,
+    shipping: shippingCost,
+    total: data.total || 0
+};
+
+// ✅ عرض زر الواتساب
+setTimeout(() => showWhatsappConfirmButton(), 100);
+       
+// ✅ حفظ بيانات الطلب لعرض زر الواتساب
+window.__lastOrderData = {
+    orderId: data.order_id,
+    storeName: publicStore.name || "المتجر",
+    storeWhatsapp: publicStore.whatsapp || publicStore.phone || "",
+    customerName: firstName + " " + lastName,
+    customerPhone: phone,
+    customerAddress: [governorate, city, district, street, addressDetails].filter(Boolean).join(" - "),
+    items: publicCart.length ? publicCart.map(item => ({
+        name: item.name,
+        qty: item.qty,
+        price: item.price
+    })) : (Array.isArray(items) ? items : []),
+    subtotal: subtotal,
+    shipping: shippingCost,
+    total: data.total || 0
+};
+
+// ✅ عرض زر الواتساب
+setTimeout(() => showWhatsappConfirmButton(), 100);
         if(publicStore.loyalty_enabled && phone){
             try {
                 const { data: loyalty } = await supabaseClient.rpc("get_customer_loyalty", {
