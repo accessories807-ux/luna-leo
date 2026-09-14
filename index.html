@@ -4010,6 +4010,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     await checkUserSession();
 });
+</script>
  <!-- ============ MARWAN AI FLOATING CHAT ============ -->
 <div id="marwanFab" class="marwan-fab" onclick="toggleMarwanChat()" title="اسأل مروان AI">🤖</div>
 
@@ -4034,6 +4035,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     </div>
 </div>
 <script>window.addEventListener("load", handleSubscriptionPaymentResult);</script>
+<script>
 /* ============ MARWAN AI FLOATING CHAT (NEW) ============ */
 let marwanChatHistory = [];
 
@@ -4094,8 +4096,44 @@ function renderMarwanChat(){
                 <button class="marwan-quick-btn" onclick="askMarwanQuick('إيه أفضل منتج مبيعاً؟')">🏆 الأكثر مبيعاً</button>
                 <button class="marwan-quick-btn" onclick="askMarwanQuick('قولي إجمالي مبيعاتي')">💰 إجمالي المبيعات</button>
                 <button class="marwan-quick-btn" onclick="askMarwanQuick('اقترح عليّ طرق تحسين متجري')">💡 اقتراحات</button>
-            </div>
-  
+            </div>`;
+        return;
+    }
+
+    body.innerHTML = marwanChatHistory.map(item => {
+        const role = item?.role === "user" ? "user" : "assistant";
+        return `<div class="marwan-message ${role}">${escapeHTML(item?.content || "")}</div>`;
+    }).join("");
+}
+
+function clearMarwanChat(){
+    marwanChatHistory = [];
+    saveMarwanHistory();
+    renderMarwanChat();
+}
+
+function askMarwanQuick(text){
+    const input = document.getElementById("marwanInput");
+    if(input) input.value = text;
+    sendMarwanMessage();
+}
+
+function sendMarwanMessage(){
+    const input = document.getElementById("marwanInput");
+    const body = document.getElementById("marwanBody");
+    const text = String(input?.value || "").trim();
+    if(!text) return;
+    marwanChatHistory.push({role:"user",content:text});
+    const response = "أنا مروان AI. تم استلام سؤالك، ويمكنك استخدام بيانات المتجر من لوحة التحكم.";
+    marwanChatHistory.push({role:"assistant",content:response});
+    saveMarwanHistory();
+    if(input) input.value = "";
+    if(body) renderMarwanChat();
+}
+
+loadMarwanHistory();
+if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", showMarwanFab);
+else showMarwanFab();
 </script> 
 </body>
  </html>
