@@ -1080,6 +1080,17 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
 .image-thumb .remove:hover{background:var(--danger)}
 
 /* Responsive */
+
+/* ============ LANGUAGE SWITCHER ============ */
+.lang-switcher{position:relative;display:inline-flex;align-items:center}
+.lang-select{width:auto;min-width:112px;padding:9px 12px;border-radius:11px;border:1px solid var(--g-soft);background:var(--card);color:var(--ink);font-weight:800;font-size:13px;cursor:pointer}
+.lang-select:focus{border-color:var(--g);outline:none;box-shadow:0 0 0 3px rgba(185,138,56,.12)}
+[data-lang="en"] body,[data-lang="fr"] body{direction:ltr}
+[data-lang="en"] .modal-box,[data-lang="fr"] .modal-box,[data-lang="en"] .dash-content,[data-lang="fr"] .dash-content{direction:ltr;text-align:left}
+[data-lang="en"] .sidebar button,[data-lang="fr"] .sidebar button{text-align:left}
+[data-lang="en"] .nav-links,[data-lang="fr"] .nav-links{direction:ltr}
+@media(max-width:900px){.lang-select{min-width:96px}.nav-actions .lang-switcher{display:inline-flex}}
+
 @media(max-width:1050px){
     .sf-grid{grid-template-columns:repeat(3,1fr)}
     .products-grid{grid-template-columns:repeat(2,1fr)}
@@ -1173,6 +1184,13 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
         <a href="#faq">الأسئلة</a>
     </nav>
     <div class="nav-actions">
+        <div class="lang-switcher">
+            <select id="languageSelect" class="lang-select" onchange="setLanguage(this.value)" aria-label="Language">
+                <option value="ar">🇪🇬 العربية</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="fr">🇫🇷 Français</option>
+            </select>
+        </div>
         <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" title="تبديل الوضع">🌙</button>
         <button class="btn btn-outline" onclick="openAuth('login')">تسجيل الدخول</button>
         <button class="btn btn-primary" onclick="openAuth('register')">أنشئ متجرك</button>
@@ -1323,10 +1341,10 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     <div class="auth-logo">LUNA<span>&</span>LEO</div>
     <h2 id="authTitle">أنشئ حسابك 🚀</h2>
     <p id="authSubtitle">ابدأ متجرك الإلكتروني مع LUNA&LEO MARKET</p>
-    <div id="nameField"><input type="text" id="authName" placeholder="الاسم" autocomplete="name"></div>
-    <input type="email" id="authEmail" placeholder="البريد الإلكتروني" autocomplete="email">
-    <input type="password" id="authPassword" placeholder="كلمة المرور" autocomplete="current-password">
-    <div id="confirmField"><input type="password" id="authPassword2" placeholder="تأكيد كلمة المرور" autocomplete="new-password"></div>
+    <div id="nameField"><input type="text" id="authName" placeholder="الاسم" data-ph-ar="الاسم" data-ph-en="Name" data-ph-fr="Nom" autocomplete="name"></div>
+    <input type="email" id="authEmail" placeholder="البريد الإلكتروني" data-ph-ar="البريد الإلكتروني" data-ph-en="Email" data-ph-fr="E-mail" autocomplete="email">
+    <input type="password" id="authPassword" placeholder="كلمة المرور" data-ph-ar="كلمة المرور" data-ph-en="Password" data-ph-fr="Mot de passe" autocomplete="current-password">
+    <div id="confirmField"><input type="password" id="authPassword2" placeholder="تأكيد كلمة المرور" data-ph-ar="تأكيد كلمة المرور" data-ph-en="Confirm password" data-ph-fr="Confirmer le mot de passe" autocomplete="new-password"></div>
     <button class="auth-submit" id="authSubmit" onclick="registerUser()">إنشاء الحساب</button>
     <button class="auth-link" id="forgotPassword" onclick="resetPassword()" style="display:none">نسيت كلمة المرور؟</button>
     <div class="auth-divider"><span>أو</span></div>
@@ -1357,6 +1375,11 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     <div class="dash-header-inner">
         <div class="dash-logo">LUNA<span>&</span>LEO</div>
         <div class="dash-user">
+            <div class="lang-switcher">
+                <select id="languageSelectDash" class="lang-select" onchange="setLanguage(this.value)" aria-label="Language">
+                    <option value="ar">🇪🇬 العربية</option><option value="en">🇬🇧 English</option><option value="fr">🇫🇷 Français</option>
+                </select>
+            </div>
             <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleDash" title="تبديل الوضع" style="display:none">🌙</button>
             <div class="notif-wrap" id="notifUI" style="display:none">
                 <button class="notif-btn" onclick="toggleNotifications()">🔔 <span class="notif-badge" id="notifBadge">0</span></button>
@@ -1669,6 +1692,11 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     <div class="sf-topbar-inner">
         <div class="sf-brand">LUNA<span>&</span>LEO</div>
         <div class="sf-top-actions">
+            <div class="lang-switcher">
+                <select id="languageSelectStore" class="lang-select" onchange="setLanguage(this.value)" aria-label="Language">
+                    <option value="ar">🇪🇬 العربية</option><option value="en">🇬🇧 English</option><option value="fr">🇫🇷 Français</option>
+                </select>
+            </div>
             <button class="sf-small-btn" onclick="backToPlatform()">منصة LUNA&LEO</button>
             <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleStore" title="تبديل الوضع">🌙</button>
             <button class="sf-small-btn" onclick="openTracking()" style="padding:10px 14px" title="تتبع طلب">📦</button>
@@ -1696,7 +1724,7 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
 
 <main class="sf-main">
     <div class="sf-toolbar">
-        <input id="sfSearch" class="sf-search" type="search" placeholder="ابحث عن منتج..." oninput="renderStoreProducts()">
+        <input id="sfSearch" class="sf-search" type="search" placeholder="ابحث عن منتج..." data-ph-ar="ابحث عن منتج..." data-ph-en="Search for a product..." data-ph-fr="Rechercher un produit..." oninput="renderStoreProducts()">
         <div id="sfCategories" class="sf-categories"></div>
        <select id="sfSortBy" class="sf-sort" onchange="renderStoreProducts()">
     <option value="newest">🆕 الأحدث</option>
@@ -2041,6 +2069,64 @@ function productsSkeleton(count = 6){
     `).join("");
 }
 
+/* ============ MULTI-LANGUAGE ============ */
+const I18N = {
+  ar:{
+    login:"تسجيل الدخول", register:"إنشاء حساب", createStore:"أنشئ متجرك", startFree:"ابدأ مجانًا الآن", discover:"اكتشف المميزات",
+    features:"المميزات", steps:"كيف يعمل؟", pricing:"الأسعار", faq:"الأسئلة", logout:"خروج 🚪", dashboard:"الرئيسية", myStore:"متجري", products:"المنتجات", orders:"الطلبات", customers:"العملاء", loyalty:"نقاط الولاء", subscription:"الاشتراك", analytics:"التحليلات", reports:"التقارير", marwan:"مروان AI", team:"الفريق", settings:"الإعدادات",
+    platform:"منصة LUNA&LEO", cart:"🛒 السلة", tracking:"📦", wishlist:"❤️", search:"ابحث عن منتج...", all:"الكل", newest:"🆕 الأحدث", lowPrice:"💰 الأرخص أولاً", highPrice:"💎 الأغلى أولاً", nameAZ:"🔤 الاسم (أ-ي)",
+    authWelcome:"أهلاً بك مرة أخرى", authStart:"ابدأ متجرك الإلكتروني", forgot:"نسيت كلمة المرور؟", noAccount:"ليس لديك حساب؟", haveAccount:"لديك حساب بالفعل؟", google:"تسجيل الدخول باستخدام Google", or:"أو",
+    save:"💾 حفظ", cancel:"إلغاء", confirm:"تأكيد", language:"اللغة", homeTitle:"أنشئ متجرك الإلكتروني", homeGold:"وابدأ البيع بسهولة 🚀"
+  },
+  en:{
+    login:"Log in", register:"Create account", createStore:"Create your store", startFree:"Start for free", discover:"Explore features",
+    features:"Features", steps:"How it works", pricing:"Pricing", faq:"FAQ", logout:"Log out 🚪", dashboard:"Dashboard", myStore:"My store", products:"Products", orders:"Orders", customers:"Customers", loyalty:"Loyalty points", subscription:"Subscription", analytics:"Analytics", reports:"Reports", marwan:"Marwan AI", team:"Team", settings:"Settings",
+    platform:"LUNA&LEO Platform", cart:"🛒 Cart", tracking:"📦", wishlist:"❤️", search:"Search for a product...", all:"All", newest:"🆕 Newest", lowPrice:"💰 Lowest price", highPrice:"💎 Highest price", nameAZ:"🔤 Name (A-Z)",
+    authWelcome:"Welcome back", authStart:"Start your online store", forgot:"Forgot your password?", noAccount:"Don't have an account?", haveAccount:"Already have an account?", google:"Continue with Google", or:"or",
+    save:"💾 Save", cancel:"Cancel", confirm:"Confirm", language:"Language", homeTitle:"Create your online store", homeGold:"and start selling easily 🚀"
+  },
+  fr:{
+    login:"Connexion", register:"Créer un compte", createStore:"Créer votre boutique", startFree:"Commencer gratuitement", discover:"Découvrir les fonctionnalités",
+    features:"Fonctionnalités", steps:"Comment ça marche ?", pricing:"Tarifs", faq:"FAQ", logout:"Déconnexion 🚪", dashboard:"Accueil", myStore:"Ma boutique", products:"Produits", orders:"Commandes", customers:"Clients", loyalty:"Points fidélité", subscription:"Abonnement", analytics:"Analyses", reports:"Rapports", marwan:"Marwan AI", team:"Équipe", settings:"Paramètres",
+    platform:"Plateforme LUNA&LEO", cart:"🛒 Panier", tracking:"📦", wishlist:"❤️", search:"Rechercher un produit...", all:"Tous", newest:"🆕 Plus récents", lowPrice:"💰 Prix croissant", highPrice:"💎 Prix décroissant", nameAZ:"🔤 Nom (A-Z)",
+    authWelcome:"Bon retour", authStart:"Commencez votre boutique en ligne", forgot:"Mot de passe oublié ?", noAccount:"Vous n'avez pas de compte ?", haveAccount:"Vous avez déjà un compte ?", google:"Continuer avec Google", or:"ou",
+    save:"💾 Enregistrer", cancel:"Annuler", confirm:"Confirmer", language:"Langue", homeTitle:"Créez votre boutique en ligne", homeGold:"et commencez à vendre facilement 🚀"
+  }
+};
+let currentLanguage = localStorage.getItem("luna_language") || "ar";
+function t(key){ return I18N[currentLanguage]?.[key] ?? I18N.ar[key] ?? key; }
+function setLanguage(lang){
+  if(!I18N[lang]) lang="ar";
+  currentLanguage=lang; localStorage.setItem("luna_language",lang);
+  document.documentElement.setAttribute("lang",lang);
+  document.documentElement.setAttribute("dir",lang === "ar" ? "rtl" : "ltr");
+  document.documentElement.setAttribute("data-lang",lang);
+  ["languageSelect","languageSelectDash","languageSelectStore"].forEach(id=>{const el=document.getElementById(id); if(el) el.value=lang;});
+  applyLanguage();
+}
+function applyLanguage(){
+  const map={
+    "#authSubmit": currentLanguage === "ar" ? (document.getElementById("nameField")?.style.display === "none" ? "تسجيل الدخول" : "إنشاء الحساب") : (document.getElementById("nameField")?.style.display === "none" ? t("login") : t("register")),
+    "#forgotPassword":t("forgot"), "#authSwitchButton":document.getElementById("nameField")?.style.display === "none" ? t("register") : t("login"),
+    ".auth-divider span":t("or"), ".google-btn":t("google"),
+    "#sfSearch":t("search")
+  };
+  Object.entries(map).forEach(([sel,val])=>{const el=document.querySelector(sel); if(el && val){ if(sel===".google-btn"){const icon=el.querySelector('.g-icon'); el.textContent=""; if(icon) el.appendChild(icon); el.appendChild(document.createTextNode(t("google")));} else if(el.tagName === "INPUT"){el.placeholder=val;} else el.textContent=val; }});
+  const phMap={ar:"ph-ar",en:"ph-en",fr:"ph-fr"}; document.querySelectorAll("[data-ph-ar]").forEach(el=>{el.placeholder=el.dataset[phMap[currentLanguage]]||el.dataset.phAr;});
+  // Common landing navigation and action buttons
+  const nav=document.querySelectorAll(".nav-links a"); const navKeys=["features","steps","pricing","faq"]; nav.forEach((el,i)=>{if(navKeys[i])el.textContent=t(navKeys[i]);});
+  const navBtns=document.querySelectorAll(".site-header .nav-actions .btn"); if(navBtns[0])navBtns[0].textContent=t("login"); if(navBtns[1])navBtns[1].textContent=t("createStore");
+  const heroH=document.querySelector(".hero-text h1"); if(heroH){heroH.innerHTML=`${t("homeTitle")}<br><span class="gold">${t("homeGold")}</span>`;}
+  const dashMap={home:"📊 "+t("dashboard"),store:"🏪 "+t("myStore"),products:"📦 "+t("products"),orders:"🛒 "+t("orders"),customers:"👥 "+t("customers"),loyalty:"🎁 "+t("loyalty"),subscription:"💳 "+t("subscription"),analytics:"📊 "+t("analytics"),reports:"📈 "+t("reports"),marwan:"🤖 "+t("marwan"),team:"👥 "+t("team"),settings:"⚙️ "+t("settings")};
+  document.querySelectorAll(".sidebar button[data-section]").forEach(b=>{const k=b.dataset.section;if(dashMap[k])b.textContent=dashMap[k];});
+  const dashLogout=document.querySelector(".dash-user .btn-ghost"); if(dashLogout)dashLogout.textContent=t("logout");
+  const platform=document.querySelector(".sf-small-btn"); if(platform)platform.textContent=t("platform");
+  const cartBtn=document.querySelector(".sf-cart-btn"); if(cartBtn){const count=document.getElementById("sfCartCount")?.textContent||"0";cartBtn.innerHTML=`${t("cart")} <span id="sfCartCount">${count}</span>`;}
+  const sort=document.getElementById("sfSortBy"); if(sort){sort.innerHTML=`<option value="newest">${t("newest")}</option><option value="price-asc">${t("lowPrice")}</option><option value="price-desc">${t("highPrice")}</option><option value="name-asc">${t("nameAZ")}</option>`;}
+  document.title = currentLanguage === "ar" ? "LUNA&LEO MARKET | أنشئ متجرك الإلكتروني" : currentLanguage === "fr" ? "LUNA&LEO MARKET | Créez votre boutique" : "LUNA&LEO MARKET | Create your online store";
+}
+setLanguage(currentLanguage);
+
 /* ============ AUTH ============ */
 function openAuth(mode = "login"){
     const modal = document.getElementById("authModal");
@@ -2115,21 +2201,26 @@ async function registerUser(){
     } finally { btn.disabled = false; btn.textContent = "إنشاء الحساب"; }
 }
 async function loginUser(){
-    const email = document.getElementById("authEmail").value.trim().toLowerCase();
-    const password = document.getElementById("authPassword").value;
+    const email = document.getElementById("authEmail")?.value.trim().toLowerCase();
+    const password = document.getElementById("authPassword")?.value || "";
     const msg = document.getElementById("authMessage");
     const btn = document.getElementById("authSubmit");
-    if(!email || !password){ msg.textContent = "⚠️ اكتب البريد وكلمة المرور."; return; }
-    btn.disabled = true; btn.textContent = "⏳ جاري الدخول..."; msg.textContent = "";
+    if(!email || !password){ msg.textContent = currentLanguage === "en" ? "⚠️ Enter your email and password." : currentLanguage === "fr" ? "⚠️ Entrez votre e-mail et votre mot de passe." : "⚠️ اكتب البريد وكلمة المرور."; return; }
+    btn.disabled = true; btn.textContent = currentLanguage === "en" ? "Signing in..." : currentLanguage === "fr" ? "Connexion..." : "⏳ جاري الدخول..."; msg.textContent = "";
     try{
         const {data, error} = await supabaseClient.auth.signInWithPassword({email, password});
         if(error) throw error;
+        if(!data?.session || !data?.user) throw new Error(currentLanguage === "en" ? "Login session was not created." : currentLanguage === "fr" ? "La session de connexion n'a pas été créée." : "لم يتم إنشاء جلسة الدخول.");
         currentUser = data.user; window.currentUser = currentUser;
-        msg.textContent = "🎉 تم تسجيل الدخول!";
-        setTimeout(async () => { closeAuth(); showDashboard(); updateUserInfo(); await loadUserStore(); }, 400);
+        closeAuth(); showDashboard(); updateUserInfo();
+        await loadUserStore();
+        toast(currentLanguage === "en" ? "✅ Logged in successfully." : currentLanguage === "fr" ? "✅ Connexion réussie." : "✅ تم تسجيل الدخول بنجاح.", "success");
     } catch(error){
-        msg.textContent = "❌ " + (error.message || "حدث خطأ.");
-    } finally { btn.disabled = false; btn.textContent = "تسجيل الدخول"; }
+        console.error("Login error:", error);
+        const raw = String(error?.message || "");
+        const friendly = /invalid login credentials/i.test(raw) ? (currentLanguage === "en" ? "❌ Email or password is incorrect." : currentLanguage === "fr" ? "❌ E-mail ou mot de passe incorrect." : "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة.") : raw;
+        msg.textContent = "❌ " + (friendly || (currentLanguage === "en" ? "Login failed." : currentLanguage === "fr" ? "Échec de la connexion." : "فشل تسجيل الدخول."));
+    } finally { btn.disabled = false; btn.textContent = t("login"); }
 }
 async function loginWithGoogle(){
     const msg = document.getElementById("authMessage");
@@ -2157,8 +2248,17 @@ async function checkUserSession(){
     } else { showLanding(); }
 }
 supabaseClient.auth.onAuthStateChange((event, session) => {
-    if(session){ currentUser = session.user; window.currentUser = currentUser; updateUserInfo(); }
-    else { currentUser = null; window.currentUser = null; }
+    if(session){
+        currentUser = session.user; window.currentUser = currentUser; updateUserInfo();
+        if(event === "SIGNED_IN" || event === "INITIAL_SESSION"){
+            Promise.resolve().then(async()=>{
+                if(currentUser){ showDashboard(); updateUserInfo(); await loadUserStore(); }
+            }).catch(err=>console.error("Session load error:",err));
+        }
+    } else {
+        currentUser = null; window.currentUser = null;
+        if(event === "SIGNED_OUT") showLanding();
+    }
 });
 function updateUserInfo(){
     if(!currentUser) return;
@@ -3479,7 +3579,6 @@ function renderStoreProducts(){
     }).join("");
 }
 
-function selectCategory(category, btn){   ← ده اللي بعده
 function renderStoreProducts_OLD(){
     const box = document.getElementById("sfProducts");
     if(!box) return;
@@ -4213,6 +4312,7 @@ async function cancelMyOrder(orderId){
 
 /* ============ INIT ============ */
 document.addEventListener("DOMContentLoaded", async () => {
+    setLanguage(localStorage.getItem("luna_language") || "ar");
     document.querySelectorAll(".faq-q").forEach(btn => {
         btn.addEventListener("click", () => {
             const item = btn.parentElement;
