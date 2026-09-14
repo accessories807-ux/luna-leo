@@ -1675,6 +1675,12 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
     <div class="sf-toolbar">
         <input id="sfSearch" class="sf-search" type="search" placeholder="ابحث عن منتج..." oninput="renderStoreProducts()">
         <div id="sfCategories" class="sf-categories"></div>
+       <select id="sfSortBy" class="sf-sort" onchange="renderStoreProducts()">
+    <option value="newest">🆕 الأحدث</option>
+    <option value="price-asc">💰 الأرخص أولاً</option>
+    <option value="price-desc">💎 الأغلى أولاً</option>
+    <option value="name-asc">🔤 الاسم (أ-ي)</option>
+       </select>
         <div id="sfProductCount" class="sf-count"></div>
     </div>
     <div id="sfProducts" class="sf-grid">
