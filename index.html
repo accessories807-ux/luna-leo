@@ -2783,7 +2783,7 @@ function cancelProductEdit(){
     document.getElementById("productForm").classList.add("hidden");
 }
 function clearProductForm(){
-    ["productName", "productPrice", "productComparePrice", "productStock", "productLowStock", "productSku", "productDescription", "productCostPrice"].forEach(id => {
+    ["productName", "productPrice", "productComparePrice", "productStock", "productLowStock", "productSku", "productCategory", "productDescription", "productCostPrice"].forEach(id => {
         const el = document.getElementById(id);
         if(el) el.value = "";
     });
