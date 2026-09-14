@@ -1806,7 +1806,7 @@ label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bot
                     <div class="summary-row total"><span>الإجمالي</span><span id="sfCartTotal">0 جنيه</span></div>
                 </div>
 
-                <button class="checkout-btn" onclick="showCheckout()">
+                <button type="button" id="openCheckoutBtn" class="checkout-btn" onclick="showCheckout(); return false;">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
                     إتمام الطلب
                 </button>
@@ -3725,6 +3725,74 @@ function closeCart(){
     document.getElementById("successView").classList.remove("open");
 }
 function closeCartIfOverlay(e){ if(e.target === e.currentTarget) closeCart(); }
+
+// فتح صفحة إتمام الطلب داخل السلة — نسخة قوية للموبايل
+function showCheckout(){
+    const cartView = document.getElementById("cartView");
+    const checkoutView = document.getElementById("checkoutView");
+    const successView = document.getElementById("successView");
+
+    if(!cartView || !checkoutView){
+        console.error("Checkout elements not found");
+        return false;
+    }
+
+    if(!Array.isArray(publicCart) || publicCart.length === 0){
+        if(typeof toast === "function") toast("🛒 السلة فارغة.", "error");
+        return false;
+    }
+
+    // إظهار صفحة إتمام الطلب فوراً بدون الاعتماد على تحميل المتجر
+    cartView.style.display = "none";
+    cartView.setAttribute("aria-hidden", "true");
+    if(successView) successView.classList.remove("open");
+    checkoutView.classList.add("open");
+    checkoutView.style.display = "block";
+    checkoutView.setAttribute("aria-hidden", "false");
+
+    const msg = document.getElementById("sfOrderMessage");
+    if(msg) msg.textContent = "";
+
+    const btn = document.getElementById("placeOrderBtn");
+    if(btn){
+        btn.disabled = false;
+        btn.textContent = "✓ تأكيد الطلب";
+    }
+
+    // تحميل خيارات الشحن بدون منع فتح صفحة الطلب إذا حدث خطأ
+    if(typeof loadShippingOptions === "function"){
+        Promise.resolve(loadShippingOptions()).catch(e => console.warn("Shipping load error:", e));
+    }
+
+    setTimeout(() => { checkoutView.scrollTop = 0; }, 0);
+    return false;
+}
+
+// حماية إضافية لزر إتمام الطلب على متصفحات الموبايل
+document.addEventListener("DOMContentLoaded", function(){
+    const checkoutBtn = document.getElementById("openCheckoutBtn");
+    if(checkoutBtn && !checkoutBtn.dataset.checkoutBound){
+        checkoutBtn.dataset.checkoutBound = "1";
+        checkoutBtn.addEventListener("click", function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            showCheckout();
+        }, true);
+    }
+});
+
+// الرجوع من إتمام الطلب إلى السلة
+function backToCart(){
+    const cartView = document.getElementById("cartView");
+    const checkoutView = document.getElementById("checkoutView");
+    const successView = document.getElementById("successView");
+
+    if(cartView) cartView.style.display = "flex";
+    if(checkoutView) checkoutView.classList.remove("open");
+    if(successView) successView.classList.remove("open");
+    renderCart();
+}
+
 function renderCart(){
     const box = document.getElementById("cartItems");
     if(!box) return;
