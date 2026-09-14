@@ -3400,6 +3400,86 @@ function selectCategory(category, btn){
     if(btn) btn.classList.add("active");
     renderStoreProducts();
 }
+
+   function renderStoreProducts_OLD(){
+    // ... الكود القديم
+}
+
+// ⬅️ ضيف الدالة الجديدة هنا
+
+function renderStoreProducts(){
+    const box = document.getElementById("sfProducts");
+    if(!box) return;
+    
+    const search = (document.getElementById("sfSearch")?.value || "").trim().toLowerCase();
+    const sortBy = document.getElementById("sfSortBy")?.value || "newest";
+    
+    let filtered = publicProducts.filter(p => {
+        const text = ((p.name || "") + " " + (p.description || "")).toLowerCase();
+        const matchesSearch = !search || text.includes(search);
+        const matchesCategory = publicCategory === "all" || p.category === publicCategory;
+        return matchesSearch && matchesCategory;
+    });
+    
+    filtered = [...filtered].sort((a, b) => {
+        switch(sortBy){
+            case "price-asc":
+                return Number(a.price || 0) - Number(b.price || 0);
+            case "price-desc":
+                return Number(b.price || 0) - Number(a.price || 0);
+            case "name-asc":
+                return String(a.name || "").localeCompare(String(b.name || ""), "ar");
+            case "newest":
+            default:
+                return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+        }
+    });
+    
+    const countEl = document.getElementById("sfProductCount");
+    if(countEl) countEl.textContent = `${filtered.length} منتج`;
+    
+    if(!filtered.length){
+        box.innerHTML = '<div class="sf-empty" style="grid-column:1/-1"><div class="sf-empty-icon">📦</div><h3>لا توجد منتجات</h3></div>';
+        return;
+    }
+    
+    box.innerHTML = filtered.map(product => {
+        const stock = product.stock == null ? 999999 : Number(product.stock);
+        const disabled = stock <= 0;
+        const pid = String(product.id).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+        const hasDiscount = product.compare_price && Number(product.compare_price) > Number(product.price || 0);
+        const discountPct = hasDiscount ? Math.round((1 - Number(product.price) / Number(product.compare_price)) * 100) : 0;
+        const inWishlist = isInWishlist(product.id);
+        const images = Array.isArray(product.images) ? product.images : [];
+        const mainImage = product.image_url || (images.length ? images[0] : null);
+        return `<article class="sf-tile">
+            <div class="sf-tile-img" onclick="openQuickView('${pid}')">
+                <button class="wishlist-btn ${inWishlist ? 'active' : ''}" onclick="event.stopPropagation();toggleWishlist('${pid}')">
+                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+                ${mainImage ? `<img src="${escapeHTML(mainImage)}" alt="${escapeHTML(product.name || "منتج")}" loading="lazy">` : `<div class="placeholder">📦</div>`}
+                ${hasDiscount ? `<span class="sf-tag discount">خصم ${discountPct}%</span>` : ""}
+                ${stock <= 0 ? `<span class="sf-tag sold">نفد</span>` : ""}
+            </div>
+            <div class="sf-tile-body">
+                <h3>${escapeHTML(product.name || "منتج")}</h3>
+                ${product.category ? `<div class="sf-tile-cat">🏷️ ${escapeHTML(product.category)}</div>` : ""}
+                <div class="sf-tile-desc">${escapeHTML(product.description || "منتج مميز")}</div>
+                <div class="sf-tile-bottom">
+                    <div class="sf-price">
+                        <strong>${Number(product.price || 0).toLocaleString("ar-EG")} جنيه</strong>
+                        ${hasDiscount ? `<del>${Number(product.compare_price).toLocaleString("ar-EG")} جنيه</del>` : ""}
+                    </div>
+                    <button class="sf-add" ${disabled ? "disabled" : ""} onclick="event.stopPropagation();addToCart('${pid}')">
+                        ${disabled ? "نفد" : "أضف للسلة"}
+                    </button>
+                </div>
+            </div>
+        </article>`;
+    }).join("");
+}
+
+function selectCategory(category, btn){   ← ده اللي بعده
 function renderStoreProducts_OLD(){
     const box = document.getElementById("sfProducts");
     if(!box) return;
