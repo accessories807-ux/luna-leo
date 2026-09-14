@@ -2730,6 +2730,7 @@ function editProduct(id){
     document.getElementById("productStock").value = product.stock ?? 0;
     document.getElementById("productLowStock").value = product.low_stock_threshold ?? 5;
     document.getElementById("productSku").value = product.sku || "";
+    document.getElementById("productCategory").value = product.category || "";
     document.getElementById("productImages").value = "";
     document.getElementById("productDescription").value = product.description || "";
     renderProductImagesPreview(product.image_url);
