@@ -3908,30 +3908,207 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     await checkUserSession();
 });
-</script>
 <script>window.addEventListener("load", handleSubscriptionPaymentResult);</script>
- <!-- ============ MARWAN AI FLOATING CHAT ============ -->
-<div id="marwanFab" class="marwan-fab" onclick="toggleMarwanChat()" title="اسأل مروان AI">🤖</div>
+/* ============ MARWAN AI FLOATING CHAT (NEW) ============ */
+let marwanChatHistory = [];
 
-<div id="marwanChat" class="marwan-chat">
-    <div class="marwan-header">
-        <div class="marwan-header-title">
-            <div class="marwan-header-avatar">🤖</div>
-            <div>
-                <div>مروان AI</div>
-                <div class="marwan-header-status">● متصل — مساعدك الذكي</div>
+function loadMarwanHistory(){
+    try{
+        const saved = localStorage.getItem("marwan_chat_history");
+        if(saved){
+            marwanChatHistory = JSON.parse(saved);
+            if(!Array.isArray(marwanChatHistory)) marwanChatHistory = [];
+        }
+    } catch(e){ marwanChatHistory = []; }
+}
+
+function saveMarwanHistory(){
+    try{
+        localStorage.setItem("marwan_chat_history", JSON.stringify(marwanChatHistory.slice(-30)));
+    } catch(e){}
+}
+
+function toggleMarwanChat(){
+    const chat = document.getElementById("marwanChat");
+    if(!chat) return;
+    chat.classList.toggle("open");
+    if(chat.classList.contains("open")){
+        renderMarwanChat();
+        setTimeout(() => {
+            const input = document.getElementById("marwanInput");
+            if(input) input.focus();
+        }, 200);
+    }
+}
+
+function showMarwanFab(){
+    const fab = document.getElementById("marwanFab");
+    if(!fab) return;
+    // الزر بيظهر بس لما التاجر يكون مسجل دخول وداخل لوحة التحكم
+    const dashboardVisible = document.getElementById("dashboardApp")?.style.display !== "none";
+    if(dashboardVisible && currentUser){
+        fab.classList.add("visible");
+    } else {
+        fab.classList.remove("visible");
+    }
+}
+
+function renderMarwanChat(){
+    const body = document.getElementById("marwanBody");
+    if(!body) return;
+    
+    if(marwanChatHistory.length === 0){
+        body.innerHTML = `
+            <div class="marwan-welcome">
+                أهلاً بيك 👋 أنا مروان AI، مساعدك الذكي في إدارة متجرك.<br>
+                اسألني عن أي حاجة تخص متجرك!
             </div>
-        </div>
-        <div class="marwan-header-actions">
-            <button class="marwan-header-btn" onclick="clearMarwanChat()" title="محادثة جديدة">🗑️</button>
-            <button class="marwan-header-btn" onclick="toggleMarwanChat()" title="إغلاق">✕</button>
-        </div>
-    </div>
-    <div class="marwan-body" id="marwanBody"></div>
-    <div class="marwan-footer">
-        <textarea id="marwanInput" class="marwan-input" rows="1" placeholder="اكتب سؤالك لمروان..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMarwanMessage()}"></textarea>
-        <button id="marwanSendBtn" class="marwan-send" onclick="sendMarwanMessage()" title="إرسال">➤</button>
-    </div>
-</div>
+            <div class="marwan-quick">
+                <button class="marwan-quick-btn" onclick="askMarwanQuick('كام طلب عندي؟')">📦 كام طلب عندي؟</button>
+                <button class="marwan-quick-btn" onclick="askMarwanQuick('مين أفضل عميل عندي؟')">👑 أفضل عميل</button>
+                <button class="marwan-quick-btn" onclick="askMarwanQuick('إيه أفضل منتج مبيعاً؟')">🏆 الأكثر مبيعاً</button>
+                <button class="marwan-quick-btn" onclick="askMarwanQuick('قولي إجمالي مبيعاتي')">💰 إجمالي المبيعات</button>
+                <button class="marwan-quick-btn" onclick="askMarwanQuick('اقترح عليّ طرق تحسين متجري')">💡 اقتراحات</button>
+            </div>
+        `;
+        return;
+    }
+    
+    body.innerHTML = marwanChatHistory.map(msg => {
+        if(msg.role === "typing"){
+            return `<div class="marwan-msg bot typing"><span></span><span></span><span></span></div>`;
+        }
+        return `<div class="marwan-msg ${msg.role === "user" ? "user" : "bot"}">${escapeHTML(msg.text)}</div>`;
+    }).join("");
+    
+    body.scrollTop = body.scrollHeight;
+}
+
+function askMarwanQuick(text){
+    const input = document.getElementById("marwanInput");
+    if(input){
+        input.value = text;
+        sendMarwanMessage();
+    }
+}
+
+async function sendMarwanMessage(){
+    const input = document.getElementById("marwanInput");
+    const sendBtn = document.getElementById("marwanSendBtn");
+    if(!input || !sendBtn) return;
+    
+    const message = input.value.trim();
+    if(!message) return;
+    
+    input.value = "";
+    input.style.height = "auto";
+    sendBtn.disabled = true;
+    
+    marwanChatHistory.push({role: "user", text: message});
+    marwanChatHistory.push({role: "typing"});
+    renderMarwanChat();
+    saveMarwanHistory();
+    
+    const body = document.getElementById("marwanBody");
+    if(body) body.scrollTop = body.scrollHeight;
+    
+    try{
+        const storeContext = buildMarwanContext();
+        const history = marwanChatHistory
+            .filter(m => m.role === "user" || m.role === "bot")
+            .slice(-10);
+        
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/marwan-ai`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
+            },
+            body: JSON.stringify({
+                message: message,
+                context: storeContext,
+                history: history
+            })
+        });
+        
+        if(!response.ok){
+            throw new Error("فشل الاتصال بمروان");
+        }
+        
+        const data = await response.json();
+        const reply = data?.reply || "عذراً، مش قادر أجاوب دلوقتي.";
+        
+        // شيل typing indicator
+        marwanChatHistory = marwanChatHistory.filter(m => m.role !== "typing");
+        marwanChatHistory.push({role: "bot", text: reply});
+        renderMarwanChat();
+        saveMarwanHistory();
+        
+    } catch(err){
+        console.error("Marwan error:", err);
+        marwanChatHistory = marwanChatHistory.filter(m => m.role !== "typing");
+        marwanChatHistory.push({role: "bot", text: "❌ معلش، حصلت مشكلة في الاتصال. جرب تاني."});
+        renderMarwanChat();
+        saveMarwanHistory();
+    } finally{
+        sendBtn.disabled = false;
+        input.focus();
+    }
+}
+
+function buildMarwanContext(){
+    if(!currentStore) return "";
+    
+    const ordersCount = dashboardOrdersCount || 0;
+    const productsCount = dashboardProducts.length || 0;
+    const sales = window.__dashboardSales || 0;
+    const customersCount = window.__dashboardCustomersCount || 0;
+    
+    const lowStockProducts = dashboardProducts
+        .filter(p => Number(p.stock || 0) <= Number(p.low_stock_threshold ?? 5))
+        .slice(0, 10)
+        .map(p => `${p.name} (مخزون: ${p.stock})`)
+        .join(", ") || "لا يوجد";
+    
+    const topProducts = [...dashboardProducts]
+        .sort((a, b) => Number(b.stock || 0) - Number(a.stock || 0))
+        .slice(0, 5)
+        .map(p => p.name)
+        .join(", ") || "لا يوجد";
+    
+    return `
+اسم المتجر: ${currentStore.name || "غير محدد"}
+عدد المنتجات: ${productsCount}
+عدد الطلبات النشطة: ${ordersCount}
+إجمالي المبيعات: ${Number(sales).toLocaleString("ar-EG")} جنيه
+عدد العملاء: ${customersCount}
+منتجات مخزونها منخفض: ${lowStockProducts}
+منتجات مميزة: ${topProducts}
+    `.trim();
+}
+
+function clearMarwanChat(){
+    if(!confirm("مسح كل المحادثة؟")) return;
+    marwanChatHistory = [];
+    saveMarwanHistory();
+    renderMarwanChat();
+    toast("🗑️ تم مسح المحادثة", "success");
+}
+
+// تحميل التاريخ عند بدء التشغيل
+loadMarwanHistory();
+
+// عرض الزر العائم لما تتغير الشاشات
+const marwanObserver = new MutationObserver(() => {
+    showMarwanFab();
+});
+document.addEventListener("DOMContentLoaded", () => {
+    showMarwanFab();
+    const dashboard = document.getElementById("dashboardApp");
+    if(dashboard){
+        marwanObserver.observe(dashboard, {attributes: true, attributeFilter: ["style"]});
+    }
+});
+</script> 
 </body>
    </html>
