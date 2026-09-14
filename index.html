@@ -2838,6 +2838,7 @@ async function saveProduct(){
     const lowStockValue = document.getElementById("productLowStock").value;
     const lowStockThreshold = lowStockValue === "" ? 5 : Number(lowStockValue);
     const sku = document.getElementById("productSku").value.trim();
+    const category = document.getElementById("productCategory").value.trim();
     const description = document.getElementById("productDescription").value.trim();
     const msg = document.getElementById("productMessage");
     const btn = document.getElementById("saveProductButton");
