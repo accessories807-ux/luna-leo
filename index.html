@@ -1811,18 +1811,21 @@ function showLanding(){
     document.getElementById("dashboardApp").style.display = "none";
     document.getElementById("storefrontApp").style.display = "none";
     document.getElementById("authModal").classList.remove("open");
+    if(typeof showMarwanFab === "function") showMarwanFab();
 }
 function showDashboard(){
     document.getElementById("landingPage").style.display = "none";
     document.getElementById("dashboardApp").style.display = "block";
     document.getElementById("storefrontApp").style.display = "none";
     document.getElementById("authModal").classList.remove("open");
+    if(typeof showMarwanFab === "function") showMarwanFab();
 }
 function showStorefront(){
     document.getElementById("landingPage").style.display = "none";
     document.getElementById("dashboardApp").style.display = "none";
     document.getElementById("storefrontApp").style.display = "block";
     document.getElementById("authModal").classList.remove("open");
+    if(typeof showMarwanFab === "function") showMarwanFab();
 }
 function showSection(section){
     const requiredFeature = {products:"products", orders:"orders", customers:"customers", analytics:"analytics", reports:"analytics", marwan:"marwan", team:"team"}[section];
@@ -2094,18 +2097,20 @@ async function requestPlanChange(plan){
 }
 function handleSubscriptionPaymentResult(){
     const params = new URLSearchParams(window.location.search);
-    if(params.get('subscription_payment') !== '1') return;
+    const hasPaymobResult = params.get('subscription_payment') === '1' || params.has('payment_result') || params.has('trx_id') || params.has('merchant_order_id');
+    if(!hasPaymobResult) return;
     const requestId = params.get('request_id');
     const success = params.get('success');
     if(success === 'false' || success === '0'){
         toast('❌ لم تكتمل عملية الدفع.', 'error', 6000);
-        return;
+    }else{
+        toast('⏳ تم الرجوع من Paymob. جاري تأكيد الدفع وتفعيل الاشتراك…', 'info', 7000);
+        setTimeout(async () => {
+            try{ await loadSubscription(); }catch(e){}
+            if(requestId) console.log('subscription request:', requestId);
+        }, 1500);
     }
-    toast('⏳ تم الرجوع من Paymob. جاري تأكيد الدفع وتفعيل الاشتراك…', 'info', 7000);
-    setTimeout(async () => {
-        try{ await loadSubscription(); }catch(e){}
-        if(requestId) console.log('subscription request:', requestId);
-    }, 1200);
+    try{ history.replaceState({}, document.title, window.location.pathname); }catch(e){}
 }
 
 function openPlans(){
@@ -4038,6 +4043,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 <script>
 /* ============ MARWAN AI FLOATING CHAT (NEW) ============ */
 let marwanChatHistory = [];
+const marwanEscapeHTML = (value) => String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[ch]));
 
 function loadMarwanHistory(){
     try{
@@ -4102,7 +4108,7 @@ function renderMarwanChat(){
 
     body.innerHTML = marwanChatHistory.map(item => {
         const role = item?.role === "user" ? "user" : "assistant";
-        return `<div class="marwan-message ${role}">${escapeHTML(item?.content || "")}</div>`;
+        return `<div class="marwan-msg ${role}">${marwanEscapeHTML(item?.content || "")}</div>`;
     }).join("");
 }
 
@@ -4118,17 +4124,50 @@ function askMarwanQuick(text){
     sendMarwanMessage();
 }
 
-function sendMarwanMessage(){
+async function sendMarwanMessage(){
     const input = document.getElementById("marwanInput");
     const body = document.getElementById("marwanBody");
+    const sendBtn = document.getElementById("marwanSendBtn");
     const text = String(input?.value || "").trim();
-    if(!text) return;
+    if(!text || !currentUser) return;
+    if(!hasFeature("marwan")){
+        toast("🔒 مروان AI متاح من Growth. وهو متاح كاملًا في Trial.", "error", 5000);
+        return;
+    }
     marwanChatHistory.push({role:"user",content:text});
-    const response = "أنا مروان AI. تم استلام سؤالك، ويمكنك استخدام بيانات المتجر من لوحة التحكم.";
-    marwanChatHistory.push({role:"assistant",content:response});
     saveMarwanHistory();
     if(input) input.value = "";
-    if(body) renderMarwanChat();
+    if(sendBtn) sendBtn.disabled = true;
+    if(body) {
+        body.innerHTML = marwanChatHistory.map(item => {
+            const role = item?.role === "user" ? "user" : "assistant";
+            return `<div class="marwan-msg ${role}">${marwanEscapeHTML(item?.content || "")}</div>`;
+        }).join("") + '<div class="marwan-msg bot typing"><span></span><span></span><span></span></div>';
+        body.scrollTop = body.scrollHeight;
+    }
+    try{
+        const {data: sessionData, error: sessionError} = await supabaseClient.auth.getSession();
+        if(sessionError) throw sessionError;
+        const token = sessionData?.session?.access_token;
+        if(!token) throw new Error("جلسة الدخول غير متاحة. سجّل الدخول مرة أخرى.");
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/marwan-ai`, {
+            method:"POST",
+            headers:{"Content-Type":"application/json","Authorization":`Bearer ${token}`},
+            body:JSON.stringify({message:text, history:marwanChatHistory.slice(-12), store_id:currentStore?.id || null})
+        });
+        const result = await response.json().catch(()=>({}));
+        if(!response.ok) throw new Error(result?.error || "تعذر تشغيل مروان AI.");
+        const answer = String(result?.answer || "مروان لم يرجع ردًا.");
+        marwanChatHistory.push({role:"assistant",content:answer});
+        saveMarwanHistory();
+    }catch(err){
+        marwanChatHistory.push({role:"assistant",content:"❌ " + (err?.message || "تعذر الاتصال بمروان AI.")});
+        saveMarwanHistory();
+    }finally{
+        if(sendBtn) sendBtn.disabled = false;
+        renderMarwanChat();
+        if(body) body.scrollTop = body.scrollHeight;
+    }
 }
 
 loadMarwanHistory();
