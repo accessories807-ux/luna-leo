@@ -1564,8 +1564,10 @@ setLanguage(currentLanguage);
 /* ============ AUTH ============ */
 function openAuth(mode = "login"){
     const modal = document.getElementById("authModal");
+    if(!modal) return;
     modal.classList.add("open");
     document.body.style.overflow = "hidden";
+
     const titleEl = document.getElementById("authTitle");
     const subEl = document.getElementById("authSubtitle");
     const nameField = document.getElementById("nameField");
@@ -1574,126 +1576,226 @@ function openAuth(mode = "login"){
     const submitBtn = document.getElementById("authSubmit");
     const switchText = document.getElementById("authSwitchText");
     const switchBtn = document.getElementById("authSwitchButton");
-    document.getElementById("authMessage").textContent = "";
+    const msg = document.getElementById("authMessage");
 
-    if(mode === "login"){
-        titleEl.textContent = "تسجيل الدخول 🔐";
-        subEl.textContent = "أهلاً بك مرة أخرى";
-        nameField.style.display = "none";
-        confirmField.style.display = "none";
-        forgotBtn.style.display = "inline-block";
-        submitBtn.textContent = "تسجيل الدخول";
-        submitBtn.onclick = loginUser;
-        switchText.textContent = "ليس لديك حساب؟";
-        switchBtn.textContent = "إنشاء حساب";
-        switchBtn.onclick = () => openAuth("register");
-    } else {
-        titleEl.textContent = "أنشئ حسابك 🚀";
-        subEl.textContent = "ابدأ متجرك الإلكتروني";
-        nameField.style.display = "block";
-        confirmField.style.display = "block";
-        forgotBtn.style.display = "none";
-        submitBtn.textContent = "إنشاء الحساب";
-        submitBtn.onclick = registerUser;
-        switchText.textContent = "لديك حساب بالفعل؟";
-        switchBtn.textContent = "تسجيل الدخول";
-        switchBtn.onclick = () => openAuth("login");
-    }
+    if(msg) msg.textContent = "";
+
+    const isLogin = mode === "login";
+    titleEl.textContent = isLogin ? "تسجيل الدخول 🔐" : "أنشئ حسابك 🚀";
+    subEl.textContent = isLogin ? "أهلاً بك مرة أخرى" : "ابدأ متجرك الإلكتروني";
+    nameField.style.display = isLogin ? "none" : "block";
+    confirmField.style.display = isLogin ? "none" : "block";
+    forgotBtn.style.display = isLogin ? "inline-block" : "none";
+    submitBtn.textContent = isLogin ? "تسجيل الدخول" : "إنشاء الحساب";
+    submitBtn.onclick = isLogin ? loginUser : registerUser;
+    switchText.textContent = isLogin ? "ليس لديك حساب؟" : "لديك حساب بالفعل؟";
+    switchBtn.textContent = isLogin ? "إنشاء حساب" : "تسجيل الدخول";
+    switchBtn.onclick = () => openAuth(isLogin ? "register" : "login");
+
     ["authName","authEmail","authPassword","authPassword2"].forEach(id => {
         const el = document.getElementById(id);
         if(el) el.value = "";
     });
+
+    const pass = document.getElementById("authPassword");
+    const pass2 = document.getElementById("authPassword2");
+    if(pass) pass.autocomplete = isLogin ? "current-password" : "new-password";
+    if(pass2) pass2.autocomplete = "new-password";
 }
+
 function closeAuth(){
-    document.getElementById("authModal").classList.remove("open");
+    const modal = document.getElementById("authModal");
+    if(modal) modal.classList.remove("open");
     document.body.style.overflow = "";
 }
+
+function authErrorMessage(error, fallback){
+    const raw = String(error?.message || "");
+    const low = raw.toLowerCase();
+    if(low.includes("invalid login credentials")) return "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+    if(low.includes("email not confirmed")) return "البريد الإلكتروني غير مؤكد. راجع رسالة التأكيد في بريدك.";
+    if(low.includes("user already registered") || low.includes("already registered")) return "هذا البريد الإلكتروني مسجل بالفعل.";
+    if(low.includes("password should be at least")) return "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
+    if(low.includes("invalid email")) return "البريد الإلكتروني غير صحيح.";
+    if(low.includes("rate limit")) return "تم تجاوز عدد المحاولات. حاول مرة أخرى بعد قليل.";
+    return raw || fallback;
+}
+
 async function registerUser(){
-    const name = document.getElementById("authName").value.trim();
-    const email = document.getElementById("authEmail").value.trim().toLowerCase();
-    const password = document.getElementById("authPassword").value;
-    const password2 = document.getElementById("authPassword2").value;
+    const name = document.getElementById("authName")?.value.trim();
+    const email = document.getElementById("authEmail")?.value.trim().toLowerCase();
+    const password = document.getElementById("authPassword")?.value || "";
+    const password2 = document.getElementById("authPassword2")?.value || "";
     const msg = document.getElementById("authMessage");
     const btn = document.getElementById("authSubmit");
-    if(!name || !email || !password || !password2){ msg.textContent = "⚠️ من فضلك املأ كل البيانات."; return; }
-    if(password.length < 6){ msg.textContent = "⚠️ كلمة المرور لازم 6 أحرف على الأقل."; return; }
-    if(password !== password2){ msg.textContent = "⚠️ كلمتا المرور غير متطابقتين."; return; }
-    btn.disabled = true; btn.textContent = "⏳ جاري إنشاء الحساب..."; msg.textContent = "";
+
+    if(!name || !email || !password || !password2){
+        msg.textContent = "⚠️ من فضلك املأ كل البيانات.";
+        return;
+    }
+    if(password.length < 6){
+        msg.textContent = "⚠️ كلمة المرور لازم 6 أحرف على الأقل.";
+        return;
+    }
+    if(password !== password2){
+        msg.textContent = "⚠️ كلمتا المرور غير متطابقتين.";
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "⏳ جاري إنشاء الحساب...";
+    msg.textContent = "";
+
     try{
-        const {data, error} = await supabaseClient.auth.signUp({email, password, options:{data:{full_name:name}}});
+        const {data, error} = await supabaseClient.auth.signUp({
+            email,
+            password,
+            options:{data:{full_name:name}}
+        });
         if(error) throw error;
-        if(data && data.session){
+
+        if(data?.session && data?.user){
             currentUser = data.user;
             window.currentUser = currentUser;
-            msg.textContent = "🎉 تم إنشاء الحساب!";
-            setTimeout(async () => { closeAuth(); showDashboard(); updateUserInfo(); await loadUserStore(); }, 500);
-        } else {
-            msg.textContent = "🎉 تم إنشاء الحساب. راجع بريدك الإلكتروني.";
+            msg.textContent = "🎉 تم إنشاء الحساب بنجاح!";
+            closeAuth();
+            showDashboard();
+            updateUserInfo();
+            await loadUserStore();
+        }else{
+            msg.textContent = "📩 تم إنشاء الحساب. راجع بريدك الإلكتروني لتأكيد الحساب ثم سجّل الدخول.";
         }
-    } catch(error){
-        msg.textContent = "❌ " + (error.message || "حدث خطأ.");
-    } finally { btn.disabled = false; btn.textContent = "إنشاء الحساب"; }
+    }catch(error){
+        console.error("Register error:", error);
+        msg.textContent = "❌ " + authErrorMessage(error, "تعذر إنشاء الحساب.");
+    }finally{
+        btn.disabled = false;
+        btn.textContent = "إنشاء الحساب";
+    }
 }
+
 async function loginUser(){
     const email = document.getElementById("authEmail")?.value.trim().toLowerCase();
     const password = document.getElementById("authPassword")?.value || "";
     const msg = document.getElementById("authMessage");
     const btn = document.getElementById("authSubmit");
-    if(!email || !password){ msg.textContent = "⚠️ اكتب البريد وكلمة المرور."; return; }
-    btn.disabled = true; btn.textContent = "⏳ جاري الدخول..."; msg.textContent = "";
+
+    if(!email || !password){
+        msg.textContent = "⚠️ اكتب البريد وكلمة المرور.";
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "⏳ جاري الدخول...";
+    msg.textContent = "";
+
     try{
         const {data, error} = await supabaseClient.auth.signInWithPassword({email, password});
         if(error) throw error;
         if(!data?.session || !data?.user) throw new Error("لم يتم إنشاء جلسة الدخول.");
-        currentUser = data.user; window.currentUser = currentUser;
-        closeAuth(); showDashboard(); updateUserInfo();
+
+        currentUser = data.user;
+        window.currentUser = currentUser;
+        closeAuth();
+        showDashboard();
+        updateUserInfo();
         await loadUserStore();
         toast("✅ تم تسجيل الدخول بنجاح.", "success");
-    } catch(error){
+    }catch(error){
         console.error("Login error:", error);
-        const raw = String(error?.message || "");
-        const friendly = /invalid login credentials/i.test(raw) ? "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة." : raw;
-        msg.textContent = "❌ " + (friendly || "فشل تسجيل الدخول.");
-    } finally { btn.disabled = false; btn.textContent = t("login"); }
+        msg.textContent = "❌ " + authErrorMessage(error, "فشل تسجيل الدخول.");
+    }finally{
+        btn.disabled = false;
+        btn.textContent = t("login");
+    }
 }
+
 async function loginWithGoogle(){
     const msg = document.getElementById("authMessage");
+    const btn = document.querySelector(".google-btn");
+    if(btn) btn.disabled = true;
     msg.textContent = "⏳ جاري فتح Google...";
-    const {error} = await supabaseClient.auth.signInWithOAuth({
-        provider:"google", options:{redirectTo: window.location.origin + window.location.pathname}
-    });
-    if(error) msg.textContent = "❌ " + error.message;
+
+    try{
+        const redirectTo = window.location.href.split("#")[0];
+        const {error} = await supabaseClient.auth.signInWithOAuth({
+            provider:"google",
+            options:{redirectTo}
+        });
+        if(error) throw error;
+    }catch(error){
+        console.error("Google login error:", error);
+        msg.textContent = "❌ " + authErrorMessage(error, "تعذر تسجيل الدخول باستخدام Google.");
+        if(btn) btn.disabled = false;
+    }
 }
+
 async function resetPassword(){
-    const email = document.getElementById("authEmail").value.trim();
+    const email = document.getElementById("authEmail")?.value.trim().toLowerCase();
     const msg = document.getElementById("authMessage");
-    if(!email){ msg.textContent = "⚠️ اكتب بريدك أولاً."; return; }
+    if(!email){
+        msg.textContent = "⚠️ اكتب بريدك أولاً.";
+        return;
+    }
     msg.textContent = "⏳ جاري الإرسال...";
-    const {error} = await supabaseClient.auth.resetPasswordForEmail(email, {redirectTo: window.location.origin});
-    msg.textContent = error ? "❌ " + error.message : "📩 تم إرسال الرابط.";
+    try{
+        const {error} = await supabaseClient.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + window.location.pathname
+        });
+        if(error) throw error;
+        msg.textContent = "📩 تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك.";
+    }catch(error){
+        msg.textContent = "❌ " + authErrorMessage(error, "تعذر إرسال رابط إعادة التعيين.");
+    }
 }
 
 /* ============ SESSION ============ */
 async function checkUserSession(){
-    const {data} = await supabaseClient.auth.getSession();
-    if(data && data.session){
-        currentUser = data.session.user; window.currentUser = currentUser;
-        showDashboard(); updateUserInfo(); await loadUserStore();
-    } else { showLanding(); }
+    try{
+        const {data, error} = await supabaseClient.auth.getSession();
+        if(error) throw error;
+        if(data?.session?.user){
+            currentUser = data.session.user;
+            window.currentUser = currentUser;
+            showDashboard();
+            updateUserInfo();
+            await loadUserStore();
+        }else{
+            currentUser = null;
+            window.currentUser = null;
+            showLanding();
+        }
+    }catch(error){
+        console.error("Session error:", error);
+        currentUser = null;
+        window.currentUser = null;
+        showLanding();
+    }
 }
+
 supabaseClient.auth.onAuthStateChange((event, session) => {
-    if(session){
-        currentUser = session.user; window.currentUser = currentUser; updateUserInfo();
+    if(session?.user){
+        currentUser = session.user;
+        window.currentUser = currentUser;
+        updateUserInfo();
+
         if(event === "SIGNED_IN" || event === "INITIAL_SESSION"){
             Promise.resolve().then(async()=>{
-                if(currentUser){ showDashboard(); updateUserInfo(); await loadUserStore(); }
+                if(currentUser){
+                    showDashboard();
+                    updateUserInfo();
+                    await loadUserStore();
+                }
             }).catch(err=>console.error("Session load error:",err));
         }
-    } else {
-        currentUser = null; window.currentUser = null;
-        if(event === "SIGNED_OUT") showLanding();
+    }else if(event === "SIGNED_OUT"){
+        currentUser = null;
+        window.currentUser = null;
+        currentStore = null;
+        showLanding();
     }
 });
+
 function updateUserInfo(){
     if(!currentUser) return;
     const email = currentUser.email || "";
