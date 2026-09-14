@@ -2702,6 +2702,7 @@ if(catList){
                 ${hasDiscount ? `<div class="discount-badge">خصم ${discountPct}%</div>` : ""}
                 <div class="p-meta">المخزون: ${Number(product.stock || 0)}${lowStock ? ' <span style="color:var(--warn);font-weight:800">• ⚠️ منخفض</span>' : ""}</div>
                 ${product.sku ? `<div class="p-meta">SKU: ${escapeHTML(product.sku)}</div>` : ""}
+                ${product.category ? `<div class="p-meta">🏷️ ${escapeHTML(product.category)}</div>` : ""}
                 <div class="p-actions">
                     <button class="gold-btn" onclick="editProduct('${pid}')">✏️ تعديل</button>
                     <button class="gold-btn" style="background:#fdecec;color:var(--danger)" onclick="deleteProduct('${pid}')">🗑️ حذف</button>
