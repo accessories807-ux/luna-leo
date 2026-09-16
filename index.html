@@ -4342,7 +4342,7 @@ label{
         <button data-section="orders" onclick="showSection('orders')">🛒 الطلبات</button>
         <button data-section="customers" onclick="showSection('customers')">👥 العملاء</button>
         <button data-section="loyalty" onclick="showSection('loyalty')">🎁 نقاط الولاء</button>
-        <button data-section="subscription" onclick="showSection('subscription')">💳 الاشتراك</button>
+        <button data-section="subscription" onclick="showSection('subscription')">💬 التفعيل</button>
         <button data-section="analytics" onclick="showSection('analytics')">📊 التحليلات</button>
         <button data-section="reports" onclick="showSection('reports')">📈 التقارير</button>
         <button data-section="marwan" onclick="showSection('marwan')">🤖 مروان AI</button>
@@ -4357,7 +4357,7 @@ label{
             <div class="sub-banner" id="subBanner">
                 <div class="sub-grid">
                     <div>
-                        <div class="sub-label">💳 حالة الاشتراك</div>
+                        <div class="sub-label">💬 حالة التفعيل</div>
                         <div class="sub-plan"><span id="subOwnerBadge" class="owner-badge" style="display:none"></span><span id="subPlanName">Trial</span></div>
                         <span class="pill" id="subStatusBadge">جاري التحميل</span>
                     </div>
@@ -4544,9 +4544,15 @@ label{
         <!-- ============ SUBSCRIPTION SECTION ============ -->
         <section id="dashSubscription" class="dash-section hidden">
             <div class="panel">
-                <div class="panel-title"><h2>💳 الاشتراكات</h2></div>
-                <div id="plansContainer" class="pricing"></div>
-                <div class="sub-label" style="margin-top:14px">🔒 الدفع الإلكتروني الآمن متاح عبر Paymob.</div>
+                <div class="panel-title"><h2>💬 تفعيل المتجر</h2></div>
+                <div style="text-align:center;padding:12px 4px">
+                    <div style="font-size:42px;margin-bottom:8px">🟢</div>
+                    <h3 style="margin-bottom:8px">التفعيل حاليًا عن طريق WhatsApp</h3>
+                    <p style="color:var(--muted);line-height:1.8">تواصل معنا على WhatsApp لتفعيل متجرك وتحديد الباقة المناسبة. لا يوجد دفع إلكتروني حاليًا.</p>
+                    <button class="gold-btn" style="margin-top:14px" onclick="requestActivationWhatsApp()">💬 طلب التفعيل عبر WhatsApp</button>
+                    <div id="activationMessage" class="form-message" role="alert" style="margin-top:12px"></div>
+                </div>
+                <div id="plansContainer" class="pricing" style="display:none"></div>
             </div>
         </section>
 
@@ -5584,7 +5590,7 @@ function subscriptionStatusText(){
 }
 
 function formatRemaining(ms){
-    if(ms <= 0) return "انتهى الاشتراك";
+    if(ms <= 0) return "انتهى التفعيل";
     const t = Math.floor(ms / 1000);
     const d = Math.floor(t / 86400);
     const h = Math.floor((t % 86400) / 3600);
@@ -5651,8 +5657,8 @@ function renderSubscriptionUI(){
     
     if(notice){
         notice.textContent = active
-            ? (plan === "trial" ? "أنت في الفترة التجريبية المجانية (15 يوم)." : "اشتراكك نشط.")
-            : "⚠️ انتهى الاشتراك. بياناتك محفوظة.";
+            ? (plan === "trial" ? "التفعيل يتم حاليًا عن طريق WhatsApp." : "تفعيل متجرك نشط.")
+            : "⚠️ انتهى التفعيل. بياناتك محفوظة.";
     }
     
     const marwanBadge = document.getElementById("marwanPlanBadge");
@@ -5706,7 +5712,7 @@ async function loadSubscription(){
         const pn = document.getElementById("subPlanName");
         if(pn) pn.textContent = "غير متاح";
         const notice = document.getElementById("subNotice");
-        if(notice) notice.textContent = "⚠️ لا يوجد اشتراك مرتبط.";
+        if(notice) notice.textContent = "⚠️ لا يوجد تفعيل مرتبط. تواصل معنا عبر WhatsApp لطلب التفعيل.";
         return;
     }
     
@@ -5722,102 +5728,42 @@ async function loadSubscription(){
 function renderPlanCards(){
     const box = document.getElementById("plansContainer");
     if(!box) return;
-    
     const current = normalizePlan(currentSubscription?.plan);
-    const plans = ["trial", "starter", "growth", "business"];
-    
-    box.innerHTML = plans.map(key => {
-        const p = PLAN_CONFIG[key];
-        const selected = current === key && subscriptionIsActive();
-        
-        return `<div class="plan ${selected ? "featured" : ""}">
-            <h3>${p.name}</h3>
-            <div class="price">${p.price.toLocaleString("ar-EG")} <small>${p.price ? "جنيه / شهر" : "جنيه"}</small></div>
-            <ul>
-                <li>${key === "trial" ? "15 يوم تجربة" : "اشتراك شهري"}</li>
-                <li>${p.marwan === "unlimited" ? "مروان AI غير محدود" : p.marwan === "available" ? "مروان AI متاح" : "مروان AI غير متاح"}</li>
-                <li>${p.admins === Infinity ? "Admins غير محدود" : `${p.admins} Admin`}</li>
-                <li>البيانات محفوظة دائماً</li>
-            </ul>
-            <button class="btn btn-primary" onclick="requestPlanChange('${key}')" ${selected ? "disabled" : ""}>
-                ${selected ? "الباقة الحالية" : "اختيار الباقة"}
-            </button>
-        </div>`;
-    }).join("");
+    const active = subscriptionIsActive() || isPlatformOwner();
+    const cfg = PLAN_CONFIG[current] || PLAN_CONFIG.trial;
+    box.innerHTML = `
+      <div class="plan featured" style="max-width:620px;margin:auto;text-align:center">
+        <div style="font-size:42px;margin-bottom:8px">💬</div>
+        <h3>تفعيل المتجر عبر WhatsApp</h3>
+        <p style="color:var(--muted);line-height:1.8">التفعيل يتم يدويًا حاليًا لضمان مراجعة بيانات المتجر واختيار الباقة المناسبة.</p>
+        <div class="price" style="font-size:22px">${active ? "حسابك مفعل حاليًا" : "جاهز للتفعيل"}</div>
+        <ul style="text-align:right">
+          <li>📋 مراجعة بيانات المتجر</li>
+          <li>💬 تواصل مباشر مع الإدارة</li>
+          <li>⚡ تفعيل يدوي بعد تأكيد الطلب</li>
+          <li>🛡️ بدون دفع إلكتروني حاليًا</li>
+        </ul>
+        <button class="btn btn-primary" onclick="requestActivationWhatsApp()">🟢 طلب التفعيل عبر WhatsApp</button>
+      </div>`;
 }
 
-async function requestPlanChange(plan){
-    if(!currentUser || !currentStore){
-        toast("أنشئ متجرك أولاً.", "error");
+function requestActivationWhatsApp(){
+    if(!currentUser){
+        toast("سجل الدخول أولاً ثم اطلب التفعيل.", "error");
+        openAuth("login");
         return;
     }
-    
-    if(plan === "trial"){
-        toast("الفترة التجريبية تُمنح مرة واحدة.", "info");
-        return;
-    }
-    
-    const cfg = PLAN_CONFIG[plan];
-    if(!cfg || !["starter", "growth", "business"].includes(plan)){
-        toast("الباقة غير صالحة.", "error");
-        return;
-    }
-    
-    const ok = await confirmDialog(
-        `اشتراك ${cfg.name}`,
-        `السعر: ${cfg.price.toLocaleString("ar-EG")} جنيه/شهر`,
-        "الانتقال للدفع"
-    );
-    if(!ok) return;
-    
-    const buttons = document.querySelectorAll('#plansContainer button');
-    buttons.forEach(b => {
-        b.disabled = true;
-        b.dataset.originalText = b.textContent;
-        b.textContent = 'جاري تجهيز الدفع…';
-    });
-    
-    try{
-        const {data: sessionData, error: sessionError} = await supabaseClient.auth.getSession();
-        if(sessionError) throw sessionError;
-        const token = sessionData?.session?.access_token;
-        if(!token) throw new Error('جلسة الدخول غير متاحة.');
-        
-        const {data: requestId, error: requestError} = await supabaseClient.rpc(
-            'create_subscription_request',
-            {p_plan: plan}
-        );
-        if(requestError) throw requestError;
-        if(!requestId) throw new Error('لم يتم إنشاء طلب الاشتراك.');
-        
-        const endpoint = `${SUPABASE_URL}/functions/v1/create-paymob-payment`;
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({plan, request_id: requestId})
-        });
-        
-        const result = await response.json().catch(() => ({}));
-        if(!response.ok) throw new Error(result?.error || result?.message || 'تعذر إنشاء عملية الدفع.');
-        if(!result?.client_secret || !result?.public_key) throw new Error('Paymob لم يرجع بيانات الدفع.');
-        
-        const checkoutUrl = 'https://accept.paymob.com/unifiedcheckout/?publicKey='
-            + encodeURIComponent(result.public_key)
-            + '&clientSecret='
-            + encodeURIComponent(result.client_secret);
-        
-        window.location.href = checkoutUrl;
-    }catch(err){
-        console.error('subscription payment', err);
-        buttons.forEach(b => {
-            b.disabled = false;
-            if(b.dataset.originalText) b.textContent = b.dataset.originalText;
-        });
-        toast('❌ ' + (err?.message || 'تعذر بدء الدفع.'), 'error', 6000);
-    }
+    const email = currentUser.email || "غير متاح";
+    const storeName = currentStore?.name || currentStore?.store_name || "لم يتم إنشاء المتجر بعد";
+    const userId = currentUser.id || "غير متاح";
+    const currentPlan = normalizePlan(currentSubscription?.plan);
+    const text = `مرحباً فريق LUNA&LEO 👋\nأرغب في طلب تفعيل متجري.\n\n🏪 اسم المتجر: ${storeName}\n📧 البريد: ${email}\n🆔 رقم الحساب: ${userId}\n📦 الباقة الحالية: ${currentPlan || "غير محددة"}\n\nأرجو مراجعة الحساب وإرسال تفاصيل التفعيل والباقات المتاحة. شكراً لكم 🙏`;
+    const url = "https://wa.me/201155826793?text=" + encodeURIComponent(text);
+    window.open(url, "_blank", "noopener,noreferrer");
+}
+
+function requestPlanChange(plan){
+    requestActivationWhatsApp();
 }
 
 function handleSubscriptionPaymentResult(){
@@ -6298,7 +6244,7 @@ async function loadDashboardData(){
         
         const pBox = document.getElementById("productsContainer");
         if(pBox){
-            pBox.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🔒</div>انتهى الاشتراك.</div>';
+            pBox.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🔒</div>انتهى التفعيل.</div>';
         }
         
         renderSubscriptionUI();
