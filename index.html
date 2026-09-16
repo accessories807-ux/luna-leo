@@ -3,95 +3,653 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-<!-- ============ PRIMARY META ============ -->
 <title>LUNA&LEO MARKET | أنشئ متجرك الإلكتروني في دقائق</title>
-<meta name="description" content="LUNA&LEO MARKET منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة. ابدأ مجانًا الآن وحوّل فكرتك لمشروع ناجح.">
-<meta name="keywords" content="متجر إلكتروني, إنشاء متجر, تجارة إلكترونية, مصر, LUNA&LEO, منصة متاجر, تسوق أونلاين">
-<meta name="author" content="LUNA&LEO MARKET">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-<link rel="canonical" href="https://lunaleo.com/">
-
-<!-- ============ SECURITY HEADERS ============ -->
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-
-<!-- ============ PWA ============ -->
-<meta name="theme-color" content="#b98a38" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)">
+<meta name="description" content="LUNA&LEO MARKET منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة.">
+<meta name="theme-color" content="#b98a38">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="LUNA&LEO">
-<meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=LUNA&color=b98a38&background=ffffff&size=180">
-
-<!-- ============ OPEN GRAPH ============ -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://lunaleo.com/">
-<meta property="og:title" content="LUNA&LEO MARKET | أنشئ متجرك الإلكتروني في دقائق">
-<meta property="og:description" content="منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة. ابدأ مجانًا الآن!">
-<meta property="og:image" content="https://lunaleo.com/og-image.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="LUNA&LEO MARKET - منصة متاجر إلكترونية">
-<meta property="og:locale" content="ar_EG">
-<meta property="og:site_name" content="LUNA&LEO MARKET">
-
-<!-- ============ TWITTER CARD ============ -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="LUNA&LEO MARKET | أنشئ متجرك الإلكتروني">
-<meta name="twitter:description" content="منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة.">
-<meta name="twitter:image" content="https://lunaleo.com/og-image.jpg">
-
-<!-- ============ FONTS ============ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" as="style">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-
-<!-- ============ STYLES ============ -->
 <link rel="stylesheet" href="styles.css">
-
-<!-- ============ JSON-LD STRUCTURED DATA ============ -->
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "LUNA&LEO MARKET",
-    "alternateName": "لونا أند ليو ماركت",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web, iOS, Android",
-    "description": "منصة متكاملة لإنشاء وإدارة المتاجر الإلكترونية بالعربية",
-    "url": "https://lunaleo.com",
-    "inLanguage": "ar",
-    "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "EGP",
-        "description": "تجربة مجانية 15 يوم بدون بطاقة ائتمان"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": "150",
-        "bestRating": "5",
-        "worstRating": "1"
-    },
-    "featureList": [
-        "إنشاء متجر إلكتروني",
-        "إدارة المنتجات والطلبات",
-        "نقاط الولاء",
-        "تتبع الشحنات",
-        "الدفع عبر واتساب",
-        "تقارير وتحليلات"
-    ]
-}
-</script>
 </head>
 <body>
 
+<!-- Toast Container -->
+<div class="toast-host" id="toastHost"></div>
+
+<!-- Confirm Dialog -->
+<div class="confirm-host" id="confirmHost">
+    <div class="confirm-box">
+        <h3 id="confirmTitle">تأكيد</h3>
+        <p id="confirmText"></p>
+        <div class="confirm-actions">
+            <button class="btn btn-ghost" id="confirmCancel">إلغاء</button>
+            <button class="btn btn-primary" id="confirmOk">تأكيد</button>
+        </div>
+    </div>
+</div>
+
+<!-- Landing -->
+<div id="landingPage">
+<header class="site-header" id="siteHeader">
+<div class="container nav">
+    <div class="logo">LUNA<span>&</span>LEO</div>
+    <nav class="nav-links">
+        <a href="#features">المميزات</a>
+        <a href="#steps">كيف يعمل؟</a>
+        <a href="#pricing">الأسعار</a>
+        <a href="#faq">الأسئلة</a>
+    </nav>
+    <div class="nav-actions">
+        <select id="languageSelect" class="lang-select" onchange="setLanguage(this.value)">
+            <option value="ar">🇪🇬 العربية</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="fr">🇫🇷 Français</option>
+        </select>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+        <button class="btn btn-outline" onclick="openAuth('login')">تسجيل الدخول</button>
+        <button class="btn btn-primary" onclick="openAuth('register')">أنشئ متجرك</button>
+    </div>
+    <button class="menu-btn" onclick="toggleMobileMenu()">☰</button>
+</div>
+</header>
+
+<section class="hero">
+<div class="container hero-grid">
+    <div class="hero-text">
+        <h1>أنشئ متجرك الإلكتروني<br><span class="gold">وابدأ البيع بسهولة 🚀</span></h1>
+        <p>LUNA&LEO MARKET تساعدك على إنشاء متجرك الإلكتروني وإدارة منتجاتك وطلباتك وعملائك من مكان واحد.</p>
+        <div class="hero-actions">
+            <button class="btn btn-primary" onclick="openAuth('register')">ابدأ مجانًا الآن</button>
+            <button class="btn btn-outline" onclick="scrollToSection('features')">اكتشف المميزات</button>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=80" alt="متجر">
+        <div class="hero-badge">
+            <small>مبيعات متجرك</small>
+            <strong>+24,850</strong>
+            <small>جنيه هذا الشهر</small>
+        </div>
+    </div>
+</div>
+</section>
+
+<section class="section" id="features">
+<div class="container">
+    <div class="section-title">
+        <h2>كل أدوات متجرك في مكان واحد</h2>
+        <p>حل متكامل يساعدك تبدأ وتكبر مشروعك</p>
+    </div>
+    <div class="grid-3">
+        <div class="card"><div class="card-icon">🛍️</div><h3>متجرك الخاص</h3><p>أنشئ متجرًا احترافيًا باسمك.</p></div>
+        <div class="card"><div class="card-icon">📦</div><h3>إدارة المنتجات</h3><p>أضف المنتجات بسهولة.</p></div>
+        <div class="card"><div class="card-icon">📊</div><h3>إدارة الطلبات</h3><p>تابع الطلبات وتتبع الشحنة.</p></div>
+        <div class="card"><div class="card-icon">👥</div><h3>العملاء والولاء</h3><p>نقاط ولاء تلقائية.</p></div>
+        <div class="card"><div class="card-icon">💬</div><h3>اطلب عبر واتساب</h3><p>زر طلب مباشر.</p></div>
+        <div class="card"><div class="card-icon">🔒</div><h3>حماية وأمان</h3><p>تقنيات حديثة للحماية.</p></div>
+    </div>
+</div>
+</section>
+
+<section class="section" style="background:var(--card)">
+<div class="container split">
+    <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1000&q=80" alt="متجر">
+    <div>
+        <h2>متجرك بشكل احترافي ✨</h2>
+        <p>لا تحتاج إلى مصمم أو مبرمج.</p>
+        <div class="check"><span>✓</span><span>تصميم احترافي</span></div>
+        <div class="check"><span>✓</span><span>إدارة سهلة</span></div>
+        <div class="check"><span>✓</span><span>رفع صور متعددة</span></div>
+        <div class="check"><span>✓</span><span>تتبع الشحنة</span></div>
+        <div class="check"><span>✓</span><span>وضع ليلي + PWA</span></div>
+        <br>
+        <button class="btn btn-primary" onclick="openAuth('register')">أنشئ متجرك الآن</button>
+    </div>
+</div>
+</section>
+
+<section class="section" id="steps">
+<div class="container">
+    <div class="section-title"><h2>ابدأ في 4 خطوات فقط</h2><p>من التسجيل إلى أول عملية بيع</p></div>
+    <div class="steps">
+        <div class="step"><div class="step-num">1</div><h4>أنشئ حسابك</h4><p>سجل بياناتك مجانًا.</p></div>
+        <div class="step"><div class="step-num">2</div><h4>أنشئ متجرك</h4><p>اختر اسم متجرك.</p></div>
+        <div class="step"><div class="step-num">3</div><h4>أضف منتجاتك</h4><p>أضف الصور والأسعار.</p></div>
+        <div class="step"><div class="step-num">4</div><h4>ابدأ البيع</h4><p>استقبل طلبات العملاء.</p></div>
+    </div>
+</div>
+</section>
+
+<section class="section" id="pricing" style="background:var(--card)">
+<div class="container">
+    <div class="section-title"><h2>خطط تناسب مشروعك</h2><p>ابدأ مجانًا وطوّر متجرك</p></div>
+    <div class="pricing">
+        <div class="plan">
+            <h3>Trial</h3>
+            <div class="price">0 <small>جنيه</small></div>
+            <ul><li>تجربة مجانية 15 يوم</li><li>إنشاء وإدارة المتجر</li><li>كل المميزات متاحة</li><li>بدون حذف البيانات</li></ul>
+            <button class="btn btn-primary" onclick="openAuth('register')">ابدأ مجانًا</button>
+        </div>
+        <div class="plan">
+            <h3>Starter</h3>
+            <div class="price">199 <small>جنيه / شهر</small></div>
+            <ul><li>إدارة المنتجات والمخزون</li><li>إدارة الطلبات والعملاء</li><li>نقاط ولاء + تتبع شحنة</li><li>1 Admin</li></ul>
+            <button class="btn btn-primary" onclick="openPlans()">اشترك الآن</button>
+        </div>
+        <div class="plan featured">
+            <div class="plan-badge-top">الأكثر اختيارًا</div>
+            <h3>Growth</h3>
+            <div class="price">449 <small>جنيه / شهر</small></div>
+            <ul><li>كل مميزات Starter</li><li>QumraQL Analytics</li><li>مروان AI</li><li>حتى 5 Admins</li></ul>
+            <button class="btn btn-primary" onclick="openPlans()">اشترك الآن</button>
+        </div>
+        <div class="plan">
+            <h3>Business</h3>
+            <div class="price">1,199 <small>جنيه / شهر</small></div>
+            <ul><li>كل مميزات Growth</li><li>Admin غير محدود</li><li>مروان AI غير محدود</li><li>دعم مخصص</li></ul>
+            <button class="btn btn-primary" onclick="openPlans()">اشترك الآن</button>
+        </div>
+    </div>
+</div>
+</section>
+
+<section class="section" id="faq">
+<div class="container">
+    <div class="section-title"><h2>الأسئلة الشائعة</h2></div>
+    <div class="faq">
+        <div class="faq-item"><button class="faq-q">هل إنشاء الحساب مجاني؟<span>＋</span></button><div class="faq-a">نعم، يمكنك إنشاء حساب وبدء متجرك مجانًا.</div></div>
+        <div class="faq-item"><button class="faq-q">هل أحتاج خبرة في البرمجة؟<span>＋</span></button><div class="faq-a">لا، المنصة مصممة لتكون سهلة الاستخدام.</div></div>
+        <div class="faq-item"><button class="faq-q">هل أستطيع إضافة منتجات كثيرة؟<span>＋</span></button><div class="faq-a">نعم، يمكنك إضافة منتجاتك بلا حدود.</div></div>
+        <div class="faq-item"><button class="faq-q">هل الموقع يعمل على الهاتف؟<span>＋</span></button><div class="faq-a">نعم، ويمكنك تثبيته كتطبيق (PWA).</div></div>
+    </div>
+</div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <h2>جاهز تبدأ مشروعك؟ 🚀</h2>
+        <p>أنشئ متجرك الإلكتروني الآن.</p>
+        <button class="btn btn-primary" onclick="openAuth('register')">أنشئ متجرك مجانًا</button>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <div class="container footer-row">
+        <div class="logo">LUNA<span>&</span>LEO</div>
+        <p>© 2026 LUNA&LEO MARKET — جميع الحقوق محفوظة</p>
+        <button class="btn btn-outline" onclick="openAuth('login')">تسجيل الدخول</button>
+    </div>
+</footer>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+<div class="modal-box">
+    <button class="modal-close" onclick="closeAuth()">×</button>
+    <div class="auth-logo">LUNA<span>&</span>LEO</div>
+    <h2 id="authTitle">أنشئ حسابك 🚀</h2>
+    <p id="authSubtitle">ابدأ متجرك الإلكتروني</p>
+    <div id="nameField"><input type="text" id="authName" placeholder="الاسم"></div>
+    <input type="email" id="authEmail" placeholder="البريد الإلكتروني">
+    <input type="password" id="authPassword" placeholder="كلمة المرور">
+    <div id="confirmField"><input type="password" id="authPassword2" placeholder="تأكيد كلمة المرور"></div>
+    <button class="auth-submit" id="authSubmit" onclick="registerUser()">إنشاء الحساب</button>
+    <button class="auth-link" id="forgotPassword" onclick="resetPassword()" style="display:none">نسيت كلمة المرور؟</button>
+    <div class="auth-divider"><span>أو</span></div>
+    <button class="google-btn" onclick="loginWithGoogle()"><span class="g-icon">G</span>تسجيل الدخول باستخدام Google</button>
+    <div class="auth-message" id="authMessage"></div>
+    <div class="auth-switch"><span id="authSwitchText">لديك حساب بالفعل؟</span><button onclick="openAuth('login')" id="authSwitchButton">تسجيل الدخول</button></div>
+</div>
+</div>
+
+<!-- TRACKING MODAL -->
+<div class="modal" id="trackingModal">
+<div class="modal-box" style="text-align:right">
+    <button class="modal-close" onclick="closeTracking()">×</button>
+    <h2 style="text-align:center">📦 تتبع طلبك</h2>
+    <p style="text-align:center">أدخل رقم الطلب ورقم الهاتف</p>
+    <div class="tracking-form">
+        <input id="trackOrderId" type="text" placeholder="رقم الطلب" style="direction:ltr;text-align:left">
+        <input id="trackPhone" type="tel" placeholder="رقم الهاتف" style="direction:ltr;text-align:left">
+        <button class="auth-submit" onclick="trackOrder()" id="trackBtn">🔍 تتبع الطلب</button>
+    </div>
+    <div class="tracking-result" id="trackingResult"></div>
+</div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboardApp">
+<header class="dash-header">
+    <div class="dash-header-inner">
+        <div class="dash-logo">LUNA<span>&</span>LEO</div>
+        <div class="dash-user">
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleDash" style="display:none">🌙</button>
+            <div class="notif-wrap" id="notifUI" style="display:none">
+                <button class="notif-btn" onclick="toggleNotifications()">🔔 <span class="notif-badge" id="notifBadge">0</span></button>
+                <div class="notif-panel" id="notifPanel">
+                    <div style="display:flex;justify-content:space-between;padding:6px 4px 10px">
+                        <strong>الإشعارات</strong>
+                        <button onclick="markAllNotificationsRead()" style="font-size:12px;color:var(--g);font-weight:800">تحديد الكل</button>
+                    </div>
+                    <div id="notifList"></div>
+                </div>
+            </div>
+            <div class="dash-email" id="dashboardEmail"></div>
+            <button class="btn btn-ghost" onclick="logoutUser()">خروج 🚪</button>
+        </div>
+    </div>
+</header>
+
+<div class="dash-layout">
+    <aside class="sidebar">
+        <button class="active" data-section="home" onclick="showSection('home')">📊 الرئيسية</button>
+        <button data-section="store" onclick="showSection('store')">🏪 متجري</button>
+        <button data-section="products" onclick="showSection('products')">📦 المنتجات</button>
+        <button data-section="orders" onclick="showSection('orders')">🛒 الطلبات</button>
+        <button data-section="customers" onclick="showSection('customers')">👥 العملاء</button>
+        <button data-section="loyalty" onclick="showSection('loyalty')">🎁 نقاط الولاء</button>
+        <button data-section="subscription" onclick="showSection('subscription')">💳 الاشتراك</button>
+        <button data-section="analytics" onclick="showSection('analytics')">📊 التحليلات</button>
+        <button data-section="reports" onclick="showSection('reports')">📈 التقارير</button>
+        <button data-section="marwan" onclick="showSection('marwan')">🤖 مروان AI</button>
+        <button data-section="team" onclick="showSection('team')">👥 الفريق</button>
+        <button data-section="settings" onclick="showSection('settings')">⚙️ الإعدادات</button>
+    </aside>
+
+    <main class="dash-content">
+        <section id="dashHome" class="dash-section">
+            <div class="welcome"><h1>أهلاً بك في LUNA&LEO 👋</h1><p>لوحة التحكم الخاصة بمتجرك</p></div>
+            <div class="sub-banner" id="subBanner">
+                <div class="sub-grid">
+                    <div>
+                        <div class="sub-label">💳 حالة الاشتراك</div>
+                        <div class="sub-plan"><span id="subOwnerBadge" class="owner-badge" style="display:none"></span><span id="subPlanName">Trial</span></div>
+                        <span class="pill" id="subStatusBadge">جاري التحميل</span>
+                    </div>
+                    <div>
+                        <div class="sub-label">⏱️ المدة المتبقية</div>
+                        <div class="sub-count" id="subCountdown">جاري الحساب...</div>
+                    </div>
+                    <div><button class="gold-btn" onclick="openPlans()">تجديد / ترقية</button></div>
+                </div>
+                <div class="sub-label" id="subNotice" style="margin-top:12px"></div>
+            </div>
+            <div class="stats">
+                <div class="stat"><div class="stat-icon">📦</div><h3 id="statProducts">0</h3><p>المنتجات</p></div>
+                <div class="stat"><div class="stat-icon">🛒</div><h3 id="statOrders">0</h3><p>الطلبات</p></div>
+                <div class="stat"><div class="stat-icon">👥</div><h3 id="statCustomers">0</h3><p>العملاء</p></div>
+                <div class="stat"><div class="stat-icon">💰</div><h3 id="statSales">0</h3><p>المبيعات</p></div>
+            </div>
+            <div class="panel">
+                <div class="panel-title"><h2>آخر الطلبات</h2><button class="gold-btn" onclick="showSection('orders')">عرض الكل</button></div>
+                <div id="recentOrders" class="empty"><div class="empty-icon">🛒</div>لا توجد طلبات</div>
+            </div>
+        </section>
+
+        <section id="dashStore" class="dash-section hidden">
+            <div class="panel">
+                <div class="panel-title"><h2>🏪 متجري</h2></div>
+                <div id="storeCreateArea">
+                    <div class="form-grid">
+                        <input id="storeName" type="text" placeholder="اسم المتجر">
+                        <input id="storeSlug" type="text" placeholder="رابط المتجر">
+                        <textarea id="storeDescription" placeholder="وصف المتجر"></textarea>
+                        <div class="upload-box">
+                            <label for="storeLogoFile">🖼️ لوجو المتجر</label>
+                            <input id="storeLogoFile" type="file" accept="image/*">
+                        </div>
+                        <input id="storePhone" type="tel" placeholder="رقم الهاتف">
+                        <input id="storeWhatsapp" type="tel" placeholder="رقم WhatsApp">
+                        <button class="gold-btn" id="createStoreButton" onclick="createMyStore()">إنشاء المتجر 🚀</button>
+                        <div class="form-message" id="storeMessage"></div>
+                    </div>
+                </div>
+                <div id="storeCreated" class="hidden">
+                    <div class="store-card">
+                        <div class="store-logo-preview"><img id="myStoreLogo" style="display:none"><div id="myStoreLogoFallback">🏪</div></div>
+                        <h3 id="myStoreName"></h3>
+                        <div class="form-grid" style="margin-top:20px;text-align:right">
+                            <input id="editStoreName" type="text" placeholder="اسم المتجر">
+                            <input id="editStoreSlug" type="text" placeholder="رابط المتجر">
+                            <textarea id="editStoreDescription" placeholder="وصف"></textarea>
+                            <input id="editStorePhone" type="tel" placeholder="رقم الهاتف">
+                            <input id="editStoreWhatsapp" type="tel" placeholder="واتساب">
+                            <button class="gold-btn" onclick="updateMyStore()">💾 حفظ</button>
+                        </div>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px">
+                            <button class="gold-btn" onclick="showSection('products')">📦 أضف منتج</button>
+                            <button class="gold-btn" onclick="openMyPublicStore()">🌐 زيارة المتجر</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashProducts" class="dash-section hidden">
+            <div class="panel">
+                <div class="panel-title"><h2>📦 منتجاتي</h2><button class="gold-btn" onclick="toggleProductForm()">+ إضافة منتج</button></div>
+                <div id="productForm" class="form-grid hidden">
+                    <input id="productName" type="text" placeholder="اسم المنتج">
+                    <div class="form-grid cols-2">
+                        <input id="productPrice" type="number" placeholder="السعر">
+                        <input id="productComparePrice" type="number" placeholder="قبل الخصم">
+                    </div>
+                    <div class="form-grid cols-2">
+                        <input id="productStock" type="number" placeholder="المخزون">
+                        <input id="productSku" type="text" placeholder="SKU">
+                    </div>
+                    <input id="productCategory" type="text" placeholder="التصنيف">
+                    <div class="upload-box">
+                        <label for="productImages">📷 صور المنتج</label>
+                        <input id="productImages" type="file" accept="image/*" multiple>
+                    </div>
+                    <div id="productImagesPreview" class="images-grid"></div>
+                    <textarea id="productDescription" placeholder="وصف المنتج"></textarea>
+                    <button class="gold-btn" id="saveProductButton" onclick="saveProduct()">حفظ</button>
+                    <div class="form-message" id="productMessage"></div>
+                </div>
+                <div id="productsContainer" class="products-grid">
+                    <div class="empty" style="grid-column:1/-1">لا توجد منتجات</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashOrders" class="dash-section hidden">
+            <div class="panel">
+                <div class="panel-title"><h2>🛒 الطلبات</h2></div>
+                <div id="ordersContainer" class="empty">لا توجد طلبات</div>
+                <div id="ordersArchive"></div>
+            </div>
+        </section>
+
+        <section id="dashCustomers" class="dash-section hidden">
+            <div class="panel">
+                <div class="panel-title"><h2>👥 العملاء</h2></div>
+                <div id="customersContainer" class="empty">لا يوجد عملاء</div>
+            </div>
+        </section>
+
+        <section id="dashLoyalty" class="dash-section hidden">
+            <div class="panel">
+                <div class="panel-title"><h2>🎁 نقاط الولاء</h2></div>
+                <div class="loyalty-card">
+                    <div class="loyalty-points" id="loyaltyTotalPoints">0</div>
+                    <div class="loyalty-label">إجمالي النقاط</div>
+                </div>
+                <div class="form-grid cols-3" style="margin-bottom:18px">
+                    <div><label>مُفعّل؟</label><select id="loyaltyEnabled"><option value="false">معطّل</option><option value="true">مُفعّل</option></select></div>
+                    <div><label>نقطة لكل جنيه</label><input id="loyaltyRate" type="number" value="1"></div>
+                    <div><label>سعر الاستبدال</label><input id="loyaltyRedeemRate" type="number" value="100"></div>
+                </div>
+                <button class="gold-btn" onclick="saveLoyaltySettings()">💾 حفظ</button>
+                <div id="loyaltyCustomersList" class="empty" style="margin-top:18px">لا توجد بيانات</div>
+            </div>
+        </section>
+
+        <section id="dashSubscription" class="dash-section hidden">
+            <div class="panel">
+                <div class="panel-title"><h2>💳 الاشتراكات</h2></div>
+                <div id="plansContainer" class="pricing"></div>
+            </div>
+        </section>
+
+        <section id="dashAnalytics" class="dash-section hidden">
+            <div class="panel">
+                <div class="panel-title"><h2>📊 التحليلات</h2></div>
+                <div class="stats">
+                    <div class="stat"><div class="stat-icon">💰</div><h3 id="analyticsSales">0</h3><p>المبيعات</p></div>
+                    <div class="stat"><div class="stat-icon">🛒</div><h3 id="analyticsOrders">0</h3><p>الطلبات</p></div>
+                    <div class="stat"><div class="stat-icon">📦</div><h3 id="analyticsProducts">0</h3><p>المنتجات</p></div>
+                    <div class="stat"><div class="stat-icon">👥</div><h3 id="analyticsCustomers">0</h3><p>العملاء</p></div>
+                </div>
+                <div class="sub-label" id="analyticsLock"></div>
+            </div>
+        </section>
+
+        <section id="dashReports" class="dash-section hidden">
+            <div class="panel">
+                <div class="panel-title">
+                    <h2>📈 التقارير</h2>
+                    <button class="export-btn" onclick="exportOrdersCSV()">📥 تصدير</button>
+                </div>
+                <div class="reports-toolbar">
+                    <select id="reportRange"><option value="30">آخر 30 يوم</option><option value="90">آخر 90 يوم</option><option value="0">كل الفترة</option></select>
+                    <button class="gold-btn" onclick="renderBusinessReports()">🔄 تحديث</button>
+                </div>
+                <div id="reportsSummary" class="stats"></div>
+                <div id="bestSellersReport" class="empty" style="margin-top:16px">لا مبيعات</div>
+            </div>
+        </section>
+
+        <section id="dashMarwan" class="dash-section hidden">
+            <div class="panel">
+                <div class="panel-title"><h2>🤖 مروان AI</h2></div>
+                <p style="padding:20px;text-align:center">اضغط على الأيقونة العائمة 🤖</p>
+            </div>
+        </section>
+
+        <section id="dashTeam" class="dash-section hidden">
+            <div class="panel">
+                <div class="panel-title"><h2>👥 الفريق</h2></div>
+                <div class="sub-label" id="teamPlanInfo"></div>
+                <div class="form-grid cols-3" style="margin:18px 0">
+                    <input id="llTeamEmail" type="email" placeholder="بريد العضو">
+                    <select id="llTeamRole"><option value="staff">موظف</option><option value="manager">مدير</option></select>
+                    <button class="gold-btn" onclick="addTeamMember()">+ إضافة</button>
+                </div>
+                <div id="llTeamList" class="products-grid"></div>
+            </div>
+        </section>
+
+        <section id="dashSettings" class="dash-section hidden">
+            <div class="panel">
+                <div class="panel-title"><h2>⚙️ الإعدادات</h2></div>
+                <p class="sub-label">البريد الإلكتروني</p>
+                <p id="settingsEmail" style="color:var(--g-dark);font-weight:800;margin:8px 0 25px"></p>
+                <input id="notificationEmail" type="email" placeholder="email@example.com">
+                <button class="gold-btn" onclick="saveNotificationEmail()" style="margin-top:10px">💾 حفظ</button>
+                <br><br>
+                <button class="gold-btn" onclick="logoutUser()">تسجيل الخروج</button>
+            </div>
+        </section>
+    </main>
+</div>
+</div>
+
+<!-- STOREFRONT -->
+<div id="storefrontApp">
+<div class="sf-topbar">
+    <div class="sf-topbar-inner">
+        <div class="sf-top-actions">
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggleStore">🌙</button>
+            <button class="sf-small-btn" onclick="openTracking()">📦</button>
+            <button class="sf-small-btn" onclick="openWishlist()" style="position:relative">
+                ❤️ <span class="wishlist-heart-badge" id="wishlistBadge" style="display:none">0</span>
+            </button>
+            <button class="sf-cart-btn" onclick="openCart()">🛒 السلة <span id="sfCartCount">0</span></button>
+        </div>
+    </div>
+</div>
+
+<section class="sf-hero">
+    <div class="container">
+        <div id="sfStoreLogo" class="sf-store-logo" style="display:none"><img id="sfStoreLogoImg"></div>
+        <h1 id="sfStoreName" class="sf-store-name">المتجر</h1>
+        <p id="sfStoreDescription" class="sf-store-desc">أهلاً بك</p>
+        <div class="sf-contacts">
+            <span id="sfStorePhone" class="sf-contact" style="display:none"></span>
+            <span id="sfStoreWhatsapp" class="sf-contact" style="display:none"></span>
+        </div>
+        <div class="sf-loyalty-banner" id="sfLoyaltyBanner"></div>
+    </div>
+</section>
+
+<main class="sf-main">
+    <div class="sf-toolbar">
+        <input id="sfSearch" class="sf-search" type="search" placeholder="ابحث..." oninput="debouncedSearch()">
+        <div id="sfCategories" class="sf-categories"></div>
+        <select id="sfSortBy" class="sf-sort" onchange="renderStoreProducts()">
+            <option value="newest">🆕 الأحدث</option>
+            <option value="price-asc">💰 الأرخص</option>
+            <option value="price-desc">💎 الأغلى</option>
+        </select>
+        <div id="sfProductCount" class="sf-count"></div>
+    </div>
+    <div id="sfProducts" class="sf-grid">
+        <div class="sf-empty">جاري التحميل...</div>
+    </div>
+</main>
+
+<!-- CART DRAWER -->
+<div id="cartOverlay" class="cart-overlay" onclick="closeCartIfOverlay(event)">
+    <div class="cart-drawer" onclick="event.stopPropagation()">
+        <div class="cart-head">
+            <div class="cart-head-left">
+                <div class="cart-head-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                </div>
+                <div>
+                    <h2>السلة <span class="item-count-pill" id="cartItemCount">0</span></h2>
+                    <div class="cart-head-subtitle" id="cartHeadSubtitle">جاري التحميل...</div>
+                </div>
+            </div>
+            <div class="cart-head-actions">
+                <button class="cart-clear-btn" onclick="clearCart()" id="cartClearBtn" style="display:none">إفراغ</button>
+                <button class="cart-close" onclick="closeCart()">×</button>
+            </div>
+        </div>
+
+        <div id="cartView" style="display:flex;flex-direction:column;flex:1;min-height:0">
+            <div id="freeShipBar" class="free-ship-bar" style="display:none">
+                <div class="free-ship-text"><span id="freeShipLabel"></span></div>
+                <div class="free-ship-progress"><div class="free-ship-fill" id="freeShipFill"></div></div>
+            </div>
+            <div id="cartItems" class="cart-body"></div>
+            <div class="cart-footer">
+                <div class="coupon-box">
+                    <h4>🎟️ كوبون خصم</h4>
+                    <div class="coupon-row">
+                        <input id="sfCouponCode" type="text" placeholder="أدخل الكود">
+                        <button id="sfApplyCouponBtn" onclick="applyCartCoupon()">تطبيق</button>
+                    </div>
+                    <div id="sfCouponMsg" class="coupon-msg"></div>
+                </div>
+                <div class="summary-row"><span>المجموع</span><strong id="sfCartSubtotal">0 جنيه</strong></div>
+                <div class="summary-row discount" id="sfCartDiscountRow" style="display:none"><span>الخصم</span><strong id="sfCartDiscount">0</strong></div>
+                <div class="summary-row total"><span>الإجمالي</span><span id="sfCartTotal">0 جنيه</span></div>
+                <button type="button" id="openCheckoutBtn" class="checkout-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                    إتمام الطلب
+                </button>
+                <button class="whatsapp-checkout-btn" onclick="whatsappCheckout()">
+                    📲 اطلب عبر واتساب
+                </button>
+            </div>
+        </div>
+
+        <div id="checkoutView" class="checkout">
+            <h3>🛍️ إتمام الطلب</h3>
+            <div class="field"><label>الاسم الأول *</label><input id="orderFirstName" type="text"></div>
+            <div class="field"><label>الاسم الأخير *</label><input id="orderLastName" type="text"></div>
+            <div class="field"><label>البريد الإلكتروني</label><input id="orderEmail" type="email"></div>
+            <div class="field"><label>رقم الموبايل *</label><input id="orderPhone" type="tel"></div>
+            <div class="field"><label>المحافظة *</label>
+                <select id="orderGovernorate">
+                    <option value="">اختر</option>
+                    <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option>
+                    <option>القليوبية</option><option>الدقهلية</option><option>الشرقية</option>
+                    <option>الغربية</option><option>المنوفية</option><option>البحيرة</option>
+                </select>
+            </div>
+            <div class="field"><label>المدينة *</label><input id="orderCity" type="text"></div>
+            <div class="field"><label>الشارع *</label><input id="orderStreet" type="text"></div>
+            <div class="field"><label>تفاصيل العنوان *</label><textarea id="orderAddressDetails"></textarea></div>
+            <div class="field"><label>ملاحظة</label><textarea id="orderNote"></textarea></div>
+            <input type="hidden" id="orderCountry" value="مصر">
+            <input type="hidden" id="orderDistrict" value="">
+            <input type="hidden" id="orderShipping" value="standard">
+            <input type="hidden" id="orderPayment" value="cash">
+            <div class="order-msg" id="sfOrderMessage"></div>
+            <button class="checkout-btn" id="placeOrderBtn" onclick="placeStoreOrder()">✓ تأكيد الطلب</button>
+            <button class="back-cart" onclick="backToCart()" style="width:100%;padding:14px;margin-top:10px;border-radius:14px;background:var(--bg);font-weight:900;border:1px solid var(--line)">← الرجوع</button>
+        </div>
+
+        <div id="successView" class="success">
+            <div class="success-icon">🎉</div>
+            <h3>تم استلام طلبك!</h3>
+            <div class="order-id" id="successOrderId"></div>
+            <p>سيتم التواصل معك قريبًا.</p>
+            <button class="checkout-btn" onclick="closeCart()" style="max-width:280px;margin-top:16px">متابعة التسوق</button>
+        </div>
+    </div>
+</div>
+
+<!-- WISHLIST -->
+<div id="wishlistOverlay" class="wishlist-overlay" onclick="closeWishlist()"></div>
+<div id="wishlistPanel" class="wishlist-panel" onclick="event.stopPropagation()">
+    <div class="cart-head">
+        <div class="cart-head-left">
+            <div class="cart-head-icon" style="background:linear-gradient(135deg,#ef4444,#dc2626)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <div><h2>المفضلة <span class="item-count-pill" id="wishlistItemCount">0</span></h2></div>
+        </div>
+        <button class="cart-close" onclick="closeWishlist()">×</button>
+    </div>
+    <div class="cart-body" id="wishlistItems"></div>
+    <div class="cart-footer">
+        <button class="checkout-btn" onclick="addAllWishlistToCart()">🛒 أضف الكل</button>
+    </div>
+</div>
+
+<!-- QUICK VIEW -->
+<div id="quickViewOverlay" class="quick-view-overlay" onclick="closeQuickView(event)">
+    <div class="quick-view-box" onclick="event.stopPropagation()">
+        <button class="quick-view-close" onclick="closeQuickView()">×</button>
+        <div class="quick-view-grid" id="quickViewContent"></div>
+    </div>
+</div>
+</div>
+
+<!-- MARWAN CHAT -->
+<div id="marwanFab" class="marwan-fab" onclick="toggleMarwanChat()" style="display:none">🤖</div>
+<div id="marwanChat" class="marwan-chat">
+    <div class="marwan-header">
+        <div class="marwan-header-title">
+            <div class="marwan-header-avatar">🤖</div>
+            <div><div>مروان AI</div><div class="marwan-header-status">● متصل</div></div>
+        </div>
+        <div class="marwan-header-actions">
+            <button class="marwan-header-btn" onclick="clearMarwanChat()">🗑️</button>
+            <button class="marwan-header-btn" onclick="toggleMarwanChat()">✕</button>
+        </div>
+    </div>
+    <div class="marwan-body" id="marwanBody"></div>
+    <div class="marwan-footer">
+        <textarea id="marwanInput" class="marwan-input" rows="1" placeholder="اكتب..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMarwanMessage()}"></textarea>
+        <button id="marwanSendBtn" class="marwan-send" onclick="sendMarwanMessage()">➤</button>
+    </div>
+</div>
+
+<!-- SCRIPTS - IMPORTANT! -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js-core.js"></script>
+<script src="js-app.js"></script>
+<script src="js-security.js"></script>
+<script src="tests.js"></script>
+<script>
+if('serviceWorker' in navigator && window.location.protocol === 'https:'){
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(console.warn);
+    });
+}
+</script>
+</body>
+            </html>
 <!-- Skip to content (للـ accessibility) -->
 <a href="#main-content" class="skip-link">تخطَّ إلى المحتوى الرئيسي</a>
 
