@@ -6393,6 +6393,7 @@ async function loadProducts(){
                 ${product.category ? `<div class="p-meta">🏷️ ${escapeHTML(product.category)}</div>` : ""}
                 <div class="p-actions">
                     <button class="gold-btn" onclick="editProduct('${pid}')">✏️ تعديل</button>
+                    <button class="gold-btn" onclick="copyProductLink('${pid}')">🔗 رابط المنتج</button>
                     <button class="gold-btn" style="background:#fdecec;color:var(--danger)" onclick="deleteProduct('${pid}')">🗑️ حذف</button>
                 </div>
             </div>
@@ -7259,13 +7260,49 @@ function backToPlatform(){
     window.location.href = url.toString();
 }
 
-function getPublicProductUrl(productOrId){
-    if(!publicStore) return "";
-    const productId = typeof productOrId === "object" ? productOrId?.id : productOrId;
-    if(!productId) return getPublicStoreUrl();
+function getPublicStoreUrl(){
+    if(!currentStore) return "";
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    url.searchParams.set("store", currentStore.slug || currentStore.id);
+    return url.toString();
+}
+
+function getProductPublicUrl(productId){
+    if(!currentStore || !productId) return "";
     const url = new URL(getPublicStoreUrl());
     url.searchParams.set("product", String(productId));
     return url.toString();
+}
+
+async function copyProductLink(productId){
+    const url = getProductPublicUrl(productId);
+    if(!url){
+        toast("أنشئ المتجر أولاً.", "error");
+        return;
+    }
+    try{
+        await navigator.clipboard.writeText(url);
+        toast("✅ تم نسخ رابط المنتج.", "success");
+    }catch(e){
+        prompt("انسخ رابط المنتج:", url);
+    }
+}
+
+async function copyProductLinkPublic(productId){
+    if(!publicStore) return;
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    url.searchParams.set("store", publicStore.slug || publicStore.id);
+    url.searchParams.set("product", String(productId));
+    try{
+        await navigator.clipboard.writeText(url.toString());
+        toast("✅ تم نسخ رابط المنتج.", "success");
+    }catch(e){
+        prompt("انسخ رابط المنتج:", url.toString());
+    }
 }
 
 async function openProductFromUrl(){
@@ -7275,32 +7312,25 @@ async function openProductFromUrl(){
 
     let product = publicProducts.find(p => String(p.id) === String(productId));
     if(!product){
-        try{
-            const {data, error} = await supabaseClient
-                .from("products")
-                .select("*")
-                .eq("id", productId)
-                .eq("store_id", publicStore.id)
-                .maybeSingle();
-            if(!error && data) product = data;
-        }catch(e){ console.error("Direct product link error:", e); }
+        const {data, error} = await supabaseClient
+            .from("products")
+            .select("*")
+            .eq("store_id", publicStore.id)
+            .eq("id", productId)
+            .maybeSingle();
+        if(!error && data){
+            product = data;
+            if(!publicProducts.some(p => String(p.id) === String(productId))){
+                publicProducts.push(product);
+            }
+        }
     }
     if(product){
-        currentQuickViewProduct = product;
-        currentQuickViewImageIndex = 0;
-        renderQuickView();
-        document.getElementById("quickViewOverlay")?.classList.add("open");
-        document.body.style.overflow = "hidden";
+        openQuickView(product.id);
+        setTimeout(() => {
+            document.getElementById("quickViewOverlay")?.scrollIntoView({behavior:"smooth", block:"center"});
+        }, 50);
     }
-}
-
-function getPublicStoreUrl(){
-    if(!currentStore) return "";
-    const url = new URL(window.location.href);
-    url.search = "";
-    url.hash = "";
-    url.searchParams.set("store", currentStore.slug || currentStore.id);
-    return url.toString();
 }
 
 function openMyPublicStore(){
@@ -7778,8 +7808,8 @@ async function loadPublicStore(){
     loadWishlist();
     updateCartCount();
     await loadMoreProducts(true);
-    startStockRealtime();
     await openProductFromUrl();
+    startStockRealtime();
     
     return true;
 }
@@ -7903,7 +7933,6 @@ function renderStoreProducts(){
                     <button class="sf-add" ${disabled ? "disabled" : ""} onclick="event.stopPropagation();addToCart('${pid}')">
                         ${disabled ? "نفد" : "أضف للسلة"}
                     </button>
-                    <button class="gold-btn" style="padding:10px 12px" onclick="event.stopPropagation();copyProductLink('${pid}')" title="نسخ رابط المنتج">🔗</button>
                 </div>
             </div>
         </article>`;
@@ -8544,17 +8573,6 @@ function addAllWishlistToCart(){
    ========================================================= */
 
 /* ============ QUICK VIEW ============ */
-async function copyProductLink(productId){
-    const url = getPublicProductUrl(productId);
-    if(!url) return;
-    try{
-        await navigator.clipboard.writeText(url);
-        toast("تم نسخ رابط المنتج المباشر 🔗", "success");
-    }catch(e){
-        window.prompt("انسخ رابط المنتج:", url);
-    }
-}
-
 function openQuickView(productId){
     const product = publicProducts.find(p => String(p.id) === String(productId));
     if(!product) return;
@@ -8624,6 +8642,7 @@ function renderQuickView(){
                     ? `<button class="btn btn-primary" onclick="addToCart('${pid}');closeQuickView()">🛒 أضف للسلة</button>
                        <button class="gold-btn" style="padding:16px 22px" onclick="toggleWishlist('${pid}');renderQuickView()">${isInWishlist(product.id) ? "❤️" : "🤍"}</button>`
                     : `<button class="btn btn-ghost" disabled>نفد المخزون</button>`}
+                <button class="gold-btn" style="padding:16px 22px" onclick="copyProductLinkPublic('${pid}')">🔗 نسخ رابط المنتج</button>
             </div>
         </div>`;
 }
