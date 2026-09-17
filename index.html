@@ -10054,5 +10054,81 @@ if('serviceWorker' in navigator && window.location.protocol === 'https:'){
     });
 }
 </script>
+
+<!-- ============ FULL PAGE LANGUAGE TRANSLATION ============ -->
+<style>
+  /* Keep Google's technical translator UI hidden; LUNA&LEO uses its own language selector. */
+  #google_translate_element,
+  .goog-te-banner-frame,
+  .skiptranslate > iframe,
+  .goog-te-balloon-frame { display:none !important; }
+  body { top:0 !important; }
+  .goog-text-highlight { background:transparent !important; box-shadow:none !important; }
+</style>
+<div id="google_translate_element" aria-hidden="true"></div>
+<script>
+(function(){
+  const LANG_KEY = "luna_language";
+  const SUPPORTED_LANGS = ["ar","en","fr"];
+
+  function getGoogleLang(){
+    const m = document.cookie.match(/(?:^|;\s*)googtrans=\/ar\/([^;]+)/);
+    return m ? decodeURIComponent(m[1]) : "ar";
+  }
+
+  function syncLanguageSelectors(lang){
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    ["languageSelect","languageSelectDash","languageSelectStore"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.value = lang;
+    });
+  }
+
+  window.setLanguage = function(lang){
+    lang = String(lang || "ar").toLowerCase();
+    if(!SUPPORTED_LANGS.includes(lang)) lang = "ar";
+    localStorage.setItem(LANG_KEY, lang);
+
+    const current = getGoogleLang();
+    if(current === lang){
+      syncLanguageSelectors(lang);
+      return;
+    }
+
+    if(lang === "ar"){
+      document.cookie = "googtrans=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+      document.cookie = "googtrans=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=" + location.hostname;
+    }else{
+      document.cookie = "googtrans=/ar/" + lang + ";path=/";
+      document.cookie = "googtrans=/ar/" + lang + ";path=/;domain=" + location.hostname;
+    }
+    syncLanguageSelectors(lang);
+    location.reload();
+  };
+
+  window.googleTranslateElementInit = function(){
+    if(!window.google || !google.translate) return;
+    new google.translate.TranslateElement({
+      pageLanguage: "ar",
+      includedLanguages: "ar,en,fr",
+      autoDisplay: false,
+      multilanguagePage: true
+    }, "google_translate_element");
+  };
+
+  const saved = localStorage.getItem(LANG_KEY) || getGoogleLang() || "ar";
+  syncLanguageSelectors(SUPPORTED_LANGS.includes(saved) ? saved : "ar");
+
+  const script = document.createElement("script");
+  script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+  script.async = true;
+  script.onerror = function(){
+    console.warn("LUNA&LEO language service could not be loaded.");
+  };
+  document.head.appendChild(script);
+})();
+</script>
+
 </body>
 </html>
