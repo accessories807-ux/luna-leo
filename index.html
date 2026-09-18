@@ -4089,6 +4089,85 @@ label{
    Part 1: Config + Utils + Auth
    ========================================================= */
 
+
+/* ===== LUNA&LEO CART / CATEGORY / TEMPLATE V2 ===== */
+.sf-cat-mobile-wrap{display:none}
+.sf-cat-desktop{display:flex;gap:8px;flex-wrap:wrap}
+.luna-category-manager,.luna-template-panel{
+    margin:16px 0;padding:18px;border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(135deg,rgba(185,138,56,.08),rgba(255,255,255,.02));
+}
+.luna-manager-head h3,.luna-template-panel h3{margin-bottom:5px}
+.luna-manager-head p,.luna-template-panel p{font-size:12px;color:var(--muted);line-height:1.7}
+.luna-category-add{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;margin-top:13px}
+.luna-category-add input{min-width:0;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.luna-category-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:12px}
+.luna-category-card{padding:13px;border:1px solid rgba(185,138,56,.35);border-radius:15px;background:var(--card)}
+.luna-category-card strong{display:block;font-size:14px}
+.luna-category-card small{display:block;color:var(--muted);margin-top:5px}
+.luna-category-card button{margin-top:9px;border:0;background:transparent;color:var(--danger);font-size:12px}
+.luna-template-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px}
+.luna-template-card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:9px;text-align:right}
+.luna-template-card.active{border-color:var(--g);box-shadow:0 0 0 2px rgba(185,138,56,.16)}
+.tpl-preview{display:block;height:55px;border-radius:11px;margin-bottom:8px}
+.tpl-luxury{background:linear-gradient(135deg,#050505,#b98a38)}
+.tpl-royal{background:linear-gradient(135deg,#090612,#5c3b82)}
+.tpl-clean{background:linear-gradient(135deg,#fff,#ead9b5)}
+.luna-template-card strong,.luna-template-card small{display:block}
+.luna-template-card small{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* Customer catalog: three products per row on phones */
+@media(max-width:700px){
+    .sf-cat-desktop{display:none}
+    .sf-cat-mobile-wrap{
+        display:flex;align-items:center;gap:8px;width:100%;margin-top:8px
+    }
+    .sf-cat-mobile-wrap span{font-size:12px;font-weight:900;white-space:nowrap}
+    .sf-category-select{
+        flex:1;min-height:44px;padding:9px 12px;border-radius:12px;
+        border:1px solid rgba(185,138,56,.45);background:var(--card);font-weight:800
+    }
+    #sfProducts.sf-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+        gap:8px !important;
+    }
+    #sfProducts .sf-tile{min-width:0;border-radius:13px;overflow:hidden}
+    #sfProducts .sf-tile-img{height:auto;aspect-ratio:1/1}
+    #sfProducts .sf-tile-body{padding:8px !important}
+    #sfProducts .sf-tile-title{font-size:11px !important;line-height:1.45 !important}
+    #sfProducts .sf-tile-price{font-size:11px !important}
+    #sfProducts .sf-tile .gold-btn{font-size:10px !important;padding:7px 5px !important}
+    #cartItems.cart-body{
+        display:grid !important;
+        grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+        gap:8px !important;
+        align-content:start;
+    }
+    #cartItems .cart-item{
+        display:flex !important;flex-direction:column !important;
+        min-width:0 !important;border-radius:13px !important;padding:7px !important;
+    }
+    #cartItems .cart-item-img-wrap{width:100% !important;height:auto !important;aspect-ratio:1/1 !important}
+    #cartItems .cart-item-info{padding:6px 2px 2px !important}
+    #cartItems .cart-item-name{font-size:11px !important;line-height:1.35 !important}
+    #cartItems .cart-item-prices{font-size:10px !important;gap:3px !important;flex-wrap:wrap}
+    #cartItems .cart-item-bottom{display:flex !important;flex-direction:column !important;gap:5px !important}
+    #cartItems .qty{width:100% !important;justify-content:space-between !important}
+    #cartItems .qty button{width:27px !important;height:27px !important}
+    #cartItems .cart-item-remove{font-size:10px !important}
+    .luna-category-add{grid-template-columns:1fr}
+    .luna-template-grid{grid-template-columns:1fr}
+}
+@media(max-width:380px){
+    #sfProducts.sf-grid,#cartItems.cart-body{gap:5px !important}
+    #sfProducts .sf-tile-body{padding:6px !important}
+    #cartItems .cart-item{padding:5px !important}
+}
+
+/* Simple store templates — visual only */
+body[data-luna-template="royal"]{--g:#b78cff;--g-dark:#8b5dcc;--g-soft:#eee4ff}
+body[data-luna-template="clean"]{--g:#b98a38;--g-dark:#8a681c;--g-soft:#f4ead7;--bg:#fbfaf7;--card:#fff}
+
 </style>
 </head>
 <body>
@@ -4491,7 +4570,40 @@ label{
                     <h2>📦 منتجاتي</h2>
                     <button class="gold-btn" onclick="toggleProductForm()">+ إضافة منتج</button>
                 </div>
-                <div id="productForm" class="form-grid hidden">
+                
+                <div class="luna-category-manager" id="lunaCategoryManager">
+                    <div class="luna-manager-head">
+                        <div>
+                            <h3>📂 أقسام المتجر</h3>
+                            <p>أنشئ أقسامك واربط كل قسم باسم الشركة حتى لا تختلط عليك المنتجات.</p>
+                        </div>
+                    </div>
+                    <div class="luna-category-add">
+                        <input id="lunaNewCategory" type="text" maxlength="50" placeholder="اسم القسم — مثال: ساعات">
+                        <input id="lunaNewCompany" type="text" maxlength="80" placeholder="اسم الشركة — مثال: شركة XYZ">
+                        <button type="button" class="gold-btn" onclick="lunaAddCategory()">＋ إضافة قسم</button>
+                    </div>
+                    <div id="lunaCategoryGrid" class="luna-category-grid"></div>
+                </div>
+
+                <div class="luna-template-panel">
+                    <div>
+                        <h3>🎨 قوالب المتجر</h3>
+                        <p>اختر الشكل الذي يناسب متجرك. التغيير بصري فقط ولا يمس الطلبات أو الدفع.</p>
+                    </div>
+                    <div class="luna-template-grid">
+                        <button type="button" class="luna-template-card" data-template="luxury" onclick="lunaSetTemplate('luxury')">
+                            <span class="tpl-preview tpl-luxury"></span><strong>Luxury Gold</strong><small>أسود × ذهبي</small>
+                        </button>
+                        <button type="button" class="luna-template-card" data-template="royal" onclick="lunaSetTemplate('royal')">
+                            <span class="tpl-preview tpl-royal"></span><strong>Royal Night</strong><small>داكن × بنفسجي</small>
+                        </button>
+                        <button type="button" class="luna-template-card" data-template="clean" onclick="lunaSetTemplate('clean')">
+                            <span class="tpl-preview tpl-clean"></span><strong>Clean Store</strong><small>فاتح × ذهبي</small>
+                        </button>
+                    </div>
+                </div>
+<div id="productForm" class="form-grid hidden">
                     <input id="productName" type="text" placeholder="اسم المنتج" aria-label="اسم المنتج">
                     <div class="form-grid cols-2">
                         <input id="productPrice" type="number" min="0" step="0.01" placeholder="السعر الحالي" aria-label="السعر">
@@ -4950,7 +5062,63 @@ label{
 </div>
 
 <!-- ============ SCRIPTS ============ -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+/* ===== LUNA&LEO CATEGORY + TEMPLATE MANAGER ===== */
+function lunaCategoryKey(){
+    return "lunaLeoCategories_" + (currentStore?.id || currentUser?.id || "local");
+}
+function lunaLoadCategories(){
+    let data=[];
+    try{ data=JSON.parse(localStorage.getItem(lunaCategoryKey())||"[]"); }catch(e){}
+    if(!Array.isArray(data)) data=[];
+    const box=document.getElementById("lunaCategoryGrid");
+    const list=document.getElementById("categoryList");
+    if(box){
+        box.innerHTML=data.length ? data.map((x,i)=>`
+            <div class="luna-category-card">
+                <strong>📂 ${escapeHTML(x.name)}</strong>
+                <small>🏢 ${escapeHTML(x.company || "شركة غير محددة")}</small>
+                <button type="button" onclick="lunaDeleteCategory(${i})">حذف القسم</button>
+            </div>`).join("") : `<div style="grid-column:1/-1;color:var(--muted);font-size:12px">لم تضف أقسامًا بعد.</div>`;
+    }
+    if(list){
+        list.innerHTML=data.map(x=>`<option value="${escapeHTML(x.name)}">${escapeHTML(x.name)} — ${escapeHTML(x.company||"")}</option>`).join("");
+    }
+}
+function lunaAddCategory(){
+    const n=document.getElementById("lunaNewCategory");
+    const c=document.getElementById("lunaNewCompany");
+    const name=(n?.value||"").trim(), company=(c?.value||"").trim();
+    if(!name){ toast("اكتب اسم القسم أولاً","error"); return; }
+    let data=[]; try{data=JSON.parse(localStorage.getItem(lunaCategoryKey())||"[]")}catch(e){}
+    if(!Array.isArray(data)) data=[];
+    if(data.some(x=>String(x.name).toLowerCase()===name.toLowerCase())){
+        toast("القسم موجود بالفعل","error"); return;
+    }
+    data.push({name,company});
+    localStorage.setItem(lunaCategoryKey(),JSON.stringify(data));
+    if(n)n.value=""; if(c)c.value="";
+    lunaLoadCategories();
+    toast("✅ تم إضافة القسم","success");
+}
+function lunaDeleteCategory(i){
+    let data=[]; try{data=JSON.parse(localStorage.getItem(lunaCategoryKey())||"[]")}catch(e){}
+    if(!Array.isArray(data)) data=[];
+    data.splice(i,1); localStorage.setItem(lunaCategoryKey(),JSON.stringify(data)); lunaLoadCategories();
+}
+function lunaSetTemplate(name){
+    document.body.setAttribute("data-luna-template",name);
+    localStorage.setItem("lunaLeoTemplate_"+(currentStore?.id||currentUser?.id||"local"),name);
+    document.querySelectorAll(".luna-template-card").forEach(b=>b.classList.toggle("active",b.dataset.template===name));
+    toast("🎨 تم اختيار القالب","success");
+}
+function lunaLoadTemplate(){
+    const name=localStorage.getItem("lunaLeoTemplate_"+(currentStore?.id||currentUser?.id||"local"))||"luxury";
+    lunaSetTemplate(name);
+}
+document.addEventListener("DOMContentLoaded",()=>{setTimeout(()=>{lunaLoadCategories();lunaLoadTemplate()},500)});
+
+</script>
 <script>
 /* ============ CONFIG ============ */
 const SUPABASE_URL = "https://zuljqdzinbndmesbarjn.supabase.co";
@@ -7319,18 +7487,42 @@ function getProductPublicUrl(productId){
     return url.toString();
 }
 
+async async function lunaCopyText(textToCopy){
+    if(!textToCopy) return false;
+    try{
+        if(navigator.clipboard && window.isSecureContext){
+            await navigator.clipboard.writeText(String(textToCopy));
+            return true;
+        }
+    }catch(e){}
+    try{
+        const ta = document.createElement("textarea");
+        ta.value = String(textToCopy);
+        ta.setAttribute("readonly","");
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        ta.style.top = "0";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        ta.setSelectionRange(0, ta.value.length);
+        const ok = document.execCommand("copy");
+        ta.remove();
+        return !!ok;
+    }catch(e){
+        return false;
+    }
+}
+
 async function copyProductLink(productId){
     const url = getProductPublicUrl(productId);
     if(!url){
         toast("أنشئ المتجر أولاً.", "error");
         return;
     }
-    try{
-        await navigator.clipboard.writeText(url);
-        toast("✅ تم نسخ رابط المنتج.", "success");
-    }catch(e){
-        prompt("انسخ رابط المنتج:", url);
-    }
+    const copied = await lunaCopyText(url);
+    toast(copied ? "✅ تم نسخ الرابط" : "⚠️ لم يتم النسخ تلقائياً", copied ? "success" : "error");
 }
 
 async function copyProductLinkPublic(productId){
@@ -7340,12 +7532,8 @@ async function copyProductLinkPublic(productId){
     url.hash = "";
     url.searchParams.set("store", publicStore.slug || publicStore.id);
     url.searchParams.set("product", String(productId));
-    try{
-        await navigator.clipboard.writeText(url.toString());
-        toast("✅ تم نسخ رابط المنتج.", "success");
-    }catch(e){
-        prompt("انسخ رابط المنتج:", url.toString());
-    }
+    const copied = await lunaCopyText(url.toString());
+    toast(copied ? "✅ تم نسخ الرابط" : "⚠️ لم يتم النسخ تلقائياً", copied ? "success" : "error");
 }
 
 async function openProductFromUrl(){
@@ -7399,12 +7587,8 @@ function shareStore(platform){
 
 async function copyStoreLink(){
     const url = getPublicStoreUrl();
-    try{
-        await navigator.clipboard.writeText(url);
-        toast("✅ تم النسخ.", "success");
-    }catch(e){
-        prompt("انسخ:", url);
-    }
+    const copied = await lunaCopyText(url);
+    toast(copied ? "✅ تم نسخ رابط المتجر" : "⚠️ لم يتم النسخ تلقائياً", copied ? "success" : "error");
 }
 
 async function shareStoreNative(){
@@ -7892,21 +8076,45 @@ async function loadMoreProducts(reset = false){
 function buildCategories(){
     const box = document.getElementById("sfCategories");
     if(!box) return;
-    
+
     const categories = [...new Set(publicProducts.map(p => p.category).filter(Boolean))];
-    
+
     if(!categories.length){
         box.innerHTML = "";
         return;
     }
-    
-    box.innerHTML = `<button class="sf-cat ${publicCategory === 'all' ? 'active' : ''}" onclick="selectCategory('all', this)">الكل</button>`
-        + categories.map(c => 
-            `<button class="sf-cat ${publicCategory === c ? 'active' : ''}" onclick="selectCategory('${escapeHTML(c)}', this)">${escapeHTML(c)}</button>`
-        ).join("");
+
+    const options = `<option value="all">📂 كل الأقسام</option>` +
+        categories.map(c => `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join("");
+
+    box.innerHTML = `
+        <div class="sf-cat-mobile-wrap">
+            <span>📂 القسم</span>
+            <select id="sfCategorySelect" class="sf-category-select" onchange="selectCategory(this.value)">
+                ${options}
+            </select>
+        </div>
+        <div class="sf-cat-desktop">
+            <button class="sf-cat ${publicCategory === 'all' ? 'active' : ''}" onclick="selectCategory('all', this)">الكل</button>
+            ${categories.map(c =>
+                `<button class="sf-cat ${publicCategory === c ? 'active' : ''}" onclick="selectCategory('${escapeHTML(c)}', this)">${escapeHTML(c)}</button>`
+            ).join("")}
+        </div>`;
+
+    const select = document.getElementById("sfCategorySelect");
+    if(select) select.value = publicCategory;
 }
 
 function selectCategory(category, btn){
+    publicCategory = category;
+    document.querySelectorAll(".sf-cat").forEach(b => b.classList.remove("active"));
+    if(btn && btn.classList) btn.classList.add("active");
+    const select = document.getElementById("sfCategorySelect");
+    if(select) select.value = category;
+    renderStoreProducts();
+}
+
+(category, btn){
     publicCategory = category;
     document.querySelectorAll(".sf-cat").forEach(b => b.classList.remove("active"));
     if(btn) btn.classList.add("active");
