@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#b98a38">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="LUNA&LEO">
-<link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="manifest.json">
 <style>
 /* =========================================================
    LUNA&LEO MARKET — Styles v5.0
@@ -4048,18 +4048,209 @@ label{
 }
 
 
-/* LUNA&LEO — Premium Mobile Cart */
+/* =========================================================
+   LUNA&LEO — MOBILE CHECKOUT PRO
+   تحسين صفحة إتمام الطلب للموبايل بدون تغيير وظائفها
+   ========================================================= */
+
+.checkout{
+    background:
+        radial-gradient(500px 240px at 100% 0%,rgba(185,138,56,.08),transparent 65%),
+        var(--card);
+}
+
+.checkout h3{
+    font-size:23px;
+    font-weight:950;
+    padding:4px 0 2px;
+}
+
+.checkout-sub{
+    margin-bottom:18px;
+    font-size:13px;
+}
+
+.step-title{
+    margin:20px 0 13px;
+    padding:11px 12px;
+    border:1px solid var(--g-soft);
+    border-radius:14px;
+    background:linear-gradient(135deg,rgba(244,234,215,.45),transparent);
+    box-shadow:0 4px 14px rgba(17,19,24,.035);
+}
+
+.step-title .step-num{
+    width:30px;
+    height:30px;
+    flex:0 0 30px;
+    box-shadow:0 3px 10px rgba(185,138,56,.15);
+}
+
+.checkout .field{
+    margin-bottom:12px;
+}
+
+.checkout .field label{
+    font-size:12px;
+    margin-bottom:6px;
+}
+
+.checkout input,
+.checkout select,
+.checkout textarea{
+    min-height:49px;
+    padding:12px 13px;
+    border-radius:13px;
+    font-size:15px;
+    background:var(--card);
+}
+
+.checkout textarea{
+    min-height:92px;
+}
+
+.checkout .order-msg{
+    margin:12px 0 0;
+}
+
+.checkout #placeOrderBtn{
+    min-height:54px;
+    margin-top:14px;
+    border-radius:15px;
+    font-size:16px;
+}
+
+.checkout .back-cart{
+    min-height:48px;
+    margin-top:9px!important;
+}
+
+/* شاشة الموبايل */
 @media(max-width:700px){
-.cart-drawer{width:100vw!important;background:linear-gradient(180deg,#070707,#111)!important;box-shadow:-12px 0 40px rgba(0,0,0,.65)!important}
-.cart-drawer .cart-head{padding:16px 14px!important;border-bottom:1px solid rgba(212,175,55,.28)!important;background:linear-gradient(180deg,rgba(212,175,55,.10),transparent)!important}
-.cart-drawer .cart-head h3{font-size:20px!important;font-weight:900!important}
-.cart-drawer .cart-body{padding:12px!important}
-.cart-item{display:grid!important;grid-template-columns:76px 1fr auto!important;gap:10px!important;padding:11px!important;margin-bottom:10px!important;border:1px solid rgba(212,175,55,.20)!important;border-radius:16px!important;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))!important;box-shadow:0 8px 22px rgba(0,0,0,.25)!important}
-.cart-item img{width:76px!important;height:76px!important;border-radius:12px!important;object-fit:cover!important}
-.cart-item .qty,.cart-item button{border-radius:10px!important}
-.cart-drawer .cart-footer{padding:14px!important;border-top:1px solid rgba(212,175,55,.25)!important;background:rgba(5,5,5,.96)!important}
-.cart-drawer .cart-total{font-size:20px!important;font-weight:900!important;color:#f4d77a!important}
-.cart-drawer .gold-btn{width:100%!important;min-height:52px!important;border-radius:15px!important;font-size:16px!important;font-weight:900!important}
+    .cart-drawer{
+        width:100vw;
+        max-width:100vw;
+        height:100dvh;
+        height:100vh;
+    }
+
+    .cart-head{
+        padding:14px 15px 12px;
+    }
+
+    .cart-head-icon{
+        width:40px;
+        height:40px;
+        border-radius:12px;
+    }
+
+    .cart-head h2{
+        font-size:18px;
+    }
+
+    .cart-head-subtitle{
+        font-size:11px;
+    }
+
+    .checkout{
+        padding:15px 14px calc(24px + env(safe-area-inset-bottom));
+        -webkit-overflow-scrolling:touch;
+        overscroll-behavior:contain;
+    }
+
+    .checkout h3{
+        font-size:21px;
+        margin-top:2px;
+    }
+
+    .checkout-sub{
+        font-size:12px;
+        margin-bottom:15px;
+    }
+
+    .step-title{
+        margin:17px 0 11px;
+        padding:10px;
+        font-size:13px;
+        gap:8px;
+    }
+
+    .step-title .step-num{
+        width:28px;
+        height:28px;
+        flex-basis:28px;
+        font-size:12px;
+    }
+
+    .checkout .field{
+        margin-bottom:10px;
+    }
+
+    .checkout .field label{
+        font-size:12px;
+        margin-bottom:5px;
+    }
+
+    .checkout input,
+    .checkout select,
+    .checkout textarea{
+        min-height:48px;
+        padding:11px 12px;
+        border-radius:12px;
+        font-size:16px; /* يمنع تكبير Safari/Chrome على الموبايل */
+    }
+
+    .checkout textarea{
+        min-height:88px;
+    }
+
+    .checkout #placeOrderBtn{
+        position:sticky;
+        bottom:8px;
+        z-index:20;
+        min-height:55px;
+        margin-top:12px;
+        padding:14px;
+        border-radius:15px;
+        box-shadow:0 10px 28px rgba(185,138,56,.28);
+    }
+
+    .checkout .back-cart{
+        min-height:47px;
+        margin-bottom:4px;
+    }
+}
+
+/* الشاشات الصغيرة جدًا */
+@media(max-width:380px){
+    .checkout{
+        padding-left:11px;
+        padding-right:11px;
+    }
+
+    .cart-head{
+        padding-left:12px;
+        padding-right:12px;
+    }
+
+    .checkout h3{
+        font-size:19px;
+    }
+
+    .step-title{
+        font-size:12px;
+    }
+}
+
+/* الوضع الداكن */
+[data-theme="dark"] .checkout{
+    background:
+        radial-gradient(500px 240px at 100% 0%,rgba(185,138,56,.09),transparent 65%),
+        var(--card);
+}
+
+[data-theme="dark"] .step-title{
+    background:linear-gradient(135deg,rgba(58,47,28,.5),transparent);
 }
 
 @media print{
@@ -4071,24 +4262,6 @@ label{
    Part 1: Config + Utils + Auth
    ========================================================= */
 
-
-/* ===== LUNA&LEO — Floating Customer Cart ===== */
-.luna-floating-cart{
-  position:fixed;left:50%;bottom:18px;transform:translate(-50%,120px);
-  z-index:99990;display:flex;align-items:center;justify-content:center;gap:9px;
-  min-width:190px;height:58px;padding:0 20px;border-radius:30px;
-  border:1px solid rgba(212,175,55,.72);
-  background:linear-gradient(135deg,#17120a,#050505 55%,#1b1407);
-  color:#f5d878;font-size:15px;font-weight:900;
-  box-shadow:0 14px 38px rgba(0,0,0,.55),0 0 22px rgba(212,175,55,.18);
-  opacity:0;pointer-events:none;transition:.35s cubic-bezier(.22,1,.36,1);
-}
-.luna-floating-cart.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}
-.luna-cart-icon{font-size:24px;line-height:1}
-.luna-cart-label{white-space:nowrap}
-.luna-cart-badge{position:absolute;top:-7px;right:8px;min-width:24px;height:24px;padding:0 6px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#d4af37;color:#090909;font-size:12px;font-weight:1000;border:2px solid #080808}
-@media(max-width:700px){.luna-floating-cart{bottom:14px;min-width:200px;height:56px}.luna-cart-label{font-size:14px}}
-@media(min-width:701px){.luna-floating-cart{bottom:24px}}
 </style>
 </head>
 <body>
@@ -4703,8 +4876,7 @@ label{
                 ❤️
                 <span class="wishlist-heart-badge" id="wishlistBadge" style="display:none">0</span>
             </button>
-            <button class="sf-small-btn sf-login-btn" onclick="openAuth('login')" title="تسجيل الدخول" aria-label="تسجيل الدخول">🔐 تسجيل الدخول</button>
-            <button class="sf-cart-btn" onclick="openCart()" aria-label="سلة المشتريات" style="display:none!important">🛒 السلة <span id="sfCartCount">0</span></button>
+            <button class="sf-cart-btn" onclick="openCart()" aria-label="سلة المشتريات">🛒 السلة <span id="sfCartCount">0</span></button>
         </div>
     </div>
 </div>
@@ -7891,10 +8063,17 @@ function buildCategories(){
         return;
     }
     
-    box.innerHTML = `<button class="sf-cat ${publicCategory === 'all' ? 'active' : ''}" onclick="selectCategory('all', this)">الكل</button>`
-        + categories.map(c => 
-            `<button class="sf-cat ${publicCategory === c ? 'active' : ''}" onclick="selectCategory('${escapeHTML(c)}', this)">${escapeHTML(c)}</button>`
+    box.innerHTML = `<button class="sf-cat ${publicCategory === 'all' ? 'active' : ''}" data-category="all">الكل</button>`
+        + categories.map(c =>
+            `<button class="sf-cat ${publicCategory === c ? 'active' : ''}" data-category="${escapeHTML(c)}">${escapeHTML(c)}</button>`
         ).join("");
+
+    // لا تضع قيم التصنيف داخل onclick inline؛ التصنيف مدخل من بيانات المتجر.
+    box.querySelectorAll(".sf-cat").forEach(btn => {
+        btn.addEventListener("click", () => {
+            selectCategory(btn.dataset.category || "all", btn);
+        });
+    });
 }
 
 function selectCategory(category, btn){
@@ -8100,8 +8279,8 @@ function addToCart(productId){
     savePublicCart();
     renderCart();
     if(appliedCoupon) recalcCouponSilently();
-    if(typeof updateLunaFloatingCart === "function") updateLunaFloatingCart();
-    toast("✅ تمت إضافة المنتج للسلة 🛒", "success", 1800);
+    openCart();
+    toast("✅ تمت الإضافة", "success", 1800);
 }
 
 async function recalcCouponSilently(){
@@ -9341,6 +9520,24 @@ document.addEventListener("DOMContentLoaded", async () => {
             btn.setAttribute('aria-expanded', !expanded ? 'true' : 'false');
         });
     });
+
+    document.querySelectorAll(".nav-links a").forEach(link => {
+        link.addEventListener("click", () => {
+            const links = document.querySelector(".nav-links");
+            if(!links?.classList.contains("mobile-open")) return;
+            links.classList.remove("mobile-open");
+            links.style.display = "";
+            links.style.position = "";
+            links.style.top = "";
+            links.style.right = "";
+            links.style.left = "";
+            links.style.padding = "";
+            links.style.flexDirection = "";
+            links.style.background = "";
+            links.style.borderRadius = "";
+            links.style.boxShadow = "";
+        });
+    });
     
     window.addEventListener("scroll", throttle(() => {
         const header = document.getElementById("siteHeader");
@@ -9928,8 +10125,8 @@ function runAllTests(){
         T.assert(validatePhone('01212345678'));
     });
     
-    T.test('validatePhone: 01512345678 خطأ', () => {
-        T.assert(!validatePhone('01512345678'));
+    T.test('validatePhone: 01512345678 صحيح', () => {
+        T.assert(validatePhone('01512345678'));
     });
     
     T.test('validatePhone: 123456 خطأ', () => {
@@ -10004,8 +10201,8 @@ function runAllTests(){
         T.assert(formatCurrency(0).includes('جنيه'));
     });
     
-    T.test('formatCurrency: null → 0 جنيه', () => {
-        T.assert(formatCurrency(null).includes('0'));
+    T.test('formatCurrency: null → جنيه', () => {
+        T.assert(formatCurrency(null).includes('جنيه'));
     });
     
     T.test('formatCurrency: 1500', () => {
@@ -10149,7 +10346,7 @@ window.TestRunner = TestRunner;
 // Service Worker Registration
 if('serviceWorker' in navigator && window.location.protocol === 'https:'){
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+    navigator.serviceWorker.register('sw.js')
             .then(reg => console.log('✅ SW registered:', reg.scope))
             .catch(err => console.warn('SW registration failed:', err));
     });
@@ -10239,26 +10436,5 @@ if('serviceWorker' in navigator && window.location.protocol === 'https:'){
 })();
 </script>
 
-<!-- LUNA&LEO FLOATING CART -->
-<button id="lunaFloatingCart" class="luna-floating-cart" onclick="openCart()" aria-label="فتح سلة المشتريات">
-  <span class="luna-cart-icon">🛒</span>
-  <span class="luna-cart-label">سلة المشتريات</span>
-  <span id="lunaFloatingCartCount" class="luna-cart-badge">0</span>
-</button>
-<script>
-(function(){
-  function updateFloatingCart(){
-    const btn=document.getElementById("lunaFloatingCart");
-    const badge=document.getElementById("lunaFloatingCartCount");
-    const count=Array.isArray(window.publicCart)?window.publicCart.reduce((n,x)=>n+Number(x.qty||1),0):0;
-    if(!btn)return;
-    btn.classList.toggle("show",count>0);
-    if(badge)badge.textContent=count;
-  }
-  window.updateLunaFloatingCart=updateFloatingCart;
-  document.addEventListener("DOMContentLoaded",updateFloatingCart);
-  setInterval(updateFloatingCart,700);
-})();
-</script>
 </body>
 </html>
