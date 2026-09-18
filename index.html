@@ -4703,6 +4703,7 @@ label{
                 ❤️
                 <span class="wishlist-heart-badge" id="wishlistBadge" style="display:none">0</span>
             </button>
+            <button class="sf-small-btn sf-login-btn" onclick="openAuth('login')" title="تسجيل الدخول" aria-label="تسجيل الدخول">🔐 تسجيل الدخول</button>
             <button class="sf-cart-btn" onclick="openCart()" aria-label="سلة المشتريات" style="display:none!important">🛒 السلة <span id="sfCartCount">0</span></button>
         </div>
     </div>
@@ -6992,28 +6993,7 @@ async function printOrderInvoice(orderId){
         <div class="total">الإجمالي: ${formatCurrency(order.total)}</div>
         <div class="footer">شكرًا لتعاملك مع ${escapeHTML(storeName)} ❤️</div>
         <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
-    <!-- LUNA&LEO FLOATING CART -->
-<button id="lunaFloatingCart" class="luna-floating-cart" onclick="openCart()" aria-label="فتح سلة المشتريات">
-  <span class="luna-cart-icon">🛒</span>
-  <span class="luna-cart-label">سلة المشتريات</span>
-  <span id="lunaFloatingCartCount" class="luna-cart-badge">0</span>
-</button>
-<script>
-(function(){
-  function updateFloatingCart(){
-    const btn=document.getElementById("lunaFloatingCart");
-    const badge=document.getElementById("lunaFloatingCartCount");
-    const count=Array.isArray(window.publicCart)?window.publicCart.reduce((n,x)=>n+Number(x.qty||1),0):0;
-    if(!btn)return;
-    btn.classList.toggle("show",count>0);
-    if(badge)badge.textContent=count;
-  }
-  window.updateLunaFloatingCart=updateFloatingCart;
-  document.addEventListener("DOMContentLoaded",updateFloatingCart);
-  setInterval(updateFloatingCart,700);
-})();
-</script>
-</body></html>`;
+    </body></html>`;
     
     const w = window.open("", "_blank");
     if(!w){
@@ -10259,5 +10239,26 @@ if('serviceWorker' in navigator && window.location.protocol === 'https:'){
 })();
 </script>
 
+<!-- LUNA&LEO FLOATING CART -->
+<button id="lunaFloatingCart" class="luna-floating-cart" onclick="openCart()" aria-label="فتح سلة المشتريات">
+  <span class="luna-cart-icon">🛒</span>
+  <span class="luna-cart-label">سلة المشتريات</span>
+  <span id="lunaFloatingCartCount" class="luna-cart-badge">0</span>
+</button>
+<script>
+(function(){
+  function updateFloatingCart(){
+    const btn=document.getElementById("lunaFloatingCart");
+    const badge=document.getElementById("lunaFloatingCartCount");
+    const count=Array.isArray(window.publicCart)?window.publicCart.reduce((n,x)=>n+Number(x.qty||1),0):0;
+    if(!btn)return;
+    btn.classList.toggle("show",count>0);
+    if(badge)badge.textContent=count;
+  }
+  window.updateLunaFloatingCart=updateFloatingCart;
+  document.addEventListener("DOMContentLoaded",updateFloatingCart);
+  setInterval(updateFloatingCart,700);
+})();
+</script>
 </body>
 </html>
