@@ -4047,39 +4047,6 @@ label{
     .marwan-fab{bottom:16px;left:16px;width:54px;height:54px;font-size:24px}
 }
 
-/* ===== LUNA&LEO CART VIEW SWITCH ===== */
-.cart-view-toolbar,.merchant-view-toolbar{
-    display:flex;align-items:center;gap:7px;flex-wrap:wrap;
-    padding:10px 12px;margin:0 0 12px;border:1px solid var(--line);
-    border-radius:14px;background:rgba(212,175,55,.05);font-size:12px;font-weight:800;
-}
-.cart-view-toolbar span,.merchant-view-toolbar span{margin-inline-end:auto;color:var(--muted)}
-.cart-view-btn,.merchant-view-btn{
-    border:1px solid var(--line);background:var(--bg);color:var(--ink-2);
-    border-radius:10px;padding:8px 11px;font-weight:900;font-size:12px;cursor:pointer;
-}
-.cart-view-btn.active,.merchant-view-btn.active{
-    background:linear-gradient(135deg,#d4af37,#a67c18);color:#111;border-color:#d4af37;
-}
-#cartItems.cart-list-view .cart-item{grid-template-columns:100px 1fr}
-#cartItems:not(.cart-list-view){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-content:start}
-#cartItems:not(.cart-list-view) .cart-item{display:flex;flex-direction:column;gap:10px;padding:10px;margin:0;min-width:0}
-#cartItems:not(.cart-list-view) .cart-item-img-wrap{width:100%;height:150px}
-#cartItems:not(.cart-list-view) .cart-item-name{font-size:14px;margin-bottom:5px}
-#cartItems:not(.cart-list-view) .cart-item-prices{margin-bottom:7px;gap:5px}
-#cartItems:not(.cart-list-view) .cart-item-price{font-size:15px}
-#cartItems:not(.cart-list-view) .cart-item-bottom{margin-top:auto}
-.products-grid.merchant-list-view{grid-template-columns:1fr !important}
-.products-grid.merchant-list-view .product-tile{display:grid;grid-template-columns:130px 1fr;align-items:stretch}
-.products-grid.merchant-list-view .product-tile img{height:100%;min-height:130px}
-@media(max-width:700px){
- .cart-view-toolbar,.merchant-view-toolbar{position:sticky;top:0;z-index:8}
- #cartItems:not(.cart-list-view){grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
- #cartItems:not(.cart-list-view) .cart-item-img-wrap{height:125px}
- .products-grid.merchant-list-view .product-tile{grid-template-columns:105px 1fr}
-}
-@media(max-width:360px){#cartItems:not(.cart-list-view){grid-template-columns:1fr}}
-
 @media print{
     body{background:#fff}
     .site-header,.site-footer,.cart-overlay,.wishlist-overlay{display:none!important}
@@ -4088,85 +4055,6 @@ label{
    LUNA&LEO MARKET — Core JS v5.0
    Part 1: Config + Utils + Auth
    ========================================================= */
-
-
-/* ===== LUNA&LEO CART / CATEGORY / TEMPLATE V2 ===== */
-.sf-cat-mobile-wrap{display:none}
-.sf-cat-desktop{display:flex;gap:8px;flex-wrap:wrap}
-.luna-category-manager,.luna-template-panel{
-    margin:16px 0;padding:18px;border:1px solid var(--line);border-radius:18px;
-    background:linear-gradient(135deg,rgba(185,138,56,.08),rgba(255,255,255,.02));
-}
-.luna-manager-head h3,.luna-template-panel h3{margin-bottom:5px}
-.luna-manager-head p,.luna-template-panel p{font-size:12px;color:var(--muted);line-height:1.7}
-.luna-category-add{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;margin-top:13px}
-.luna-category-add input{min-width:0;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
-.luna-category-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:12px}
-.luna-category-card{padding:13px;border:1px solid rgba(185,138,56,.35);border-radius:15px;background:var(--card)}
-.luna-category-card strong{display:block;font-size:14px}
-.luna-category-card small{display:block;color:var(--muted);margin-top:5px}
-.luna-category-card button{margin-top:9px;border:0;background:transparent;color:var(--danger);font-size:12px}
-.luna-template-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px}
-.luna-template-card{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:9px;text-align:right}
-.luna-template-card.active{border-color:var(--g);box-shadow:0 0 0 2px rgba(185,138,56,.16)}
-.tpl-preview{display:block;height:55px;border-radius:11px;margin-bottom:8px}
-.tpl-luxury{background:linear-gradient(135deg,#050505,#b98a38)}
-.tpl-royal{background:linear-gradient(135deg,#090612,#5c3b82)}
-.tpl-clean{background:linear-gradient(135deg,#fff,#ead9b5)}
-.luna-template-card strong,.luna-template-card small{display:block}
-.luna-template-card small{font-size:11px;color:var(--muted);margin-top:3px}
-
-/* Customer catalog: three products per row on phones */
-@media(max-width:700px){
-    .sf-cat-desktop{display:none}
-    .sf-cat-mobile-wrap{
-        display:flex;align-items:center;gap:8px;width:100%;margin-top:8px
-    }
-    .sf-cat-mobile-wrap span{font-size:12px;font-weight:900;white-space:nowrap}
-    .sf-category-select{
-        flex:1;min-height:44px;padding:9px 12px;border-radius:12px;
-        border:1px solid rgba(185,138,56,.45);background:var(--card);font-weight:800
-    }
-    #sfProducts.sf-grid{
-        grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-        gap:8px !important;
-    }
-    #sfProducts .sf-tile{min-width:0;border-radius:13px;overflow:hidden}
-    #sfProducts .sf-tile-img{height:auto;aspect-ratio:1/1}
-    #sfProducts .sf-tile-body{padding:8px !important}
-    #sfProducts .sf-tile-title{font-size:11px !important;line-height:1.45 !important}
-    #sfProducts .sf-tile-price{font-size:11px !important}
-    #sfProducts .sf-tile .gold-btn{font-size:10px !important;padding:7px 5px !important}
-    #cartItems.cart-body{
-        display:grid !important;
-        grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-        gap:8px !important;
-        align-content:start;
-    }
-    #cartItems .cart-item{
-        display:flex !important;flex-direction:column !important;
-        min-width:0 !important;border-radius:13px !important;padding:7px !important;
-    }
-    #cartItems .cart-item-img-wrap{width:100% !important;height:auto !important;aspect-ratio:1/1 !important}
-    #cartItems .cart-item-info{padding:6px 2px 2px !important}
-    #cartItems .cart-item-name{font-size:11px !important;line-height:1.35 !important}
-    #cartItems .cart-item-prices{font-size:10px !important;gap:3px !important;flex-wrap:wrap}
-    #cartItems .cart-item-bottom{display:flex !important;flex-direction:column !important;gap:5px !important}
-    #cartItems .qty{width:100% !important;justify-content:space-between !important}
-    #cartItems .qty button{width:27px !important;height:27px !important}
-    #cartItems .cart-item-remove{font-size:10px !important}
-    .luna-category-add{grid-template-columns:1fr}
-    .luna-template-grid{grid-template-columns:1fr}
-}
-@media(max-width:380px){
-    #sfProducts.sf-grid,#cartItems.cart-body{gap:5px !important}
-    #sfProducts .sf-tile-body{padding:6px !important}
-    #cartItems .cart-item{padding:5px !important}
-}
-
-/* Simple store templates — visual only */
-body[data-luna-template="royal"]{--g:#b78cff;--g-dark:#8b5dcc;--g-soft:#eee4ff}
-body[data-luna-template="clean"]{--g:#b98a38;--g-dark:#8a681c;--g-soft:#f4ead7;--bg:#fbfaf7;--card:#fff}
 
 </style>
 </head>
@@ -4507,7 +4395,28 @@ body[data-luna-template="clean"]{--g:#b98a38;--g-dark:#8a681c;--g-soft:#f4ead7;-
                         <input id="storeName" type="text" placeholder="اسم المتجر" aria-label="اسم المتجر">
                         <input id="storeSlug" type="text" placeholder="رابط المتجر (luna-store)" aria-label="رابط المتجر">
                         <textarea id="storeDescription" placeholder="وصف المتجر" aria-label="وصف المتجر"></textarea>
-                        <div class="upload-box">
+                        
+                    <div class="luna-color-panel">
+                        <label>🎨 الألوان المتاحة للمنتج</label>
+                        <div class="luna-color-presets" id="lunaColorPresets">
+                            <label><input type="checkbox" value="أسود" data-color="#111111"><span style="--sw:#111111"></span>أسود</label>
+                            <label><input type="checkbox" value="أبيض" data-color="#ffffff"><span style="--sw:#ffffff"></span>أبيض</label>
+                            <label><input type="checkbox" value="ذهبي" data-color="#d4af37"><span style="--sw:#d4af37"></span>ذهبي</label>
+                            <label><input type="checkbox" value="فضي" data-color="#c0c0c0"><span style="--sw:#c0c0c0"></span>فضي</label>
+                            <label><input type="checkbox" value="بني" data-color="#7b4b2a"><span style="--sw:#7b4b2a"></span>بني</label>
+                            <label><input type="checkbox" value="أحمر" data-color="#c62828"><span style="--sw:#c62828"></span>أحمر</label>
+                            <label><input type="checkbox" value="أزرق" data-color="#1565c0"><span style="--sw:#1565c0"></span>أزرق</label>
+                            <label><input type="checkbox" value="وردي" data-color="#e88ca0"><span style="--sw:#e88ca0"></span>وردي</label>
+                        </div>
+                        <div class="luna-custom-color">
+                            <input id="lunaCustomColorName" type="text" maxlength="30" placeholder="لون آخر — مثال: روز جولد">
+                            <input id="lunaCustomColorHex" type="color" value="#b76e79" aria-label="لون مخصص">
+                            <button type="button" class="gold-btn" onclick="lunaAddCustomColor()">＋ إضافة لون</button>
+                        </div>
+                        <div id="lunaSelectedColors" class="luna-selected-colors"></div>
+                        <small>اختيارات الألوان تُحفظ مع إعدادات المتجر على هذا الجهاز فقط، ولا نغيّر قاعدة بيانات المنتجات حتى لا تتأثر الخدمات الحالية.</small>
+                    </div>
+<div class="upload-box">
                             <label for="storeLogoFile">🖼️ صورة / لوجو المتجر</label>
                             <input id="storeLogoFile" type="file" accept="image/png,image/jpeg,image/webp" aria-label="لوجو المتجر">
                             <small>يفضل صورة مربعة.</small>
@@ -4571,36 +4480,27 @@ body[data-luna-template="clean"]{--g:#b98a38;--g-dark:#8a681c;--g-soft:#f4ead7;-
                     <button class="gold-btn" onclick="toggleProductForm()">+ إضافة منتج</button>
                 </div>
                 
-                <div class="luna-category-manager" id="lunaCategoryManager">
+                <div class="luna-category-manager">
                     <div class="luna-manager-head">
                         <div>
-                            <h3>📂 أقسام المتجر</h3>
-                            <p>أنشئ أقسامك واربط كل قسم باسم الشركة حتى لا تختلط عليك المنتجات.</p>
+                            <h3>📂 أقسام المتجر والشركات</h3>
+                            <p>مثال: قسم «الساعات» — شركة «XYZ». يساعدك على تنظيم المنتجات إذا كنت تتعامل مع أكثر من شركة.</p>
                         </div>
                     </div>
                     <div class="luna-category-add">
-                        <input id="lunaNewCategory" type="text" maxlength="50" placeholder="اسم القسم — مثال: ساعات">
-                        <input id="lunaNewCompany" type="text" maxlength="80" placeholder="اسم الشركة — مثال: شركة XYZ">
-                        <button type="button" class="gold-btn" onclick="lunaAddCategory()">＋ إضافة قسم</button>
+                        <input id="lunaNewCategory" type="text" maxlength="50" placeholder="اسم القسم">
+                        <input id="lunaNewCompany" type="text" maxlength="80" placeholder="اسم الشركة">
+                        <button type="button" class="gold-btn" onclick="lunaAddCategory()">＋ إضافة</button>
                     </div>
                     <div id="lunaCategoryGrid" class="luna-category-grid"></div>
                 </div>
-
                 <div class="luna-template-panel">
-                    <div>
-                        <h3>🎨 قوالب المتجر</h3>
-                        <p>اختر الشكل الذي يناسب متجرك. التغيير بصري فقط ولا يمس الطلبات أو الدفع.</p>
-                    </div>
+                    <h3>🎨 قوالب جاهزة</h3>
+                    <p>اختار شكل متجرك من قوالب فاخرة — التغيير شكلي فقط.</p>
                     <div class="luna-template-grid">
-                        <button type="button" class="luna-template-card" data-template="luxury" onclick="lunaSetTemplate('luxury')">
-                            <span class="tpl-preview tpl-luxury"></span><strong>Luxury Gold</strong><small>أسود × ذهبي</small>
-                        </button>
-                        <button type="button" class="luna-template-card" data-template="royal" onclick="lunaSetTemplate('royal')">
-                            <span class="tpl-preview tpl-royal"></span><strong>Royal Night</strong><small>داكن × بنفسجي</small>
-                        </button>
-                        <button type="button" class="luna-template-card" data-template="clean" onclick="lunaSetTemplate('clean')">
-                            <span class="tpl-preview tpl-clean"></span><strong>Clean Store</strong><small>فاتح × ذهبي</small>
-                        </button>
+                        <button type="button" class="luna-template-card" data-template="luxury" onclick="lunaSetTemplate('luxury')"><span class="tpl-preview tpl-luxury"></span><strong>Luxury Gold</strong><small>أسود × ذهبي</small></button>
+                        <button type="button" class="luna-template-card" data-template="royal" onclick="lunaSetTemplate('royal')"><span class="tpl-preview tpl-royal"></span><strong>Royal Night</strong><small>داكن × بنفسجي</small></button>
+                        <button type="button" class="luna-template-card" data-template="clean" onclick="lunaSetTemplate('clean')"><span class="tpl-preview tpl-clean"></span><strong>Clean Store</strong><small>فاتح × ذهبي</small></button>
                     </div>
                 </div>
 <div id="productForm" class="form-grid hidden">
@@ -4631,11 +4531,6 @@ body[data-luna-template="clean"]{--g:#b98a38;--g-dark:#8a681c;--g-soft:#f4ead7;-
                         <button class="gold-btn hidden" id="cancelEditBtn" style="background:#253236;color:#fff" onclick="cancelProductEdit()">❌ إلغاء</button>
                     </div>
                     <div class="form-message" id="productMessage" role="alert"></div>
-                </div>
-                <div class="merchant-view-toolbar" aria-label="ترتيب منتجات التاجر">
-                    <span>ترتيب المنتجات:</span>
-                    <button type="button" class="merchant-view-btn" data-merchant-view="grid" onclick="setMerchantProductsView('grid')">▦ شبكة</button>
-                    <button type="button" class="merchant-view-btn" data-merchant-view="list" onclick="setMerchantProductsView('list')">☷ قائمة</button>
                 </div>
                 <div id="productsContainer" class="products-grid">
                     <div class="empty" style="grid-column:1/-1"><div class="empty-icon">📦</div>لا توجد منتجات حتى الآن</div>
@@ -4895,11 +4790,6 @@ body[data-luna-template="clean"]{--g:#b98a38;--g-dark:#8a681c;--g-soft:#f4ead7;-
                 <div class="free-ship-progress"><div class="free-ship-fill" id="freeShipFill" style="width:0%"></div></div>
             </div>
 
-            <div class="cart-view-toolbar" aria-label="طريقة عرض السلة">
-                <span>عرض المنتجات:</span>
-                <button type="button" class="cart-view-btn" data-cart-view="grid" onclick="setCartView('grid')">▦ شبكة</button>
-                <button type="button" class="cart-view-btn" data-cart-view="list" onclick="setCartView('list')">☷ قائمة</button>
-            </div>
             <div id="cartItems" class="cart-body"></div>
 
             <div style="padding:0 20px">
@@ -5062,63 +4952,7 @@ body[data-luna-template="clean"]{--g:#b98a38;--g-dark:#8a681c;--g-soft:#f4ead7;-
 </div>
 
 <!-- ============ SCRIPTS ============ -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-/* ===== LUNA&LEO CATEGORY + TEMPLATE MANAGER ===== */
-function lunaCategoryKey(){
-    return "lunaLeoCategories_" + (currentStore?.id || currentUser?.id || "local");
-}
-function lunaLoadCategories(){
-    let data=[];
-    try{ data=JSON.parse(localStorage.getItem(lunaCategoryKey())||"[]"); }catch(e){}
-    if(!Array.isArray(data)) data=[];
-    const box=document.getElementById("lunaCategoryGrid");
-    const list=document.getElementById("categoryList");
-    if(box){
-        box.innerHTML=data.length ? data.map((x,i)=>`
-            <div class="luna-category-card">
-                <strong>📂 ${escapeHTML(x.name)}</strong>
-                <small>🏢 ${escapeHTML(x.company || "شركة غير محددة")}</small>
-                <button type="button" onclick="lunaDeleteCategory(${i})">حذف القسم</button>
-            </div>`).join("") : `<div style="grid-column:1/-1;color:var(--muted);font-size:12px">لم تضف أقسامًا بعد.</div>`;
-    }
-    if(list){
-        list.innerHTML=data.map(x=>`<option value="${escapeHTML(x.name)}">${escapeHTML(x.name)} — ${escapeHTML(x.company||"")}</option>`).join("");
-    }
-}
-function lunaAddCategory(){
-    const n=document.getElementById("lunaNewCategory");
-    const c=document.getElementById("lunaNewCompany");
-    const name=(n?.value||"").trim(), company=(c?.value||"").trim();
-    if(!name){ toast("اكتب اسم القسم أولاً","error"); return; }
-    let data=[]; try{data=JSON.parse(localStorage.getItem(lunaCategoryKey())||"[]")}catch(e){}
-    if(!Array.isArray(data)) data=[];
-    if(data.some(x=>String(x.name).toLowerCase()===name.toLowerCase())){
-        toast("القسم موجود بالفعل","error"); return;
-    }
-    data.push({name,company});
-    localStorage.setItem(lunaCategoryKey(),JSON.stringify(data));
-    if(n)n.value=""; if(c)c.value="";
-    lunaLoadCategories();
-    toast("✅ تم إضافة القسم","success");
-}
-function lunaDeleteCategory(i){
-    let data=[]; try{data=JSON.parse(localStorage.getItem(lunaCategoryKey())||"[]")}catch(e){}
-    if(!Array.isArray(data)) data=[];
-    data.splice(i,1); localStorage.setItem(lunaCategoryKey(),JSON.stringify(data)); lunaLoadCategories();
-}
-function lunaSetTemplate(name){
-    document.body.setAttribute("data-luna-template",name);
-    localStorage.setItem("lunaLeoTemplate_"+(currentStore?.id||currentUser?.id||"local"),name);
-    document.querySelectorAll(".luna-template-card").forEach(b=>b.classList.toggle("active",b.dataset.template===name));
-    toast("🎨 تم اختيار القالب","success");
-}
-function lunaLoadTemplate(){
-    const name=localStorage.getItem("lunaLeoTemplate_"+(currentStore?.id||currentUser?.id||"local"))||"luxury";
-    lunaSetTemplate(name);
-}
-document.addEventListener("DOMContentLoaded",()=>{setTimeout(()=>{lunaLoadCategories();lunaLoadTemplate()},500)});
-
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============ CONFIG ============ */
 const SUPABASE_URL = "https://zuljqdzinbndmesbarjn.supabase.co";
@@ -7170,7 +7004,114 @@ async function printOrderInvoice(orderId){
         <div class="total">الإجمالي: ${formatCurrency(order.total)}</div>
         <div class="footer">شكرًا لتعاملك مع ${escapeHTML(storeName)} ❤️</div>
         <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
-    </body></html>`;
+    
+<style>
+/* ===== LUNA&LEO V3 — SAFE UI ADDITIONS ===== */
+.luna-customer-category-menu{display:none}
+.luna-customer-category-grid{display:flex;gap:8px;flex-wrap:wrap}
+.luna-category-manager,.luna-template-panel,.luna-color-panel{margin:14px 0;padding:16px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,rgba(185,138,56,.08),rgba(255,255,255,.02))}
+.luna-category-manager h3,.luna-template-panel h3,.luna-color-panel>label{font-weight:900}
+.luna-manager-head p,.luna-template-panel p,.luna-color-panel small{color:var(--muted);font-size:12px;line-height:1.7}
+.luna-category-add{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-top:12px}
+.luna-category-add input,.luna-custom-color input[type=text]{min-width:0;padding:11px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:inherit}
+.luna-category-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:9px;margin-top:11px}
+.luna-category-card{padding:12px;border:1px solid rgba(185,138,56,.35);border-radius:14px;background:var(--card)}
+.luna-category-card strong,.luna-category-card small{display:block}
+.luna-category-card small{color:var(--muted);margin-top:4px}
+.luna-category-card button{margin-top:7px;border:0;background:none;color:var(--danger);font-size:12px}
+.luna-template-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}
+.luna-template-card{border:1px solid var(--line);border-radius:15px;background:var(--card);padding:8px;text-align:right;color:inherit}
+.luna-template-card.active{border-color:var(--g);box-shadow:0 0 0 2px rgba(185,138,56,.15)}
+.tpl-preview{display:block;height:52px;border-radius:10px;margin-bottom:7px}
+.tpl-luxury{background:linear-gradient(135deg,#050505,#d4af37)}
+.tpl-royal{background:linear-gradient(135deg,#090612,#6e49a5)}
+.tpl-clean{background:linear-gradient(135deg,#fff,#ead9b5)}
+.luna-template-card strong,.luna-template-card small{display:block}.luna-template-card small{font-size:11px;color:var(--muted);margin-top:3px}
+.luna-color-panel{grid-column:1/-1}
+.luna-color-presets{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.luna-color-presets label{display:flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:12px}
+.luna-color-presets input{accent-color:var(--g)}
+.luna-color-presets span{width:18px;height:18px;border-radius:50%;background:var(--sw);border:1px solid #aaa;display:inline-block}
+.luna-custom-color{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.luna-custom-color input[type=color]{width:44px;height:42px;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.luna-selected-colors{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0}
+.luna-selected-colors span{padding:5px 8px;border-radius:999px;border:1px solid var(--line);font-size:11px}
+body[data-luna-template=royal]{--g:#b78cff;--g-dark:#8b5dcc}
+body[data-luna-template=clean]{--g:#b98a38;--g-dark:#8a681c}
+@media(max-width:700px){
+    .luna-customer-category-grid{display:none}
+    .luna-customer-category-menu{display:flex;align-items:center;gap:8px;width:100%;margin:8px 0}
+    .luna-customer-category-menu span{font-size:12px;font-weight:900;white-space:nowrap}
+    .luna-customer-category-menu select{flex:1;min-height:44px;padding:9px 11px;border-radius:12px;border:1px solid rgba(185,138,56,.45);background:var(--card);color:inherit;font-weight:800}
+    #sfProducts.sf-grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:7px !important}
+    #sfProducts .sf-tile{min-width:0;border-radius:12px;overflow:hidden}
+    #sfProducts .sf-tile-img{aspect-ratio:1/1;height:auto}
+    #sfProducts .sf-tile-body{padding:7px !important}
+    #sfProducts .sf-tile-title{font-size:11px !important;line-height:1.35 !important}
+    #sfProducts .sf-tile-price{font-size:11px !important}
+    #sfProducts .gold-btn{font-size:10px !important;padding:7px 4px !important}
+    #cartItems.cart-body{display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:7px !important;align-content:start}
+    #cartItems .cart-item{display:flex !important;flex-direction:column !important;min-width:0 !important;padding:6px !important;border-radius:12px !important}
+    #cartItems .cart-item-img-wrap{width:100% !important;height:auto !important;aspect-ratio:1/1 !important}
+    #cartItems .cart-item-info{padding:5px 1px !important}
+    #cartItems .cart-item-name{font-size:10px !important;line-height:1.35 !important}
+    #cartItems .cart-item-bottom{display:flex !important;flex-direction:column !important;gap:4px !important}
+    #cartItems .qty{width:100% !important}
+    .luna-category-add{grid-template-columns:1fr}
+    .luna-template-grid{grid-template-columns:1fr}
+}
+</style>
+<script>
+(function(){
+    function catKey(){return "lunaLeoCategories_"+(window.currentStore?.id||window.currentUser?.id||"local")}
+    function getCats(){try{let x=JSON.parse(localStorage.getItem(catKey())||"[]");return Array.isArray(x)?x:[]}catch(e){return[]}}
+    function renderCats(){
+        const box=document.getElementById("lunaCategoryGrid"); if(!box)return;
+        const data=getCats();
+        box.innerHTML=data.length?data.map((x,i)=>`<div class="luna-category-card"><strong>📂 ${escapeHTML(x.name)}</strong><small>🏢 ${escapeHTML(x.company||"غير محددة")}</small><button type="button" onclick="lunaDeleteCategory(${i})">حذف</button></div>`).join(""):"<div style='color:var(--muted);font-size:12px'>لم تضف أقسامًا بعد.</div>";
+    }
+    window.lunaAddCategory=function(){
+        const n=document.getElementById("lunaNewCategory"),c=document.getElementById("lunaNewCompany");
+        const name=(n?.value||"").trim(),company=(c?.value||"").trim();
+        if(!name){toast("اكتب اسم القسم أولاً","error");return}
+        let data=getCats();
+        if(data.some(x=>String(x.name).toLowerCase()===name.toLowerCase())){toast("القسم موجود بالفعل","error");return}
+        data.push({name,company});localStorage.setItem(catKey(),JSON.stringify(data));
+        n.value="";c.value="";renderCats();toast("✅ تم إضافة القسم","success");
+    };
+    window.lunaDeleteCategory=function(i){let d=getCats();d.splice(i,1);localStorage.setItem(catKey(),JSON.stringify(d));renderCats()};
+    function colorKey(){return "lunaLeoProductColors_"+(window.currentStore?.id||window.currentUser?.id||"local")}
+    function getColorData(){try{let x=JSON.parse(localStorage.getItem(colorKey())||"{}");return x&&typeof x==="object"?x:{}}catch(e){return{}}}
+    function selectedNames(){return [...document.querySelectorAll("#lunaColorPresets input:checked")].map(x=>x.value)}
+    window.lunaAddCustomColor=function(){
+        const n=document.getElementById("lunaCustomColorName"),h=document.getElementById("lunaCustomColorHex");
+        const name=(n?.value||"").trim(); if(!name){toast("اكتب اسم اللون","error");return}
+        const wrap=document.getElementById("lunaColorPresets"); if(!wrap)return;
+        const lab=document.createElement("label"); lab.innerHTML=`<input type="checkbox" value="${escapeHTML(name)}" checked><span style="--sw:${h?.value||"#999"}"></span>${escapeHTML(name)}`;
+        wrap.appendChild(lab); n.value=""; renderSelected();
+    };
+    function renderSelected(){
+        const box=document.getElementById("lunaSelectedColors"); if(!box)return;
+        box.innerHTML=selectedNames().map(x=>`<span>🎨 ${escapeHTML(x)}</span>`).join("");
+    }
+    document.addEventListener("change",e=>{if(e.target.closest?.("#lunaColorPresets"))renderSelected()});
+    window.lunaSetTemplate=function(name){
+        document.body.setAttribute("data-luna-template",name);
+        localStorage.setItem("lunaLeoTemplate_"+(window.currentStore?.id||window.currentUser?.id||"local"),name);
+        document.querySelectorAll(".luna-template-card").forEach(b=>b.classList.toggle("active",b.dataset.template===name));
+        toast("🎨 تم اختيار القالب","success");
+    };
+    function loadExtras(){
+        renderCats();renderSelected();
+        const t=localStorage.getItem("lunaLeoTemplate_"+(window.currentStore?.id||window.currentUser?.id||"local"))||"luxury";
+        document.body.setAttribute("data-luna-template",t);
+        document.querySelectorAll(".luna-template-card").forEach(b=>b.classList.toggle("active",b.dataset.template===t));
+    }
+    document.addEventListener("DOMContentLoaded",()=>setTimeout(loadExtras,700));
+})();
+</script>
+
+</body></html>`;
     
     const w = window.open("", "_blank");
     if(!w){
@@ -7487,7 +7428,7 @@ function getProductPublicUrl(productId){
     return url.toString();
 }
 
-async async function lunaCopyText(textToCopy){
+async function lunaCopyText(textToCopy){
     if(!textToCopy) return false;
     try{
         if(navigator.clipboard && window.isSecureContext){
@@ -7496,43 +7437,38 @@ async async function lunaCopyText(textToCopy){
         }
     }catch(e){}
     try{
-        const ta = document.createElement("textarea");
-        ta.value = String(textToCopy);
+        const ta=document.createElement("textarea");
+        ta.value=String(textToCopy);
         ta.setAttribute("readonly","");
-        ta.style.position = "fixed";
-        ta.style.left = "-9999px";
-        ta.style.top = "0";
-        ta.style.opacity = "0";
+        ta.style.position="fixed";
+        ta.style.left="-9999px";
+        ta.style.top="0";
+        ta.style.opacity="0";
         document.body.appendChild(ta);
         ta.focus();
         ta.select();
-        ta.setSelectionRange(0, ta.value.length);
-        const ok = document.execCommand("copy");
+        ta.setSelectionRange(0,ta.value.length);
+        const ok=document.execCommand("copy");
         ta.remove();
         return !!ok;
-    }catch(e){
-        return false;
-    }
+    }catch(e){ return false; }
 }
 
 async function copyProductLink(productId){
-    const url = getProductPublicUrl(productId);
-    if(!url){
-        toast("أنشئ المتجر أولاً.", "error");
-        return;
-    }
-    const copied = await lunaCopyText(url);
+    const url=getProductPublicUrl(productId);
+    if(!url){ toast("أنشئ المتجر أولاً.","error"); return; }
+    const copied=await lunaCopyText(url);
     toast(copied ? "✅ تم نسخ الرابط" : "⚠️ لم يتم النسخ تلقائياً", copied ? "success" : "error");
 }
 
 async function copyProductLinkPublic(productId){
     if(!publicStore) return;
-    const url = new URL(window.location.href);
-    url.search = "";
-    url.hash = "";
-    url.searchParams.set("store", publicStore.slug || publicStore.id);
-    url.searchParams.set("product", String(productId));
-    const copied = await lunaCopyText(url.toString());
+    const url=new URL(window.location.href);
+    url.search="";
+    url.hash="";
+    url.searchParams.set("store",publicStore.slug || publicStore.id);
+    url.searchParams.set("product",String(productId));
+    const copied=await lunaCopyText(url.toString());
     toast(copied ? "✅ تم نسخ الرابط" : "⚠️ لم يتم النسخ تلقائياً", copied ? "success" : "error");
 }
 
@@ -7587,8 +7523,12 @@ function shareStore(platform){
 
 async function copyStoreLink(){
     const url = getPublicStoreUrl();
-    const copied = await lunaCopyText(url);
-    toast(copied ? "✅ تم نسخ رابط المتجر" : "⚠️ لم يتم النسخ تلقائياً", copied ? "success" : "error");
+    try{
+        await navigator.clipboard.writeText(url);
+        toast("✅ تم النسخ.", "success");
+    }catch(e){
+        prompt("انسخ:", url);
+    }
 }
 
 async function shareStoreNative(){
@@ -8074,50 +8014,33 @@ async function loadMoreProducts(reset = false){
 }
 
 function buildCategories(){
-    const box = document.getElementById("sfCategories");
+    const box=document.getElementById("sfCategories");
     if(!box) return;
+    const categories=[...new Set(publicProducts.map(p=>p.category).filter(Boolean))];
+    if(!categories.length){ box.innerHTML=""; return; }
 
-    const categories = [...new Set(publicProducts.map(p => p.category).filter(Boolean))];
-
-    if(!categories.length){
-        box.innerHTML = "";
-        return;
-    }
-
-    const options = `<option value="all">📂 كل الأقسام</option>` +
-        categories.map(c => `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join("");
-
-    box.innerHTML = `
-        <div class="sf-cat-mobile-wrap">
-            <span>📂 القسم</span>
-            <select id="sfCategorySelect" class="sf-category-select" onchange="selectCategory(this.value)">
-                ${options}
-            </select>
-        </div>
-        <div class="sf-cat-desktop">
-            <button class="sf-cat ${publicCategory === 'all' ? 'active' : ''}" onclick="selectCategory('all', this)">الكل</button>
-            ${categories.map(c =>
-                `<button class="sf-cat ${publicCategory === c ? 'active' : ''}" onclick="selectCategory('${escapeHTML(c)}', this)">${escapeHTML(c)}</button>`
-            ).join("")}
-        </div>`;
-
-    const select = document.getElementById("sfCategorySelect");
-    if(select) select.value = publicCategory;
+    box.innerHTML=`
+      <div class="luna-customer-category-menu">
+        <span>📂 القسم</span>
+        <select id="sfCategorySelect" onchange="selectCategory(this.value)">
+          <option value="all">كل الأقسام</option>
+          ${categories.map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join("")}
+        </select>
+      </div>
+      <div class="luna-customer-category-grid">
+        <button class="sf-cat ${publicCategory==='all'?'active':''}" onclick="selectCategory('all',this)">الكل</button>
+        ${categories.map(c=>`<button class="sf-cat ${publicCategory===c?'active':''}" onclick="selectCategory('${escapeHTML(c)}',this)">${escapeHTML(c)}</button>`).join("")}
+      </div>`;
+    const sel=document.getElementById("sfCategorySelect");
+    if(sel) sel.value=publicCategory;
 }
 
-function selectCategory(category, btn){
-    publicCategory = category;
-    document.querySelectorAll(".sf-cat").forEach(b => b.classList.remove("active"));
-    if(btn && btn.classList) btn.classList.add("active");
-    const select = document.getElementById("sfCategorySelect");
-    if(select) select.value = category;
-    renderStoreProducts();
-}
-
-(category, btn){
-    publicCategory = category;
-    document.querySelectorAll(".sf-cat").forEach(b => b.classList.remove("active"));
+function selectCategory(category,btn){
+    publicCategory=category;
+    document.querySelectorAll(".sf-cat").forEach(b=>b.classList.remove("active"));
     if(btn) btn.classList.add("active");
+    const sel=document.getElementById("sfCategorySelect");
+    if(sel) sel.value=category;
     renderStoreProducts();
 }
 
@@ -8443,53 +8366,6 @@ function backToCart(){
     if(successView) successView.classList.remove("open");
     
     renderCart();
-}
-
-function setCartView(view){
-    view = view === "list" ? "list" : "grid";
-    localStorage.setItem("lunaLeoCartView", view);
-    const box = document.getElementById("cartItems");
-    if(box) box.classList.toggle("cart-list-view", view === "list");
-    document.querySelectorAll(".cart-view-btn").forEach(b => b.classList.toggle("active", b.dataset.cartView === view));
-}
-
-function initCartView(){
-    setCartView(localStorage.getItem("lunaLeoCartView") || "grid");
-}
-
-function setMerchantProductsView(view){
-    view = view === "list" ? "list" : "grid";
-    localStorage.setItem("lunaLeoMerchantProductsView", view);
-    const box = document.getElementById("productsContainer");
-    if(box) box.classList.toggle("merchant-list-view", view === "list");
-    document.querySelectorAll(".merchant-view-btn").forEach(b => b.classList.toggle("active", b.dataset.merchantView === view));
-}
-
-function initMerchantProductsView(){
-    setMerchantProductsView(localStorage.getItem("lunaLeoMerchantProductsView") || "grid");
-}
-
-function whatsappCheckout(){
-    if(!publicCart.length){
-        toast("🛒 السلة فارغة", "error");
-        return;
-    }
-    const storePhone = normalizePhoneForWhatsApp(publicStore?.whatsapp || publicStore?.phone || "01155826793");
-    if(!storePhone){
-        toast("❌ رقم واتساب المتجر غير متاح", "error");
-        return;
-    }
-    const itemsText = publicCart.map((item,i) => {
-        const total = Number(item.price || 0) * Number(item.qty || 0);
-        return `${i+1}. ${item.name} × ${item.qty} = ${total.toLocaleString("ar-EG")} جنيه`;
-    }).join("\n");
-    const subtotal = publicCart.reduce((sum,item) => sum + Number(item.price || 0) * Number(item.qty || 0), 0);
-    const discount = Math.min(Math.max(0, Number(appliedCouponDiscount || 0)), subtotal);
-    const total = Math.max(0, subtotal - discount);
-    const message = `🛍️ طلب جديد من ${publicStore?.name || "LUNA&LEO"}\n\n${itemsText}\n\n💰 الإجمالي: ${total.toLocaleString("ar-EG")} جنيه${discount ? `\n🎟️ الخصم: ${discount.toLocaleString("ar-EG")} جنيه` : ""}\n\nأريد إتمام الطلب عبر واتساب.`;
-    const url = `https://wa.me/${storePhone}?text=${encodeURIComponent(message)}`;
-    toast("📱 جاري فتح واتساب...", "info");
-    setTimeout(() => { window.location.href = url; }, 80);
 }
 
 function renderCart(){
@@ -9257,11 +9133,6 @@ async function placeStoreOrder(){
         btn.textContent = "✓ تأكيد الطلب";
     }
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    initCartView();
-    initMerchantProductsView();
-});
 
 /* ============ WHATSAPP CONFIRM ============ */
 function showWhatsappConfirmButton(){
@@ -10510,5 +10381,3 @@ if('serviceWorker' in navigator && window.location.protocol === 'https:'){
 
 </body>
 </html>
-
-<script>try{initCartView();initMerchantProductsView();}catch(e){}</script>
