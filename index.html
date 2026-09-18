@@ -7068,7 +7068,7 @@ body[data-luna-template=clean]{--g:#b98a38;--g-dark:#8a681c}
     function renderCats(){
         const box=document.getElementById("lunaCategoryGrid"); if(!box)return;
         const data=getCats();
-        box.innerHTML=data.length?data.map((x,i)=>`<div class="luna-category-card"><strong>📂 ${escapeHTML(x.name)}</strong><small>🏢 ${escapeHTML(x.company||"غير محددة")}</small><button type="button" onclick="lunaDeleteCategory(${i})">حذف</button></div>`).join(""):"<div style='color:var(--muted);font-size:12px'>لم تضف أقسامًا بعد.</div>";
+        box.innerHTML=data.length?data.map((x,i)=>\`<div class="luna-category-card"><strong>📂 \${escapeHTML(x.name)}</strong><small>🏢 \${escapeHTML(x.company||"غير محددة")}</small><button type="button" onclick="lunaDeleteCategory(\${i})">حذف</button></div>\`).join(""):"<div style='color:var(--muted);font-size:12px'>لم تضف أقسامًا بعد.</div>";
     }
     window.lunaAddCategory=function(){
         const n=document.getElementById("lunaNewCategory"),c=document.getElementById("lunaNewCompany");
@@ -7087,12 +7087,12 @@ body[data-luna-template=clean]{--g:#b98a38;--g-dark:#8a681c}
         const n=document.getElementById("lunaCustomColorName"),h=document.getElementById("lunaCustomColorHex");
         const name=(n?.value||"").trim(); if(!name){toast("اكتب اسم اللون","error");return}
         const wrap=document.getElementById("lunaColorPresets"); if(!wrap)return;
-        const lab=document.createElement("label"); lab.innerHTML=`<input type="checkbox" value="${escapeHTML(name)}" checked><span style="--sw:${h?.value||"#999"}"></span>${escapeHTML(name)}`;
+        const lab=document.createElement("label"); lab.innerHTML=\`<input type="checkbox" value="\${escapeHTML(name)}" checked><span style="--sw:\${h?.value||"#999"}"></span>\${escapeHTML(name)}\`;
         wrap.appendChild(lab); n.value=""; renderSelected();
     };
     function renderSelected(){
         const box=document.getElementById("lunaSelectedColors"); if(!box)return;
-        box.innerHTML=selectedNames().map(x=>`<span>🎨 ${escapeHTML(x)}</span>`).join("");
+        box.innerHTML=selectedNames().map(x=>\`<span>🎨 \${escapeHTML(x)}</span>\`).join("");
     }
     document.addEventListener("change",e=>{if(e.target.closest?.("#lunaColorPresets"))renderSelected()});
     window.lunaSetTemplate=function(name){
@@ -7107,9 +7107,9 @@ body[data-luna-template=clean]{--g:#b98a38;--g-dark:#8a681c}
         document.body.setAttribute("data-luna-template",t);
         document.querySelectorAll(".luna-template-card").forEach(b=>b.classList.toggle("active",b.dataset.template===t));
     }
-    document.addEventListener("DOMContentLoaded",()=>setTimeout(loadExtras,700));
-})();
-</script>
+     document.addEventListener("DOMContentLoaded",()=>setTimeout(loadExtras,700));
+ })();
+<\/script>
 
 </body></html>`;
     
