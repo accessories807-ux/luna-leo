@@ -4048,8 +4048,19 @@ label{
 }
 
 
-/* ===== LUNA&LEO MOBILE CHECKOUT V2 ===== */
-@media (max-width:700px){#checkoutView.checkout{padding:14px 12px 110px!important;overflow-x:hidden!important;background:radial-gradient(circle at 50% -10%,rgba(212,175,55,.14),transparent 40%),linear-gradient(180deg,#080808,#101010)!important}#checkoutView .checkout h3{font-size:22px!important;text-align:center!important;margin:4px 0 5px!important}#checkoutView .checkout-sub{font-size:13px!important;line-height:1.7!important;text-align:center!important;margin-bottom:14px!important}#checkoutView .step-title{padding:11px 12px!important;margin:12px 0 8px!important;border-radius:14px!important;font-size:14px!important;background:linear-gradient(180deg,rgba(212,175,55,.12),rgba(255,255,255,.025))!important;border:1px solid rgba(212,175,55,.38)!important}#checkoutView .field{margin-bottom:9px!important}#checkoutView .field label{display:block!important;margin:0 2px 5px!important;font-size:12px!important;font-weight:800!important}#checkoutView input,#checkoutView select,#checkoutView textarea{width:100%!important;box-sizing:border-box!important;min-height:48px!important;padding:12px 13px!important;border-radius:13px!important;font-size:16px!important;line-height:1.4!important}#checkoutView textarea{min-height:92px!important;resize:vertical!important}#checkoutView .form-grid,#checkoutView .form-grid.cols-2{grid-template-columns:1fr!important;gap:0!important}#checkoutView .order-msg{border-radius:12px!important;font-size:13px!important;line-height:1.6!important}#checkoutView #placeOrderBtn{position:sticky!important;bottom:8px!important;z-index:30!important;width:100%!important;min-height:54px!important;border-radius:15px!important;font-size:16px!important;font-weight:900!important;box-shadow:0 10px 28px rgba(0,0,0,.42),0 0 0 1px rgba(212,175,55,.22)!important}#checkoutView button[onclick="backToCart()"]{width:100%!important;min-height:46px!important;margin-top:8px!important;border-radius:13px!important}}@media(max-width:380px){#checkoutView.checkout{padding-left:9px!important;padding-right:9px!important}#checkoutView .checkout h3{font-size:20px!important}#checkoutView input,#checkoutView select,#checkoutView textarea{min-height:46px!important;padding:10px 11px!important}}#toast{z-index:999999!important}
+/* LUNA&LEO — Premium Mobile Cart */
+@media(max-width:700px){
+.cart-drawer{width:100vw!important;background:linear-gradient(180deg,#070707,#111)!important;box-shadow:-12px 0 40px rgba(0,0,0,.65)!important}
+.cart-drawer .cart-head{padding:16px 14px!important;border-bottom:1px solid rgba(212,175,55,.28)!important;background:linear-gradient(180deg,rgba(212,175,55,.10),transparent)!important}
+.cart-drawer .cart-head h3{font-size:20px!important;font-weight:900!important}
+.cart-drawer .cart-body{padding:12px!important}
+.cart-item{display:grid!important;grid-template-columns:76px 1fr auto!important;gap:10px!important;padding:11px!important;margin-bottom:10px!important;border:1px solid rgba(212,175,55,.20)!important;border-radius:16px!important;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))!important;box-shadow:0 8px 22px rgba(0,0,0,.25)!important}
+.cart-item img{width:76px!important;height:76px!important;border-radius:12px!important;object-fit:cover!important}
+.cart-item .qty,.cart-item button{border-radius:10px!important}
+.cart-drawer .cart-footer{padding:14px!important;border-top:1px solid rgba(212,175,55,.25)!important;background:rgba(5,5,5,.96)!important}
+.cart-drawer .cart-total{font-size:20px!important;font-weight:900!important;color:#f4d77a!important}
+.cart-drawer .gold-btn{width:100%!important;min-height:52px!important;border-radius:15px!important;font-size:16px!important;font-weight:900!important}
+}
 
 @media print{
     body{background:#fff}
@@ -7280,9 +7291,19 @@ function getProductPublicUrl(productId){
     return url.toString();
 }
 
-async function lunaCopyText(textToCopy){if(!textToCopy)return false;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(String(textToCopy));return true;}}catch(e){}try{const ta=document.createElement("textarea");ta.value=String(textToCopy);ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.left="-9999px";ta.style.top="0";ta.style.opacity="0";document.body.appendChild(ta);ta.focus();ta.select();ta.setSelectionRange(0,ta.value.length);const ok=document.execCommand("copy");ta.remove();return !!ok}catch(e){return false}}
-
-async function copyProductLink(productId){const url=getProductPublicUrl(productId);if(!url){toast("أنشئ المتجر أولاً.","error");return}const copied=await lunaCopyText(url);toast(copied?"✅ تم نسخ رابط المنتج":"⚠️ لم يتم النسخ تلقائياً",copied?"success":"error")}
+async function copyProductLink(productId){
+    const url = getProductPublicUrl(productId);
+    if(!url){
+        toast("أنشئ المتجر أولاً.", "error");
+        return;
+    }
+    try{
+        await navigator.clipboard.writeText(url);
+        toast("✅ تم نسخ رابط المنتج.", "success");
+    }catch(e){
+        prompt("انسخ رابط المنتج:", url);
+    }
+}
 
 async function copyProductLinkPublic(productId){
     if(!publicStore) return;
