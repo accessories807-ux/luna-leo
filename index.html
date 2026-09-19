@@ -1868,6 +1868,334 @@ label{
 
 .p-actions button{flex:1}
 
+/* ============ PRODUCT CATALOG PRO ============ */
+.products-overview{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:18px 20px;
+    margin:-4px 0 18px;
+    border:1px solid var(--g-soft);
+    border-radius:18px;
+    background:linear-gradient(135deg,rgba(185,138,56,.11),rgba(185,138,56,.035));
+}
+
+.products-overview-copy{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.products-overview-icon{
+    width:46px;
+    height:46px;
+    display:grid;
+    place-items:center;
+    border-radius:14px;
+    background:var(--ink);
+    color:var(--g-soft);
+    font-size:22px;
+    box-shadow:0 8px 20px rgba(17,19,24,.13);
+}
+
+.products-overview h3{
+    font-size:16px;
+    font-weight:950;
+    margin-bottom:2px;
+}
+
+.products-overview p{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.products-overview-count{
+    min-width:82px;
+    text-align:center;
+    padding:8px 14px;
+    border-radius:13px;
+    background:var(--card);
+    border:1px solid var(--line);
+}
+
+.products-overview-count strong{
+    display:block;
+    color:var(--g-dark);
+    font-size:23px;
+    line-height:1.1;
+    font-weight:950;
+}
+
+.products-overview-count span{
+    color:var(--muted);
+    font-size:11px;
+    font-weight:800;
+}
+
+.products-toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin:0 0 18px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--line);
+}
+
+.products-toolbar-title{
+    color:var(--ink-2);
+    font-size:14px;
+    font-weight:950;
+    white-space:nowrap;
+}
+
+.products-toolbar-title span{
+    color:var(--muted);
+    font-size:11px;
+    font-weight:700;
+    margin-right:5px;
+}
+
+.products-toolbar-controls{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex:1;
+    justify-content:flex-end;
+}
+
+.products-search{
+    position:relative;
+    width:min(100%,260px);
+}
+
+.products-search span{
+    position:absolute;
+    top:50%;
+    right:12px;
+    transform:translateY(-50%);
+    color:var(--muted);
+    pointer-events:none;
+}
+
+.products-search input,
+.products-filter{
+    min-height:42px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--bg);
+    color:var(--ink);
+    font-size:12px;
+    font-weight:700;
+}
+
+.products-search input{
+    width:100%;
+    padding:10px 36px 10px 12px;
+}
+
+.products-filter{
+    min-width:145px;
+    padding:10px 12px;
+}
+
+.products-search input:focus,
+.products-filter:focus{
+    border-color:var(--g);
+    box-shadow:0 0 0 3px rgba(185,138,56,.12);
+    outline:none;
+}
+
+.product-tile-pro{
+    position:relative;
+}
+
+.product-tile-pro .product-media{
+    position:relative;
+    aspect-ratio:4 / 3;
+    overflow:hidden;
+    background:linear-gradient(135deg,var(--g-soft),var(--bg));
+}
+
+.product-tile-pro .product-media img,
+.product-tile-pro .product-img-placeholder{
+    width:100%;
+    height:100%;
+}
+
+.product-tile-pro .product-media img{
+    object-fit:cover;
+}
+
+.product-tile-pro .product-img-placeholder{
+    display:grid;
+    place-items:center;
+    font-size:48px;
+}
+
+.product-media-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    padding:12px;
+    pointer-events:none;
+}
+
+.product-media-badge,
+.product-stock-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:6px 9px;
+    border-radius:999px;
+    background:rgba(255,255,255,.92);
+    color:var(--ink-2);
+    font-size:10px;
+    font-weight:900;
+    box-shadow:0 5px 14px rgba(17,19,24,.1);
+}
+
+.product-media-badge{
+    color:var(--g-dark);
+}
+
+.product-stock-badge.is-low{
+    color:var(--warn);
+}
+
+.product-stock-badge.is-out{
+    color:var(--danger);
+}
+
+.product-tile-pro .p-body{
+    padding:17px;
+}
+
+.product-card-kicker{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    min-height:20px;
+    margin-bottom:6px;
+}
+
+.product-card-category{
+    color:var(--g-dark);
+    font-size:11px;
+    font-weight:900;
+}
+
+.product-card-sku{
+    color:var(--muted);
+    font-size:10px;
+    direction:ltr;
+}
+
+.product-tile-pro h3{
+    display:-webkit-box;
+    overflow:hidden;
+    min-height:44px;
+    margin-bottom:4px;
+    line-height:1.45;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+}
+
+.product-card-description{
+    display:-webkit-box;
+    overflow:hidden;
+    min-height:39px;
+    margin:4px 0 11px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.65;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+}
+
+.product-tile-pro .p-price{
+    margin:0 0 12px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+}
+
+.product-tile-pro .p-price strong{
+    font-size:19px;
+}
+
+.product-info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-bottom:14px;
+}
+
+.product-info-item{
+    padding:9px 10px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    background:var(--bg);
+}
+
+.product-info-item span{
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+    font-weight:700;
+    margin-bottom:2px;
+}
+
+.product-info-item strong{
+    display:block;
+    color:var(--ink-2);
+    font-size:12px;
+    font-weight:950;
+}
+
+.product-tile-pro .p-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+    margin-top:auto;
+}
+
+.product-tile-pro .p-actions button{
+    min-height:37px;
+    padding:8px 7px;
+    font-size:11px;
+}
+
+.product-tile-pro .p-actions button:last-child{
+    grid-column:1 / -1;
+}
+
+[data-theme="dark"] .product-media-badge,
+[data-theme="dark"] .product-stock-badge{
+    background:rgba(26,29,35,.92);
+}
+
+@media(max-width:700px){
+    .products-overview{
+        align-items:flex-start;
+    }
+    .products-toolbar{
+        align-items:stretch;
+        flex-direction:column;
+    }
+    .products-toolbar-controls{
+        justify-content:stretch;
+        flex-direction:column;
+    }
+    .products-search,
+    .products-filter{
+        width:100%;
+    }
+}
+
 /* ============ ORDERS (Dashboard) ============ */
 .order-card{
     background:var(--card);
@@ -2333,6 +2661,14 @@ label{
     margin-bottom:6px;
 }
 
+.sf-tile-company{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    font-weight:800;
+    margin:-2px 0 7px;
+}
+
 .sf-tile-desc{
     color:var(--muted);
     font-size:13px;
@@ -2354,6 +2690,28 @@ label{
     margin-top:auto;
     padding-top:14px;
     flex-wrap:wrap;
+}
+
+.sf-tile-img{
+    aspect-ratio:4 / 5;
+    height:auto;
+}
+
+.sf-tile-body h3{
+    display:-webkit-box;
+    min-height:50px;
+    overflow:hidden;
+    line-height:1.5;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+}
+
+.sf-tile-cat{
+    min-height:24px;
+}
+
+.sf-tile-bottom{
+    border-top:1px solid var(--line);
 }
 
 .sf-price{
@@ -4051,6 +4409,233 @@ label{
     body{background:#fff}
     .site-header,.site-footer,.cart-overlay,.wishlist-overlay{display:none!important}
  }
+
+/* ============ STORE CATEGORIES + READY TEMPLATES ============ */
+.luna-category-manager,
+.luna-template-panel{
+    margin:16px 0;
+    padding:18px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:linear-gradient(135deg,rgba(185,138,56,.09),rgba(255,255,255,.02));
+}
+
+.luna-manager-head{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+}
+
+.luna-category-manager h3,
+.luna-template-panel h3{
+    font-size:15px;
+    font-weight:950;
+}
+
+.luna-manager-head p,
+.luna-template-panel p{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.7;
+    margin-top:4px;
+}
+
+.luna-category-add{
+    display:grid;
+    grid-template-columns:1fr 1fr auto;
+    gap:8px;
+    margin-top:14px;
+}
+
+.luna-category-add input{
+    min-width:0;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--card);
+    color:var(--ink);
+    font-family:inherit;
+}
+
+.luna-category-add input:focus{
+    outline:none;
+    border-color:var(--g);
+    box-shadow:0 0 0 3px rgba(185,138,56,.12);
+}
+
+.luna-category-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+    gap:9px;
+    margin-top:12px;
+}
+
+.luna-category-card{
+    padding:12px;
+    border:1px solid rgba(185,138,56,.35);
+    border-radius:14px;
+    background:var(--card);
+}
+
+.luna-category-card strong,
+.luna-category-card small{
+    display:block;
+}
+
+.luna-category-card strong{
+    font-size:13px;
+}
+
+.luna-category-card small{
+    color:var(--muted);
+    margin-top:4px;
+    font-size:11px;
+}
+
+.luna-category-card button{
+    margin-top:8px;
+    border:0;
+    background:none;
+    color:var(--danger);
+    font-size:11px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.luna-template-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-top:14px;
+}
+
+.luna-template-card{
+    position:relative;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:var(--card);
+    padding:9px;
+    text-align:right;
+    color:inherit;
+    cursor:pointer;
+    transition:transform .2s,border-color .2s,box-shadow .2s;
+}
+
+.luna-template-card:hover{
+    transform:translateY(-3px);
+    border-color:var(--g);
+    box-shadow:var(--shadow-sm);
+}
+
+.luna-template-card.active{
+    border-color:var(--g);
+    box-shadow:0 0 0 3px rgba(185,138,56,.16);
+}
+
+.luna-template-card.active::after{
+    content:"✓ مختار";
+    position:absolute;
+    top:8px;
+    left:8px;
+    padding:4px 7px;
+    border-radius:999px;
+    background:var(--g);
+    color:#fff;
+    font-size:9px;
+    font-weight:900;
+}
+
+.tpl-preview{
+    display:block;
+    height:74px;
+    border-radius:11px;
+    margin-bottom:9px;
+    position:relative;
+    overflow:hidden;
+}
+
+.tpl-preview::after{
+    content:"";
+    position:absolute;
+    left:12px;
+    right:12px;
+    bottom:10px;
+    height:22px;
+    border-radius:6px;
+    background:rgba(255,255,255,.8);
+    box-shadow:0 -30px 0 rgba(255,255,255,.2);
+}
+
+.tpl-luxury{background:linear-gradient(135deg,#080808 0%,#241b0a 55%,#d4af37 100%)}
+.tpl-royal{background:linear-gradient(135deg,#110b22 0%,#3b2360 55%,#b78cff 100%)}
+.tpl-clean{background:linear-gradient(135deg,#fff 0%,#f6efe3 55%,#d9b86c 100%)}
+
+.luna-template-card strong,
+.luna-template-card small{
+    display:block;
+}
+
+.luna-template-card strong{
+    font-size:12px;
+    font-weight:950;
+}
+
+.luna-template-card small{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:3px;
+}
+
+/* These are actual storefront skins, not just color labels. */
+body[data-luna-template="luxury"] #storefrontApp{
+    --bg:#0b0b0d;
+    --card:#151517;
+    --ink:#f8f1e5;
+    --ink-2:#eee2cf;
+    --muted:#b7aa96;
+    --line:#2d2922;
+    --g:#d4af37;
+    --g-dark:#e5c465;
+    --g-soft:#2b2415;
+}
+
+body[data-luna-template="royal"] #storefrontApp{
+    --bg:#f7f3fc;
+    --card:#fff;
+    --ink:#21182c;
+    --ink-2:#342342;
+    --muted:#756783;
+    --line:#e6dcef;
+    --g:#8b5dcc;
+    --g-dark:#6e49a5;
+    --g-soft:#efe7fb;
+}
+
+body[data-luna-template="clean"] #storefrontApp{
+    --bg:#fbfaf7;
+    --card:#fff;
+    --ink:#202124;
+    --ink-2:#34363a;
+    --muted:#74777c;
+    --line:#e8e4dc;
+    --g:#b98a38;
+    --g-dark:#8a681c;
+    --g-soft:#f4ead7;
+}
+
+body[data-luna-template="luxury"] #storefrontApp .sf-hero{
+    background:radial-gradient(circle at 20% 20%,rgba(212,175,55,.2),transparent 45%),linear-gradient(135deg,#0b0b0d,#211a0e);
+}
+
+body[data-luna-template="royal"] #storefrontApp .sf-hero{
+    background:radial-gradient(circle at 80% 20%,rgba(183,140,255,.3),transparent 45%),linear-gradient(135deg,#f4edff,#fff);
+}
+
+body[data-luna-template="clean"] #storefrontApp .sf-hero{
+    background:linear-gradient(135deg,#fff,#f4ead7);
+}
+
  /* =========================================================
    LUNA&LEO MARKET — Core JS v5.0
    Part 1: Config + Utils + Auth
@@ -4479,6 +5064,34 @@ label{
                     <h2>📦 منتجاتي</h2>
                     <button class="gold-btn" onclick="toggleProductForm()">+ إضافة منتج</button>
                 </div>
+                <div class="products-overview">
+                    <div class="products-overview-copy">
+                        <div class="products-overview-icon">✦</div>
+                        <div>
+                            <h3>كتالوجك بشكل أوضح</h3>
+                            <p>نظّم منتجاتك وتابع السعر والمخزون من مكان واحد.</p>
+                        </div>
+                    </div>
+                    <div class="products-overview-count">
+                        <strong id="productsCountValue">0</strong>
+                        <span>منتج</span>
+                    </div>
+                </div>
+                <div class="products-toolbar">
+                    <div class="products-toolbar-title">كل المنتجات <span id="productsCountLabel">0 منتج</span></div>
+                    <div class="products-toolbar-controls">
+                        <label class="products-search">
+                            <span>⌕</span>
+                            <input id="dashboardProductSearch" type="search" placeholder="ابحث بالاسم أو SKU..." oninput="filterDashboardProducts()" aria-label="البحث في المنتجات">
+                        </label>
+                        <select id="dashboardProductFilter" class="products-filter" onchange="filterDashboardProducts()" aria-label="تصفية المنتجات">
+                            <option value="all">كل الحالات</option>
+                            <option value="available">متوفر</option>
+                            <option value="low">مخزون منخفض</option>
+                            <option value="out">نفد المخزون</option>
+                        </select>
+                    </div>
+                </div>
                 
                 <div class="luna-category-manager">
                     <div class="luna-manager-head">
@@ -4496,7 +5109,7 @@ label{
                 </div>
                 <div class="luna-template-panel">
                     <h3>🎨 قوالب جاهزة</h3>
-                    <p>اختار شكل متجرك من قوالب فاخرة — التغيير شكلي فقط.</p>
+                    <p>اختار شكلًا جاهزًا لمتجرك وشاهد الفرق مباشرة بين الهوية الفاخرة والملكية والنظيفة.</p>
                     <div class="luna-template-grid">
                         <button type="button" class="luna-template-card" data-template="luxury" onclick="lunaSetTemplate('luxury')"><span class="tpl-preview tpl-luxury"></span><strong>Luxury Gold</strong><small>أسود × ذهبي</small></button>
                         <button type="button" class="luna-template-card" data-template="royal" onclick="lunaSetTemplate('royal')"><span class="tpl-preview tpl-royal"></span><strong>Royal Night</strong><small>داكن × بنفسجي</small></button>
@@ -4516,7 +5129,8 @@ label{
                     <div class="form-grid cols-2">
                         <input id="productLowStock" type="number" min="0" step="1" placeholder="حد التنبيه (افتراضي: 5)" aria-label="حد التنبيه">
                         <input id="productSku" type="text" maxlength="80" placeholder="SKU (اختياري)" aria-label="SKU">
-                        <input id="productCategory" type="text" list="categoryList" placeholder="التصنيف (ملابس، أحذية...)" maxlength="50" aria-label="التصنيف">
+                        <input id="productCategory" type="text" list="categoryList" placeholder="القسم (ملابس، أحذية...)" maxlength="50" aria-label="القسم">
+                        <input id="productCompany" type="text" placeholder="اسم الشركة / البراند" maxlength="80" aria-label="اسم الشركة">
                         <datalist id="categoryList"></datalist>
                     </div>
                     <div class="upload-box">
@@ -4994,6 +5608,8 @@ let authTransitionPromise = null;
 let authTransitionUserId = null;
 let subscriptionTimer = null;
 let dashboardProducts = [];
+let dashboardProductQuery = "";
+let dashboardProductFilter = "all";
 let dashboardOrdersCount = 0;
 let editingProductId = null;
 let editingProductImages = [];
@@ -6036,6 +6652,9 @@ async function loadUserStore(){
     
     currentStore = store;
     window.currentStore = currentStore;
+    if(typeof window.refreshLunaCatalogSettings === "function"){
+        window.refreshLunaCatalogSettings();
+    }
     
     await loadTeamContext(currentStore);
     displayStore();
@@ -6417,6 +7036,134 @@ function productsSkeleton(count = 6){
     `).join("");
 }
 
+function productCompanyStorageKey(){
+    return "lunaLeoProductCompanies_" + (currentStore?.id || currentUser?.id || "local");
+}
+
+function getLocalProductCompanies(){
+    try{
+        const data = JSON.parse(localStorage.getItem(productCompanyStorageKey()) || "{}");
+        return data && typeof data === "object" ? data : {};
+    }catch(e){
+        return {};
+    }
+}
+
+function saveLocalProductCompany(productId, company){
+    if(!productId) return;
+    const data = getLocalProductCompanies();
+    if(company) data[String(productId)] = company;
+    else delete data[String(productId)];
+    localStorage.setItem(productCompanyStorageKey(), JSON.stringify(data));
+}
+
+function filterDashboardProducts(){
+    dashboardProductQuery = String(document.getElementById("dashboardProductSearch")?.value || "").trim().toLowerCase();
+    dashboardProductFilter = document.getElementById("dashboardProductFilter")?.value || "all";
+    renderDashboardProducts();
+}
+
+function renderDashboardProducts(){
+    const container = document.getElementById("productsContainer");
+    if(!container) return;
+
+    const total = dashboardProducts.length;
+    const query = dashboardProductQuery;
+    const filter = dashboardProductFilter;
+    const filtered = dashboardProducts.filter(product => {
+        const stock = Number(product.stock || 0);
+        const threshold = Number(product.low_stock_threshold ?? 5);
+        const haystack = [
+            product.name,
+            product.sku,
+            product.category,
+            product.company,
+            product.description
+        ].map(value => String(value || "").toLowerCase()).join(" ");
+        
+        const matchesQuery = !query || haystack.includes(query);
+        const matchesFilter =
+            filter === "available" ? stock > threshold :
+            filter === "low" ? stock > 0 && stock <= threshold :
+            filter === "out" ? stock <= 0 :
+            true;
+        
+        return matchesQuery && matchesFilter;
+    });
+
+    const countValue = document.getElementById("productsCountValue");
+    const countLabel = document.getElementById("productsCountLabel");
+    if(countValue) countValue.textContent = String(total);
+    if(countLabel){
+        countLabel.textContent = query || filter !== "all"
+            ? `${filtered.length} من ${total}`
+            : `${total} منتج`;
+    }
+
+    if(!filtered.length){
+        container.innerHTML = total
+            ? '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🔎</div>لا توجد منتجات مطابقة للبحث أو التصفية.</div>'
+            : '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📦</div>لا توجد منتجات حتى الآن</div>';
+        return;
+    }
+
+    container.innerHTML = filtered.map(product => {
+        const pid = String(product.id).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+        const name = product.name || "بدون اسم";
+        const company = product.company || "";
+        const stock = Number(product.stock || 0);
+        const threshold = Number(product.low_stock_threshold ?? 5);
+        const hasDiscount = product.compare_price && Number(product.compare_price) > Number(product.price || 0);
+        const discountPct = hasDiscount ? Math.round((1 - Number(product.price) / Number(product.compare_price)) * 100) : 0;
+        const images = Array.isArray(product.images) ? product.images : [];
+        const mainImage = product.image_url || (images.length ? images[0] : null);
+        const imagesCount = images.length + (product.image_url ? 1 : 0);
+        const stockClass = stock <= 0 ? "is-out" : stock <= threshold ? "is-low" : "";
+        const stockLabel = stock <= 0 ? "نفد المخزون" : stock <= threshold ? "مخزون منخفض" : "متوفر";
+        const description = product.description || "أضف وصفًا مختصرًا ليسهل تمييز المنتج.";
+        
+        return `
+        <article class="product-tile product-tile-pro">
+            <div class="product-media">
+                ${mainImage
+                    ? `<img src="${escapeHTML(mainImage)}" alt="${escapeHTML(name)}" loading="lazy">`
+                    : `<div class="product-img-placeholder">📦</div>`}
+                <div class="product-media-overlay">
+                    <span class="product-media-badge">${imagesCount > 1 ? `🖼️ ${imagesCount} صور` : "منتج"}</span>
+                    <span class="product-stock-badge ${stockClass}">● ${stockLabel}</span>
+                </div>
+            </div>
+            <div class="p-body">
+                <div class="product-card-kicker">
+                    <span class="product-card-category">${product.category ? `🏷️ ${escapeHTML(product.category)}` : "بدون قسم"}${company ? ` · 🏢 ${escapeHTML(company)}` : ""}</span>
+                    ${product.sku ? `<span class="product-card-sku">SKU: ${escapeHTML(product.sku)}</span>` : ""}
+                </div>
+                <h3>${escapeHTML(name)}</h3>
+                <p class="product-card-description">${escapeHTML(description)}</p>
+                <div class="p-price">
+                    <strong>${formatCurrency(product.price)}</strong>
+                    ${hasDiscount ? `<del>${formatCurrency(product.compare_price)}</del><span class="discount-badge">-${discountPct}%</span>` : ""}
+                </div>
+                <div class="product-info-grid">
+                    <div class="product-info-item">
+                        <span>المخزون الحالي</span>
+                        <strong>${stock} وحدة</strong>
+                    </div>
+                    <div class="product-info-item">
+                        <span>سعر التكلفة</span>
+                        <strong>${product.cost_price !== null && product.cost_price !== undefined ? formatCurrency(product.cost_price) : "غير محدد"}</strong>
+                    </div>
+                </div>
+                <div class="p-actions">
+                    <button class="gold-btn" onclick="editProduct('${pid}')">✏️ تعديل</button>
+                    <button class="gold-btn" onclick="copyProductLink('${pid}')">🔗 نسخ الرابط</button>
+                    <button class="gold-btn" style="background:#fdecec;color:var(--danger)" onclick="deleteProduct('${pid}')">🗑️ حذف المنتج</button>
+                </div>
+            </div>
+        </article>`;
+    }).join("");
+}
+
 async function loadProducts(){
     if(!currentStore) return;
     
@@ -6434,7 +7181,11 @@ async function loadProducts(){
         return;
     }
     
-    dashboardProducts = data || [];
+    const localCompanies = getLocalProductCompanies();
+    dashboardProducts = (data || []).map(product => ({
+        ...product,
+        company: product.company || localCompanies[String(product.id)] || ""
+    }));
     
     const catList = document.getElementById("categoryList");
     if(catList){
@@ -6445,44 +7196,7 @@ async function loadProducts(){
     const statP = document.getElementById("statProducts");
     if(statP) statP.textContent = dashboardProducts.length;
     
-    if(!container) return;
-    
-    if(!dashboardProducts.length){
-        container.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📦</div>لا توجد منتجات حتى الآن</div>';
-        return;
-    }
-    
-    container.innerHTML = dashboardProducts.map(product => {
-        const pid = String(product.id).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
-        const hasDiscount = product.compare_price && Number(product.compare_price) > Number(product.price || 0);
-        const discountPct = hasDiscount ? Math.round((1 - Number(product.price) / Number(product.compare_price)) * 100) : 0;
-        const lowStock = Number(product.stock || 0) <= Number(product.low_stock_threshold ?? 5);
-        const images = Array.isArray(product.images) ? product.images : [];
-        const mainImage = product.image_url || (images.length ? images[0] : null);
-        const imagesCount = images.length + (product.image_url ? 1 : 0);
-        
-        return `
-        <div class="product-tile">
-            ${mainImage ? `<img src="${escapeHTML(mainImage)}" alt="${escapeHTML(product.name || "منتج")}" loading="lazy">` : `<div class="product-img-placeholder">📦</div>`}
-            <div class="p-body">
-                <h3>${escapeHTML(product.name)}</h3>
-                ${imagesCount > 1 ? `<div class="p-meta">🖼️ ${imagesCount} صور</div>` : ""}
-                <div class="p-price">
-                    <strong>${formatCurrency(product.price)}</strong>
-                    ${hasDiscount ? `<del>${formatCurrency(product.compare_price)}</del>` : ""}
-                </div>
-                ${hasDiscount ? `<div class="discount-badge">خصم ${discountPct}%</div>` : ""}
-                <div class="p-meta">المخزون: ${Number(product.stock || 0)}${lowStock ? ' <span style="color:var(--warn);font-weight:800">• ⚠️ منخفض</span>' : ""}</div>
-                ${product.sku ? `<div class="p-meta">SKU: ${escapeHTML(product.sku)}</div>` : ""}
-                ${product.category ? `<div class="p-meta">🏷️ ${escapeHTML(product.category)}</div>` : ""}
-                <div class="p-actions">
-                    <button class="gold-btn" onclick="editProduct('${pid}')">✏️ تعديل</button>
-                    <button class="gold-btn" onclick="copyProductLink('${pid}')">🔗 رابط المنتج</button>
-                    <button class="gold-btn" style="background:#fdecec;color:var(--danger)" onclick="deleteProduct('${pid}')">🗑️ حذف</button>
-                </div>
-            </div>
-        </div>`;
-    }).join("");
+    renderDashboardProducts();
 }
 
 function toggleProductForm(){
@@ -6519,6 +7233,7 @@ function editProduct(id){
     document.getElementById("productLowStock").value = product.low_stock_threshold ?? 5;
     document.getElementById("productSku").value = product.sku || "";
     document.getElementById("productCategory").value = product.category || "";
+    document.getElementById("productCompany").value = product.company || "";
     document.getElementById("productImages").value = "";
     document.getElementById("productDescription").value = product.description || "";
     
@@ -6580,10 +7295,10 @@ function cancelProductEdit(){
     document.getElementById("productForm").classList.add("hidden");
 }
 
-function clearProductForm(){
+ function clearProductForm(){
     ["productName", "productPrice", "productComparePrice", "productStock",
-     "productLowStock", "productSku", "productCategory", "productDescription",
-     "productCostPrice"].forEach(id => {
+     "productLowStock", "productSku", "productCategory", "productCompany",
+     "productDescription", "productCostPrice"].forEach(id => {
         const el = document.getElementById(id);
         if(el) el.value = "";
     });
@@ -6663,6 +7378,7 @@ async function saveProduct(){
     const lowStockThreshold = lowStockValue === "" ? 5 : Number(lowStockValue);
     const sku = document.getElementById("productSku").value.trim();
     const category = document.getElementById("productCategory").value.trim();
+    const company = document.getElementById("productCompany").value.trim();
     const description = document.getElementById("productDescription").value.trim();
     const msg = document.getElementById("productMessage");
     const btn = document.getElementById("saveProductButton");
@@ -6719,12 +7435,14 @@ async function saveProduct(){
             low_stock_threshold: lowStockThreshold,
             sku: sku || null,
             category: category || null,
+            company: company || null,
             image_url,
             images,
             description
         };
         
         let result;
+        let savedProductId = wasEditing ? editingProductId : null;
         
         if(wasEditing){
             result = await supabaseClient
@@ -6735,10 +7453,33 @@ async function saveProduct(){
         } else {
             result = await supabaseClient
                 .from("products")
-                .insert({store_id: currentStore.id, ...productData});
+                .insert({store_id: currentStore.id, ...productData})
+                .select("id")
+                .single();
+        }
+
+        if(result.error && /company|schema cache|column/i.test(String(result.error.message || ""))){
+            const compatibleProductData = {...productData};
+            delete compatibleProductData.company;
+            
+            if(wasEditing){
+                result = await supabaseClient
+                    .from("products")
+                    .update(compatibleProductData)
+                    .eq("id", editingProductId)
+                    .eq("store_id", currentStore.id);
+            } else {
+                result = await supabaseClient
+                    .from("products")
+                    .insert({store_id: currentStore.id, ...compatibleProductData})
+                    .select("id")
+                    .single();
+            }
         }
         
         if(result.error) throw result.error;
+        savedProductId = savedProductId || result.data?.id || null;
+        if(savedProductId) saveLocalProductCompany(savedProductId, company);
         
         toast(wasEditing ? "🎉 تم التعديل." : "🎉 تم الإضافة.", "success");
         
@@ -7974,6 +8715,9 @@ async function loadPublicStore(){
     }
     
     publicStore = store;
+    if(typeof window.applyLunaTemplate === "function"){
+        window.applyLunaTemplate(localStorage.getItem("lunaLeoTemplate_" + store.id) || "luxury");
+    }
     
     const logoWrap = document.getElementById("sfStoreLogo");
     const logoImg = document.getElementById("sfStoreLogoImg");
@@ -8091,7 +8835,7 @@ function renderStoreProducts(){
     const sortBy = document.getElementById("sfSortBy")?.value || "newest";
     
     let filtered = publicProducts.filter(p => {
-        const text = ((p.name || "") + " " + (p.description || "")).toLowerCase();
+        const text = ((p.name || "") + " " + (p.company || "") + " " + (p.category || "") + " " + (p.description || "")).toLowerCase();
         const matchesSearch = !search || text.includes(search);
         const matchesCategory = publicCategory === "all" || p.category === publicCategory;
         return matchesSearch && matchesCategory;
@@ -8137,6 +8881,7 @@ function renderStoreProducts(){
             <div class="sf-tile-body">
                 <h3>${escapeHTML(product.name || "منتج")}</h3>
                 ${product.category ? `<div class="sf-tile-cat">🏷️ ${escapeHTML(product.category)}</div>` : ""}
+                    ${product.company ? `<div class="sf-tile-company">🏢 ${escapeHTML(product.company)}</div>` : ""}
                 <div class="sf-tile-desc">${escapeHTML(product.description || "منتج مميز")}</div>
                 <div class="sf-tile-bottom">
                     <div class="sf-price">
@@ -10339,6 +11084,99 @@ if('serviceWorker' in navigator && window.location.protocol === 'https:'){
             .catch(err => console.warn('SW registration failed:', err));
     });
 }
+</script>
+
+<script>
+/* ============ CATALOG ORGANIZER + READY STORE TEMPLATES ============ */
+(function(){
+    function scopedKey(prefix){
+        return prefix + "_" + (window.currentStore?.id || window.currentUser?.id || "local");
+    }
+
+    function getCategories(){
+        try{
+            const data = JSON.parse(localStorage.getItem(scopedKey("lunaLeoCategories")) || "[]");
+            return Array.isArray(data) ? data : [];
+        }catch(e){
+            return [];
+        }
+    }
+
+    function renderCategories(){
+        const box = document.getElementById("lunaCategoryGrid");
+        if(!box) return;
+        const data = getCategories();
+        box.innerHTML = data.length
+            ? data.map((item, index) => `
+                <div class="luna-category-card">
+                    <strong>📂 ${escapeHTML(item.name)}</strong>
+                    <small>🏢 ${escapeHTML(item.company || "غير محددة")}</small>
+                    <button type="button" onclick="lunaDeleteCategory(${index})">حذف القسم</button>
+                </div>`).join("")
+            : '<div style="color:var(--muted);font-size:12px;grid-column:1/-1">لم تضف أقسامًا بعد.</div>';
+    }
+
+    window.lunaAddCategory = function(){
+        const nameInput = document.getElementById("lunaNewCategory");
+        const companyInput = document.getElementById("lunaNewCompany");
+        const name = String(nameInput?.value || "").trim();
+        const company = String(companyInput?.value || "").trim();
+        
+        if(!name){
+            toast("اكتب اسم القسم أولًا.", "error");
+            nameInput?.focus();
+            return;
+        }
+        
+        const data = getCategories();
+        if(data.some(item => String(item.name).toLowerCase() === name.toLowerCase())){
+            toast("هذا القسم موجود بالفعل.", "error");
+            return;
+        }
+        
+        data.push({name, company});
+        localStorage.setItem(scopedKey("lunaLeoCategories"), JSON.stringify(data));
+        if(nameInput) nameInput.value = "";
+        if(companyInput) companyInput.value = "";
+        renderCategories();
+        toast("✅ تم إضافة القسم والشركة.", "success");
+    };
+
+    window.lunaDeleteCategory = function(index){
+        const data = getCategories();
+        data.splice(index, 1);
+        localStorage.setItem(scopedKey("lunaLeoCategories"), JSON.stringify(data));
+        renderCategories();
+    };
+
+    window.applyLunaTemplate = function(name){
+        const allowed = ["luxury", "royal", "clean"];
+        const template = allowed.includes(name) ? name : "luxury";
+        document.body.setAttribute("data-luna-template", template);
+        document.querySelectorAll(".luna-template-card").forEach(card => {
+            card.classList.toggle("active", card.dataset.template === template);
+        });
+        return template;
+    };
+
+    window.lunaSetTemplate = function(name){
+        const template = window.applyLunaTemplate(name);
+        const key = scopedKey("lunaLeoTemplate");
+        localStorage.setItem(key, template);
+        toast(`🎨 تم تفعيل قالب ${template === "luxury" ? "Luxury Gold" : template === "royal" ? "Royal Night" : "Clean Store"}.`, "success");
+    };
+
+    function loadCatalogSettings(){
+        renderCategories();
+        window.applyLunaTemplate(localStorage.getItem(scopedKey("lunaLeoTemplate")) || "luxury");
+    }
+
+    window.refreshLunaCatalogSettings = loadCatalogSettings;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(loadCatalogSettings, 0);
+    });
+})();
 </script>
 
 <!-- ============ FULL PAGE LANGUAGE TRANSLATION ============ -->
