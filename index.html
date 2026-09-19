@@ -4588,7 +4588,8 @@ label{
 }
 
 /* These are actual storefront skins, not just color labels. */
-body[data-luna-template="luxury"] #storefrontApp{
+body[data-luna-template="luxury"] #storefrontApp,
+#storefrontApp[data-luna-template="luxury"]{
     --bg:#0b0b0d;
     --card:#151517;
     --ink:#f8f1e5;
@@ -4600,7 +4601,8 @@ body[data-luna-template="luxury"] #storefrontApp{
     --g-soft:#2b2415;
 }
 
-body[data-luna-template="royal"] #storefrontApp{
+body[data-luna-template="royal"] #storefrontApp,
+#storefrontApp[data-luna-template="royal"]{
     --bg:#f7f3fc;
     --card:#fff;
     --ink:#21182c;
@@ -4612,7 +4614,8 @@ body[data-luna-template="royal"] #storefrontApp{
     --g-soft:#efe7fb;
 }
 
-body[data-luna-template="clean"] #storefrontApp{
+body[data-luna-template="clean"] #storefrontApp,
+#storefrontApp[data-luna-template="clean"]{
     --bg:#fbfaf7;
     --card:#fff;
     --ink:#202124;
@@ -4624,16 +4627,55 @@ body[data-luna-template="clean"] #storefrontApp{
     --g-soft:#f4ead7;
 }
 
-body[data-luna-template="luxury"] #storefrontApp .sf-hero{
+body[data-luna-template="luxury"] #storefrontApp .sf-hero,
+#storefrontApp[data-luna-template="luxury"] .sf-hero{
     background:radial-gradient(circle at 20% 20%,rgba(212,175,55,.2),transparent 45%),linear-gradient(135deg,#0b0b0d,#211a0e);
 }
 
-body[data-luna-template="royal"] #storefrontApp .sf-hero{
+body[data-luna-template="royal"] #storefrontApp .sf-hero,
+#storefrontApp[data-luna-template="royal"] .sf-hero{
     background:radial-gradient(circle at 80% 20%,rgba(183,140,255,.3),transparent 45%),linear-gradient(135deg,#f4edff,#fff);
 }
 
-body[data-luna-template="clean"] #storefrontApp .sf-hero{
+body[data-luna-template="clean"] #storefrontApp .sf-hero,
+#storefrontApp[data-luna-template="clean"] .sf-hero{
     background:linear-gradient(135deg,#fff,#f4ead7);
+}
+
+body[data-luna-template="luxury"] #storefrontApp .sf-tile,
+#storefrontApp[data-luna-template="luxury"] .sf-tile{
+    border-radius:12px;
+    border-color:#3b3120;
+    box-shadow:0 16px 34px rgba(0,0,0,.22);
+}
+
+body[data-luna-template="luxury"] #storefrontApp .sf-store-name,
+#storefrontApp[data-luna-template="luxury"] .sf-store-name{
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+body[data-luna-template="royal"] #storefrontApp .sf-tile,
+#storefrontApp[data-luna-template="royal"] .sf-tile{
+    border-radius:26px;
+    box-shadow:0 16px 34px rgba(93,57,139,.14);
+}
+
+body[data-luna-template="royal"] #storefrontApp .sf-add,
+#storefrontApp[data-luna-template="royal"] .sf-add{
+    border-radius:999px;
+    background:linear-gradient(135deg,#8b5dcc,#6e49a5);
+}
+
+body[data-luna-template="clean"] #storefrontApp .sf-tile,
+#storefrontApp[data-luna-template="clean"] .sf-tile{
+    border-radius:12px;
+    box-shadow:none;
+}
+
+body[data-luna-template="clean"] #storefrontApp .sf-tile-img,
+#storefrontApp[data-luna-template="clean"] .sf-tile-img{
+    aspect-ratio:1 / 1;
 }
 
  /* =========================================================
@@ -5110,6 +5152,7 @@ body[data-luna-template="clean"] #storefrontApp .sf-hero{
                 <div class="luna-template-panel">
                     <h3>🎨 قوالب جاهزة</h3>
                     <p>اختار شكلًا جاهزًا لمتجرك وشاهد الفرق مباشرة بين الهوية الفاخرة والملكية والنظيفة.</p>
+                    <div id="lunaTemplateStatus" style="margin-top:10px;color:var(--g-dark);font-size:12px;font-weight:900">القالب الحالي: Luxury Gold</div>
                     <div class="luna-template-grid">
                         <button type="button" class="luna-template-card" data-template="luxury" onclick="lunaSetTemplate('luxury')"><span class="tpl-preview tpl-luxury"></span><strong>Luxury Gold</strong><small>أسود × ذهبي</small></button>
                         <button type="button" class="luna-template-card" data-template="royal" onclick="lunaSetTemplate('royal')"><span class="tpl-preview tpl-royal"></span><strong>Royal Night</strong><small>داكن × بنفسجي</small></button>
@@ -8198,6 +8241,10 @@ function getPublicStoreUrl(){
     url.search = "";
     url.hash = "";
     url.searchParams.set("store", currentStore.slug || currentStore.id);
+    const selectedTemplate = localStorage.getItem("lunaLeoTemplate_" + currentStore.id);
+    if(["luxury", "royal", "clean"].includes(selectedTemplate)){
+        url.searchParams.set("template", selectedTemplate);
+    }
     return url.toString();
 }
 
@@ -8716,7 +8763,9 @@ async function loadPublicStore(){
     
     publicStore = store;
     if(typeof window.applyLunaTemplate === "function"){
-        window.applyLunaTemplate(localStorage.getItem("lunaLeoTemplate_" + store.id) || "luxury");
+        const requestedTemplate = new URLSearchParams(window.location.search).get("template");
+        const savedTemplate = localStorage.getItem("lunaLeoTemplate_" + store.id);
+        window.applyLunaTemplate(requestedTemplate || savedTemplate || "luxury");
     }
     
     const logoWrap = document.getElementById("sfStoreLogo");
@@ -11153,6 +11202,19 @@ if('serviceWorker' in navigator && window.location.protocol === 'https:'){
         const allowed = ["luxury", "royal", "clean"];
         const template = allowed.includes(name) ? name : "luxury";
         document.body.setAttribute("data-luna-template", template);
+        const storefront = document.getElementById("storefrontApp");
+        if(storefront){
+            storefront.setAttribute("data-luna-template", template);
+            storefront.classList.remove("luna-template-luxury", "luna-template-royal", "luna-template-clean");
+            storefront.classList.add("luna-template-" + template);
+        }
+        const labels = {
+            luxury: "Luxury Gold",
+            royal: "Royal Night",
+            clean: "Clean Store"
+        };
+        const status = document.getElementById("lunaTemplateStatus");
+        if(status) status.textContent = "القالب الحالي: " + labels[template];
         document.querySelectorAll(".luna-template-card").forEach(card => {
             card.classList.toggle("active", card.dataset.template === template);
         });
