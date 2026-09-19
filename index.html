@@ -4990,6 +4990,8 @@ let currentStore = null;
 let currentTeamMembership = null;
 let currentTeamPermissions = null;
 let currentSubscription = null;
+let authTransitionPromise = null;
+let authTransitionUserId = null;
 let subscriptionTimer = null;
 let dashboardProducts = [];
 let dashboardOrdersCount = 0;
@@ -5329,6 +5331,9 @@ function openAuth(mode = "login"){
     const pass2 = document.getElementById("authPassword2");
     if(pass) pass.autocomplete = isLogin ? "current-password" : "new-password";
     if(pass2) pass2.autocomplete = "new-password";
+    setTimeout(() => {
+        document.getElementById(isLogin ? "authEmail" : "authName")?.focus();
+    }, 0);
 }
 
 function closeAuth(){
@@ -5349,7 +5354,49 @@ function authErrorMessage(error, fallback){
     if(low.includes("password should be at least")) return "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
     if(low.includes("invalid email")) return "البريد الإلكتروني غير صحيح.";
     if(low.includes("rate limit")) return "تم تجاوز عدد المحاولات. حاول لاحقًا.";
-    return raw || fallback;
+    return fallback;
+}
+
+function requireAuthClient(){
+    if(!supabaseClient?.auth){
+        throw new Error("خدمة تسجيل الدخول غير متاحة حاليًا.");
+    }
+    return supabaseClient.auth;
+}
+
+async function enterDashboard(user, options = {}){
+    if(!user?.id) return;
+
+    if(authTransitionPromise && authTransitionUserId === user.id){
+        return authTransitionPromise;
+    }
+
+    authTransitionUserId = user.id;
+    authTransitionPromise = (async () => {
+        currentUser = user;
+        window.currentUser = currentUser;
+        closeAuth();
+        showDashboard();
+        updateUserInfo();
+        try{
+            await loadUserStore();
+        }catch(error){
+            console.error("Dashboard data load error:", error);
+            toast("✅ تم الدخول، لكن تعذر تحميل بيانات المتجر الآن.", "warning", 5000);
+        }
+        if(options.toastMessage){
+            toast(options.toastMessage, "success");
+        }
+    })();
+
+    try{
+        return await authTransitionPromise;
+    }finally{
+        if(authTransitionUserId === user.id){
+            authTransitionPromise = null;
+            authTransitionUserId = null;
+        }
+    }
 }
 
 async function registerUser(){
@@ -5362,6 +5409,10 @@ async function registerUser(){
     
     if(!name || !email || !password || !password2){
         msg.textContent = "⚠️ من فضلك املأ كل البيانات.";
+        return;
+    }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        msg.textContent = "⚠️ البريد الإلكتروني غير صحيح.";
         return;
     }
     if(password.length < 6){
@@ -5378,7 +5429,7 @@ async function registerUser(){
     msg.textContent = "";
     
     try{
-        const {data, error} = await supabaseClient.auth.signUp({
+        const {data, error} = await requireAuthClient().signUp({
             email,
             password,
             options:{data:{full_name:name}}
@@ -5386,13 +5437,9 @@ async function registerUser(){
         if(error) throw error;
         
         if(data?.session && data?.user){
-            currentUser = data.user;
-            window.currentUser = currentUser;
-            msg.textContent = "🎉 تم إنشاء الحساب بنجاح!";
-            closeAuth();
-            showDashboard();
-            updateUserInfo();
-            await loadUserStore();
+            await enterDashboard(data.user, {
+                toastMessage:"🎉 تم إنشاء الحساب بنجاح!"
+            });
         } else {
             msg.textContent = "📩 تم إنشاء الحساب. راجع بريدك لتأكيد الحساب.";
         }
@@ -5415,23 +5462,23 @@ async function loginUser(){
         msg.textContent = "⚠️ اكتب البريد وكلمة المرور.";
         return;
     }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        msg.textContent = "⚠️ البريد الإلكتروني غير صحيح.";
+        return;
+    }
     
     btn.disabled = true;
     btn.textContent = "⏳ جاري الدخول...";
     msg.textContent = "";
     
     try{
-        const {data, error} = await supabaseClient.auth.signInWithPassword({email, password});
+        const {data, error} = await requireAuthClient().signInWithPassword({email, password});
         if(error) throw error;
         if(!data?.session || !data?.user) throw new Error("لم يتم إنشاء جلسة الدخول.");
         
-        currentUser = data.user;
-        window.currentUser = currentUser;
-        closeAuth();
-        showDashboard();
-        updateUserInfo();
-        await loadUserStore();
-        toast("✅ تم تسجيل الدخول بنجاح.", "success");
+        await enterDashboard(data.user, {
+            toastMessage:"✅ تم تسجيل الدخول بنجاح."
+        });
     }catch(error){
         console.error("Login error:", error);
         msg.textContent = "❌ " + authErrorMessage(error, "فشل تسجيل الدخول.");
@@ -5449,7 +5496,7 @@ async function loginWithGoogle(){
     
     try{
         const redirectTo = window.location.href.split("#")[0];
-        const {error} = await supabaseClient.auth.signInWithOAuth({
+        const {error} = await requireAuthClient().signInWithOAuth({
             provider:"google",
             options:{redirectTo}
         });
@@ -5473,7 +5520,7 @@ async function resetPassword(){
     msg.textContent = "⏳ جاري الإرسال...";
     
     try{
-        const {error} = await supabaseClient.auth.resetPasswordForEmail(email, {
+        const {error} = await requireAuthClient().resetPasswordForEmail(email, {
             redirectTo: window.location.origin + window.location.pathname
         });
         if(error) throw error;
@@ -5485,15 +5532,11 @@ async function resetPassword(){
 
 async function checkUserSession(){
     try{
-        const {data, error} = await supabaseClient.auth.getSession();
+        const {data, error} = await requireAuthClient().getSession();
         if(error) throw error;
         
         if(data?.session?.user){
-            currentUser = data.session.user;
-            window.currentUser = currentUser;
-            showDashboard();
-            updateUserInfo();
-            await loadUserStore();
+            await enterDashboard(data.session.user);
         } else {
             currentUser = null;
             window.currentUser = null;
@@ -5507,20 +5550,15 @@ async function checkUserSession(){
     }
 }
 
-supabaseClient.auth.onAuthStateChange((event, session) => {
+ if(supabaseClient?.auth){
+ supabaseClient.auth.onAuthStateChange((event, session) => {
     if(session?.user){
         currentUser = session.user;
         window.currentUser = currentUser;
         updateUserInfo();
         
         if(event === "SIGNED_IN" || event === "INITIAL_SESSION"){
-            Promise.resolve().then(async () => {
-                if(currentUser){
-                    showDashboard();
-                    updateUserInfo();
-                    await loadUserStore();
-                }
-            }).catch(err => console.error("Session load error:", err));
+            enterDashboard(session.user).catch(err => console.error("Session load error:", err));
         }
     } else if(event === "SIGNED_OUT"){
         currentUser = null;
@@ -5529,6 +5567,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
         showLanding();
     }
 });
+}
 
 function updateUserInfo(){
     if(!currentUser) return;
@@ -9489,6 +9528,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     document.getElementById("authModal")?.addEventListener("click", function(e){
         if(e.target === this) closeAuth();
+    });
+    
+    document.getElementById("authModal")?.addEventListener("keydown", function(e){
+        if(e.key !== "Enter" || !e.target.matches("input")) return;
+        e.preventDefault();
+        document.getElementById("authSubmit")?.click();
     });
     
     document.getElementById("trackingModal")?.addEventListener("click", function(e){
