@@ -4001,6 +4001,16 @@ label{
 .luna-color-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.luna-color-chip{display:flex;align-items:center;gap:6px;border:1px solid rgba(185,138,56,.18);border-radius:999px;padding:6px 9px;background:#fff;font-size:10px}.luna-color-dot{width:15px;height:15px;border-radius:50%;border:1px solid rgba(0,0,0,.12)}
 @media(max-width:560px){.luna-product-form-head{align-items:flex-start}.luna-product-form-head h2{font-size:18px}.luna-form-badge{font-size:9px}.product-form .form-section,#productForm .form-section,.add-product-form .form-section,.product-editor .form-section{padding:12px!important}}
 
+
+/* LUNA&LEO ACTIVE STORE TEMPLATES + MERCHANT COMPANY */
+body[data-luna-template="luxury"]{--g:#d4af37;--g-dark:#8a681c;}
+body[data-luna-template="royal"]{--g:#b88cff;--g-dark:#6d45a8;}
+body[data-luna-template="clean"]{--g:#b98a38;--g-dark:#7b5a20;}
+body[data-luna-template="midnight"]{--g:#c6a55a;--g-dark:#806a35;}
+body[data-luna-template="royal"] .dash-section .panel{background:linear-gradient(135deg,#17101f,#241631)!important;border-color:rgba(184,140,255,.22)!important;}
+body[data-luna-template="clean"] .dash-section .panel{background:linear-gradient(135deg,#fff,#f5f0e5)!important;border-color:rgba(185,138,56,.18)!important;}
+body[data-luna-template="midnight"] .dash-section .panel{background:linear-gradient(135deg,#0b0e10,#172026)!important;}
+.luna-merchant-company{font-size:10px;color:var(--g-dark);font-weight:900;margin-top:4px;padding:4px 7px;border-radius:8px;background:rgba(185,138,56,.08);display:inline-block;}
 /* ============ RESPONSIVE ============ */
 @media(max-width:1050px){
     .sf-grid{grid-template-columns:repeat(3,1fr)}
@@ -4523,15 +4533,17 @@ label{
                 </div>
                 <div class="luna-template-panel">
                     <h3>🎨 قوالب جاهزة</h3>
-                    <p>اختار شكل متجرك من قوالب فاخرة — التغيير شكلي فقط.</p>
+                    <p>اضغط على أي قالب وسيتم تفعيله فورًا ويحفظ اختيارك تلقائيًا.</p>
                     <div class="luna-template-grid">
                         <button type="button" class="luna-template-card" data-template="luxury" onclick="lunaSetTemplate('luxury')"><span class="tpl-preview tpl-luxury"></span><strong>Luxury Gold</strong><small>أسود × ذهبي</small></button>
                         <button type="button" class="luna-template-card" data-template="royal" onclick="lunaSetTemplate('royal')"><span class="tpl-preview tpl-royal"></span><strong>Royal Night</strong><small>داكن × بنفسجي</small></button>
                         <button type="button" class="luna-template-card" data-template="clean" onclick="lunaSetTemplate('clean')"><span class="tpl-preview tpl-clean"></span><strong>Clean Store</strong><small>فاتح × ذهبي</small></button>
+                        <button type="button" class="luna-template-card" data-template="midnight" onclick="lunaSetTemplate('midnight')"><span class="tpl-preview tpl-midnight"></span><strong>Midnight</strong><small>أسود × برونزي</small></button>
                     </div>
                 </div>
 <div id="productForm" class="form-grid hidden">
                     <input id="productName" type="text" placeholder="اسم المنتج" aria-label="اسم المنتج">
+                    <input id="productCompany" type="text" maxlength="120" placeholder="اسم الشركة / المورد (يظهر للتاجر فقط)" aria-label="اسم الشركة / المورد">
                     <div class="form-grid cols-2">
                         <input id="productPrice" type="number" min="0" step="0.01" placeholder="السعر الحالي" aria-label="السعر">
                         <input id="productComparePrice" type="number" min="0" step="0.01" placeholder="السعر قبل الخصم (اختياري)" aria-label="السعر قبل الخصم">
@@ -6692,6 +6704,7 @@ async function loadProducts(){
             ${mainImage ? `<img src="${escapeHTML(mainImage)}" alt="${escapeHTML(product.name || "منتج")}" loading="lazy">` : `<div class="product-img-placeholder">📦</div>`}
             <div class="p-body">
                 <h3>${escapeHTML(product.name)}</h3>
+            <div class="luna-merchant-company">🏢 ${escapeHTML(lunaGetProductCompany(product.id, currentStore?.id) || "غير محددة")}</div>
                 ${imagesCount > 1 ? `<div class="p-meta">🖼️ ${imagesCount} صور</div>` : ""}
                 <div class="p-price">
                     <strong>${formatCurrency(product.price)}</strong>
@@ -6739,6 +6752,7 @@ function editProduct(id){
     editingProductImages = Array.isArray(product.images) ? [...product.images] : [];
     
     document.getElementById("productName").value = product.name || "";
+    document.getElementById("productCompany").value = lunaGetProductCompany(product.id, currentStore?.id);
     document.getElementById("productPrice").value = product.price ?? "";
     document.getElementById("productCostPrice").value = product.cost_price ?? "";
     document.getElementById("productComparePrice").value = product.compare_price ?? "";
@@ -7058,6 +7072,11 @@ async function syncProductVariants(productId){
     }
 }
 
+function lunaProductCompanyKey(storeId){ return "lunaLeoProductCompanies_" + (storeId || "local"); }
+function lunaGetProductCompanies(storeId){ try { const x=JSON.parse(localStorage.getItem(lunaProductCompanyKey(storeId))||"{}"); return x&&typeof x==="object"?x:{}; } catch(e){ return {}; } }
+function lunaSetProductCompany(productId, company, storeId){ const d=lunaGetProductCompanies(storeId); if(company) d[String(productId)]=company; else delete d[String(productId)]; localStorage.setItem(lunaProductCompanyKey(storeId), JSON.stringify(d)); }
+function lunaGetProductCompany(productId, storeId){ return lunaGetProductCompanies(storeId)[String(productId)] || ""; }
+
 async function saveProduct(){
     if(!enforceFeature("products")) return;
     if(!currentUser || !currentStore){
@@ -7066,6 +7085,7 @@ async function saveProduct(){
     }
     
     const name = document.getElementById("productName").value.trim();
+    const company = (document.getElementById("productCompany")?.value || "").trim();
     const priceValue = document.getElementById("productPrice").value;
     const price = Number(priceValue);
     const costPriceValue = document.getElementById("productCostPrice").value;
@@ -7167,6 +7187,7 @@ async function saveProduct(){
         
         const savedProductId = editingProductId || result.data?.id;
         if(savedProductId){
+            lunaSetProductCompany(savedProductId, company, currentStore.id);
             try{
                 await syncProductVariants(savedProductId);
             }catch(variantErr){
@@ -11194,7 +11215,14 @@ async function llxRestore(ev){
     const f=ev.target.files?.[0];if(!f)return;
     try{const x=JSON.parse(await f.text());if(!x.data)throw new Error("ملف غير صالح");llxStore(x.data);llxLoadForms();llxRenderCoupons();llxApplySeo(false);llxApplyDesign(false);toast("✅ تم استرجاع الإعدادات","success");}catch(e){toast("❌ ملف النسخة الاحتياطية غير صالح","error");}
 }
-document.addEventListener("DOMContentLoaded",()=>setTimeout(llxRefreshSuite,500));
+document.addEventListener("DOMContentLoaded",()=>{
+    // Keep the advanced tools inside the desktop dashboard content area.
+    // This also fixes desktop layouts where the section was rendered outside .dash-layout.
+    const business=document.getElementById("dashBusiness");
+    const content=document.querySelector(".dash-content");
+    if(business && content && business.parentElement!==content){ content.appendChild(business); }
+    setTimeout(llxRefreshSuite,500);
+});
 
 
 /* LLX section bridge */
