@@ -1,46 +1,4 @@
-asyncfunction updateStoreOGTags(store){
-    if(!store) return;
-
-    const storeName = store.name || "متجر";
-    const storeDesc = store.description || `تسوق الآن من ${storeName} — منتجات مميزة وأسعار رائعة.`;
-    const storeLogo = store.logo_url || "";
-    
-    // رابط المتجر العام
-    const url = new URL(window.location.href);
-    url.search = "";
-    url.hash = "";
-    url.searchParams.set("store", store.slug || store.id);
-    const storeUrl = url.toString();
-
-    // صورة افتراضية لو مفيش لوجو (صورة المتجر/الهيرو)
-    const fallbackImage = "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=80";
-    const ogImage = storeLogo || fallbackImage;
-
-    // تحديث العنوان
-    document.title = `${storeName} | LUNA&LEO MARKET`;
-
-    const setMeta = (id, value) => {
-        const el = document.getElementById(id);
-        if(el) el.setAttribute("content", value);
-    };
-
-    setMeta("ogTitle", storeName);
-    setMeta("ogDescription", storeDesc.slice(0, 200));
-    setMeta("ogImage", ogImage);
-    setMeta("ogUrl", storeUrl);
-    setMeta("twTitle", storeName);
-    setMeta("twDescription", storeDesc.slice(0, 200));
-    setMeta("twImage", ogImage);
-
-    // meta description العادي
-    let descMeta = document.querySelector('meta[name="description"]');
-    if(!descMeta){
-        descMeta = document.createElement("meta");
-        descMeta.name = "description";
-        document.head.appendChild(descMeta);
-    }
-    descMeta.content = storeDesc.slice(0, 160);
-}TYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -48,21 +6,6 @@ asyncfunction updateStoreOGTags(store){
 <title>LUNA&LEO MARKET | أنشئ متجرك الإلكتروني في دقائق</title>
 <meta name="description" content="LUNA&LEO MARKET منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة.">
 <meta name="theme-color" content="#b98a38">
-<!-- ===== Open Graph (افتراضي — يتم تحديثه ديناميكيًا حسب المتجر) ===== -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="LUNA&LEO MARKET">
-<meta property="og:title" id="ogTitle" content="LUNA&LEO MARKET | أنشئ متجرك الإلكتروني في دقائق">
-<meta property="og:description" id="ogDescription" content="منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة.">
-<meta property="og:image" id="ogImage" content="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=80">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" id="ogUrl" content="">
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" id="twTitle" content="LUNA&LEO MARKET">
-<meta name="twitter:description" id="twDescription" content="منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني.">
-<meta name="twitter:image" id="twImage" content="">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="LUNA&LEO">
 <script>
@@ -9471,9 +9414,7 @@ async function loadPublicStore(){
     }
     
     publicStore = store;
-
-    // ===== تحديث وسوم OG ديناميكيًا حسب المتجر =====
-updateStoreOGTags(store);
+    
     const logoWrap = document.getElementById("sfStoreLogo");
     const logoImg = document.getElementById("sfStoreLogoImg");
     if(logoWrap && logoImg && store.logo_url){
@@ -11359,7 +11300,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(storeKey){
         document.getElementById("landingPage").style.display = "none";
         document.getElementById("dashboardApp").style.display = "none";
-        await ();
+        await loadPublicStore();
         return;
     }
     
