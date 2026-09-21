@@ -58,6 +58,22 @@
         Promise.all(tasks).catch(function(){}).then(function(){ location.reload(); });
     }
 
+    var EXPECTED_BYTES = 455623;
+
+    function received(){
+        try{
+            var nav = performance.getEntriesByType("navigation")[0];
+            if(nav && nav.decodedBodySize) return nav.decodedBodySize + " of " + EXPECTED_BYTES + " bytes";
+        }catch(e){}
+        return "unknown (expected " + EXPECTED_BYTES + " bytes)";
+    }
+
+    function lastElement(){
+        var last = document.body && document.body.lastElementChild;
+        if(!last) return "none";
+        return last.tagName.toLowerCase() + (last.id ? "#" + last.id : "");
+    }
+
     function env(){
         var ls = "ok";
         try{ localStorage.setItem("__t","1"); localStorage.removeItem("__t"); }catch(e){ ls = "blocked"; }
@@ -66,7 +82,9 @@
             "supabase: " + (typeof window.supabase),
             "localStorage: " + ls,
             "serviceWorker controller: " + ((navigator.serviceWorker && navigator.serviceWorker.controller) ? "yes" : "no"),
+            "html received: " + received(),
             "end of file reached: " + (window.__lunaEnd ? "yes" : "NO (file is incomplete)"),
+            "last element in page: " + lastElement(),
             "landingPage: " + (document.getElementById("landingPage") ? "yes" : "no"),
             "readyState: " + document.readyState,
             "UA: " + navigator.userAgent
@@ -2532,6 +2550,39 @@ label{
     margin-bottom:10px;
 }
 
+.sf-empty p{margin:6px 0 16px;font-size:14px}
+
+.sf-clear-search{
+    margin-inline-start:8px;
+    padding:4px 11px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--danger);
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.sf-more-wrap{
+    grid-column:1/-1;
+    text-align:center;
+    padding:8px 0 4px;
+}
+
+.sf-more{
+    padding:13px 30px;
+    border-radius:14px;
+    border:1.5px solid var(--g);
+    background:var(--card);
+    color:var(--g-dark);
+    font-weight:900;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.sf-more:hover{background:var(--g-soft)}
+
 /* ============ WISHLIST BUTTON ============ */
 .wishlist-btn{
     position:absolute;
@@ -3609,6 +3660,19 @@ label{
 }
 
 .cp-orders{grid-column:1/-1}
+
+/* The cart is a real page: while it is open the store behind it is hidden, so nothing shows through
+   (or gets cut off) when the browser is zoomed out or in "desktop site" mode */
+body.cart-mode{overflow-x:hidden}
+body.cart-mode #storefrontApp > *:not(#cartOverlay){display:none!important}
+body.cart-mode .cart-overlay.cp-page.open{
+    position:relative;
+    inset:auto;
+    z-index:auto;
+    min-height:100vh;
+    min-height:100dvh;
+    overflow:visible;
+}
 
 .cp-card,
 .cp-summary{
@@ -5495,7 +5559,7 @@ body[data-luna-template="midnight"] .dash-section .panel{background:linear-gradi
 
 <main class="sf-main">
     <div class="sf-toolbar">
-        <input id="sfSearch" class="sf-search" type="search" placeholder="ابحث عن منتج..." oninput="debouncedSearch()" aria-label="البحث عن منتج">
+        <input id="sfSearch" class="sf-search" type="search" placeholder="ابحث بالاسم أو القسم أو الكود..." oninput="debouncedSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();renderStoreProducts()}" enterkeyhint="search" autocomplete="off" aria-label="البحث عن منتج">
         <div id="sfCategories" class="sf-categories"></div>
         <select id="sfSortBy" class="sf-sort" onchange="renderStoreProducts()" aria-label="ترتيب المنتجات">
             <option value="newest">🆕 الأحدث</option>
@@ -9403,6 +9467,7 @@ async function loadMoreProducts(reset = false){
         publicProductsOffset = 0;
         publicProducts = [];
         publicProductsHasMore = true;
+        publicProductsToken++;
     }
     
     if(!publicProductsHasMore) return;
@@ -9426,6 +9491,64 @@ async function loadMoreProducts(reset = false){
     
     buildCategories();
     renderStoreProducts();
+    
+    // The first page is already on screen; quietly load the rest so search and sections cover every product
+    if(reset && publicProductsHasMore) loadRemainingProducts();
+}
+
+let publicProductsToken = 0;      // bumped on every reset, so an old background load can't mix into a new one
+let publicCatalogLoading = false;
+const PRODUCTS_BACKGROUND_PAGE = 100;
+
+function sfHasActiveFilter(){
+    const q = (document.getElementById("sfSearch")?.value || "").trim();
+    return !!q || publicCategory !== "all";
+}
+
+async function loadRemainingProducts(){
+    if(!publicStore || !publicProductsHasMore) return;
+    
+    const token = publicProductsToken;
+    const storeId = publicStore.id;
+    publicCatalogLoading = true;
+    
+    try{
+        let pages = 0;
+        while(publicProductsHasMore && token === publicProductsToken && pages < 30){
+            pages++;
+            const start = publicProductsOffset;
+            
+            const {data, error} = await supabaseClient
+                .from("products")
+                .select("*")
+                .eq("store_id", storeId)
+                .order("created_at", {ascending:false})
+                .range(start, start + PRODUCTS_BACKGROUND_PAGE - 1);
+            
+            if(token !== publicProductsToken) return;   // a newer reload took over
+            if(error){ console.warn("Catalog load error:", error); break; }
+            
+            const rows = data || [];
+            const known = new Set(publicProducts.map(p => String(p.id)));
+            publicProducts = publicProducts.concat(rows.filter(r => !known.has(String(r.id))));
+            publicProductsOffset = start + rows.length;
+            publicProductsHasMore = rows.length === PRODUCTS_BACKGROUND_PAGE;
+            
+            // While the customer is searching, show results as they arrive
+            if(sfHasActiveFilter()){
+                buildCategories();
+                renderStoreProducts();
+            }
+        }
+    }catch(e){
+        console.warn("Catalog load failed:", e);
+    }finally{
+        if(token === publicProductsToken){
+            publicCatalogLoading = false;
+            buildCategories();
+            renderStoreProducts();
+        }
+    }
 }
 
 function buildCategories(){
@@ -9459,18 +9582,31 @@ function selectCategory(category,btn){
     renderStoreProducts();
 }
 
+let sfShowCount = 24;
+const SF_SHOW_STEP = 24;
+let sfLastFilterSignature = "";
+
 function renderStoreProducts(){
     const box = document.getElementById("sfProducts");
     if(!box) return;
     
-    const search = (document.getElementById("sfSearch")?.value || "").trim().toLowerCase();
+    const rawQuery = (document.getElementById("sfSearch")?.value || "").trim();
+    const words = lunaNorm(rawQuery).split(" ").filter(Boolean);
     const sortBy = document.getElementById("sfSortBy")?.value || "newest";
     
+    // Back to the first page of results whenever the filters change
+    const signature = rawQuery + "|" + publicCategory + "|" + sortBy;
+    if(signature !== sfLastFilterSignature){
+        sfLastFilterSignature = signature;
+        sfShowCount = SF_SHOW_STEP;
+    }
+    
+    // Search: name, section, description or code. Every word typed must match, in any order.
     let filtered = publicProducts.filter(p => {
-        const text = ((p.name || "") + " " + (p.description || "")).toLowerCase();
-        const matchesSearch = !search || text.includes(search);
-        const matchesCategory = publicCategory === "all" || p.category === publicCategory;
-        return matchesSearch && matchesCategory;
+        if(publicCategory !== "all" && p.category !== publicCategory) return false;
+        if(!words.length) return true;
+        const haystack = lunaNorm([p.name, p.category, p.description, p.sku].filter(Boolean).join(" "));
+        return words.every(w => haystack.includes(w));
     });
     
     filtered = [...filtered].sort((a, b) => {
@@ -9484,14 +9620,30 @@ function renderStoreProducts(){
     });
     
     const countEl = document.getElementById("sfProductCount");
-    if(countEl) countEl.textContent = `${filtered.length} منتج`;
+    if(countEl){
+        if(words.length){
+            countEl.innerHTML = `${filtered.length} نتيجة لـ «${escapeHTML(rawQuery)}»`
+                + (publicCatalogLoading ? " · جاري البحث في باقي المنتجات..." : "")
+                + ` <button type="button" class="sf-clear-search" onclick="clearStoreSearch()">✕ مسح البحث</button>`;
+        } else {
+            countEl.textContent = `${filtered.length} منتج`;
+        }
+    }
     
     if(!filtered.length){
-        box.innerHTML = '<div class="sf-empty" style="grid-column:1/-1"><div class="sf-empty-icon">📦</div><h3>لا توجد منتجات</h3></div>';
+        if(words.length && publicCatalogLoading){
+            box.innerHTML = '<div class="sf-empty" style="grid-column:1/-1"><div class="sf-empty-icon">⏳</div><h3>جاري البحث في كل المنتجات...</h3></div>';
+        } else if(words.length){
+            box.innerHTML = `<div class="sf-empty" style="grid-column:1/-1"><div class="sf-empty-icon">🔎</div><h3>لا توجد نتائج لـ «${escapeHTML(rawQuery)}»</h3><p>جرّب كلمة أخرى أو اكتب جزءًا من الاسم أو القسم.</p><button type="button" class="sf-more" onclick="clearStoreSearch()">مسح البحث</button></div>`;
+        } else {
+            box.innerHTML = '<div class="sf-empty" style="grid-column:1/-1"><div class="sf-empty-icon">📦</div><h3>لا توجد منتجات</h3></div>';
+        }
         return;
     }
     
-    box.innerHTML = filtered.map(product => {
+    const visible = filtered.slice(0, sfShowCount);
+    
+    box.innerHTML = visible.map(product => {
         const stock = product.stock == null ? 999999 : Number(product.stock);
         const disabled = stock <= 0;
         const pid = String(product.id).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
@@ -9525,7 +9677,21 @@ function renderStoreProducts(){
                 </div>
             </div>
         </article>`;
-    }).join("");
+    }).join("") + (filtered.length > visible.length
+        ? `<div class="sf-more-wrap"><button type="button" class="sf-more" onclick="sfShowMore()">عرض المزيد (${filtered.length - visible.length})</button></div>`
+        : "");
+}
+
+function sfShowMore(){
+    sfShowCount += SF_SHOW_STEP;
+    renderStoreProducts();
+}
+
+function clearStoreSearch(){
+    const el = document.getElementById("sfSearch");
+    if(el) el.value = "";
+    renderStoreProducts();
+    if(el) el.focus();
 }
 
 const debouncedSearch = debounce(() => renderStoreProducts(), 250);
@@ -9702,6 +9868,7 @@ async function recalcCouponSilently(){
 let cpShipping = null;      // null = shipping not known yet (no governorate chosen)
 let cpShippingToken = 0;
 let cpOrderDone = false;
+let cpSavedScrollY = 0;     // where the store was scrolled to, restored when the cart closes
 
 function cpSubtotal(){
     return publicCart.reduce((sum, i) => sum + Number(i.price || 0) * Number(i.qty || 0), 0);
@@ -9779,9 +9946,10 @@ function openCart(){
     renderCart();
     updateFreeShippingBar();
     
+    if(!wasOpen) cpSavedScrollY = window.scrollY || 0;
     page.classList.add("open");
-    page.scrollTop = 0;
-    document.body.style.overflow = "hidden";
+    document.body.classList.add("cart-mode");
+    window.scrollTo(0, 0);
     try{ page.focus({preventScroll:true}); }catch(e){}
     
     // Lets the phone's back button close the cart page instead of leaving the store
@@ -9799,10 +9967,15 @@ function closeCart(fromPopState){
     const wasOpen = page.classList.contains("open");
     
     page.classList.remove("open");
+    document.body.classList.remove("cart-mode");
     document.body.style.overflow = "";
     document.getElementById("successView")?.classList.remove("open");
     cpOrderDone = false;
     updateCartPageState();
+    if(wasOpen){
+        window.scrollTo(0, cpSavedScrollY);
+        requestAnimationFrame(() => window.scrollTo(0, cpSavedScrollY));
+    }
     
     if(wasOpen && fromPopState !== true && history.state && history.state.lunaCart){
         try{ history.back(); }catch(e){}
@@ -9850,8 +10023,7 @@ if(document.readyState !== "loading") bindCheckoutButton();
 
 function backToCart(){
     renderCart();
-    const page = document.getElementById("cartOverlay");
-    if(page) page.scrollTo({top:0, behavior:"smooth"});
+    window.scrollTo({top:0, behavior:"smooth"});
 }
 
 function cpOrderError(text, fieldIds){
@@ -9903,8 +10075,7 @@ function showOrderSuccess(orderId){
     renderOrderRecap();
     updateCartPageState();
     
-    const page = document.getElementById("cartOverlay");
-    if(page) page.scrollTop = 0;
+    window.scrollTo(0, 0);
 }
 
 document.addEventListener("input", e => {
@@ -11419,7 +11590,7 @@ function announceToScreenReader(message){
         live.id = 'aria-live-region';
         live.setAttribute('aria-live', 'polite');
         live.setAttribute('aria-atomic', 'true');
-        live.style.cssText = 'position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden';
+        live.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap';
         document.body.appendChild(live);
     }
     
