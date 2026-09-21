@@ -5062,6 +5062,8 @@ body[data-luna-template="midnight"] .dash-section .panel{background:linear-gradi
                             <div style="display:flex;gap:8px;flex-wrap:wrap">
                                 <button class="gold-btn" onclick="shareStore('whatsapp')">🟢 WhatsApp</button>
                                 <button class="gold-btn" onclick="shareStore('facebook')">🔵 Facebook</button>
+                                <button class="gold-btn" onclick="shareStore('instagram')">📸 Instagram</button>
+                                <button class="gold-btn" onclick="shareStore('tiktok')">🎵 TikTok</button>
                                 <button class="gold-btn" onclick="shareStore('telegram')">✈️ Telegram</button>
                                 <button class="gold-btn" onclick="copyStoreLink()">🔗 نسخ</button>
                                 <button class="gold-btn" onclick="shareStoreNative()">📤 مشاركة</button>
@@ -8874,17 +8876,48 @@ function openMyPublicStore(){
     window.open(getPublicStoreUrl(), "_blank");
 }
 
-function shareStore(platform){
-    const url = encodeURIComponent(getPublicStoreUrl());
-    const text = encodeURIComponent(`🛍️ ${currentStore?.name || ""}\n${getPublicStoreUrl()}`);
-    
+async function shareStore(platform){
+    if(!currentStore) return;
+
+    const publicUrl = getPublicStoreUrl();
+    const url = encodeURIComponent(publicUrl);
+    const text = encodeURIComponent(`🛍️ ${currentStore?.name || "متجرنا"}\n${publicUrl}`);
+
     const links = {
         whatsapp: `https://wa.me/?text=${text}`,
         facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
         telegram: `https://t.me/share/url?url=${url}&text=${text}`
     };
-    
-    window.open(links[platform], "_blank");
+
+    // Instagram و TikTok لا يوفّران رابط Web عامًا موثوقًا لمشاركة أي URL.
+    // لذلك على الهاتف نستخدم شاشة المشاركة الأصلية، ومنها يختار التاجر Instagram أو TikTok.
+    if(platform === "instagram" || platform === "tiktok"){
+        if(navigator.share){
+            try{
+                await navigator.share({
+                    title: currentStore.name || "متجرنا",
+                    text: `🛍️ ${currentStore.name || "متجرنا"}\n${publicUrl}`,
+                    url: publicUrl
+                });
+                return;
+            }catch(e){
+                // المستخدم أغلق شاشة المشاركة أو المشاركة غير متاحة.
+            }
+        }
+
+        const copied = await lunaCopyText(publicUrl);
+        toast(
+            copied
+                ? `✅ تم نسخ رابط المتجر. افتح ${platform === "instagram" ? "Instagram" : "TikTok"} والصقه للمشاركة.`
+                : "⚠️ انسخ رابط المتجر يدويًا ثم شاركه.",
+            copied ? "success" : "error"
+        );
+        return;
+    }
+
+    if(links[platform]){
+        window.open(links[platform], "_blank", "noopener,noreferrer");
+    }
 }
 
 async function copyStoreLink(){
