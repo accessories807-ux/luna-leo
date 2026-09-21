@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>LUNA&LEO MARKET | أنشئ متجرك الإلكتروني في دقائق</title>
 <meta name="description" content="LUNA&LEO MARKET منصة متكاملة لإنشاء وإدارة متجرك الإلكتروني بسهولة.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LUNA&LEO MARKET">
+<meta property="og:title" content="LUNA&LEO MARKET">
+<meta property="og:description" content="أنشئ متجرك الإلكتروني وابدأ البيع بسهولة.">
+<meta property="og:image" content="">
+<meta property="og:url" content="">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LUNA&LEO MARKET">
+<meta name="twitter:description" content="أنشئ متجرك الإلكتروني وابدأ البيع بسهولة.">
+<meta name="twitter:image" content="">
 <meta name="theme-color" content="#b98a38">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="LUNA&LEO">
@@ -5052,6 +5062,8 @@ body[data-luna-template="midnight"] .dash-section .panel{background:linear-gradi
                             <div style="display:flex;gap:8px;flex-wrap:wrap">
                                 <button class="gold-btn" onclick="shareStore('whatsapp')">🟢 WhatsApp</button>
                                 <button class="gold-btn" onclick="shareStore('facebook')">🔵 Facebook</button>
+                                <button class="gold-btn" onclick="shareStore('instagram')">📸 Instagram</button>
+                                <button class="gold-btn" onclick="shareStore('tiktok')">🎵 TikTok</button>
                                 <button class="gold-btn" onclick="shareStore('telegram')">✈️ Telegram</button>
                                 <button class="gold-btn" onclick="copyStoreLink()">🔗 نسخ</button>
                                 <button class="gold-btn" onclick="shareStoreNative()">📤 مشاركة</button>
@@ -8721,6 +8733,50 @@ async function exportProductsCSV(){
     downloadCSV(`products-${currentStore.slug || "store"}-${Date.now()}.csv`, rows);
 }
 
+/* ============ STORE SHARE PREVIEW / OPEN GRAPH ============ */
+function setMetaContent(selector, value){
+    let el = document.querySelector(selector);
+    if(!el){
+        el = document.createElement("meta");
+        const m = selector.match(/\[([^=]+)=["']?([^\]"']+)["']?\]/);
+        if(m){ el.setAttribute(m[1], m[2]); document.head.appendChild(el); }
+    }
+    if(el) el.setAttribute("content", String(value || ""));
+}
+
+function applyStoreShareMeta(store){
+    if(!store) return;
+    const name = store.name || "متجر";
+    const description = store.description || "تسوق من متجرنا الإلكتروني الآن.";
+    const image = store.logo_url || "";
+    const url = window.location.href;
+    document.title = name + " | LUNA&LEO";
+    setMetaContent('meta[property="og:title"]', name);
+    setMetaContent('meta[property="og:description"]', description);
+    setMetaContent('meta[property="og:image"]', image);
+    setMetaContent('meta[property="og:url"]', url);
+    setMetaContent('meta[name="twitter:title"]', name);
+    setMetaContent('meta[name="twitter:description"]', description);
+    setMetaContent('meta[name="twitter:image"]', image);
+    setMetaContent('meta[name="description"]', description);
+}
+
+function getStoreSharePreviewUrl(store, extraParams = {}){
+    if(!store) return "";
+    const base = `${SUPABASE_URL}/functions/v1/store-share`;
+    const appUrl = new URL(window.location.href);
+    appUrl.search = "";
+    appUrl.hash = "";
+    appUrl.searchParams.set("store", store.slug || store.id);
+    Object.entries(extraParams || {}).forEach(([k,v]) => {
+        if(v !== undefined && v !== null && v !== "") appUrl.searchParams.set(k, String(v));
+    });
+    const preview = new URL(base);
+    preview.searchParams.set("store", store.slug || store.id);
+    preview.searchParams.set("app", appUrl.toString());
+    return preview.toString();
+}
+
 /* ============ SHARE ============ */
 function getStoreQuery(){
     const params = new URLSearchParams(window.location.search);
@@ -8736,18 +8792,12 @@ function backToPlatform(){
 
 function getPublicStoreUrl(){
     if(!currentStore) return "";
-    const url = new URL(window.location.href);
-    url.search = "";
-    url.hash = "";
-    url.searchParams.set("store", currentStore.slug || currentStore.id);
-    return url.toString();
+    return getStoreSharePreviewUrl(currentStore);
 }
 
 function getProductPublicUrl(productId){
     if(!currentStore || !productId) return "";
-    const url = new URL(getPublicStoreUrl());
-    url.searchParams.set("product", String(productId));
-    return url.toString();
+    return getStoreSharePreviewUrl(currentStore, {product: productId});
 }
 
 async function lunaCopyText(textToCopy){
@@ -8785,11 +8835,7 @@ async function copyProductLink(productId){
 
 async function copyProductLinkPublic(productId){
     if(!publicStore) return;
-    const url=new URL(window.location.href);
-    url.search="";
-    url.hash="";
-    url.searchParams.set("store",publicStore.slug || publicStore.id);
-    url.searchParams.set("product",String(productId));
+    const url=getStoreSharePreviewUrl(publicStore, {product: productId});
     const copied=await lunaCopyText(url.toString());
     toast(copied ? "✅ تم نسخ الرابط" : "⚠️ لم يتم النسخ تلقائياً", copied ? "success" : "error");
 }
@@ -8830,17 +8876,48 @@ function openMyPublicStore(){
     window.open(getPublicStoreUrl(), "_blank");
 }
 
-function shareStore(platform){
-    const url = encodeURIComponent(getPublicStoreUrl());
-    const text = encodeURIComponent(`🛍️ ${currentStore?.name || ""}\n${getPublicStoreUrl()}`);
-    
+async function shareStore(platform){
+    if(!currentStore) return;
+
+    const publicUrl = getPublicStoreUrl();
+    const url = encodeURIComponent(publicUrl);
+    const text = encodeURIComponent(`🛍️ ${currentStore?.name || "متجرنا"}\n${publicUrl}`);
+
     const links = {
         whatsapp: `https://wa.me/?text=${text}`,
         facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
         telegram: `https://t.me/share/url?url=${url}&text=${text}`
     };
-    
-    window.open(links[platform], "_blank");
+
+    // Instagram و TikTok لا يوفّران رابط Web عامًا موثوقًا لمشاركة أي URL.
+    // لذلك على الهاتف نستخدم شاشة المشاركة الأصلية، ومنها يختار التاجر Instagram أو TikTok.
+    if(platform === "instagram" || platform === "tiktok"){
+        if(navigator.share){
+            try{
+                await navigator.share({
+                    title: currentStore.name || "متجرنا",
+                    text: `🛍️ ${currentStore.name || "متجرنا"}\n${publicUrl}`,
+                    url: publicUrl
+                });
+                return;
+            }catch(e){
+                // المستخدم أغلق شاشة المشاركة أو المشاركة غير متاحة.
+            }
+        }
+
+        const copied = await lunaCopyText(publicUrl);
+        toast(
+            copied
+                ? `✅ تم نسخ رابط المتجر. افتح ${platform === "instagram" ? "Instagram" : "TikTok"} والصقه للمشاركة.`
+                : "⚠️ انسخ رابط المتجر يدويًا ثم شاركه.",
+            copied ? "success" : "error"
+        );
+        return;
+    }
+
+    if(links[platform]){
+        window.open(links[platform], "_blank", "noopener,noreferrer");
+    }
 }
 
 async function copyStoreLink(){
@@ -9414,6 +9491,7 @@ async function loadPublicStore(){
     }
     
     publicStore = store;
+    applyStoreShareMeta(store);
     
     const logoWrap = document.getElementById("sfStoreLogo");
     const logoImg = document.getElementById("sfStoreLogoImg");
