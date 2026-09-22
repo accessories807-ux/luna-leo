@@ -8903,40 +8903,38 @@ function openMyPublicStore(){
     window.open(getPublicStoreUrl(), "_blank");
 }
 
+function getStoreShareUrl(){
+    if(!currentStore) return "";
+    
+    const base = "https://zuljqdzinbndmesbarjn.supabase.co/functions/v1/store-share";
+    
+    const url = new URL(base);
+    url.searchParams.set("store", currentStore.slug || currentStore.id);
+    url.searchParams.set("v", "2");
+    
+    return url.toString();
+}
+
 function shareStore(platform){
-    const url = encodeURIComponent(getPublicStoreUrl());
-    const text = encodeURIComponent(`🛍️ ${currentStore?.name || ""}\n${getPublicStoreUrl()}`);
-    
-    const links = {
-        whatsapp: `https://wa.me/?text=${text}`,
-        facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-        telegram: `https://t.me/share/url?url=${url}&text=${text}`
-    };
-    
-    window.open(links[platform], "_blank");
-}
-
-async function copyStoreLink(){
-    const url = getPublicStoreUrl();
-    try{
-        await navigator.clipboard.writeText(url);
-        toast("✅ تم النسخ.", "success");
-    }catch(e){
-        prompt("انسخ:", url);
-    }
-}
-
-async function shareStoreNative(){
     if(!currentStore) return;
-    const url = getPublicStoreUrl();
-    const text = `🛍️ ${currentStore.name}\n${url}`;
-    
-    if(navigator.share){
-        try{
-            await navigator.share({title:currentStore.name, text, url});
-        }catch(e){}
-    } else {
-        await copyStoreLink();
+
+    const storeUrl = getPublicStoreUrl();
+    const shareUrl = getStoreShareUrl();
+
+    const text = encodeURIComponent(
+        `🛍️ ${currentStore.name || ""}\n${storeUrl}`
+    );
+
+    const encodedShareUrl = encodeURIComponent(shareUrl);
+
+    const links = {
+        whatsapp: `https://wa.me/?text=${text}%0A${encodedShareUrl}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedShareUrl}`,
+        telegram: `https://t.me/share/url?url=${encodedShareUrl}&text=${text}`
+    };
+
+    if(links[platform]){
+        window.open(links[platform], "_blank");
     }
 }
 
