@@ -6830,12 +6830,23 @@ async function loadUserStore(){
         .from("stores")
         .select("*")
         .eq("owner_id", currentUser.id)
-        .order("created_at", {ascending:false})
-        .limit(1);
+        .order("created_at", {ascending:true});
     
     if(error) console.error("Store lookup:", error);
     
-    let store = data && data.length ? data[0] : null;
+    let store = null;
+    if(data && data.length){
+        // When duplicate stores exist, use the store that contains the most products.
+        const storesWithCounts = await Promise.all(data.map(async (candidate) => {
+            const countResult = await supabaseClient
+                .from("products")
+                .select("id", {count:"exact", head:true})
+                .eq("store_id", candidate.id);
+            return {store:candidate, count:countResult.count || 0};
+        }));
+        storesWithCounts.sort((a,b) => b.count - a.count);
+        store = storesWithCounts[0].store;
+    }
     
     if(!store){
         const membershipResult = await supabaseClient
@@ -6883,6 +6894,44 @@ function resetStoreForm(){
 async function createMyStore(){
     if(!currentUser){
         toast("يجب تسجيل الدخول.", "error");
+        return;
+    }
+    
+    // Safety check: never create a second store for the same owner.
+    const existingResult = await supabaseClient
+        .from("stores")
+        .select("*")
+        .eq("owner_id", currentUser.id)
+        .order("created_at", {ascending:true})
+        .limit(1);
+    
+    if(existingResult.error){
+        toast("تعذر التحقق من المتجر الحالي.", "error");
+        return;
+    }
+    
+    if(existingResult.data && existingResult.data.length){
+        // Prefer the existing store that contains products, if duplicates exist.
+        let existingStore = existingResult.data[0];
+        if(existingResult.data.length > 1){
+            const candidates = await Promise.all(existingResult.data.map(async (candidate) => {
+                const countResult = await supabaseClient
+                    .from("products")
+                    .select("id", {count:"exact", head:true})
+                    .eq("store_id", candidate.id);
+                return {store:candidate, count:countResult.count || 0};
+            }));
+            candidates.sort((a,b) => b.count - a.count);
+            existingStore = candidates[0].store;
+        }
+        currentStore = existingStore;
+        window.currentStore = currentStore;
+        await loadTeamContext(currentStore);
+        displayStore();
+        applyTeamPermissionsUI();
+        await loadDashboardData();
+        toast("ℹ️ لديك متجر بالفعل، تم فتح المتجر الحالي.", "info");
+        showSection("home");
         return;
     }
     
