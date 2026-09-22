@@ -16,7 +16,7 @@
 
     function remember(msg, src, line, col){
         if(firstError) return;
-        fwhatsapp: `https://wa.me/?text=${text}%0A${encodedShareUrl}`,irstError = String(msg || "") + (src ? "\n" + src + ":" + (line || 0) + ":" + (col || 0) : "");
+        firstError = String(msg || "") + (src ? "\n" + src + ":" + (line || 0) + ":" + (col || 0) : "");
     }
     window.addEventListener("error", function(e){
         remember(e.message, e.filename, e.lineno, e.colno);
@@ -5054,21 +5054,6 @@ body[data-luna-template="midnight"] .dash-section .panel{background:linear-gradi
                                 <button class="gold-btn" onclick="shareStore('facebook')">🔵 Facebook</button>
                                 <button class="gold-btn" onclick="shareStore('telegram')">✈️ Telegram</button>
                                 <button class="gold-btn" onclick="copyStoreShareLink()">🔗 نسخ رابط المشاركة</button>
-async function copyStoreShareLink(){
-    const url = getStoreShareUrl();
-
-    if(!url){
-        toast("أنشئ المتجر أولاً.", "error");
-        return;
-    }
-
-    const copied = await lunaCopyText(url);
-
-    toast(
-        copied ? "✅ تم نسخ رابط المشاركة" : "⚠️ لم يتم النسخ تلقائياً",
-        copied ? "success" : "error"
-    );
-}
                                 <button class="gold-btn" onclick="shareStoreNative()">📤 مشاركة</button>
                             </div>
                             <div class="form-message" id="storeShareMessage" role="alert"></div>
@@ -6845,23 +6830,11 @@ async function loadUserStore(){
         .from("stores")
         .select("*")
         .eq("owner_id", currentUser.id)
-        .order("created_at", {ascending:true});
+        .limit(1);
     
     if(error) console.error("Store lookup:", error);
     
-    let store = null;
-    if(data && data.length){
-        // When duplicate stores exist, use the store that contains the most products.
-        const storesWithCounts = await Promise.all(data.map(async (candidate) => {
-            const countResult = await supabaseClient
-                .from("products")
-                .select("id", {count:"exact", head:true})
-                .eq("store_id", candidate.id);
-            return {store:candidate, count:countResult.count || 0};
-        }));
-        storesWithCounts.sort((a,b) => b.count - a.count);
-        store = storesWithCounts[0].store;
-    }
+    let store = data && data.length ? data[0] : null;
     
     if(!store){
         const membershipResult = await supabaseClient
@@ -6912,44 +6885,6 @@ async function createMyStore(){
         return;
     }
     
-    // Safety check: never create a second store for the same owner.
-    const existingResult = await supabaseClient
-        .from("stores")
-        .select("*")
-        .eq("owner_id", currentUser.id)
-        .order("created_at", {ascending:true})
-        .limit(1);
-    
-    if(existingResult.error){
-        toast("تعذر التحقق من المتجر الحالي.", "error");
-        return;
-    }
-    
-    if(existingResult.data && existingResult.data.length){
-        // Prefer the existing store that contains products, if duplicates exist.
-        let existingStore = existingResult.data[0];
-        if(existingResult.data.length > 1){
-            const candidates = await Promise.all(existingResult.data.map(async (candidate) => {
-                const countResult = await supabaseClient
-                    .from("products")
-                    .select("id", {count:"exact", head:true})
-                    .eq("store_id", candidate.id);
-                return {store:candidate, count:countResult.count || 0};
-            }));
-            candidates.sort((a,b) => b.count - a.count);
-            existingStore = candidates[0].store;
-        }
-        currentStore = existingStore;
-        window.currentStore = currentStore;
-        await loadTeamContext(currentStore);
-        displayStore();
-        applyTeamPermissionsUI();
-        await loadDashboardData();
-        toast("ℹ️ لديك متجر بالفعل، تم فتح المتجر الحالي.", "info");
-        showSection("home");
-        return;
-    }
-    
     const name = document.getElementById("storeName").value.trim();
     const slug = document.getElementById("storeSlug").value.trim().toLowerCase().replace(/\s+/g, "-");
     const description = document.getElementById("storeDescription").value.trim();
@@ -6965,33 +6900,10 @@ async function createMyStore(){
     }
     
     btn.disabled = true;
-    btn.textContent = "⏳ جاري التحقق...";
+    btn.textContent = "⏳ جاري الإنشاء...";
     msg.textContent = "";
     
     try{
-        // منع إنشاء متجر ثانٍ لنفس المستخدم
-        const existingStoreResult = await supabaseClient
-            .from("stores")
-            .select("*")
-            .eq("owner_id", currentUser.id)
-            .order("created_at", {ascending:false})
-            .limit(1);
-        
-        if(existingStoreResult.error) throw existingStoreResult.error;
-        
-        if(existingStoreResult.data && existingStoreResult.data.length){
-            currentStore = existingStoreResult.data[0];
-            window.currentStore = currentStore;
-            await loadSubscription();
-            toast("ℹ️ لديك متجر بالفعل، تم فتح متجرك الحالي.", "success");
-            displayStore();
-            await loadDashboardData();
-            setTimeout(() => showSection("home"), 300);
-            return;
-        }
-        
-        btn.textContent = "⏳ جاري الإنشاء...";
-        
         const {data, error} = await supabaseClient
             .from("stores")
             .insert({
@@ -8920,13 +8832,11 @@ function openMyPublicStore(){
 
 function getStoreShareUrl(){
     if(!currentStore) return "";
-    
+
     const base = "https://zuljqdzinbndmesbarjn.supabase.co/functions/v1/store-share";
-    
     const url = new URL(base);
     url.searchParams.set("store", currentStore.slug || currentStore.id);
     url.searchParams.set("v", "2");
-    
     return url.toString();
 }
 
@@ -8935,11 +8845,7 @@ function shareStore(platform){
 
     const storeUrl = getPublicStoreUrl();
     const shareUrl = getStoreShareUrl();
-
-    const text = encodeURIComponent(
-        `🛍️ ${currentStore.name || ""}\n${storeUrl}`
-    );
-
+    const text = encodeURIComponent(`🛍️ ${currentStore.name || ""}\n${storeUrl}`);
     const encodedShareUrl = encodeURIComponent(shareUrl);
 
     const links = {
@@ -8948,8 +8854,46 @@ function shareStore(platform){
         telegram: `https://t.me/share/url?url=${encodedShareUrl}&text=${text}`
     };
 
-    if(links[platform]){
-        window.open(links[platform], "_blank");
+    if(links[platform]) window.open(links[platform], "_blank");
+}
+
+async function copyStoreLink(){
+    const url = getPublicStoreUrl();
+    try{
+        await navigator.clipboard.writeText(url);
+        toast("✅ تم النسخ.", "success");
+    }catch(e){
+        prompt("انسخ:", url);
+    }
+}
+
+async function copyStoreShareLink(){
+    const url = getStoreShareUrl();
+
+    if(!url){
+        toast("أنشئ المتجر أولاً.", "error");
+        return;
+    }
+
+    const copied = await lunaCopyText(url);
+
+    toast(
+        copied ? "✅ تم نسخ رابط المشاركة" : "⚠️ لم يتم النسخ تلقائياً",
+        copied ? "success" : "error"
+    );
+}
+
+async function shareStoreNative(){
+    if(!currentStore) return;
+    const url = getPublicStoreUrl();
+    const text = `🛍️ ${currentStore.name}\n${url}`;
+    
+    if(navigator.share){
+        try{
+            await navigator.share({title:currentStore.name, text, url});
+        }catch(e){}
+    } else {
+        await copyStoreLink();
     }
 }
 
