@@ -5053,7 +5053,22 @@ body[data-luna-template="midnight"] .dash-section .panel{background:linear-gradi
                                 <button class="gold-btn" onclick="shareStore('whatsapp')">🟢 WhatsApp</button>
                                 <button class="gold-btn" onclick="shareStore('facebook')">🔵 Facebook</button>
                                 <button class="gold-btn" onclick="shareStore('telegram')">✈️ Telegram</button>
-                                <button class="gold-btn" onclick="copyStoreLink()">🔗 نسخ</button>
+                                <button class="gold-btn" onclick="copyStoreShareLink()">🔗 نسخ رابط المشاركة</button>
+async function copyStoreShareLink(){
+    const url = getStoreShareUrl();
+
+    if(!url){
+        toast("أنشئ المتجر أولاً.", "error");
+        return;
+    }
+
+    const copied = await lunaCopyText(url);
+
+    toast(
+        copied ? "✅ تم نسخ رابط المشاركة" : "⚠️ لم يتم النسخ تلقائياً",
+        copied ? "success" : "error"
+    );
+}
                                 <button class="gold-btn" onclick="shareStoreNative()">📤 مشاركة</button>
                             </div>
                             <div class="form-message" id="storeShareMessage" role="alert"></div>
