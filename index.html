@@ -16,7 +16,7 @@
 
     function remember(msg, src, line, col){
         if(firstError) return;
-        firstError = String(msg || "") + (src ? "\n" + src + ":" + (line || 0) + ":" + (col || 0) : "");
+        fwhatsapp: `https://wa.me/?text=${text}%0A${encodedShareUrl}`,irstError = String(msg || "") + (src ? "\n" + src + ":" + (line || 0) + ":" + (col || 0) : "");
     }
     window.addEventListener("error", function(e){
         remember(e.message, e.filename, e.lineno, e.colno);
@@ -8928,7 +8928,7 @@ function shareStore(platform){
     const encodedShareUrl = encodeURIComponent(shareUrl);
 
     const links = {
-        whatsapp: `https://wa.me/?text=${text}%0A${encodedShareUrl}`,
+        whatsapp: `https://wa.me/?text=${encodedShareUrl}`,
         facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedShareUrl}`,
         telegram: `https://t.me/share/url?url=${encodedShareUrl}&text=${text}`
     };
