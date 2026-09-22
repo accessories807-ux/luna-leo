@@ -6830,6 +6830,7 @@ async function loadUserStore(){
         .from("stores")
         .select("*")
         .eq("owner_id", currentUser.id)
+        .order("created_at", {ascending:false})
         .limit(1);
     
     if(error) console.error("Store lookup:", error);
