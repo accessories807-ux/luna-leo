@@ -6830,8 +6830,20 @@ async function loadUserStore(){
         .from("stores")
         .select("*")
         .eq("owner_id", currentUser.id)
-        .order("created_at", {ascending:false})
+        .eq("slug", "luna-leo-accessoriess")
         .limit(1);
+
+    // Fallback: if the correct slug is not found, use the newest store.
+    if(!error && (!data || !data.length)){
+        const fallback = await supabaseClient
+            .from("stores")
+            .select("*")
+            .eq("owner_id", currentUser.id)
+            .order("created_at", {ascending:false})
+            .limit(1);
+        data = fallback.data;
+        error = fallback.error;
+    }
     
     if(error) console.error("Store lookup:", error);
     
