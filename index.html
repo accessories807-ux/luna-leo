@@ -8835,8 +8835,14 @@ function getStoreShareUrl(){
 
     const base = "https://zuljqdzinbndmesbarjn.supabase.co/functions/v1/store-share";
     const url = new URL(base);
-    url.searchParams.set("store", currentStore.slug || currentStore.id);
-    url.searchParams.set("v", "2");
+
+    // Use the actual public store slug.
+    // This prevents an old/incorrect currentStore.slug from producing store=luna-leo.
+    const publicStoreSlug = "luna-leo-accessoriess";
+
+    url.searchParams.set("store", publicStoreSlug);
+    url.searchParams.set("v", "3");
+
     return url.toString();
 }
 
