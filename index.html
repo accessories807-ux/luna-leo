@@ -8856,6 +8856,15 @@ function getStoreShareUrl(){
     url.searchParams.set("store", publicStoreSlug);
     url.searchParams.set("v", "3");
 
+    // Share-preview URL: after the customer enters the storefront,
+    // the storefront will automatically open the cart.
+    const appUrl = new URL(window.location.href);
+    appUrl.search = "";
+    appUrl.hash = "";
+    appUrl.searchParams.set("store", publicStoreSlug);
+    appUrl.searchParams.set("cart", "1");
+    url.searchParams.set("app", appUrl.toString());
+
     return url.toString();
 }
 
@@ -9504,6 +9513,16 @@ async function loadPublicStore(){
     updateCartCount();
     await loadMoreProducts(true);
     await openProductFromUrl();
+
+    // If the shared link contains cart=1, open the customer cart
+    // only after the store and saved cart have finished loading.
+    const openCartFromUrl = new URLSearchParams(window.location.search).get("cart") === "1";
+    if(openCartFromUrl){
+        setTimeout(() => {
+            try{ openCart(); }catch(e){ console.warn("Auto-open cart error:", e); }
+        }, 150);
+    }
+
     startStockRealtime();
     
     return true;
