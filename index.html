@@ -4642,6 +4642,26 @@ body[data-luna-template="midnight"] .dash-section .panel{background:linear-gradi
 .llx-suite{overflow:hidden}.llx-suite-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}.llx-suite-head h2{margin:3px 0 6px;font-size:22px}.llx-suite-head p{color:var(--muted);line-height:1.8;margin:0;max-width:850px}.llx-kicker{font-size:10px;letter-spacing:2px;color:var(--g-dark);font-weight:950}.llx-tabs{display:flex;gap:7px;overflow:auto;padding:7px;background:var(--bg);border:1px solid var(--line);border-radius:16px;margin-bottom:16px}.llx-tabs button{border:1px solid transparent;background:transparent;padding:10px 12px;border-radius:11px;font-weight:900;white-space:nowrap;color:var(--ink-2);cursor:pointer}.llx-tabs button.active{background:var(--ink);color:var(--bg);box-shadow:0 6px 16px rgba(0,0,0,.12)}.llx-pane{animation:cartItemIn .2s ease}.llx-grid-2,.llx-grid-3{display:grid;gap:12px;margin-bottom:13px}.llx-grid-2{grid-template-columns:1fr 1fr}.llx-grid-3{grid-template-columns:repeat(3,1fr)}.llx-pane label{display:block;font-size:12px;font-weight:900;color:var(--ink-2);margin-bottom:6px}.llx-pane input,.llx-pane select,.llx-pane textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px;font:inherit}.llx-pane textarea{min-height:110px;resize:vertical}.llx-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.llx-secondary{background:var(--bg)!important;color:var(--ink)!important;border:1px solid var(--line)!important}.llx-note{margin-top:12px;padding:11px 13px;border-radius:12px;background:var(--bg);color:var(--muted);font-size:12px;line-height:1.8}.llx-list{margin-top:14px;display:grid;gap:9px}.llx-row{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;padding:13px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.llx-row strong{color:var(--g-dark)}.llx-badge{display:inline-flex;padding:5px 9px;border-radius:999px;background:rgba(185,148,69,.12);color:var(--g-dark);font-size:11px;font-weight:900}.llx-import-box{padding:16px;border:1px dashed var(--g-soft);border-radius:16px;margin-bottom:12px;background:var(--bg)}.llx-import-box h3{margin:0 0 6px}.llx-import-box p{color:var(--muted);font-size:12px;line-height:1.7}.llx-template-big-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.llx-template-choice{min-height:125px;border:2px solid var(--line);border-radius:17px;cursor:pointer;padding:15px;text-align:right;background:linear-gradient(135deg,#111,#c9a449);color:#fff;display:flex;flex-direction:column;justify-content:end}.llx-template-choice:nth-child(2){background:linear-gradient(135deg,#100a19,#70499a)}.llx-template-choice:nth-child(3){background:linear-gradient(135deg,#fff,#eadbb5);color:#5c481d}.llx-template-choice:nth-child(4){background:linear-gradient(135deg,#05070a,#5e625f);color:#f4ead0}.llx-template-choice.active{border-color:var(--g);box-shadow:0 0 0 3px rgba(185,148,69,.16)}.llx-template-choice b{font-size:15px}.llx-template-choice span{font-size:11px;opacity:.8;margin-top:4px}.llx-file-btn{display:inline-flex;align-items:center;cursor:pointer}.llx-file-btn input{display:none!important}@media(max-width:800px){.llx-grid-2,.llx-grid-3{grid-template-columns:1fr}.llx-template-big-grid{grid-template-columns:1fr 1fr}.llx-suite-head{display:block}.llx-suite-head .gold-btn{margin-top:12px}}@media(max-width:480px){.llx-template-big-grid{grid-template-columns:1fr}.llx-tabs button{font-size:11px}}
 </style>
 
+<script>
+/* LUNA&LEO PUBLIC STORE BOOTSTRAP
+   Make sure a shared ?store= link never shows the platform landing page
+   while the public storefront is loading. */
+(function(){
+  try{
+    var params = new URLSearchParams(window.location.search || '');
+    var store = params.get('store') || params.get('shop') || params.get('slug');
+    if(!store) return;
+    document.addEventListener('DOMContentLoaded', function(){
+      var landing = document.getElementById('landingPage');
+      var dashboard = document.getElementById('dashboardApp');
+      var storefront = document.getElementById('storefrontApp');
+      if(landing) landing.style.display = 'none';
+      if(dashboard) dashboard.style.display = 'none';
+      if(storefront) storefront.style.display = 'block';
+    }, {once:true});
+  }catch(e){ console.warn('Public store bootstrap:', e); }
+})();
+</script>
 </head>
 <body>
 <!-- Skip to content (للـ accessibility) -->
@@ -9413,21 +9433,29 @@ async function deleteShippingMethod(id){
 /* ============ PUBLIC STORE ============ */
 async function findStoreByKey(key){
     if(!key) return null;
-    
+
+    // Accept the current public slug and the original LUNA&LEO slug.
+    // This keeps old/shared links working even if the store slug was changed.
+    const keys = [String(key).trim()];
+    if(keys[0].toLowerCase() === "luna-leo-accessoriess") keys.push("luna-leo");
+    if(keys[0].toLowerCase() === "luna-leo") keys.push("luna-leo-accessoriess");
+
+    for(const slug of [...new Set(keys)]){
+        const result = await supabaseClient
+            .from("stores")
+            .select("*")
+            .eq("slug", slug)
+            .maybeSingle();
+        if(result.data) return result.data;
+    }
+
     let result = await supabaseClient
-        .from("stores")
-        .select("*")
-        .eq("slug", key)
-        .maybeSingle();
-    if(result.data) return result.data;
-    
-    result = await supabaseClient
         .from("stores")
         .select("*")
         .eq("owner_id", key)
         .maybeSingle();
     if(result.data) return result.data;
-    
+
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if(uuidRegex.test(key)){
         result = await supabaseClient
@@ -9437,7 +9465,7 @@ async function findStoreByKey(key){
             .maybeSingle();
         if(result.data) return result.data;
     }
-    
+
     return null;
 }
 
