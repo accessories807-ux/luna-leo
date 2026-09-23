@@ -8854,7 +8854,7 @@ function getStoreShareUrl(){
 
     // Use the actual public store slug.
     // This prevents an old/incorrect currentStore.slug from producing store=luna-leo.
-    const publicStoreSlug = "luna-leo-accessoriess";
+    const publicStoreSlug = String(currentStore.slug || currentStore.id || "").trim();
 
     url.searchParams.set("store", publicStoreSlug);
     url.searchParams.set("v", "4");
@@ -8889,7 +8889,7 @@ function shareStore(platform){
 }
 
 async function copyStoreLink(){
-    const url = getPublicStoreUrl();
+    const url = getStoreShareUrl();
     try{
         await navigator.clipboard.writeText(url);
         toast("✅ تم النسخ.", "success");
