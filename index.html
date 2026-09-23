@@ -4642,26 +4642,6 @@ body[data-luna-template="midnight"] .dash-section .panel{background:linear-gradi
 .llx-suite{overflow:hidden}.llx-suite-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}.llx-suite-head h2{margin:3px 0 6px;font-size:22px}.llx-suite-head p{color:var(--muted);line-height:1.8;margin:0;max-width:850px}.llx-kicker{font-size:10px;letter-spacing:2px;color:var(--g-dark);font-weight:950}.llx-tabs{display:flex;gap:7px;overflow:auto;padding:7px;background:var(--bg);border:1px solid var(--line);border-radius:16px;margin-bottom:16px}.llx-tabs button{border:1px solid transparent;background:transparent;padding:10px 12px;border-radius:11px;font-weight:900;white-space:nowrap;color:var(--ink-2);cursor:pointer}.llx-tabs button.active{background:var(--ink);color:var(--bg);box-shadow:0 6px 16px rgba(0,0,0,.12)}.llx-pane{animation:cartItemIn .2s ease}.llx-grid-2,.llx-grid-3{display:grid;gap:12px;margin-bottom:13px}.llx-grid-2{grid-template-columns:1fr 1fr}.llx-grid-3{grid-template-columns:repeat(3,1fr)}.llx-pane label{display:block;font-size:12px;font-weight:900;color:var(--ink-2);margin-bottom:6px}.llx-pane input,.llx-pane select,.llx-pane textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px;font:inherit}.llx-pane textarea{min-height:110px;resize:vertical}.llx-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.llx-secondary{background:var(--bg)!important;color:var(--ink)!important;border:1px solid var(--line)!important}.llx-note{margin-top:12px;padding:11px 13px;border-radius:12px;background:var(--bg);color:var(--muted);font-size:12px;line-height:1.8}.llx-list{margin-top:14px;display:grid;gap:9px}.llx-row{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;padding:13px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.llx-row strong{color:var(--g-dark)}.llx-badge{display:inline-flex;padding:5px 9px;border-radius:999px;background:rgba(185,148,69,.12);color:var(--g-dark);font-size:11px;font-weight:900}.llx-import-box{padding:16px;border:1px dashed var(--g-soft);border-radius:16px;margin-bottom:12px;background:var(--bg)}.llx-import-box h3{margin:0 0 6px}.llx-import-box p{color:var(--muted);font-size:12px;line-height:1.7}.llx-template-big-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.llx-template-choice{min-height:125px;border:2px solid var(--line);border-radius:17px;cursor:pointer;padding:15px;text-align:right;background:linear-gradient(135deg,#111,#c9a449);color:#fff;display:flex;flex-direction:column;justify-content:end}.llx-template-choice:nth-child(2){background:linear-gradient(135deg,#100a19,#70499a)}.llx-template-choice:nth-child(3){background:linear-gradient(135deg,#fff,#eadbb5);color:#5c481d}.llx-template-choice:nth-child(4){background:linear-gradient(135deg,#05070a,#5e625f);color:#f4ead0}.llx-template-choice.active{border-color:var(--g);box-shadow:0 0 0 3px rgba(185,148,69,.16)}.llx-template-choice b{font-size:15px}.llx-template-choice span{font-size:11px;opacity:.8;margin-top:4px}.llx-file-btn{display:inline-flex;align-items:center;cursor:pointer}.llx-file-btn input{display:none!important}@media(max-width:800px){.llx-grid-2,.llx-grid-3{grid-template-columns:1fr}.llx-template-big-grid{grid-template-columns:1fr 1fr}.llx-suite-head{display:block}.llx-suite-head .gold-btn{margin-top:12px}}@media(max-width:480px){.llx-template-big-grid{grid-template-columns:1fr}.llx-tabs button{font-size:11px}}
 </style>
 
-<script>
-/* LUNA&LEO PUBLIC STORE BOOTSTRAP
-   Make sure a shared ?store= link never shows the platform landing page
-   while the public storefront is loading. */
-(function(){
-  try{
-    var params = new URLSearchParams(window.location.search || '');
-    var store = params.get('store') || params.get('shop') || params.get('slug');
-    if(!store) return;
-    document.addEventListener('DOMContentLoaded', function(){
-      var landing = document.getElementById('landingPage');
-      var dashboard = document.getElementById('dashboardApp');
-      var storefront = document.getElementById('storefrontApp');
-      if(landing) landing.style.display = 'none';
-      if(dashboard) dashboard.style.display = 'none';
-      if(storefront) storefront.style.display = 'block';
-    }, {once:true});
-  }catch(e){ console.warn('Public store bootstrap:', e); }
-})();
-</script>
 </head>
 <body>
 <!-- Skip to content (للـ accessibility) -->
@@ -6097,17 +6077,6 @@ initTheme();
 
 /* ============ VIEWS ============ */
 function showLanding(){
-    // A public store URL must NEVER fall back to the platform landing page.
-    // Auth/session callbacks can fire after the public-store loader starts,
-    // so protect the storefront here as the final safety net.
-    try{
-        const publicKey = (typeof getStoreQuery === "function") ? getStoreQuery() : null;
-        if(publicKey){
-            showStorefront();
-            return;
-        }
-    }catch(e){}
-
     document.getElementById("landingPage").style.display = "block";
     document.getElementById("dashboardApp").style.display = "none";
     document.getElementById("storefrontApp").style.display = "none";
@@ -8778,11 +8747,14 @@ function backToPlatform(){
     window.location.href = url.toString();
 }
 
+// Public storefront URL — never build customer links from the merchant/dashboard URL.
+// This is important when the owner shares from the dashboard: social apps must receive
+// the public storefront, not the merchant landing/dashboard page.
+const PUBLIC_STORE_APP_URL = "https://luna-leo.vercel.app/";
+
 function getPublicStoreUrl(){
     if(!currentStore) return "";
-    const url = new URL(window.location.href);
-    url.search = "";
-    url.hash = "";
+    const url = new URL(PUBLIC_STORE_APP_URL);
     url.searchParams.set("store", currentStore.slug || currentStore.id);
     return url.toString();
 }
@@ -8887,11 +8859,11 @@ function getStoreShareUrl(){
     url.searchParams.set("store", publicStoreSlug);
     url.searchParams.set("v", "3");
 
-    // Share-preview URL: after the customer enters the storefront,
+    // Share-preview URL: after the customer enters the PUBLIC STOREFRONT,
     // the storefront will automatically open the cart.
-    const appUrl = new URL(window.location.href);
-    appUrl.search = "";
-    appUrl.hash = "";
+    // Never use window.location.href here because the owner may currently be
+    // inside the merchant/dashboard page.
+    const appUrl = new URL(PUBLIC_STORE_APP_URL);
     appUrl.searchParams.set("store", publicStoreSlug);
     appUrl.searchParams.set("cart", "1");
     url.searchParams.set("app", appUrl.toString());
@@ -8944,15 +8916,18 @@ async function copyStoreShareLink(){
 
 async function shareStoreNative(){
     if(!currentStore) return;
-    const url = getPublicStoreUrl();
-    const text = `🛍️ ${currentStore.name}\n${url}`;
+
+    // Native sharing must also use the preview URL so WhatsApp/Facebook/etc.
+    // receive the store name, description and logo from store-share.
+    const url = getStoreShareUrl();
+    const text = `🛍️ ${currentStore.name || ""}`;
     
     if(navigator.share){
         try{
             await navigator.share({title:currentStore.name, text, url});
         }catch(e){}
     } else {
-        await copyStoreLink();
+        await copyStoreShareLink();
     }
 }
 
@@ -9543,23 +9518,9 @@ async function loadPublicStore(){
     }
     
     try{
-        const savedCart = JSON.parse(localStorage.getItem("luna_cart_" + store.id) || "[]");
-        publicCart = Array.isArray(savedCart) ? savedCart.map(item => {
-            const rawQty = Number(item?.qty);
-            const rawPrice = Number(item?.price);
-            const rawStock = Number(item?.stock);
-            return {
-                ...item,
-                qty: Number.isFinite(rawQty) ? Math.max(1, Math.floor(rawQty)) : 1,
-                price: Number.isFinite(rawPrice) ? rawPrice : 0,
-                stock: Number.isFinite(rawStock) && rawStock >= 0 ? rawStock : 999999
-            };
-        }).filter(item => item && item.id) : [];
-        savePublicCart();
-    }catch(e){
-        publicCart = [];
-        try{ localStorage.removeItem("luna_cart_" + store.id); }catch(_){}
-    }
+        publicCart = JSON.parse(localStorage.getItem("luna_cart_" + store.id) || "[]");
+        if(!Array.isArray(publicCart)) publicCart = [];
+    }catch(e){ publicCart = []; }
     
     loadSavedCoupon();
     loadWishlist();
@@ -10938,16 +10899,10 @@ async function placeStoreOrder(){
             order_note: orderNote || null
         };
         
-        const items = publicCart.map(item => {
-            const quantity = Number(item.qty);
-            if(!Number.isFinite(quantity) || quantity < 1 || !Number.isInteger(quantity)){
-                throw new Error("QUANTITY_INVALID:" + String(item.qty));
-            }
-            return {
-                product_id: item.id,
-                quantity: quantity
-            };
-        });
+        const items = publicCart.map(item => ({
+            product_id: item.id,
+            quantity: Number(item.qty || 0)
+        }));
         
         const cancelToken = makeUUID();
         
