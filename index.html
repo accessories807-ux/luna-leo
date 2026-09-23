@@ -8857,16 +8857,7 @@ function getStoreShareUrl(){
     const publicStoreSlug = "luna-leo-accessoriess";
 
     url.searchParams.set("store", publicStoreSlug);
-    url.searchParams.set("v", "4");
-
-    // Share-preview URL: after the customer enters the PUBLIC STOREFRONT,
-    // the storefront will automatically open the cart.
-    // Never use window.location.href here because the owner may currently be
-    // inside the merchant/dashboard page.
-    const appUrl = new URL(PUBLIC_STORE_APP_URL);
-    appUrl.searchParams.set("store", publicStoreSlug);
-    appUrl.searchParams.set("cart", "1");
-    url.searchParams.set("app", appUrl.toString());
+    url.searchParams.set("v", "6");
 
     return url.toString();
 }
