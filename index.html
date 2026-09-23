@@ -6097,6 +6097,17 @@ initTheme();
 
 /* ============ VIEWS ============ */
 function showLanding(){
+    // A public store URL must NEVER fall back to the platform landing page.
+    // Auth/session callbacks can fire after the public-store loader starts,
+    // so protect the storefront here as the final safety net.
+    try{
+        const publicKey = (typeof getStoreQuery === "function") ? getStoreQuery() : null;
+        if(publicKey){
+            showStorefront();
+            return;
+        }
+    }catch(e){}
+
     document.getElementById("landingPage").style.display = "block";
     document.getElementById("dashboardApp").style.display = "none";
     document.getElementById("storefrontApp").style.display = "none";
@@ -6105,6 +6116,17 @@ function showLanding(){
 }
 
 function showDashboard(){
+    // Never replace a public storefront URL with the platform dashboard.
+    // This is especially important when Supabase fires INITIAL_SESSION
+    // after the public store has already started loading.
+    try{
+        const publicKey = (typeof getStoreQuery === "function") ? getStoreQuery() : null;
+        if(publicKey){
+            showStorefront();
+            return;
+        }
+    }catch(e){}
+
     document.getElementById("landingPage").style.display = "none";
     document.getElementById("dashboardApp").style.display = "block";
     document.getElementById("storefrontApp").style.display = "none";
@@ -6397,6 +6419,23 @@ async function checkUserSession(){
 }
 
 supabaseClient.auth.onAuthStateChange((event, session) => {
+    // A public store URL always wins over the authentication UI.
+    // Supabase may emit INITIAL_SESSION after page load and must not
+    // send the customer back to "أنشئ متجرك".
+    let publicKey = null;
+    try{
+        publicKey = (typeof getStoreQuery === "function") ? getStoreQuery() : null;
+    }catch(e){}
+
+    if(publicKey){
+        if(session?.user){
+            currentUser = session.user;
+            window.currentUser = currentUser;
+        }
+        showStorefront();
+        return;
+    }
+
     if(session?.user){
         currentUser = session.user;
         window.currentUser = currentUser;
