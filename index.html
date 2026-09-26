@@ -8852,9 +8852,12 @@ function getStoreShareUrl(){
     const base = "https://zuljqdzinbndmesbarjn.supabase.co/functions/v1/store-share";
     const url = new URL(base);
 
-    // Use the actual public store slug.
-    // This prevents an old/incorrect currentStore.slug from producing store=luna-leo.
-    const publicStoreSlug = "luna-leo-accessoriess";
+    // Use the current merchant's own store slug (fall back to its id).
+    // Previously this was hardcoded to "luna-leo-accessoriess", which meant
+    // every trader's share link/preview pointed at that one store instead of
+    // their own — showing the generic "أنشئ متجرك" landing page instead of
+    // their own logo/name/description.
+    const publicStoreSlug = currentStore.slug || currentStore.id;
 
     url.searchParams.set("store", publicStoreSlug);
     url.searchParams.set("v", "6");
