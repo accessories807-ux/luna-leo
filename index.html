@@ -4642,6 +4642,27 @@ body[data-luna-template="midnight"] .dash-section .panel{background:linear-gradi
 .llx-suite{overflow:hidden}.llx-suite-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}.llx-suite-head h2{margin:3px 0 6px;font-size:22px}.llx-suite-head p{color:var(--muted);line-height:1.8;margin:0;max-width:850px}.llx-kicker{font-size:10px;letter-spacing:2px;color:var(--g-dark);font-weight:950}.llx-tabs{display:flex;gap:7px;overflow:auto;padding:7px;background:var(--bg);border:1px solid var(--line);border-radius:16px;margin-bottom:16px}.llx-tabs button{border:1px solid transparent;background:transparent;padding:10px 12px;border-radius:11px;font-weight:900;white-space:nowrap;color:var(--ink-2);cursor:pointer}.llx-tabs button.active{background:var(--ink);color:var(--bg);box-shadow:0 6px 16px rgba(0,0,0,.12)}.llx-pane{animation:cartItemIn .2s ease}.llx-grid-2,.llx-grid-3{display:grid;gap:12px;margin-bottom:13px}.llx-grid-2{grid-template-columns:1fr 1fr}.llx-grid-3{grid-template-columns:repeat(3,1fr)}.llx-pane label{display:block;font-size:12px;font-weight:900;color:var(--ink-2);margin-bottom:6px}.llx-pane input,.llx-pane select,.llx-pane textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px;font:inherit}.llx-pane textarea{min-height:110px;resize:vertical}.llx-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.llx-secondary{background:var(--bg)!important;color:var(--ink)!important;border:1px solid var(--line)!important}.llx-note{margin-top:12px;padding:11px 13px;border-radius:12px;background:var(--bg);color:var(--muted);font-size:12px;line-height:1.8}.llx-list{margin-top:14px;display:grid;gap:9px}.llx-row{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;padding:13px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.llx-row strong{color:var(--g-dark)}.llx-badge{display:inline-flex;padding:5px 9px;border-radius:999px;background:rgba(185,148,69,.12);color:var(--g-dark);font-size:11px;font-weight:900}.llx-import-box{padding:16px;border:1px dashed var(--g-soft);border-radius:16px;margin-bottom:12px;background:var(--bg)}.llx-import-box h3{margin:0 0 6px}.llx-import-box p{color:var(--muted);font-size:12px;line-height:1.7}.llx-template-big-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.llx-template-choice{min-height:125px;border:2px solid var(--line);border-radius:17px;cursor:pointer;padding:15px;text-align:right;background:linear-gradient(135deg,#111,#c9a449);color:#fff;display:flex;flex-direction:column;justify-content:end}.llx-template-choice:nth-child(2){background:linear-gradient(135deg,#100a19,#70499a)}.llx-template-choice:nth-child(3){background:linear-gradient(135deg,#fff,#eadbb5);color:#5c481d}.llx-template-choice:nth-child(4){background:linear-gradient(135deg,#05070a,#5e625f);color:#f4ead0}.llx-template-choice.active{border-color:var(--g);box-shadow:0 0 0 3px rgba(185,148,69,.16)}.llx-template-choice b{font-size:15px}.llx-template-choice span{font-size:11px;opacity:.8;margin-top:4px}.llx-file-btn{display:inline-flex;align-items:center;cursor:pointer}.llx-file-btn input{display:none!important}@media(max-width:800px){.llx-grid-2,.llx-grid-3{grid-template-columns:1fr}.llx-template-big-grid{grid-template-columns:1fr 1fr}.llx-suite-head{display:block}.llx-suite-head .gold-btn{margin-top:12px}}@media(max-width:480px){.llx-template-big-grid{grid-template-columns:1fr}.llx-tabs button{font-size:11px}}
 </style>
 
+<style id="analytics-redesign">
+.an-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.an-head h2{font-size:24px;font-weight:950;margin:0}
+.an-range{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px}
+.an-range button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:12px;font-weight:800;padding:8px 12px;border-radius:10px;cursor:pointer}
+.an-range button.active{background:var(--g-soft);color:var(--g-dark)}
+.an-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.an-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:8px;min-width:0}
+.an-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.an-ico{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+.an-label{font-size:13px;font-weight:800;color:var(--muted);line-height:1.4}
+.an-val{font-size:24px;font-weight:950;color:var(--ink);letter-spacing:-.5px;overflow-wrap:anywhere}
+.an-delta{align-self:flex-start;font-size:12px;font-weight:900;padding:5px 10px;border-radius:999px}
+.an-delta.up{background:#e6f7ef;color:#18794e}
+.an-delta.down{background:#fdecea;color:#b42318}
+.an-delta.flat{background:var(--g-soft);color:var(--muted)}
+.an-chart-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:14px}
+.an-chart-card h3{font-size:16px;font-weight:950;margin:0 0 10px}
+.an-note{grid-column:1/-1;font-size:12px;color:var(--muted);background:var(--g-soft);border-radius:14px;padding:10px 12px;line-height:1.7}
+@media(min-width:900px){.an-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
 </head>
 <body>
 <!-- Skip to content (للـ accessibility) -->
@@ -4960,7 +4981,20 @@ body[data-luna-template="midnight"] .dash-section .panel{background:linear-gradi
                 </div>
                 <div class="sub-label" id="subNotice" style="margin-top:12px"></div>
             </div>
-            <div class="stats">
+            <div class="an-head">
+                <h2>الإحصائيات</h2>
+                <div class="an-range" role="group" aria-label="الفترة">
+                    <button data-d="7" onclick="setAnalyticsRange(7)">7 أيام</button>
+                    <button data-d="30" class="active" onclick="setAnalyticsRange(30)">30 يوم</button>
+                    <button data-d="90" onclick="setAnalyticsRange(90)">90 يوم</button>
+                </div>
+            </div>
+            <div class="an-grid"><div class="empty" style="grid-column:1/-1">⏳ جاري التحميل...</div></div>
+            <div class="an-chart-card">
+                <h3>إجمالي الطلبات</h3>
+                <div class="an-chart"></div>
+            </div>
+            <div class="stats" style="display:none">
                 <div class="stat"><div class="stat-icon">📦</div><h3 id="statProducts">0</h3><p>المنتجات</p></div>
                 <div class="stat"><div class="stat-icon">🛒</div><h3 id="statOrders">0</h3><p>الطلبات</p></div>
                 <div class="stat"><div class="stat-icon">👥</div><h3 id="statCustomers">0</h3><p>العملاء</p></div>
@@ -5231,16 +5265,20 @@ body[data-luna-template="midnight"] .dash-section .panel{background:linear-gradi
 
         <!-- ============ ANALYTICS SECTION ============ -->
         <section id="dashAnalytics" class="dash-section hidden">
-            <div class="panel">
-                <div class="panel-title"><h2>📊 QumraQL Smart Analytics</h2></div>
-                <div class="stats">
-                    <div class="stat"><div class="stat-icon">💰</div><h3 id="analyticsSales">0</h3><p>إجمالي المبيعات</p></div>
-                    <div class="stat"><div class="stat-icon">🛒</div><h3 id="analyticsOrders">0</h3><p>إجمالي الطلبات</p></div>
-                    <div class="stat"><div class="stat-icon">📦</div><h3 id="analyticsProducts">0</h3><p>المنتجات</p></div>
-                    <div class="stat"><div class="stat-icon">👥</div><h3 id="analyticsCustomers">0</h3><p>العملاء</p></div>
+            <div class="an-head">
+                <h2>الإحصائيات</h2>
+                <div class="an-range" role="group" aria-label="الفترة">
+                    <button data-d="7" onclick="setAnalyticsRange(7)">7 أيام</button>
+                    <button data-d="30" class="active" onclick="setAnalyticsRange(30)">30 يوم</button>
+                    <button data-d="90" onclick="setAnalyticsRange(90)">90 يوم</button>
                 </div>
-                <div class="sub-label" id="analyticsLock"></div>
             </div>
+            <div class="an-grid"><div class="empty" style="grid-column:1/-1">⏳ جاري التحميل...</div></div>
+            <div class="an-chart-card">
+                <h3>إجمالي الطلبات</h3>
+                <div class="an-chart"></div>
+            </div>
+            <div class="sub-label" id="analyticsLock"></div>
         </section>
 
         <!-- ============ REPORTS SECTION ============ -->
@@ -7192,16 +7230,186 @@ async function loadDashboardData(){
     startNotifications();
 }
 
-function renderAnalytics(){
-    const sales = document.getElementById("analyticsSales");
-    const orders = document.getElementById("analyticsOrders");
-    const products = document.getElementById("analyticsProducts");
-    const customers = document.getElementById("analyticsCustomers");
-    
-    if(sales) sales.textContent = formatCurrency(window.__dashboardSales || 0);
-    if(orders) orders.textContent = String(dashboardOrdersCount || 0);
-    if(products) products.textContent = String(dashboardProducts.length || 0);
-    if(customers) customers.textContent = String(window.__dashboardCustomersCount || 0);
+/* ============ ANALYTICS (redesigned) ============ */
+let __anRange = 30;
+
+function setAnalyticsRange(d){
+    __anRange = d;
+    document.querySelectorAll(".an-range button").forEach(b => b.classList.toggle("active", Number(b.dataset.d) === d));
+    renderAnalytics();
+}
+
+function anDelta(cur, prev){
+    if(!prev && !cur) return {cls:"flat", txt:"— 0%"};
+    if(!prev) return {cls:"up", txt:"زيادة جديدة"};
+    const pct = ((cur - prev) / Math.abs(prev)) * 100;
+    if(Math.abs(pct) < 0.05) return {cls:"flat", txt:"0%"};
+    const v = Math.abs(pct).toFixed(1);
+    return pct > 0 ? {cls:"up", txt:"زيادة +" + v + "% ↗"} : {cls:"down", txt:"انخفاض -" + v + "% ↘"};
+}
+
+function anShort(n){
+    n = Number(n || 0);
+    if(n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
+    if(n >= 1e4) return (n / 1e3).toFixed(1).replace(/\.0$/, "") + "K";
+    return Math.round(n).toLocaleString("en-US");
+}
+
+async function renderAnalytics(){
+    const grids = Array.from(document.querySelectorAll(".an-grid")).filter(g => g.offsetParent !== null);
+    if(!grids.length || !currentStore) return;
+
+    const days = __anRange;
+    const now = Date.now();
+    const curStart = now - days * 864e5;
+    const prevStart = now - 2 * days * 864e5;
+
+    const [ordersRes, productsRes, eventsRes, unreadRes] = await Promise.all([
+        supabaseClient.from("orders").select("id,total,status,created_at,items")
+            .eq("store_id", currentStore.id).gte("created_at", new Date(prevStart).toISOString()).limit(20000),
+        supabaseClient.from("products").select("id,cost_price").eq("store_id", currentStore.id),
+        supabaseClient.from("store_events").select("event_type,session_id,created_at")
+            .eq("store_id", currentStore.id).gte("created_at", new Date(prevStart).toISOString()).limit(50000),
+        supabaseClient.from("store_notifications").select("id", {count:"exact", head:true})
+            .eq("store_id", currentStore.id).eq("is_read", false)
+    ]);
+
+    const eventsOk = !eventsRes.error;
+    const orders = (ordersRes.data || []).filter(o => String(o.status || "").toLowerCase() !== "cancelled");
+    const costMap = new Map((productsRes.data || []).map(p => [String(p.id), Number(p.cost_price || 0)]));
+    const events = eventsRes.data || [];
+
+    const inCur = t => new Date(t).getTime() >= curStart;
+    const split = arr => ({
+        cur: arr.filter(x => inCur(x.created_at)),
+        prev: arr.filter(x => !inCur(x.created_at))
+    });
+
+    const ord = split(orders);
+    const ev = split(events);
+    const count = (list, type) => list.filter(e => e.event_type === type).length;
+    const uniq = (list, type) => new Set(list.filter(e => e.event_type === type).map(e => e.session_id)).size;
+
+    const profitOf = list => list.reduce((sum, o) => {
+        let items = o.items;
+        if(typeof items === "string"){ try{ items = JSON.parse(items); }catch(e){ items = []; } }
+        if(!Array.isArray(items)) return sum;
+        return sum + items.reduce((t, it) => {
+            const qty = Math.max(0, Number(it.quantity ?? it.qty ?? 1));
+            const unit = Number(it.price || 0);
+            const cost = costMap.get(String(it.product_id ?? it.id)) || 0;
+            return t + (unit - cost) * qty;
+        }, 0);
+    }, 0);
+
+    const calc = (o, e) => {
+        const orders_n = o.length;
+        const sales = o.reduce((s, x) => s + Number(x.total || 0), 0);
+        const visitors = uniq(e, "visit");
+        const checkouts = uniq(e, "checkout_start");
+        const incomplete = Math.max(checkouts - orders_n, 0);
+        return {
+            visitors, orders: orders_n, sales,
+            aov: orders_n ? sales / orders_n : 0,
+            carts: count(e, "add_to_cart"),
+            checkouts, incomplete,
+            lostRate: checkouts ? (incomplete / checkouts) * 100 : 0,
+            conv: visitors ? (orders_n / visitors) * 100 : 0,
+            profit: profitOf(o)
+        };
+    };
+    const C = calc(ord.cur, ev.cur);
+    const P = calc(ord.prev, ev.prev);
+
+    const unread = unreadRes.error ? null : (unreadRes.count || 0);
+    const needEvents = v => eventsOk ? v : "—";
+
+    const cards = [
+        {k:"visitors",  label:"الزائرين",            icon:"👁️", bg:"#e3f2fd", val:needEvents(anShort(C.visitors)), d:eventsOk ? anDelta(C.visitors, P.visitors) : null},
+        {k:"orders",    label:"طلبات",               icon:"📦", bg:"#ede7f6", val:anShort(C.orders), d:anDelta(C.orders, P.orders)},
+        {k:"aov",       label:"متوسط سعر الطلب",     icon:"🧾", bg:"#f3e5f5", val:anShort(C.aov) + " EGP", d:anDelta(C.aov, P.aov)},
+        {k:"carts",     label:"مرات إضافة للسلة",    icon:"🛒", bg:"#e8f5e9", val:needEvents(anShort(C.carts)), d:eventsOk ? anDelta(C.carts, P.carts) : null},
+        {k:"checkouts", label:"مرات بدء الشراء",     icon:"💳", bg:"#f9fbe7", val:needEvents(anShort(C.checkouts)), d:eventsOk ? anDelta(C.checkouts, P.checkouts) : null},
+        {k:"incomplete",label:"طلبات غير مكتملة",    icon:"⚠️", bg:"#fdecea", val:needEvents(anShort(C.incomplete)), d:eventsOk ? anDelta(C.incomplete, P.incomplete) : null},
+        {k:"unread",    label:"الطلبات غير المقروءة", icon:"📩", bg:"#e0f7fa", val:unread == null ? "—" : anShort(unread), d:null},
+        {k:"lost",      label:"المعدل بالمفقودة",    icon:"🔄", bg:"#e0f2f1", val:needEvents(C.lostRate.toFixed(2) + "%"), d:eventsOk ? anDelta(C.lostRate, P.lostRate) : null},
+        {k:"conv",      label:"معدل التحويل",        icon:"📈", bg:"#e0f7fa", val:needEvents(C.conv.toFixed(2) + "%"), d:eventsOk ? anDelta(C.conv, P.conv) : null},
+        {k:"profit",    label:"صافي الربح",          icon:"💵", bg:"#e8f5e9", val:anShort(C.profit) + " EGP", d:anDelta(C.profit, P.profit)},
+        {k:"sales",     label:"إجمالي المبيعات",     icon:"💰", bg:"#e1f5fe", val:anShort(C.sales) + " EGP", d:anDelta(C.sales, P.sales)}
+    ];
+
+    const gridHTML = cards.map(c => `
+        <div class="an-card">
+            <div class="an-top">
+                <div>
+                    <div class="an-label">${c.label}</div>
+                </div>
+                <div class="an-ico" style="background:${c.bg}">${c.icon}</div>
+            </div>
+            <div class="an-val" dir="ltr" style="text-align:right">${c.val}</div>
+            ${c.d ? `<span class="an-delta ${c.d.cls}">${c.d.txt}</span>` : `<span class="an-delta flat">—</span>`}
+        </div>`).join("") +
+        (eventsOk ? "" : `<div class="an-note">📌 أرقام الزوار والسلة وبدء الشراء تحتاج تفعيل جدول التتبع (store_events) مرة واحدة من Supabase — الملف المرفق analytics-setup.sql. باقي الأرقام شغالة الآن.</div>`);
+
+    grids.forEach(g => { g.innerHTML = gridHTML; });
+    renderOrdersChart(ord.cur, days);
+}
+
+function renderOrdersChart(orders, days){
+    Array.from(document.querySelectorAll(".an-chart")).filter(b => b.offsetParent !== null).forEach(box => renderOrdersChartInto(box, orders, days));
+}
+
+function renderOrdersChartInto(box, orders, days){
+    const buckets = Math.min(days, 30);
+    const step = days / buckets;
+    const now = Date.now();
+    const start = now - days * 864e5;
+    const data = new Array(buckets).fill(0);
+    orders.forEach(o => {
+        const idx = Math.min(buckets - 1, Math.max(0, Math.floor((new Date(o.created_at).getTime() - start) / (step * 864e5))));
+        data[idx]++;
+    });
+    const max = Math.max(...data, 1);
+    const niceMax = Math.ceil(max / 5) * 5 || 5;
+    const W = 320, H = 170, padL = 28, padB = 8, padT = 10;
+    const iw = W - padL - 6, ih = H - padB - padT;
+    const pts = data.map((v, i) => [padL + (buckets === 1 ? iw / 2 : (i / (buckets - 1)) * iw), padT + ih - (v / niceMax) * ih]);
+    const line = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+    const area = line + ` L${pts[pts.length-1][0].toFixed(1)} ${padT+ih} L${pts[0][0].toFixed(1)} ${padT+ih} Z`;
+    const grid = [0, .25, .5, .75, 1].map(f => {
+        const y = padT + ih - f * ih;
+        return `<line x1="${padL}" x2="${W-6}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-dasharray="4 4"/><text x="${padL-6}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--muted)">${Math.round(f * niceMax)}</text>`;
+    }).join("");
+    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;direction:ltr" role="img" aria-label="إجمالي الطلبات">
+        ${grid}
+        <path d="${area}" fill="#18794e" opacity=".12"/>
+        <path d="${line}" fill="none" stroke="#18794e" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>`;
+}
+
+/* ============ STOREFRONT EVENT TRACKING (visitors / cart / checkout) ============ */
+function trackStoreEvent(type){
+    try{
+        if(!publicStore || !publicStore.id) return;
+        let sid = "";
+        try{
+            sid = localStorage.getItem("ll_sid") || "";
+            if(!sid){
+                sid = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2));
+                localStorage.setItem("ll_sid", sid);
+            }
+        }catch(e){ sid = "anon-" + Math.random().toString(16).slice(2); }
+        if(type === "visit"){
+            try{
+                const k = "ll_visit_" + publicStore.id;
+                if(sessionStorage.getItem(k)) return;
+                sessionStorage.setItem(k, "1");
+            }catch(e){}
+        }
+        supabaseClient.from("store_events")
+            .insert({store_id: publicStore.id, session_id: sid, event_type: type})
+            .then(() => {}, () => {});
+    }catch(e){}
 }
 
 function showSection(section){
@@ -7240,7 +7448,7 @@ function showSection(section){
     const activeBtn = document.querySelector(`.sidebar button[data-section="${section}"]`);
     if(activeBtn) activeBtn.classList.add("active");
     
-    if(section === "analytics" && hasFeature("analytics")) renderAnalytics();
+    if(section === "home" || (section === "analytics" && hasFeature("analytics"))) renderAnalytics();
     if(section === "reports" && hasFeature("analytics")) renderBusinessReports();
     if(section === "team") renderTeamList();
     if(section === "subscription") renderPlanCards();
@@ -9480,6 +9688,7 @@ async function loadPublicStore(){
     }
     
     publicStore = store;
+    trackStoreEvent("visit");
     
     const logoWrap = document.getElementById("sfStoreLogo");
     const logoImg = document.getElementById("sfStoreLogoImg");
@@ -9896,6 +10105,7 @@ function addToCart(productId){
         });
     }
     
+    trackStoreEvent("add_to_cart");
     savePublicCart();
     renderCart();
     if(appliedCoupon) recalcCouponSilently();
@@ -10073,6 +10283,7 @@ function showCheckout(){
         return false;
     }
     
+    trackStoreEvent("checkout_start");
     document.getElementById("cpContact")?.scrollIntoView({behavior:"smooth", block:"start"});
     setTimeout(() => {
         try{ document.getElementById("orderFirstName")?.focus({preventScroll:true}); }catch(e){}
@@ -10946,6 +11157,7 @@ async function placeStoreOrder(){
         showOrderSuccess(data.order_id);
         
         showWhatsappConfirmButton();
+        notifyMerchantNewOrderWhatsApp(window.__lastOrderData);
         
         if(publicStore.loyalty_enabled && phone){
             try{
@@ -10992,6 +11204,99 @@ async function placeStoreOrder(){
             b.disabled = false;
             b.textContent = "✓ تأكيد الطلب";
         });
+    }
+}
+
+/* ============ NOTIFY MERCHANT (NEW ORDER) ON WHATSAPP ============ */
+// As soon as a customer's order succeeds, this opens a WhatsApp chat addressed to
+// the STORE's own WhatsApp number (currentStore/publicStore.whatsapp), prefilled with
+// the full order details, so the merchant gets notified. WhatsApp itself never allows a
+// message to be sent silently — the customer still has to tap "Send" once inside
+// WhatsApp — but the chat + message are opened for them automatically, so it's a single tap.
+function buildMerchantOrderMessage(data){
+    const itemsText = data.items.map((item, i) => {
+        const lineTotal = Number(item.price || 0) * Number(item.qty || 0);
+        return `${i+1}. ${item.name} × ${item.qty} = ${lineTotal.toLocaleString("ar-EG")} جنيه`;
+    }).join("\n");
+
+    return `🛒 طلب جديد من متجرك (${data.storeName})
+
+━━━━━━━━━━━━━━━━━━━
+🆔 رقم الطلب: ${String(data.orderId).slice(0, 8)}
+👤 العميل: ${data.customerName}
+📞 الهاتف: ${data.customerPhone}
+📍 العنوان: ${data.customerAddress}
+━━━━━━━━━━━━━━━━━━━
+📦 المنتجات:
+${itemsText}
+━━━━━━━━━━━━━━━━━━━
+💰 المجموع: ${Number(data.subtotal).toLocaleString("ar-EG")} جنيه
+${data.shipping > 0 ? `🚚 الشحن: ${Number(data.shipping).toLocaleString("ar-EG")} جنيه\n` : ""}✅ الإجمالي: ${Number(data.total).toLocaleString("ar-EG")} جنيه
+━━━━━━━━━━━━━━━━━━━`;
+}
+
+async function notifyMerchantNewOrderWhatsApp(data){
+    if(!data) return;
+
+    const storePhone = normalizePhoneForWhatsApp(data.storeWhatsapp);
+    if(!storePhone) return; // No WhatsApp number saved for this store — nothing to notify.
+
+    // Primary path: fully automatic, silent, server-side send via the official
+    // WhatsApp Cloud API (Meta), through a Supabase Edge Function that holds the
+    // access token. The merchant gets the message with no action needed from the customer.
+    try{
+        const {error} = await supabaseClient.functions.invoke("notify-merchant-order", {
+            body: {
+                storePhone,
+                storeName: data.storeName,
+                orderId: data.orderId,
+                customerName: data.customerName,
+                customerPhone: data.customerPhone,
+                customerAddress: data.customerAddress,
+                items: data.items,
+                subtotal: data.subtotal,
+                shipping: data.shipping,
+                total: data.total
+            }
+        });
+        if(error) throw error;
+        return; // Sent server-side — no fallback needed.
+    }catch(e){
+        console.warn("notify-merchant-order failed, falling back to wa.me:", e);
+    }
+
+    // Fallback only: if the Cloud API call failed (e.g. function not deployed yet,
+    // template not approved, or the 24h session window is closed for a plain-text
+    // send), open a pre-filled WhatsApp draft to the store's number as a backup —
+    // this still needs one tap from the customer to actually send it.
+    const message = buildMerchantOrderMessage(data);
+    const url = `https://wa.me/${storePhone}?text=${encodeURIComponent(message)}`;
+
+    let opened = null;
+    try{ opened = window.open(url, "_blank"); }catch(e){ opened = null; }
+
+    showNotifyMerchantFallbackButton(url, !opened || opened.closed);
+}
+
+function showNotifyMerchantFallbackButton(url, popupWasBlocked){
+    document.getElementById("notifyMerchantBtn")?.remove();
+
+    const btn = document.createElement("button");
+    btn.id = "notifyMerchantBtn";
+    btn.className = "whatsapp-checkout-btn";
+    btn.style.cssText = "margin-top:10px;max-width:340px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border:none;";
+    btn.innerHTML = popupWasBlocked
+        ? "📲 إرسال إشعار الطلب للتاجر على واتساب"
+        : "📲 لم يصلك واتساب التاجر؟ اضغط هنا";
+    btn.onclick = function(){ window.open(url, "_blank"); };
+
+    const successView = document.getElementById("successView");
+    if(!successView) return;
+    const continueBtn = successView.querySelector(".checkout-btn");
+    if(continueBtn){
+        continueBtn.parentNode.insertBefore(btn, continueBtn);
+    } else {
+        successView.appendChild(btn);
     }
 }
 
@@ -12296,22 +12601,60 @@ function llxSave(section){
     if(section==="design")llxApplyDesign(false);
     toast("✅ تم الحفظ","success");
 }
-function llxAddCoupon(){
+async function llxAddCoupon(){
+    if(!currentStore) return;
     const code=llxGet("llxCouponCode").trim().toUpperCase();
     const value=Number(llxGet("llxCouponValue")||0);
     if(!code||value<=0){toast("⚠️ اكتب كود وقيمة صحيحة","error");return;}
-    const d=llxLoad();d.coupons=Array.isArray(d.coupons)?d.coupons:[];
-    const i=d.coupons.findIndex(x=>x.code===code);
-    const item={id:i>=0?d.coupons[i].id:(Date.now()+"_"+Math.random().toString(36).slice(2,7)),code,type:llxGet("llxCouponType"),value,min:Number(llxGet("llxCouponMin")||0),limit:Number(llxGet("llxCouponLimit")||0),end:llxGet("llxCouponEnd"),categories:llxGet("llxCouponCategories"),products:llxGet("llxCouponProducts"),createdAt:new Date().toISOString(),active:true};
-    if(i>=0)d.coupons[i]=item;else d.coupons.push(item);
-    llxStore(d);llxClearCouponForm();llxRenderCoupons();toast("🎟️ تم حفظ الكوبون","success");
+
+    const row={
+        store_id:currentStore.id,
+        code,
+        type:llxGet("llxCouponType"),
+        value,
+        min_order:Number(llxGet("llxCouponMin")||0),
+        usage_limit:Number(llxGet("llxCouponLimit")||0) || null,
+        end_date:llxGet("llxCouponEnd") || null,
+        categories:llxGet("llxCouponCategories"),
+        products:llxGet("llxCouponProducts"),
+        active:true
+    };
+
+    try{
+        const {error}=await supabaseClient.from("coupons")
+            .upsert(row, {onConflict:"store_id,code"});
+        if(error) throw error;
+        llxClearCouponForm();
+        await llxRenderCoupons();
+        toast("🎟️ تم حفظ الكوبون","success");
+    }catch(e){
+        console.error("llxAddCoupon", e);
+        toast("⚠️ تعذر حفظ الكوبون: " + (e?.message || "خطأ غير معروف"), "error", 6000);
+    }
 }
 function llxClearCouponForm(){["llxCouponCode","llxCouponValue","llxCouponMin","llxCouponLimit","llxCouponEnd","llxCouponCategories","llxCouponProducts"].forEach(id=>llxSet(id,""));}
-function llxDeleteCoupon(id){const d=llxLoad();d.coupons=(d.coupons||[]).filter(x=>x.id!==id);llxStore(d);llxRenderCoupons();}
-function llxRenderCoupons(){
-    const box=document.getElementById("llxCouponList");if(!box)return;
-    const d=llxLoad(),items=d.coupons||[];
-    box.innerHTML=items.length?items.map(x=>`<div class="llx-row"><div><strong>${escapeHTML(x.code)}</strong> <span class="llx-badge">${x.type==="percent"?x.value+"%":formatCurrency(x.value)}</span><div style="font-size:11px;color:var(--muted);margin-top:5px">حد أدنى: ${formatCurrency(x.min||0)} · استخدام: ${x.limit||"بدون حد"}${x.end?" · حتى "+escapeHTML(x.end):""}</div></div><button class="gold-btn" onclick="llxDeleteCoupon('${x.id}')">حذف</button></div>`).join(""):'<div class="empty">لا توجد كوبونات مضافة في أدوات المتجر المتقدمة.</div>';
+async function llxDeleteCoupon(id){
+    if(!currentStore) return;
+    try{
+        const {error}=await supabaseClient.from("coupons").delete().eq("id",id).eq("store_id",currentStore.id);
+        if(error) throw error;
+        await llxRenderCoupons();
+    }catch(e){
+        toast("⚠️ تعذر حذف الكوبون","error");
+    }
+}
+async function llxRenderCoupons(){
+    const box=document.getElementById("llxCouponList");if(!box||!currentStore)return;
+    box.innerHTML='<div class="empty">⏳ جاري التحميل...</div>';
+    try{
+        const {data,error}=await supabaseClient.from("coupons").select("*").eq("store_id",currentStore.id).order("created_at",{ascending:false});
+        if(error) throw error;
+        const items=data||[];
+        box.innerHTML=items.length?items.map(x=>`<div class="llx-row"><div><strong>${escapeHTML(x.code)}</strong> <span class="llx-badge">${x.type==="percent"?x.value+"%":formatCurrency(x.value)}</span><div style="font-size:11px;color:var(--muted);margin-top:5px">حد أدنى: ${formatCurrency(x.min_order||0)} · استخدام: ${x.usage_limit||"بدون حد"}${x.end_date?" · حتى "+escapeHTML(x.end_date):""}</div></div><button class="gold-btn" onclick="llxDeleteCoupon('${x.id}')">حذف</button></div>`).join(""):'<div class="empty">لا توجد كوبونات مضافة بعد.</div>';
+    }catch(e){
+        console.error("llxRenderCoupons", e);
+        box.innerHTML='<div class="empty">⚠️ تعذر تحميل الكوبونات — تأكد إن جدول coupons موجود في قاعدة البيانات (شغّل ملف coupons-setup.sql).</div>';
+    }
 }
 async function llxRenderCustomers(){
     const box=document.getElementById("llxCustomersList");if(!box||!currentStore)return;
